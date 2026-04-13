@@ -1317,6 +1317,62 @@
                     <p class="text-lg text-white/60 max-w-3xl">친환경 도시개발에 앞장서가는 기업, 유성에이스는 14년간 한길만 걸어온 대한민국 덕트 No.1입니다.</p>
                 </div>
             </section>
+
+            <!-- CONTACT FORM / 문의하기 -->
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 reveal">
+                <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">CONTACT US</div>
+                <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">문의하기</h2>
+                <p class="text-lg text-white/50 mb-10">견적, 설치, A/S 등 궁금한 점을 남겨주시면 빠르게 연락드리겠습니다.</p>
+
+                <form id="inquiry-form" class="grid grid-cols-1 md:grid-cols-2 gap-5" onsubmit="return submitInquiry(event)">
+                    <div>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">이름 <span class="text-red-400">*</span></label>
+                        <input type="text" id="inq-name" required placeholder="홍길동"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">연락처 <span class="text-red-400">*</span></label>
+                        <input type="tel" id="inq-tel" required placeholder="010-0000-0000"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">업체 / 매장명</label>
+                        <input type="text" id="inq-company" placeholder="매장명 또는 업체명"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">문의 유형</label>
+                        <select id="inq-type"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition appearance-none"
+                            style="background-image:url('data:image/svg+xml;utf8,<svg fill=\"white\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z\" clip-rule=\"evenodd\"/></svg>');background-repeat:no-repeat;background-position:right 12px center;background-size:20px;">
+                            <option value="견적" style="background:#1a1a2e">견적 문의</option>
+                            <option value="설치" style="background:#1a1a2e">설치 문의</option>
+                            <option value="AS" style="background:#1a1a2e">A/S 문의</option>
+                            <option value="기타" style="background:#1a1a2e">기타 문의</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">문의 내용 <span class="text-red-400">*</span></label>
+                        <textarea id="inq-msg" required rows="5" placeholder="문의하실 내용을 자세히 적어주세요."
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition resize-none"></textarea>
+                    </div>
+                    <div class="md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <button type="submit" id="inq-submit-btn"
+                            class="px-8 py-3.5 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 active:scale-95">
+                            문의 접수하기
+                        </button>
+                        <span class="text-sm text-white/40">또는 <a href="tel:1588-9123" class="text-blue-400 hover:text-blue-300 font-semibold transition">1588-9123</a> 으로 전화주세요</span>
+                    </div>
+                </form>
+
+                <!-- 접수 완료 메시지 (숨김) -->
+                <div id="inquiry-success" class="hidden text-center py-12">
+                    <div class="text-5xl mb-4">✅</div>
+                    <h3 class="text-2xl font-bold mb-2">문의가 접수되었습니다!</h3>
+                    <p class="text-white/60 mb-6">빠른 시간 내에 담당자가 연락드리겠습니다.</p>
+                    <button onclick="resetInquiryForm()" class="px-6 py-2.5 border border-white/20 rounded-xl text-white/80 hover:bg-white/5 transition">새 문의 작성</button>
+                </div>
+            </section>
         </div>
 
         <!-- 3. PRODUCTS 페이지 -->
@@ -3056,6 +3112,50 @@
         window.openGalleryModal = openGalleryModal;
         window.closeGalleryModal = closeGalleryModal;
         window.navGalleryModal = navGalleryModal;
+
+        // ============== 문의 폼 로직 ==============
+        function submitInquiry(e) {
+            e.preventDefault();
+            const nm   = document.getElementById('inq-name').value.trim();
+            const tel  = document.getElementById('inq-tel').value.trim();
+            const co   = document.getElementById('inq-company').value.trim();
+            const type = document.getElementById('inq-type').value;
+            const msg  = document.getElementById('inq-msg').value.trim();
+
+            if (!nm || !tel || !msg) return false;
+
+            // localStorage에 저장 (admin과 동일한 구조)
+            const CMS_KEY = 'usung-cms-state-v2';
+            let state = null;
+            try { state = JSON.parse(localStorage.getItem(CMS_KEY) || 'null'); } catch(e){}
+            if (!state) state = { content:{}, arrays:{}, inquiries:[], boards:{}, theme:'dark' };
+            if (!Array.isArray(state.inquiries)) state.inquiries = [];
+
+            const inq = {
+                id: 'web_' + Date.now().toString(36),
+                nm: nm,
+                co: co,
+                tel: tel,
+                em: '',
+                msg: '[' + type + '] ' + msg,
+                st: 'new',
+                createdAt: Date.now(),
+                source: 'webform'
+            };
+            state.inquiries.unshift(inq);
+            localStorage.setItem(CMS_KEY, JSON.stringify(state));
+
+            // 폼 숨기고 성공 메시지 표시
+            document.getElementById('inquiry-form').classList.add('hidden');
+            document.getElementById('inquiry-success').classList.remove('hidden');
+            return false;
+        }
+
+        function resetInquiryForm() {
+            document.getElementById('inquiry-form').reset();
+            document.getElementById('inquiry-form').classList.remove('hidden');
+            document.getElementById('inquiry-success').classList.add('hidden');
+        }
 
         // 페이지 네비게이션 로직 (SPA 흉내)
         function navigate(pageId) {
