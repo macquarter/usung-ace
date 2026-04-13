@@ -43,6 +43,18 @@
         .page { display: none; opacity: 0; transition: opacity 0.5s ease; }
         .page.active { display: block; opacity: 1; }
 
+        /* 네비 링크 색상 강제 고정 — 어떤 상황에서도 흰색 유지 */
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+        .nav-link:hover,
+        .nav-link:focus,
+        .nav-link:active,
+        .nav-item:hover > .nav-link {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
         /* 네비 드롭다운 / 메가 메뉴 트랜지션 */
         .dropdown {
             visibility: hidden;
