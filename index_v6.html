@@ -474,12 +474,8 @@
     <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out bg-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0 cursor-pointer flex items-center gap-2.5" onclick="navigate('home')">
-                    <div class="brand-mark w-9 h-9 rounded-xl bg-blue-600 grid place-items-center text-white font-black text-lg shadow-lg shadow-blue-900/40">U</div>
-                    <div class="leading-none">
-                        <div class="brand-name text-white font-black tracking-tight text-[15px]">USUNG ACE</div>
-                        <div class="brand-sub text-[10px] font-bold text-white/55 tracking-[0.18em] mt-1">유성에이스</div>
-                    </div>
+                <div class="flex-shrink-0 cursor-pointer" onclick="navigate('home')">
+                    <img id="nav-logo" src="logo-dark.png" alt="유성에이스" style="height:40px;transition:opacity .3s;">
                 </div>
 
                 <nav class="hidden md:flex items-center gap-1 lg:gap-2 relative" id="primary-nav">
@@ -1740,7 +1736,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
                 <div class="lg:col-span-5">
-                    <img src="logo.png" alt="유성에이스 로고" style="height:64px;margin-bottom:16px;filter:brightness(1.8);">
+                    <img src="logo-dark.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
                     <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
                         대한민국 덕트 No.1 — 14년간 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
                     </p>
@@ -1770,7 +1766,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo.png" alt="유성에이스" style="height:22px;filter:brightness(1.5);opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
+                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-dark.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
                 <div class="flex space-x-6 text-xs text-white/35">
                     <span>SINCE 2012</span>
                     <span>·</span>
@@ -3101,12 +3097,15 @@
         window.addEventListener('scroll', () => {
             // 네비게이션 바 배경
             const navbar = document.getElementById('navbar');
+            const navLogo = document.getElementById('nav-logo');
             if (window.scrollY > 50) {
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.remove('bg-transparent');
+                if(navLogo) navLogo.src = 'logo-dark.png';
             } else {
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.add('bg-transparent');
+                if(navLogo) navLogo.src = 'logo-dark.png';
             }
 
             // Home 페이지 스크롤 애니메이션 (간이 구현)
