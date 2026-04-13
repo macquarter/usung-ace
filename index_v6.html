@@ -3354,50 +3354,9 @@
         }, { threshold: 0.5 });
         document.querySelectorAll('.count').forEach(el => countIO.observe(el));
 
-        // 네비바 톤 자동 전환 (라이트 섹션 위 / 다크 섹션 위)
-        const lightSelectors = ['#page-home section.bg-white'];
-        function updateNavTone() {
-            let onLight = false;
-            for (const sel of lightSelectors) {
-                document.querySelectorAll(sel).forEach(el => {
-                    const r = el.getBoundingClientRect();
-                    if (r.top < 80 && r.bottom > 80) onLight = true;
-                });
-            }
-            const nav = document.getElementById('navbar');
-            const brandName = nav.querySelector('.brand-name');
-            const brandSub  = nav.querySelector('.brand-sub');
-            const cta       = document.getElementById('cta-contact');
-
-            if (onLight) {
-                nav.classList.add('bg-white/85','backdrop-blur-md','border-b','border-black/5');
-                nav.classList.remove('bg-black/80','border-white/10');
-                nav.querySelectorAll('.nav-link').forEach(b => {
-                    b.classList.remove('text-white/85','hover:text-white','hover:bg-white/10');
-                    b.classList.add('text-black/75','hover:text-black','hover:bg-black/5');
-                });
-                if (brandName) { brandName.classList.remove('text-white'); brandName.classList.add('text-black'); }
-                if (brandSub)  { brandSub.classList.remove('text-white/55'); brandSub.classList.add('text-black/50'); }
-                if (cta) {
-                    cta.classList.remove('bg-white','text-black');
-                    cta.classList.add('bg-black','text-white','hover:bg-blue-600');
-                }
-            } else {
-                nav.classList.remove('bg-white/85','border-black/5');
-                nav.querySelectorAll('.nav-link').forEach(b => {
-                    b.classList.add('text-white/85','hover:text-white','hover:bg-white/10');
-                    b.classList.remove('text-black/75','hover:text-black','hover:bg-black/5');
-                });
-                if (brandName) { brandName.classList.remove('text-black'); brandName.classList.add('text-white'); }
-                if (brandSub)  { brandSub.classList.remove('text-black/50'); brandSub.classList.add('text-white/55'); }
-                if (cta) {
-                    cta.classList.remove('bg-black','text-white','hover:bg-blue-600');
-                    cta.classList.add('bg-white','text-black');
-                }
-            }
-        }
-        window.addEventListener('scroll', updateNavTone, { passive: true });
-        updateNavTone();
+        // updateNavTone 제거 — 네비바는 항상 다크 톤(흰색 텍스트) 유지
+        // 스크롤 시 bg-black/80 backdrop-blur 적용으로 모든 섹션에서 가독성 확보
+        function updateNavTone() { /* disabled */ }
     </script>
 
     <!-- 유성에이스 전문 CS 챗봇 "에이스봇" -->
