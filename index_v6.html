@@ -2,8 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    <link rel="apple-touch-icon" href="favicon.png?v=2">
+    <link rel="shortcut icon" href="favicon.ico?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>유성에이스 USUNG ACE — Engineering the Future of Duct</title>
 
@@ -3303,7 +3304,7 @@
         document.querySelectorAll('.count').forEach(el => countIO.observe(el));
 
         // 네비바 톤 자동 전환 (라이트 섹션 위 / 다크 섹션 위)
-        const lightSelectors = ['#page-home section.bg-white', '#page-about', '#page-products', '#page-parts', '#page-manual', '#page-notice', '#page-board', '#page-archive'];
+        const lightSelectors = ['#page-home section.bg-white'];
         function updateNavTone() {
             let onLight = false;
             for (const sel of lightSelectors) {
