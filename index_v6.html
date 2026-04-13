@@ -492,7 +492,7 @@
                                 <div class="font-bold text-sm text-white">CEO 인사말</div>
                                 <div class="text-[11px] text-white/45 mt-0.5">신개념 유성에이스의 약속</div>
                             </button>
-                            <button onclick="navigate('about')" class="block w-full text-left p-3 rounded-2xl hover:bg-white/5">
+                            <button onclick="navigate('about','map-section')" class="block w-full text-left p-3 rounded-2xl hover:bg-white/5">
                                 <div class="font-bold text-sm text-white">찾아오시는 길</div>
                                 <div class="text-[11px] text-white/45 mt-0.5">본사 및 공장 위치</div>
                             </button>
@@ -580,7 +580,7 @@
                                 <div class="font-bold text-sm text-black">집진기 + 닥트 패키지</div>
                                 <div class="text-[11px] text-black/45 mt-0.5">25/50 루베 · 연기·기름 동시 포집</div>
                             </button>
-                            <button onclick="navigate('about')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
+                            <button onclick="navigate('about','inquiry-section')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
                                 <div class="font-bold text-sm text-black">시공 사례 / 견적 상담</div>
                                 <div class="text-[11px] text-black/45 mt-0.5">매장 규모별 맞춤 설계</div>
                             </button>
@@ -625,13 +625,13 @@
                                     <div class="text-[10px] tracking-[0.2em] font-bold text-black/40">TEL</div>
                                     <div class="text-[15px] font-black text-black">1588-9123</div>
                                 </div>
-                                <button onclick="navigate('about')" class="px-4 py-2 rounded-full bg-black text-white text-[11px] font-bold hover:bg-blue-600 transition">문의하기</button>
+                                <button onclick="navigate('about','inquiry-section')" class="px-4 py-2 rounded-full bg-black text-white text-[11px] font-bold hover:bg-blue-600 transition">문의하기</button>
                             </div>
                         </div>
                     </div>
                 </nav>
 
-                <button id="cta-contact" onclick="navigate('about')" class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-bold hover:bg-blue-500 hover:text-white transition">
+                <button id="cta-contact" onclick="navigate('about','inquiry-section')" class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-bold hover:bg-blue-500 hover:text-white transition">
                     Contact Us
                 </button>
 
@@ -659,7 +659,7 @@
                     <button onclick="navigate('board'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">· 게시판</button>
                     <button onclick="navigate('archive'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">· 자료실</button>
                 </div>
-                <button onclick="navigate('about'); closeMobile()" class="block w-full text-center mt-4 px-4 py-3 bg-black text-white font-bold rounded-full">Contact Us</button>
+                <button onclick="navigate('about','inquiry-section'); closeMobile()" class="block w-full text-center mt-4 px-4 py-3 bg-black text-white font-bold rounded-full">Contact Us</button>
             </div>
         </div>
     </header>
@@ -744,7 +744,7 @@
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center mt-8">
                         <button onclick="navigate('products')" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform">제품 라인업 보기</button>
-                        <button onclick="navigate('about')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">견적 문의</button>
+                        <button onclick="navigate('about','inquiry-section')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">견적 문의</button>
                     </div>
                 </div>
             </div>
@@ -1307,6 +1307,46 @@
                 </div>
             </section>
 
+            <!-- 찾아오시는 길 / MAP -->
+            <section id="map-section" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 reveal">
+                <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">LOCATION</div>
+                <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-10">찾아오시는 길</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- 지도 -->
+                    <div class="lg:col-span-3 rounded-2xl overflow-hidden border border-white/10" style="min-height:360px">
+                        <iframe
+                            src="https://maps.google.com/maps?q=%EA%B2%BD%EA%B8%B0+%ED%8C%8C%EC%A3%BC%EC%8B%9C+%ED%8C%8C%EC%A3%BC%EC%9D%8D+%EC%84%BC%ED%8A%B8%EB%9F%B4%EC%82%B0%EB%8B%A81%EB%A1%9C+103&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                            width="100%" height="100%" style="border:0;min-height:360px;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                    <!-- 정보 카드 -->
+                    <div class="lg:col-span-2 flex flex-col gap-4">
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+                            <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">ADDRESS</div>
+                            <div class="text-lg font-bold leading-relaxed">경기 파주시 파주읍<br/>센트럴산단1로 103</div>
+                            <div class="text-sm text-white/45 mt-1">(봉암리 1371-9)</div>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+                            <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">TEL / FAX</div>
+                            <a href="tel:1588-9123" class="text-2xl font-black text-white hover:text-blue-400 transition">1588-9123</a>
+                            <div class="text-sm text-white/45 mt-2">FAX (031) 952-1706</div>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="https://map.naver.com/p/search/%EA%B2%BD%EA%B8%B0%20%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%ED%8C%8C%EC%A3%BC%EC%9D%8D%20%EC%84%BC%ED%8A%B8%EB%9F%B4%EC%82%B0%EB%8B%A81%EB%A1%9C%20103" target="_blank" rel="noopener"
+                                class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-[#03C75A]/10 hover:bg-[#03C75A]/20 text-[#03C75A] font-bold text-sm transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.11 10.33 8.41 11.26a.997.997 0 001.18 0C13.89 21.33 21 16.25 21 11c0-4.97-4.03-9-9-9zm0 12.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/></svg>
+                                네이버지도
+                            </a>
+                            <a href="https://map.kakao.com/link/search/%EA%B2%BD%EA%B8%B0%20%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%ED%8C%8C%EC%A3%BC%EC%9D%8D%20%EC%84%BC%ED%8A%B8%EB%9F%B4%EC%82%B0%EB%8B%A81%EB%A1%9C%20103" target="_blank" rel="noopener"
+                                class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-[#FEE500]/10 hover:bg-[#FEE500]/20 text-[#FEE500] font-bold text-sm transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.11 10.33 8.41 11.26a.997.997 0 001.18 0C13.89 21.33 21 16.25 21 11c0-4.97-4.03-9-9-9zm0 12.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/></svg>
+                                카카오맵
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- VISION -->
             <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 reveal">
                 <div class="rounded-3xl p-10 md:p-16 border border-white/10 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/5">
@@ -1320,7 +1360,7 @@
             </section>
 
             <!-- CONTACT FORM / 문의하기 -->
-            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 reveal">
+            <section id="inquiry-section" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 reveal">
                 <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">CONTACT US</div>
                 <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">문의하기</h2>
                 <p class="text-lg text-white/50 mb-10">견적, 설치, A/S 등 궁금한 점을 남겨주시면 빠르게 연락드리겠습니다.</p>
@@ -3158,18 +3198,29 @@
             document.getElementById('inquiry-success').classList.add('hidden');
         }
 
+        // 섹션 스크롤 헬퍼
+        function scrollToSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) { setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'start' }), 120); }
+        }
+
         // 페이지 네비게이션 로직 (SPA 흉내)
-        function navigate(pageId) {
+        function navigate(pageId, section) {
             document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // 네비게이션 활성화 스타일
+
+            // 네비게이션 활성화 스타일 — 라이트 테마 잔류 클래스 완전 제거
             document.querySelectorAll('.nav-link').forEach(el => {
-                el.classList.remove('bg-white/10');
-                el.classList.add('text-white/85');
+                el.classList.remove('bg-white/10','text-black/75','hover:text-black','hover:bg-black/5');
+                el.classList.add('text-white/85','hover:text-white','hover:bg-white/10');
             });
-            // 현재 페이지 하이라이트 로직 생략 (단순화를 위해)
+
+            // 네비바 톤 즉시 재계산
+            if (typeof updateNavTone === 'function') updateNavTone();
+
+            // 섹션 스크롤
+            if (section) scrollToSection(section);
         }
 
         function selectProduct(index) {
