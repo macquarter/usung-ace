@@ -488,7 +488,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 cursor-pointer" onclick="navigate('home')">
-                    <img id="nav-logo" src="logo-dark.png" alt="유성에이스" style="height:40px;transition:opacity .3s;">
+                    <img id="nav-logo" src="logo-white.png" alt="유성에이스" style="height:40px;transition:opacity .3s;">
                 </div>
 
                 <nav class="hidden md:flex items-center gap-1 lg:gap-2 relative" id="primary-nav">
@@ -686,9 +686,9 @@
                 
                 <!-- Hero Text -->
                 <div id="anim-hero" class="scroll-element z-10 text-center px-6">
-                    <div class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · USUNG ACE</div>
-                    <h1 class="text-5xl md:text-7xl lg:text-[110px] font-black tracking-[-0.04em] mb-7 leading-[0.95]">대한민국 덕트<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">No.1</span></h1>
-                    <p class="text-xl md:text-3xl text-white/55 font-medium tracking-tight">오늘을 이끄는 원동력.</p>
+                    <div data-cms="h_tag" class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · USUNG ACE</div>
+                    <h1 class="text-5xl md:text-7xl lg:text-[110px] font-black tracking-[-0.04em] mb-7 leading-[0.95]"><span data-cms="h_title1">대한민국 덕트</span><br/><span data-cms="h_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">No.1</span></h1>
+                    <p data-cms="h_sub" class="text-xl md:text-3xl text-white/55 font-medium tracking-tight">오늘을 이끄는 원동력.</p>
                 </div>
 
                 <!-- Product Image (CSS-only 후드 일러스트) -->
@@ -716,7 +716,7 @@
                                  style="background:radial-gradient(ellipse at center, rgba(255,230,150,.45) 0%, transparent 70%); filter:blur(8px);"></div>
                         </div>
                         <!-- 갤럭시 D-Type 뱃지 -->
-                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[11px] tracking-[0.22em] font-bold text-white/90 uppercase">
+                        <div data-cms="h_badge" class="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[11px] tracking-[0.22em] font-bold text-white/90 uppercase">
                             갤럭시 D-TYPE · Swing Tension
                         </div>
                     </div>
@@ -725,14 +725,14 @@
                 <!-- Text 1 -->
                 <div id="anim-text1" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
                     <h2 class="text-4xl md:text-6xl font-black text-center max-w-3xl px-6 leading-tight break-keep tracking-tight">
-                        새로운 환경, 새로운 기술로 <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">한걸음 앞서갑니다.</span>
+                        <span data-cms="h_sub2_a">새로운 환경, 새로운 기술로</span> <br/><span data-cms="h_sub2_b" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">한걸음 앞서갑니다.</span>
                     </h2>
                 </div>
 
                 <!-- Text 2 -->
                 <div id="anim-text2" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
                     <h2 class="text-4xl md:text-6xl font-black text-center max-w-3xl px-6 leading-tight break-keep tracking-tight">
-                        신뢰와 나눔 속에 <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">사랑받는 기업으로.</span>
+                        <span data-cms="h_sub3_a">신뢰와 나눔 속에</span> <br/><span data-cms="h_sub3_b" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">사랑받는 기업으로.</span>
                     </h2>
                 </div>
 
@@ -746,12 +746,12 @@
 
                 <!-- Final CTA — 한 번 쓰면 다시 못 돌아갑니다 -->
                 <div id="anim-cta" class="scroll-element z-20 bg-black/80 backdrop-blur-sm opacity-0 scale-90 pointer-events-none px-6">
-                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">14 YEARS · 28 PRODUCTS</div>
+                    <div data-cms="h_cta_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">14 YEARS · 28 PRODUCTS</div>
                     <h2 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] text-center max-w-5xl">
-                        한 번 쓰면, <br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">다시 못 돌아갑니다.</span>
+                        <span data-cms="h_cta_title1">한 번 쓰면,</span> <br/>
+                        <span data-cms="h_cta_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">다시 못 돌아갑니다.</span>
                     </h2>
-                    <p class="mt-7 text-base md:text-lg text-white/55 max-w-xl text-center leading-relaxed">
+                    <p data-cms="h_cta_desc" class="mt-7 text-base md:text-lg text-white/55 max-w-xl text-center leading-relaxed">
                         ACE 후드를 쓰시는 업소와 손님 모두 대만족. 그 차이는 직접 써보시면 알게 됩니다.
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center mt-8">
@@ -766,9 +766,9 @@
         <section class="relative bg-white text-[#1d1d1f] py-16 md:py-24">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-12 r-anim r-mask-up">
-                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-4">CORE TECHNOLOGY</div>
-                    <h2 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
-                    <p class="mt-6 text-lg text-black/55 max-w-2xl mx-auto leading-relaxed">
+                    <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-4">CORE TECHNOLOGY</div>
+                    <h2 data-cms="t_title" class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
+                    <p data-cms="t_desc" class="mt-6 text-lg text-black/55 max-w-2xl mx-auto leading-relaxed">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
                 </div>
@@ -831,8 +831,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14 14 0 0 0 0 20"/><path d="M12 2a14 14 0 0 1 0 20"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-2xl font-black mb-2 tracking-tight">360° 자유로운 스윙</h4>
-                                <p class="text-black/55 leading-relaxed">파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없어 편리합니다.</p>
+                                <h4 data-cms="t1_t" class="text-2xl font-black mb-2 tracking-tight">360° 자유로운 스윙</h4>
+                                <p data-cms="t1_d" class="text-black/55 leading-relaxed">파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없어 편리합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -840,8 +840,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-2xl font-black mb-2 tracking-tight">간편한 내부 청소</h4>
-                                <p class="text-black/55 leading-relaxed">상하부를 연결하는 파이프링이 간단히 분리되어 누구나 손쉽게 내부 청소가 가능합니다.</p>
+                                <h4 data-cms="t2_t" class="text-2xl font-black mb-2 tracking-tight">간편한 내부 청소</h4>
+                                <p data-cms="t2_d" class="text-black/55 leading-relaxed">상하부를 연결하는 파이프링이 간단히 분리되어 누구나 손쉽게 내부 청소가 가능합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -849,8 +849,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 12l8 10 8-10z"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-2xl font-black mb-2 tracking-tight">화재로부터 안전</h4>
-                                <p class="text-black/55 leading-relaxed">화로와 80~150mm 떨어져 시공되어 화재로부터 안전하며, F.V.D 방화담파가 즉각 대응합니다.</p>
+                                <h4 data-cms="t3_t" class="text-2xl font-black mb-2 tracking-tight">화재로부터 안전</h4>
+                                <p data-cms="t3_d" class="text-black/55 leading-relaxed">화로와 80~150mm 떨어져 시공되어 화재로부터 안전하며, F.V.D 방화담파가 즉각 대응합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -858,8 +858,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-2xl font-black mb-2 tracking-tight">스톱바 브레이크 시스템</h4>
-                                <p class="text-black/55 leading-relaxed">텐션이 흘러내리거나 와이어줄이 끊어져도 스톱바가 브레이크 역할을 하여 후드가 갑자기 떨어지지 않아 안전합니다.</p>
+                                <h4 data-cms="t4_t" class="text-2xl font-black mb-2 tracking-tight">스톱바 브레이크 시스템</h4>
+                                <p data-cms="t4_d" class="text-black/55 leading-relaxed">텐션이 흘러내리거나 와이어줄이 끊어져도 스톱바가 브레이크 역할을 하여 후드가 갑자기 떨어지지 않아 안전합니다.</p>
                             </div>
                         </div>
                     </div>
@@ -1257,12 +1257,12 @@
         <div id="page-about" class="page min-h-screen pt-24 pb-12">
             <!-- HERO -->
             <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
-                <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · ABOUT US</div>
+                <div data-cms="a_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · ABOUT US</div>
                 <h1 class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
-                    신뢰와 나눔 속에<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">사랑받는 기업으로.</span>
+                    <span data-cms="a_title1">신뢰와 나눔 속에</span><br/>
+                    <span data-cms="a_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">사랑받는 기업으로.</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
+                <p data-cms="a_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
                     새로운 환경, 새로운 기술로 한걸음 앞서가는 유성에이스. 친환경 도시개발에 앞장서며, 최고의 기술과 품질로 SERVICE를 통한 고객만족을 실현합니다.
                 </p>
             </section>
@@ -1274,14 +1274,14 @@
                         <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">CEO MESSAGE</div>
                         <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
                             대표이사<br/>
-                            <span class="text-blue-400">박진선</span>
+                            <span data-cms="a_ceo_name" class="text-blue-400">박진선</span>
                         </h2>
                     </div>
                     <div class="lg:col-span-8 space-y-6 text-lg text-white/70 leading-relaxed">
-                        <p>직화기 닥트(DUCT)시설의 흐름이 변해가는 시대에 심혈을 기울여 완성된 저희 <strong class="text-white">유성에이스</strong>는 그간 사용중 불편함을 개선하고, 가능성·편리성·시각화에 정성을 쏟았습니다.</p>
-                        <p>특히 기름이 새거나 흐르는 것을 방지하는 위생적인 제품 개발에 초점을 두었으며, 후드 시공 시 누구나 편리하도록 개선했습니다.</p>
-                        <p>그 결과 이미 저희 ACE후드를 사용하시는 업소와 손님 모두 대만족해 하십니다. 유성에이스는 여기에 만족하지 않고 직화기후드 부분 특허와 함께 신제품 개발, 수출에도 역점을 두고 있습니다.</p>
-                        <p class="text-white">늘 저희 제품을 애용해 주시는 모든 분들께 감사드리며, 사장님의 사업 번창을 진심으로 기원합니다.</p>
+                        <p data-cms="a_ceo_p1">직화기 닥트(DUCT)시설의 흐름이 변해가는 시대에 심혈을 기울여 완성된 저희 <strong class="text-white">유성에이스</strong>는 그간 사용중 불편함을 개선하고, 가능성·편리성·시각화에 정성을 쏟았습니다.</p>
+                        <p data-cms="a_ceo_p2">특히 기름이 새거나 흐르는 것을 방지하는 위생적인 제품 개발에 초점을 두었으며, 후드 시공 시 누구나 편리하도록 개선했습니다.</p>
+                        <p data-cms="a_ceo_p3">그 결과 이미 저희 ACE후드를 사용하시는 업소와 손님 모두 대만족해 하십니다. 유성에이스는 여기에 만족하지 않고 직화기후드 부분 특허와 함께 신제품 개발, 수출에도 역점을 두고 있습니다.</p>
+                        <p data-cms="a_ceo_p4" class="text-white">늘 저희 제품을 애용해 주시는 모든 분들께 감사드리며, 사장님의 사업 번창을 진심으로 기원합니다.</p>
                     </div>
                 </div>
             </section>
@@ -1293,28 +1293,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 rounded-3xl overflow-hidden border border-white/10">
                     <div class="bg-black p-8">
                         <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">COMPANY</div>
-                        <div class="text-2xl font-bold">유성에이스</div>
-                        <div class="text-sm text-white/50 mt-1">USUNG ACE</div>
+                        <div data-cms="c_name" class="text-2xl font-bold">유성에이스</div>
+                        <div data-cms="c_name_en" class="text-sm text-white/50 mt-1">USUNG ACE</div>
                     </div>
                     <div class="bg-black p-8">
                         <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">CEO</div>
-                        <div class="text-2xl font-bold">박진선</div>
+                        <div data-cms="c_ceo" class="text-2xl font-bold">박진선</div>
                         <div class="text-sm text-white/50 mt-1">대표이사</div>
                     </div>
                     <div class="bg-black p-8">
                         <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">TEL</div>
-                        <div class="text-2xl font-bold">1588-9123</div>
-                        <div class="text-sm text-white/50 mt-1">FAX (031) 952-1706</div>
+                        <div data-cms="c_tel" class="text-2xl font-bold">1588-9123</div>
+                        <div data-cms="c_fax" class="text-sm text-white/50 mt-1">FAX (031) 952-1706</div>
                     </div>
                     <div class="bg-black p-8">
                         <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">BUSINESS NO.</div>
-                        <div class="text-2xl font-bold">166-86-01583</div>
+                        <div data-cms="c_biz" class="text-2xl font-bold">166-86-01583</div>
                         <div class="text-sm text-white/50 mt-1">사업자등록번호</div>
                     </div>
                     <div class="bg-black p-8 md:col-span-2">
                         <div class="text-xs font-bold tracking-widest text-blue-400 mb-3">ADDRESS</div>
-                        <div class="text-2xl font-bold">경기 파주시 파주읍 센트럴산단1로 103</div>
-                        <div class="text-sm text-white/50 mt-1">(봉암리 1371-9)</div>
+                        <div data-cms="c_addr" class="text-2xl font-bold">경기 파주시 파주읍 센트럴산단1로 103</div>
+                        <div data-cms="c_addr_sub" class="text-sm text-white/50 mt-1">(봉암리 1371-9)</div>
                     </div>
                 </div>
             </section>
@@ -1364,10 +1364,10 @@
                 <div class="rounded-3xl p-10 md:p-16 border border-white/10 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/5">
                     <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">OUR PROMISE</div>
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight leading-[1.1] mb-6">
-                        최고의 기술과 품질로<br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">SERVICE를 통한 고객만족 실현.</span>
+                        <span data-cms="a_promise1">최고의 기술과 품질로</span><br/>
+                        <span data-cms="a_promise2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">SERVICE를 통한 고객만족 실현.</span>
                     </h2>
-                    <p class="text-lg text-white/60 max-w-3xl">친환경 도시개발에 앞장서가는 기업, 유성에이스는 14년간 한길만 걸어온 대한민국 덕트 No.1입니다.</p>
+                    <p data-cms="a_promise_desc" class="text-lg text-white/60 max-w-3xl">친환경 도시개발에 앞장서가는 기업, 유성에이스는 14년간 한길만 걸어온 대한민국 덕트 No.1입니다.</p>
                 </div>
             </section>
 
@@ -1432,12 +1432,12 @@
         <div id="page-products" class="page min-h-screen pt-24 pb-24">
             <!-- HERO -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 r-anim r-mask-up">
-                <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PRODUCT LINEUP · 28 MODELS</div>
+                <div data-cms="p_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PRODUCT LINEUP · 28 MODELS</div>
                 <h1 id="product-title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
-                    28가지 제품,<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 장인정신.</span>
+                    <span data-cms="p_title1">28가지 제품,</span><br/>
+                    <span data-cms="p_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 장인정신.</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
+                <p data-cms="p_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
                     갤럭시 시리즈부터 등제품, 스텐파이프, 스파이얼, 모터, 갓제품, 코브라, 후레쉬볼까지. 유성에이스의 전 제품 라인업을 한눈에 살펴보세요.
                 </p>
             </section>
@@ -1460,8 +1460,8 @@
                 <div class="relative rounded-3xl border border-white/10 bg-gradient-to-br from-blue-950/40 via-black to-black p-12 overflow-hidden">
                     <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-blue-500/10 blur-3xl"></div>
                     <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">NEED HELP CHOOSING?</div>
-                    <h3 class="text-3xl md:text-5xl font-black tracking-tight mb-4">매장에 맞는 제품,<br/>직접 상담드립니다.</h3>
-                    <p class="text-white/55 mb-8">14년 노하우로 매장 규모·화로 종류·천정고에 맞춘 최적의 제품을 추천해드립니다.</p>
+                    <h3 data-cms="p_cta_title" class="text-3xl md:text-5xl font-black tracking-tight mb-4">매장에 맞는 제품,<br/>직접 상담드립니다.</h3>
+                    <p data-cms="p_cta_desc" class="text-white/55 mb-8">14년 노하우로 매장 규모·화로 종류·천정고에 맞춤 최적의 제품을 추천해드립니다.</p>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <a href="tel:1588-9123" class="px-6 py-3 rounded-full bg-white text-black font-bold hover:scale-105 transition">📞 1588-9123</a>
                         <button onclick="navigate('gallery')" class="px-6 py-3 rounded-full border border-white/20 text-white font-bold hover:bg-white/10 transition">시공 갤러리 보기 →</button>
@@ -1474,8 +1474,8 @@
         <div id="page-parts" class="page min-h-screen pt-24 pb-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-16 text-center">
-                    <h1 class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">부품 및 집진기</h1>
-                    <p class="text-xl text-gray-400">유성에이스의 다양한 부품과 고성능 집진기를 소개합니다.</p>
+                    <h1 data-cms="pt_title" class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">부품 및 집진기</h1>
+                    <p data-cms="pt_desc" class="text-xl text-gray-400">유성에이스의 다양한 부품과 고성능 집진기를 소개합니다.</p>
                 </div>
                 <div class="mb-24">
                     <h2 class="text-3xl font-bold mb-8 border-b border-white/10 pb-4">집진기 & 참바</h2>
@@ -1520,8 +1520,8 @@
         <div id="page-manual" class="page min-h-screen pt-24 pb-12">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-16 text-center">
-                    <h1 class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">사용방법</h1>
-                    <p class="text-xl text-gray-400">유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.</p>
+                    <h1 data-cms="m_title" class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">사용방법</h1>
+                    <p data-cms="m_desc" class="text-xl text-gray-400">유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.</p>
                 </div>
                 <div id="manual-list" class="space-y-12">
                     <!-- JS로 채워짐 -->
@@ -1532,12 +1532,12 @@
         <!-- 6. GALLERY 페이지 -->
         <div id="page-gallery" class="page min-h-screen pt-24 pb-12">
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
-                <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">CONSTRUCTION GALLERY</div>
-                <h1 class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
+                <div data-cms="g_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">CONSTRUCTION GALLERY</div>
+                <h1 data-cms="g_title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
                     14년의 시공,<br/>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">전국 곳곳에 있습니다.</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
+                <p data-cms="g_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
                     유성에이스가 시공한 직화기 후드 라인업. 갤럭시 시리즈, 아크릴등, 우주선 후드, 외부태엽 등 다양한 현장 사진을 만나보세요.
                 </p>
             </section>
@@ -1845,7 +1845,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
                 <div class="lg:col-span-5">
-                    <img src="logo-dark.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
+                    <img src="logo-white.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
                     <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
                         대한민국 덕트 No.1 — 14년간 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
                     </p>
@@ -1875,7 +1875,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-dark.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
+                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-white.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
                 <div class="flex space-x-6 text-xs text-white/35">
                     <span>SINCE 2012</span>
                     <span>·</span>
@@ -2761,7 +2761,8 @@
         // ============ 고객센터: 공지사항 / 게시판 / 자료실 ============
 
         // --- 공지사항 데이터 ---
-        const noticeItems = [
+        // 기본 공지 데이터 (CMS에 데이터 없을 때 사용)
+        const defaultNoticeItems = [
             { date: "2026.04.05", tag: "업데이트", tagColor: "blue", title: "2026 제품 카탈로그 v6 배포 안내", excerpt: "갤럭시 A~D 타입 전면 개정된 최신 카탈로그가 자료실에 업로드되었습니다. 신규 F.V.D 방화담파 라인업 포함." },
             { date: "2026.03.28", tag: "A/S", tagColor: "amber", title: "태엽감속기 빠찌링(베어링) 정품 교체 캠페인", excerpt: "5년 이상 사용 매장 대상으로 베어링 무상 점검 및 할인 교체를 진행합니다. 전화 접수만 받습니다." },
             { date: "2026.03.20", tag: "공지", tagColor: "slate", title: "파주 본사 주차장 확장 공사 안내", excerpt: "3월 25일 ~ 4월 10일까지 본사 주차장 확장 공사로 임시 주차 장소를 운영합니다." },
@@ -2770,6 +2771,24 @@
             { date: "2026.02.15", tag: "A/S", tagColor: "amber", title: "설 연휴 기간 긴급 A/S 접수 안내", excerpt: "설 연휴 기간 긴급 상황 발생 시 1588-9123으로 연락 주시면 순차 대응해드립니다." },
             { date: "2026.01.20", tag: "공지", tagColor: "slate", title: "유성에이스 공식 블로그 리뉴얼 완료", excerpt: "네이버 공식 블로그가 새롭게 리뉴얼되었습니다. 시공 사례와 기술 정보를 확인하세요." }
         ];
+        // CMS 게시판 데이터 병합
+        const noticeItems = (function() {
+            const tagColorMap = { '공지': 'slate', '이벤트': 'pink', '업데이트': 'blue', 'A/S': 'amber' };
+            try {
+                const cmsState = JSON.parse(localStorage.getItem('usung-cms-state-v2') || 'null');
+                if (cmsState && cmsState.boards && cmsState.boards.notice && cmsState.boards.notice.length > 0) {
+                    const cmsNotices = cmsState.boards.notice.map(n => ({
+                        date: n.createdAt ? new Date(n.createdAt).toISOString().slice(0,10).replace(/-/g,'.') : '2026.04.10',
+                        tag: n.cat || '공지',
+                        tagColor: tagColorMap[n.cat] || 'slate',
+                        title: n.title || '',
+                        excerpt: (n.body || '').slice(0, 100)
+                    }));
+                    return [...cmsNotices, ...defaultNoticeItems];
+                }
+            } catch(e) {}
+            return defaultNoticeItems;
+        })();
         const noticeTagClasses = {
             blue: "bg-blue-100 text-blue-700",
             amber: "bg-amber-100 text-amber-700",
@@ -2793,8 +2812,8 @@
             `).join('');
         }
 
-        // --- 게시판 데이터 ---
-        const boardItems = [
+        // --- 게시판 데이터 (CMS + 기본) ---
+        const defaultBoardItems = [
             { num: 142, cat: "시공후기", catColor: "emerald", title: "강남 한우 직화구이 매장 갤럭시 B 설치 후기", author: "김**", date: "2026.04.06", views: 128, isNew: true },
             { num: 141, cat: "제품문의", catColor: "blue", title: "갤럭시 A 타입과 B 타입 차이가 궁금합니다", author: "이**", date: "2026.04.05", views: 94, isNew: true },
             { num: 140, cat: "A/S", catColor: "amber", title: "태엽 감속기에서 이상한 소리가 나는데 원인이 뭘까요?", author: "박**", date: "2026.04.04", views: 212, isNew: false },
@@ -2806,6 +2825,28 @@
             { num: 134, cat: "제품문의", catColor: "blue", title: "후레쉬볼 코브라 — 천장 낮은 매장에도 설치 가능?", author: "오**", date: "2026.03.25", views: 103, isNew: false },
             { num: 133, cat: "시공후기", catColor: "emerald", title: "등제품 교체 10분 만에 끝 — 정말 편하네요", author: "서**", date: "2026.03.22", views: 247, isNew: false }
         ];
+        // CMS 게시판 데이터 병합
+        const boardItems = (function() {
+            const catColorMap = { '시공후기': 'emerald', '제품문의': 'blue', '문의': 'blue', 'A/S': 'amber', '기타': 'slate', '칭찬': 'emerald', '일반': 'slate' };
+            try {
+                const cmsState = JSON.parse(localStorage.getItem('usung-cms-state-v2') || 'null');
+                if (cmsState && cmsState.boards && cmsState.boards.board && cmsState.boards.board.length > 0) {
+                    const maxNum = defaultBoardItems.reduce((m, b) => Math.max(m, b.num), 0);
+                    const cmsPosts = cmsState.boards.board.map((b, i) => ({
+                        num: maxNum + i + 1,
+                        cat: b.cat || '일반',
+                        catColor: catColorMap[b.cat] || 'slate',
+                        title: b.title || '',
+                        author: b.author || '관리자',
+                        date: b.createdAt ? new Date(b.createdAt).toISOString().slice(0,10).replace(/-/g,'.') : '2026.04.10',
+                        views: 0,
+                        isNew: true
+                    }));
+                    return [...cmsPosts, ...defaultBoardItems];
+                }
+            } catch(e) {}
+            return defaultBoardItems;
+        })();
         const boardCatClasses = {
             emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",
             blue: "bg-blue-50 text-blue-700 border-blue-200",
@@ -3262,14 +3303,20 @@
             // 네비게이션 바 배경
             const navbar = document.getElementById('navbar');
             const navLogo = document.getElementById('nav-logo');
+            // 라이트 배경 페이지 감지
+            const lightPages = ['page-notice','page-board','page-archive'];
+            const activePage = document.querySelector('.page.active');
+            const isLightPage = activePage && lightPages.includes(activePage.id);
+
             if (window.scrollY > 50) {
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.remove('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-dark.png';
+                if(navLogo) navLogo.src = 'logo-white.png';
             } else {
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.add('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-dark.png';
+                // 라이트 배경 페이지에서는 다크 로고, 다크 배경에서는 화이트 로고
+                if(navLogo) navLogo.src = isLightPage ? 'logo-dark.png' : 'logo-white.png';
             }
 
             // Home 페이지 스크롤 애니메이션 (간이 구현)
@@ -3369,6 +3416,45 @@
         // updateNavTone 제거 — 네비바는 항상 다크 톤(흰색 텍스트) 유지
         // 스크롤 시 bg-black/80 backdrop-blur 적용으로 모든 섹션에서 가독성 확보
         function updateNavTone() { /* disabled */ }
+
+        // ============== CMS 콘텐츠 로더 ==============
+        // admin.html에서 편집한 콘텐츠를 localStorage에서 읽어 웹사이트에 반영
+        (function loadCmsContent() {
+            const CMS_KEY = 'usung-cms-state-v2';
+            let state = null;
+            try { state = JSON.parse(localStorage.getItem(CMS_KEY) || 'null'); } catch(e) { return; }
+            if (!state || !state.content) return;
+
+            const content = state.content;
+
+            // 1) data-cms 속성이 있는 모든 요소에 텍스트 적용
+            document.querySelectorAll('[data-cms]').forEach(el => {
+                const key = el.getAttribute('data-cms');
+                if (content[key] !== undefined && content[key] !== null && content[key] !== '') {
+                    el.textContent = content[key];
+                }
+            });
+
+            // 2) 푸터 회사 정보도 CMS 데이터로 업데이트
+            if (content.c_tel) {
+                document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+                    if (a.textContent.includes('1588')) {
+                        a.href = 'tel:' + content.c_tel.replace(/[^0-9-]/g, '');
+                        // 텍스트에 전화 아이콘이 있으면 보존
+                        if (a.textContent.includes('📞')) {
+                            a.textContent = '📞 ' + content.c_tel;
+                        }
+                    }
+                });
+            }
+
+            // 3) 게시판 데이터 로드 (notice, board, archive)
+            if (state.boards) {
+                window._cmsBoards = state.boards;
+            }
+
+            console.log('[CMS] 콘텐츠 로드 완료 — ' + Object.keys(content).length + '개 필드');
+        })();
     </script>
 
     <!-- 유성에이스 전문 CS 챗봇 "에이스봇" -->
