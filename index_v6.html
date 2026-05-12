@@ -3393,7 +3393,7 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            const W = 800, H = 500;
+            const W = 800, H = 320;
             const canvas = document.createElement('canvas');
             canvas.width = W; canvas.height = H;
             canvas.style.cssText = 'width:100%;border-radius:16px;display:block;';
@@ -3655,13 +3655,13 @@
             const sceneDraw = {
                 gear(step, t) {
                     // 감속기 본체 (스테인리스)
-                    const bodyY = step >= 3 ? 100 + Math.sin(t*3)*8*(1-t) : 100;
+                    const bodyY = step >= 3 ? 50 + Math.sin(t*3)*6*(1-t) : 50;
                     draw3DRect(240, bodyY, 160, 130, 160, 170, 180, 10, true);
                     // 라벨
                     ctx.fillStyle = 'rgba(255,255,255,0.5)';
                     ctx.font = '10px Pretendard,sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('REDUCER BODY', 320, bodyY + 150);
+                    ctx.fillText('REDUCER BODY', 330, bodyY + 120);
 
                     if (step === 0) {
                         // 피스 4개 빠져나감
@@ -3763,12 +3763,12 @@
                     }
                 },
                 bearing(step, t) {
-                    draw3DPipe(80, 160, 360, 20, 140, 160, 180);
+                    draw3DPipe(80, 120, 360, 18, 140, 160, 180);
                     const colors = [[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[60,200,110],[60,200,110]];
                     if (step === 0) {
                         for (let i = 0; i < 6; i++) {
                             const dropT = Math.max(0, Math.min(1, (t - i*0.1) / 0.4));
-                            const by = 60 + (170-60) * easeOutBounce(dropT);
+                            const by = 40 + (129-40) * easeOutBounce(dropT);
                             draw3DCircle(120 + i*44, by, 16, ...colors[i], true);
                             ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
                             ctx.fillText(String(i+1), 120+i*44, by+3);
@@ -3777,7 +3777,7 @@
                         for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
                         for (let i = 0; i < 2; i++) {
                             const dropT = Math.max(0, Math.min(1, (t - 0.2 - i*0.3) / 0.5));
-                            const by = 60 + 110 * easeOutBounce(dropT);
+                            const by = 40 + 89 * easeOutBounce(dropT);
                             draw3DCircle(384 + i*44, by, 16, ...colors[6+i], true);
                             ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
                             ctx.fillText('+' + (i+1), 384+i*44, by+3);
@@ -3786,7 +3786,7 @@
                         for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
                         for (let i = 1; i >= 0; i--) {
                             const upT = Math.max(0, Math.min(1, (t - (1-i)*0.3) / 0.5));
-                            const by = 170 - upT * 110;
+                            const by = 129 - upT * 89;
                             if (upT < 1) draw3DCircle(384+i*44, by, 16, ...colors[6+i], true);
                         }
                         // 펜치 아이콘
@@ -3813,15 +3813,15 @@
                     // 후드 상단
                     draw3DRect(180, 40, 200, 60, 120, 130, 145, 8, true);
                     ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px Pretendard'; ctx.textAlign='center';
-                    ctx.fillText('HOOD', 280, 75);
+                    ctx.fillText('HOOD', 290, 50);
 
                     if (step === 0) {
                         const offY = t * 70;
                         draw3DTrumpetCap(280, 100, t);
-                        if (t > 0.3) drawArrow(220, 140 + offY*0.5, 220, 120, '#f87171', '돌려서 분리');
+                        if (t > 0.3) drawArrow(230, 110 + offY*0.4, 230, 85, '#f87171', '돌려서 분리');
                     } else if (step === 1) {
                         draw3DTrumpetCap(280, 100, 1);
-                        const trayY = 240 + t * 50;
+                        const trayY = 170 + t * 35;
                         // 기름받이
                         ctx.save();
                         ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
@@ -3869,7 +3869,7 @@
                         }
                         drawArrow(270, 195, 310, 195, '#38bdf8', '세척');
                         ctx.fillStyle='#38bdf8'; ctx.font='10px Pretendard'; ctx.textAlign='center';
-                        ctx.fillText('중성세제', 290, 170);
+                        ctx.fillText('중성세제', 290, 120);
                     } else {
                         draw3DTrumpetCap(280, 100, 1-t);
                         ctx.save();
@@ -3890,7 +3890,7 @@
 
                     if (step === 0) {
                         // 고무 올라옴
-                        const rubberY = 280 - t * 180;
+                        const rubberY = 210 - t * 130;
                         ctx.save();
                         ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=8;
                         ctx.beginPath();
@@ -3907,7 +3907,7 @@
                         ctx.beginPath(); ctx.ellipse(280,100,55,14,0,0,Math.PI*2);
                         ctx.fillStyle=metalGrad(225,86,110,28,180,70,70); ctx.fill(); ctx.restore();
                         // 등하판 올라옴
-                        const plateY = 280 - t * 160;
+                        const plateY = 210 - t * 115;
                         draw3DRect(210, plateY, 140, 25, 190, 170, 80, 5, true);
                         ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
                         ctx.fillText('등하판', 280, plateY+16);
@@ -3918,7 +3918,7 @@
                         ctx.fillStyle=metalGrad(225,86,110,28,180,70,70); ctx.fill(); ctx.restore();
                         draw3DRect(210, 120, 140, 25, 190, 170, 80, 5, true);
                         // 전구 올라옴
-                        const bulbY = 300 - t * 110;
+                        const bulbY = 220 - t * 80;
                         draw3DBulb(280, bulbY, 35, false);
                         ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
                         ctx.fillText('갓등', 280, bulbY + 50);
@@ -3944,7 +3944,7 @@
                             ctx.fillText('전원선', 405, 133);
                             ctx.restore();
                         }
-                        if (t > 0.7) drawCheckmark(280, 250, 20, (t-0.7)*3.3);
+                        if (t > 0.7) drawCheckmark(290, 190, 18, (t-0.7)*3.3);
                     }
                 }
             };
@@ -3987,61 +3987,69 @@
             const wrap = document.createElement('div');
             wrap.className = 'relative';
             wrap.appendChild(canvas);
-            // Step info overlay (right side text)
-            const infoDiv = document.createElement('div');
-            infoDiv.className = 'mt-4 space-y-2';
-            infoDiv.id = containerId + '-info';
-
-            const btnBar = document.createElement('div');
-            btnBar.className = 'grid grid-cols-4 gap-2 mt-3';
+            // 컨트롤 바: STEP 버튼 + 자동재생
+            const ctrlBar = document.createElement('div');
+            ctrlBar.className = 'flex items-center gap-2 mt-3';
             steps.forEach((s, si) => {
                 const btn = document.createElement('button');
-                btn.className = 'mnl3d-btn px-2 py-3 rounded-xl text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.07] transition-all text-center leading-tight';
-                btn.innerHTML = `<span class="block text-[9px] tracking-wider text-blue-400/60 mb-1">STEP ${si+1}</span><span class="text-[12px]">${s.title.split('—')[1]?.trim() || s.title}</span>`;
-                btn.onclick = () => {
-                    animateTo(si);
-                    updateInfo(si);
-                };
-                btnBar.appendChild(btn);
+                btn.className = 'mnl3d-btn flex-1 px-2 py-2 rounded-lg text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.07] transition-all text-center';
+                btn.textContent = `${si+1}`;
+                btn.onclick = () => animateTo(si);
+                ctrlBar.appendChild(btn);
             });
-
-            // 자동 재생
             const autoBtn = document.createElement('button');
-            autoBtn.className = 'mt-2 w-full py-2.5 rounded-xl text-[12px] font-bold border border-cyan-400/20 bg-cyan-400/[0.05] text-cyan-300 hover:bg-cyan-400/10 transition-all flex items-center justify-center gap-2';
-            autoBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> 전체 순서 자동 재생';
+            autoBtn.className = 'px-4 py-2 rounded-lg text-[11px] font-bold border border-cyan-400/20 bg-cyan-400/[0.05] text-cyan-300 hover:bg-cyan-400/10 transition-all flex items-center gap-1.5 whitespace-nowrap';
+            autoBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>재생';
             autoBtn.onclick = () => {
                 let s = 0;
                 function next() {
                     if (s >= steps.length) return;
                     animateTo(s);
-                    updateInfo(s);
+                    highlightStep(s);
                     s++;
                     if (s < steps.length) setTimeout(next, 1800);
                 }
                 next();
             };
+            ctrlBar.appendChild(autoBtn);
 
-            function updateInfo(si) {
-                const s = steps[si];
-                infoDiv.innerHTML = `
-                    <div class="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="shrink-0 w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 text-[13px] font-black text-blue-300 flex items-center justify-center">${si+1}</span>
-                            <h3 class="text-[15px] font-black text-white">${s.title}</h3>
-                        </div>
-                        <p class="text-[13px] text-white/65 leading-[1.8]">${s.text}</p>
-                    </div>`;
+            // 전체 STEP 텍스트 — 한번에 모두 표시
+            const allStepsDiv = document.createElement('div');
+            allStepsDiv.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4';
+            allStepsDiv.innerHTML = steps.map((s, si) => `
+                <div class="mnl3d-card group bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition-all cursor-pointer" data-step="${si}">
+                    <div class="flex items-start gap-3 mb-2">
+                        <span class="shrink-0 w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-400/25 text-[12px] font-black text-blue-300 flex items-center justify-center mt-0.5">${si+1}</span>
+                        <h3 class="text-[13px] font-black text-white leading-snug">${s.title.split('—')[1]?.trim() || s.title}</h3>
+                    </div>
+                    <p class="text-[12px] text-white/50 leading-[1.75] group-hover:text-white/65 transition-colors pl-10">${s.text}</p>
+                </div>
+            `).join('');
+
+            // 카드 클릭 시 애니메이션 재생
+            function highlightStep(si) {
+                allStepsDiv.querySelectorAll('.mnl3d-card').forEach((c, ci) => {
+                    c.classList.toggle('!border-blue-400/40', ci === si);
+                    c.classList.toggle('!bg-blue-500/[0.04]', ci === si);
+                });
+                ctrlBar.querySelectorAll('.mnl3d-btn').forEach((b, bi) => {
+                    b.classList.toggle('!bg-blue-500/25', bi === si);
+                    b.classList.toggle('!border-blue-400/50', bi === si);
+                    b.classList.toggle('!text-blue-300', bi === si);
+                });
             }
+            allStepsDiv.querySelectorAll('.mnl3d-card').forEach((card, ci) => {
+                card.onclick = () => { animateTo(ci); highlightStep(ci); };
+            });
 
             container.innerHTML = '';
             container.appendChild(wrap);
-            container.appendChild(btnBar);
-            container.appendChild(autoBtn);
-            container.appendChild(infoDiv);
+            container.appendChild(ctrlBar);
+            container.appendChild(allStepsDiv);
 
             // 초기
             draw();
-            updateInfo(0);
+            highlightStep(0);
 
             // Viewport trigger
             const obs = new IntersectionObserver((entries) => {
