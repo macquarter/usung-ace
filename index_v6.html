@@ -3353,367 +3353,447 @@
             bulb: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M9 14a5 5 0 1 1 6 0c-.7.5-1 1-1 2v1H10v-1c0-1-.3-1.5-1-2z"/></svg>'
         };
 
-        /* ──────── 유지보수 가이드 SVG 일러스트 (중학생 눈높이) ──────── */
-        function manualStepSVG(iconKey, stepIdx) {
-            // 각 유지보수 항목별 4단계 일러스트
-            const illustrations = {
-                gear: [
-                    // Step 1: 사각피스 4개 풀기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="50" y="20" width="100" height="100" rx="8" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <text x="100" y="12" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="bold">태엽감속기</text>
-                        <!-- 사각 피스 4개 -->
-                        <rect x="58" y="28" width="10" height="10" rx="2" fill="#f87171" stroke="#f87171" stroke-width="1.5"/>
-                        <rect x="132" y="28" width="10" height="10" rx="2" fill="#f87171" stroke="#f87171" stroke-width="1.5"/>
-                        <rect x="58" y="102" width="10" height="10" rx="2" fill="#f87171" stroke="#f87171" stroke-width="1.5"/>
-                        <rect x="132" y="102" width="10" height="10" rx="2" fill="#f87171" stroke="#f87171" stroke-width="1.5"/>
-                        <!-- 가운데 피스 2개 (풀지않음) -->
-                        <circle cx="90" cy="70" r="5" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-width="1.5"/>
-                        <circle cx="110" cy="70" r="5" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-width="1.5"/>
-                        <!-- 태엽 스프링 -->
-                        <path d="M80 50 Q100 40 120 50 Q100 60 80 50" stroke="#fbbf24" stroke-width="2" fill="#fbbf24" fill-opacity="0.15"/>
-                        <path d="M80 80 Q100 70 120 80 Q100 90 80 80" stroke="#fbbf24" stroke-width="2" fill="#fbbf24" fill-opacity="0.15"/>
-                        <!-- 화살표: 풀기 -->
-                        <path d="M52 23 L45 16" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrowR)"/>
-                        <path d="M148 23 L155 16" stroke="#f87171" stroke-width="1.5"/>
-                        <text x="100" y="135" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">빨간 피스 4개만 풀기!</text>
-                        <text x="100" y="66" text-anchor="middle" fill="#4ade80" font-size="7">이건 안 풀어요</text>
-                    </svg>`,
-                    // Step 2: 새 태엽 끼우기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="50" y="30" width="100" height="80" rx="8" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <!-- 새 태엽 -->
-                        <rect x="70" y="50" width="60" height="40" rx="4" stroke="#4ade80" stroke-width="2.5" fill="#4ade80" fill-opacity="0.15" stroke-dasharray=""/>
-                        <text x="100" y="74" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">NEW</text>
-                        <!-- 화살표: 아래로 끼움 -->
-                        <path d="M100 15 L100 30" stroke="#fbbf24" stroke-width="2.5"/>
-                        <polygon points="94,28 106,28 100,36" fill="#fbbf24"/>
-                        <text x="100" y="12" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">새 태엽 끼우기</text>
-                        <!-- 피스 다시 체결 -->
-                        <rect x="58" y="38" width="8" height="8" rx="2" fill="#60a5fa"/>
-                        <rect x="134" y="38" width="8" height="8" rx="2" fill="#60a5fa"/>
-                        <rect x="58" y="94" width="8" height="8" rx="2" fill="#60a5fa"/>
-                        <rect x="134" y="94" width="8" height="8" rx="2" fill="#60a5fa"/>
-                        <text x="100" y="130" text-anchor="middle" fill="#60a5fa" font-size="8">피스 4개 다시 조이기</text>
-                    </svg>`,
-                    // Step 3: 와이어줄 V고리 걸기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 파이프 단면 -->
-                        <rect x="30" y="40" width="140" height="30" rx="6" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <text x="100" y="60" text-anchor="middle" fill="#60a5fa" font-size="9">파이프 내부</text>
-                        <!-- 와이어줄 -->
-                        <line x1="60" y1="90" x2="100" y2="70" stroke="#fbbf24" stroke-width="2.5"/>
-                        <line x1="140" y1="90" x2="100" y2="70" stroke="#fbbf24" stroke-width="2.5"/>
-                        <!-- V고리 -->
-                        <path d="M95 68 L100 78 L105 68" stroke="#f87171" stroke-width="3" fill="none"/>
-                        <text x="100" y="95" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">V고리</text>
-                        <!-- 당기는 화살표 -->
-                        <path d="M60 100 L60 90" stroke="#fbbf24" stroke-width="2"/>
-                        <polygon points="55,92 65,92 60,85" fill="#fbbf24"/>
-                        <path d="M140 100 L140 90" stroke="#fbbf24" stroke-width="2"/>
-                        <polygon points="135,92 145,92 140,85" fill="#fbbf24"/>
-                        <text x="60" y="112" text-anchor="middle" fill="#fbbf24" font-size="8">당기기</text>
-                        <text x="140" y="112" text-anchor="middle" fill="#fbbf24" font-size="8">당기기</text>
-                        <text x="100" y="130" text-anchor="middle" fill="#94a3b8" font-size="8">와이어줄을 V고리에 걸어요</text>
-                    </svg>`,
-                    // Step 4: 작동 테스트
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 후드 모양 -->
-                        <path d="M40 30 L160 30 L150 100 L50 100 Z" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <text x="100" y="55" text-anchor="middle" fill="#60a5fa" font-size="10">후드</text>
-                        <!-- 상하 화살표 -->
-                        <path d="M175 40 L175 90" stroke="#4ade80" stroke-width="3"/>
-                        <polygon points="170,45 180,45 175,35" fill="#4ade80"/>
-                        <polygon points="170,85 180,85 175,95" fill="#4ade80"/>
-                        <text x="175" y="110" text-anchor="middle" fill="#4ade80" font-size="8" font-weight="bold">위아래</text>
-                        <!-- 체크마크 -->
-                        <circle cx="100" cy="78" r="14" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="2"/>
-                        <path d="M92 78 L98 84 L110 72" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <text x="100" y="130" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">1~2회 올렸다 내려서 확인!</text>
-                    </svg>`
+        /* ──────── 유지보수 가이드: 인터랙티브 조립 애니메이션 ──────── */
+        const manualAnimData = {
+            gear: {
+                parts: [
+                    { id:'body', type:'rect', x:140, y:80, w:120, h:100, rx:8, fill:'#60a5fa', label:'감속기 본체' },
+                    { id:'spring', type:'rect', x:165, y:105, w:70, h:50, rx:4, fill:'#fbbf24', label:'태엽(스프링)' },
+                    { id:'s1', type:'rect', x:148, y:88, w:10, h:10, rx:2, fill:'#f87171', label:'피스①' },
+                    { id:'s2', type:'rect', x:242, y:88, w:10, h:10, rx:2, fill:'#f87171', label:'피스②' },
+                    { id:'s3', type:'rect', x:148, y:162, w:10, h:10, rx:2, fill:'#f87171', label:'피스③' },
+                    { id:'s4', type:'rect', x:242, y:162, w:10, h:10, rx:2, fill:'#f87171', label:'피스④' },
+                    { id:'wire', type:'path', d:'M170 210 L200 195 L230 210', fill:'none', stroke:'#fbbf24', sw:2.5, label:'와이어+V고리' },
+                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
                 ],
-                rod: [
-                    // Step 1: 너트피스 풀기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 겉봉 -->
-                        <rect x="30" y="50" width="140" height="24" rx="12" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <text x="100" y="66" text-anchor="middle" fill="#60a5fa" font-size="9">겉봉</text>
-                        <!-- 걸링 부분 -->
-                        <rect x="125" y="44" width="20" height="36" rx="4" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <text x="135" y="40" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">걸링</text>
-                        <!-- 너트피스 -->
-                        <circle cx="135" cy="62" r="5" fill="#f87171" stroke="#f87171" stroke-width="1.5"/>
-                        <text x="135" cy="62" text-anchor="middle" fill="white" font-size="6" font-weight="bold" y="64.5">N</text>
-                        <!-- 풀기 화살표 -->
-                        <path d="M155 62 L170 62" stroke="#f87171" stroke-width="2"/>
-                        <polygon points="167,57 177,62 167,67" fill="#f87171"/>
-                        <text x="170" y="52" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">빼기!</text>
-                        <text x="100" y="105" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">① 너트피스를 풀어서 빼요</text>
-                    </svg>`,
-                    // Step 2: 걸링 돌리기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="30" y="50" width="140" height="24" rx="12" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <rect x="125" y="44" width="20" height="36" rx="4" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <!-- 반시계방향 화살표 -->
-                        <path d="M135 30 A15 15 0 1 0 120 45" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
-                        <polygon points="118,40 118,50 126,45" fill="#fbbf24"/>
-                        <text x="135" y="22" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">⟲ 반시계</text>
-                        <text x="100" y="105" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">② 걸링을 반시계로 돌려요</text>
-                    </svg>`,
-                    // Step 3: 분리
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 속봉 (왼쪽) -->
-                        <rect x="15" y="55" width="70" height="16" rx="8" stroke="#4ade80" stroke-width="2" fill="#4ade80" fill-opacity="0.15"/>
-                        <text x="50" y="67" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">속봉</text>
-                        <!-- 겉봉 (오른쪽) -->
-                        <rect x="115" y="50" width="70" height="26" rx="13" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <text x="150" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="bold">겉봉</text>
-                        <!-- 양쪽 화살표 -->
-                        <path d="M90 63 L80 63" stroke="#f87171" stroke-width="2.5"/>
-                        <polygon points="83,58 73,63 83,68" fill="#f87171"/>
-                        <path d="M105 63 L115 63" stroke="#f87171" stroke-width="2.5"/>
-                        <polygon points="112,58 122,63 112,68" fill="#f87171"/>
-                        <!-- 손 아이콘 -->
-                        <text x="30" y="45" text-anchor="middle" fill="#94a3b8" font-size="14">🤚</text>
-                        <text x="170" y="45" text-anchor="middle" fill="#94a3b8" font-size="14">🤚</text>
-                        <text x="100" y="100" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">③ 양손으로 살짝 당기면 분리!</text>
-                    </svg>`,
-                    // Step 4: 세척 후 재조립
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 세척 -->
-                        <rect x="20" y="35" width="65" height="50" rx="8" stroke="#38bdf8" stroke-width="2" fill="#38bdf8" fill-opacity="0.08"/>
-                        <text x="52" y="55" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="bold">세척제</text>
-                        <text x="52" y="70" text-anchor="middle" fill="#38bdf8" font-size="16">🧹</text>
-                        <!-- 화살표 -->
-                        <path d="M95 60 L115 60" stroke="#fbbf24" stroke-width="2"/>
-                        <polygon points="112,55 122,60 112,65" fill="#fbbf24"/>
-                        <!-- 재조립 -->
-                        <rect x="125" y="35" width="60" height="50" rx="8" stroke="#4ade80" stroke-width="2" fill="#4ade80" fill-opacity="0.08"/>
-                        <text x="155" y="55" text-anchor="middle" fill="#4ade80" font-size="8" font-weight="bold">역순 조립</text>
-                        <circle cx="155" cy="72" r="10" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.5"/>
-                        <path d="M150 72 L154 76 L162 68" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-                        <text x="100" y="110" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">④ 닦고 → 역순으로 끼우기!</text>
-                    </svg>`
-                ],
-                bearing: [
-                    // Step 1: 처음 6개 끼우기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 봉 -->
-                        <rect x="30" y="55" width="140" height="14" rx="7" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <!-- 빠찌링 6개 -->
-                        <circle cx="55" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <circle cx="75" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <circle cx="95" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <circle cx="115" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <circle cx="135" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <circle cx="155" cy="62" r="9" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <!-- 숫자 -->
-                        <text x="55" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">1</text>
-                        <text x="75" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">2</text>
-                        <text x="95" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">3</text>
-                        <text x="115" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">4</text>
-                        <text x="135" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">5</text>
-                        <text x="155" y="65" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="bold">6</text>
-                        <text x="100" y="35" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">처음엔 6개!</text>
-                        <text x="100" y="100" text-anchor="middle" fill="#94a3b8" font-size="8">봉에 빠찌링(베어링)을 끼워요</text>
-                    </svg>`,
-                    // Step 2: 느슨하면 1~2개 추가
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="20" y="55" width="120" height="14" rx="7" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <!-- 기존 6개 (작게) -->
-                        <circle cx="35" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <circle cx="52" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <circle cx="69" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <circle cx="86" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <circle cx="103" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <circle cx="120" cy="62" r="7" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <!-- 추가분 +1~2개 -->
-                        <circle cx="155" cy="55" r="9" stroke="#4ade80" stroke-width="2.5" fill="#4ade80" fill-opacity="0.25"/>
-                        <text x="155" y="58" text-anchor="middle" fill="#4ade80" font-size="7" font-weight="bold">+1</text>
-                        <circle cx="175" cy="55" r="9" stroke="#4ade80" stroke-width="2.5" fill="#4ade80" fill-opacity="0.25"/>
-                        <text x="175" y="58" text-anchor="middle" fill="#4ade80" font-size="7" font-weight="bold">+2</text>
-                        <!-- 화살표 -->
-                        <path d="M155 70 L140 65" stroke="#4ade80" stroke-width="2"/>
-                        <polygon points="143,62 138,68 147,66" fill="#4ade80"/>
-                        <text x="100" y="30" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">느슨해지면 1~2개 추가!</text>
-                        <text x="100" y="100" text-anchor="middle" fill="#94a3b8" font-size="8">흘러내리면 추가하면 돼요</text>
-                    </svg>`,
-                    // Step 3: 뺄 때 펜치 사용
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 봉 -->
-                        <rect x="50" y="60" width="100" height="12" rx="6" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.08"/>
-                        <!-- 빠찌링 하나 -->
-                        <circle cx="130" cy="66" r="10" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.2"/>
-                        <!-- 펜치 모양 -->
-                        <line x1="160" y1="40" x2="140" y2="60" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="175" y1="40" x2="145" y2="60" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
-                        <text x="170" y="35" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">펜치</text>
-                        <!-- X표시 - 손으로 빼지 말 것 -->
-                        <text x="50" y="45" text-anchor="middle" fill="#94a3b8" font-size="14">🤚</text>
-                        <line x1="38" y1="30" x2="62" y2="52" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="62" y1="30" x2="38" y2="52" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
-                        <text x="100" y="105" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">손으로 빼면 위험! 펜치로 톡!</text>
-                        <text x="100" y="120" text-anchor="middle" fill="#94a3b8" font-size="8">안쪽에서 톡 쳐서 빼요</text>
-                    </svg>`,
-                    // Step 4: 테스트
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 후드 심볼 -->
-                        <path d="M60 30 L140 30 L130 90 L70 90 Z" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <!-- 상하 화살표 -->
-                        <path d="M155 40 L155 80" stroke="#4ade80" stroke-width="3"/>
-                        <polygon points="150,45 160,45 155,35" fill="#4ade80"/>
-                        <polygon points="150,75 160,75 155,85" fill="#4ade80"/>
-                        <text x="155" y="100" text-anchor="middle" fill="#4ade80" font-size="7">여러 번</text>
-                        <!-- 체크 -->
-                        <circle cx="100" cy="65" r="16" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="2"/>
-                        <path d="M91 65 L97 71 L111 57" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <text x="100" y="120" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">여러 번 작동 → 장력 확인!</text>
-                    </svg>`
-                ],
-                drop: [
-                    // Step 1: 나팔캡 돌려서 분리
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 후드 하단 -->
-                        <rect x="40" y="15" width="120" height="40" rx="4" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <text x="100" y="40" text-anchor="middle" fill="#60a5fa" font-size="9">후드 하단</text>
-                        <!-- 나팔캡 -->
-                        <path d="M80 55 L80 85 Q80 95 90 100 L110 100 Q120 95 120 85 L120 55" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.12"/>
-                        <text x="100" y="80" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">나팔캡</text>
-                        <!-- 돌리기 화살표 -->
-                        <path d="M75 75 A30 30 0 0 1 65 55" stroke="#f87171" stroke-width="2.5" fill="none"/>
-                        <polygon points="62,58 60,50 68,54" fill="#f87171"/>
-                        <text x="50" y="50" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">돌리기</text>
-                        <!-- 손 아이콘 -->
-                        <text x="150" y="85" text-anchor="middle" fill="#94a3b8" font-size="18">🤚</text>
-                        <text x="100" y="125" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">도구 없이 손으로 OK!</text>
-                    </svg>`,
-                    // Step 2: 기름받이 분리
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 기름받이 -->
-                        <ellipse cx="100" cy="55" rx="50" ry="20" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.12"/>
-                        <text x="100" y="60" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">기름받이</text>
-                        <!-- 반시계 화살표 -->
-                        <path d="M55 45 A50 20 0 0 0 50 55" stroke="#f87171" stroke-width="2.5" fill="none"/>
-                        <polygon points="48,48 47,57 55,50" fill="#f87171"/>
-                        <text x="40" y="40" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">⟲</text>
-                        <!-- 아래로 빠짐 -->
-                        <path d="M100 80 L100 105" stroke="#f87171" stroke-width="2" stroke-dasharray="4,3"/>
-                        <polygon points="95,102 105,102 100,110" fill="#f87171"/>
-                        <text x="100" y="125" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">반시계로 돌려서 빼기</text>
-                    </svg>`,
-                    // Step 3: 세척
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 기름받이 + 기름 -->
-                        <ellipse cx="60" cy="50" rx="35" ry="15" stroke="#fbbf24" stroke-width="2" fill="#fbbf24" fill-opacity="0.1"/>
-                        <ellipse cx="60" cy="50" rx="20" ry="8" fill="#a16207" fill-opacity="0.3"/>
-                        <text x="60" y="54" text-anchor="middle" fill="#a16207" font-size="7">기름</text>
-                        <!-- 화살표 -->
-                        <path d="M105 50 L120 50" stroke="#fbbf24" stroke-width="2"/>
-                        <polygon points="117,45 127,50 117,55" fill="#fbbf24"/>
-                        <!-- 깨끗한 기름받이 -->
-                        <ellipse cx="155" cy="50" rx="35" ry="15" stroke="#4ade80" stroke-width="2" fill="#4ade80" fill-opacity="0.1"/>
-                        <text x="155" y="47" text-anchor="middle" fill="#4ade80" font-size="14">✨</text>
-                        <text x="155" y="60" text-anchor="middle" fill="#4ade80" font-size="7">깨끗!</text>
-                        <!-- 세제 -->
-                        <text x="113" y="35" text-anchor="middle" fill="#38bdf8" font-size="8">중성세제</text>
-                        <text x="100" y="100" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">기름 버리고 세제로 씻기!</text>
-                    </svg>`,
-                    // Step 4: 재조립
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 후드 하단 -->
-                        <rect x="40" y="15" width="120" height="35" rx="4" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <text x="100" y="37" text-anchor="middle" fill="#60a5fa" font-size="9">후드</text>
-                        <!-- 기름받이 + 나팔캡 올리기 -->
-                        <path d="M80 50 L80 80 Q80 90 90 95 L110 95 Q120 90 120 80 L120 50" stroke="#4ade80" stroke-width="2.5" fill="#4ade80" fill-opacity="0.1"/>
-                        <!-- 시계방향 화살표 -->
-                        <path d="M125 70 A30 30 0 0 1 135 50" stroke="#4ade80" stroke-width="2.5" fill="none"/>
-                        <polygon points="138,53 140,45 132,49" fill="#4ade80"/>
-                        <text x="150" y="45" text-anchor="middle" fill="#4ade80" font-size="8" font-weight="bold">시계⟳</text>
-                        <text x="100" y="78" text-anchor="middle" fill="#4ade80" font-size="8">조이기</text>
-                        <text x="100" y="120" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">시계방향으로 돌려 체결!</text>
-                    </svg>`
-                ],
-                bulb: [
-                    // Step 1: 등받침 고무 끼우기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 후드 하단 -->
-                        <rect x="40" y="15" width="120" height="30" rx="4" stroke="#60a5fa" stroke-width="2" fill="#60a5fa" fill-opacity="0.06"/>
-                        <text x="100" y="34" text-anchor="middle" fill="#60a5fa" font-size="9">후드 하단</text>
-                        <!-- 등받침 고무 -->
-                        <ellipse cx="100" cy="62" rx="30" ry="8" stroke="#f87171" stroke-width="2.5" fill="#f87171" fill-opacity="0.15"/>
-                        <text x="100" y="66" text-anchor="middle" fill="#f87171" font-size="8" font-weight="bold">고무</text>
-                        <!-- 화살표 위로 -->
-                        <path d="M100 85 L100 72" stroke="#fbbf24" stroke-width="2.5"/>
-                        <polygon points="95,75 105,75 100,68" fill="#fbbf24"/>
-                        <text x="100" y="100" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">① 고무를 후드에 끼우기</text>
-                    </svg>`,
-                    // Step 2: 등하판 올리기
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="40" y="15" width="120" height="25" rx="4" stroke="#60a5fa" stroke-width="1.5" fill="#60a5fa" fill-opacity="0.04"/>
-                        <!-- 고무 (이미 끼운 상태) -->
-                        <ellipse cx="100" cy="48" rx="30" ry="6" stroke="#f87171" stroke-width="1.5" fill="#f87171" fill-opacity="0.1"/>
-                        <!-- 등하판 -->
-                        <rect x="60" y="60" width="80" height="15" rx="4" stroke="#fbbf24" stroke-width="2.5" fill="#fbbf24" fill-opacity="0.15"/>
-                        <text x="100" y="71" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">등하판</text>
-                        <!-- 화살표 위로 -->
-                        <path d="M100 90 L100 77" stroke="#fbbf24" stroke-width="2.5"/>
-                        <polygon points="95,80 105,80 100,73" fill="#fbbf24"/>
-                        <text x="100" y="110" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">② 고무 위에 등하판 올리기</text>
-                    </svg>`,
-                    // Step 3: 갓등 장착
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="50" y="15" width="100" height="20" rx="4" stroke="#60a5fa" stroke-width="1.5" fill="#60a5fa" fill-opacity="0.04"/>
-                        <ellipse cx="100" cy="42" rx="25" ry="5" stroke="#f87171" stroke-width="1" fill="#f87171" fill-opacity="0.08"/>
-                        <rect x="65" y="50" width="70" height="10" rx="3" stroke="#fbbf24" stroke-width="1.5" fill="#fbbf24" fill-opacity="0.1"/>
-                        <!-- 갓등 (전구 모양) -->
-                        <circle cx="100" cy="82" r="22" stroke="#4ade80" stroke-width="2.5" fill="#4ade80" fill-opacity="0.12"/>
-                        <text x="100" y="78" text-anchor="middle" fill="#4ade80" font-size="14">💡</text>
-                        <text x="100" y="95" text-anchor="middle" fill="#4ade80" font-size="7" font-weight="bold">갓등</text>
-                        <!-- 화살표 위로 -->
-                        <path d="M100 112 L100 105" stroke="#4ade80" stroke-width="2"/>
-                        <polygon points="95,107 105,107 100,102" fill="#4ade80"/>
-                        <text x="100" y="130" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">③ 등하판 위에 갓등 장착!</text>
-                    </svg>`,
-                    // Step 4: 전원 연결 + 점등 테스트
-                    `<svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 완성된 등 -->
-                        <rect x="55" y="15" width="90" height="15" rx="3" stroke="#60a5fa" stroke-width="1.5" fill="#60a5fa" fill-opacity="0.04"/>
-                        <circle cx="100" cy="58" r="25" stroke="#fbbf24" stroke-width="2" fill="#fbbf24" fill-opacity="0.15"/>
-                        <!-- 빛 효과 -->
-                        <circle cx="100" cy="58" r="18" fill="#fbbf24" fill-opacity="0.1"/>
-                        <circle cx="100" cy="58" r="10" fill="#fbbf24" fill-opacity="0.2"/>
-                        <text x="100" y="55" text-anchor="middle" fill="#fbbf24" font-size="14">💡</text>
-                        <text x="100" y="70" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="bold">ON!</text>
-                        <!-- 전원선 -->
-                        <path d="M130 45 L160 30 L170 30" stroke="#f87171" stroke-width="2" stroke-dasharray="4,3"/>
-                        <text x="175" y="28" text-anchor="start" fill="#f87171" font-size="8">전원선</text>
-                        <!-- 체크마크 -->
-                        <circle cx="100" cy="105" r="14" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="2"/>
-                        <path d="M92 105 L98 111 L110 99" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <text x="100" y="132" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold">④ 전원 연결 → 불 켜지면 완성!</text>
-                    </svg>`
+                steps: [
+                    { title:'피스 4개 풀기', desc:'사각피스 4개를 풀어서 태엽을 분리합니다', show:['body','spring','s1','s2','s3','s4'], anim:[
+                        {id:'s1',to:{x:110,y:55},dur:600},{id:'s2',to:{x:280,y:55},dur:600},{id:'s3',to:{x:110,y:195},dur:600},{id:'s4',to:{x:280,y:195},dur:600},{id:'spring',to:{x:165,y:30},dur:800}
+                    ]},
+                    { title:'새 태엽 끼우기', desc:'새 태엽을 사각구멍에 끼우고 피스를 채웁니다', show:['body','spring','s1','s2','s3','s4'], anim:[
+                        {id:'spring',from:{x:165,y:30},to:{x:165,y:105},dur:700},{id:'s1',from:{x:110,y:55},to:{x:148,y:88},dur:500,delay:400},{id:'s2',from:{x:280,y:55},to:{x:242,y:88},dur:500,delay:500},{id:'s3',from:{x:110,y:195},to:{x:148,y:162},dur:500,delay:600},{id:'s4',from:{x:280,y:195},to:{x:242,y:162},dur:500,delay:700}
+                    ]},
+                    { title:'와이어 V고리 걸기', desc:'파이프 안쪽에서 와이어줄을 V고리에 걸어줍니다', show:['body','spring','s1','s2','s3','s4','wire'], anim:[
+                        {id:'wire',from:{y:260},to:{y:210},dur:800}
+                    ]},
+                    { title:'작동 테스트', desc:'후드를 1~2회 올렸다 내려 감속 속도를 확인합니다', show:['body','spring','s1','s2','s3','s4','wire','check'], anim:[
+                        {id:'check',from:{scale:0},to:{scale:1},dur:600},{id:'body',anim:'bounce',dur:1200}
+                    ]}
                 ]
+            },
+            rod: {
+                parts: [
+                    { id:'outer', type:'rect', x:80, y:115, w:240, h:30, rx:15, fill:'#60a5fa', label:'겉봉' },
+                    { id:'inner', type:'rect', x:90, y:120, w:130, h:20, rx:10, fill:'#4ade80', label:'속봉' },
+                    { id:'collar', type:'rect', x:250, y:108, w:26, h:44, rx:5, fill:'#fbbf24', label:'걸링' },
+                    { id:'nut', type:'circle', cx:263, cy:130, r:7, fill:'#f87171', label:'너트피스' },
+                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
+                ],
+                steps: [
+                    { title:'너트피스 풀기', desc:'걸링에 있는 너트피스를 풀어서 빼냅니다', show:['outer','inner','collar','nut'], anim:[
+                        {id:'nut',to:{cx:320,cy:100},dur:700}
+                    ]},
+                    { title:'걸링 돌리기', desc:'걸링을 반시계방향으로 돌려 잠금을 해제합니다', show:['outer','inner','collar'], anim:[
+                        {id:'collar',anim:'rotate',dur:1000}
+                    ]},
+                    { title:'속봉·겉봉 분리', desc:'양손으로 살짝 당겨 분리합니다', show:['outer','inner','collar'], anim:[
+                        {id:'inner',to:{x:10},dur:800},{id:'outer',to:{x:160},dur:800}
+                    ]},
+                    { title:'세척 후 재조립', desc:'기름때를 세척제로 닦고 역순으로 재조립합니다', show:['outer','inner','collar','check'], anim:[
+                        {id:'inner',from:{x:10},to:{x:90},dur:700},{id:'outer',from:{x:160},to:{x:80},dur:700},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:800}
+                    ]}
+                ]
+            },
+            bearing: {
+                parts: [
+                    { id:'rod', type:'rect', x:50, y:122, w:300, h:16, rx:8, fill:'#60a5fa', label:'봉' },
+                    { id:'b1', type:'circle', cx:95, cy:130, r:12, fill:'#fbbf24', label:'①' },
+                    { id:'b2', type:'circle', cx:125, cy:130, r:12, fill:'#fbbf24', label:'②' },
+                    { id:'b3', type:'circle', cx:155, cy:130, r:12, fill:'#fbbf24', label:'③' },
+                    { id:'b4', type:'circle', cx:185, cy:130, r:12, fill:'#fbbf24', label:'④' },
+                    { id:'b5', type:'circle', cx:215, cy:130, r:12, fill:'#fbbf24', label:'⑤' },
+                    { id:'b6', type:'circle', cx:245, cy:130, r:12, fill:'#fbbf24', label:'⑥' },
+                    { id:'b7', type:'circle', cx:275, cy:130, r:12, fill:'#4ade80', label:'+1' },
+                    { id:'b8', type:'circle', cx:305, cy:130, r:12, fill:'#4ade80', label:'+2' },
+                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
+                ],
+                steps: [
+                    { title:'빠찌링 6개 끼우기', desc:'봉에 빠찌링(베어링)을 6개 끼워 넣습니다', show:['rod','b1','b2','b3','b4','b5','b6'], anim:[
+                        {id:'b1',from:{cy:50},to:{cy:130},dur:400},{id:'b2',from:{cy:50},to:{cy:130},dur:400,delay:100},{id:'b3',from:{cy:50},to:{cy:130},dur:400,delay:200},{id:'b4',from:{cy:50},to:{cy:130},dur:400,delay:300},{id:'b5',from:{cy:50},to:{cy:130},dur:400,delay:400},{id:'b6',from:{cy:50},to:{cy:130},dur:400,delay:500}
+                    ]},
+                    { title:'느슨하면 1~2개 추가', desc:'사용 후 느슨해지면 여분의 빠찌링을 추가합니다', show:['rod','b1','b2','b3','b4','b5','b6','b7','b8'], anim:[
+                        {id:'b7',from:{cy:50},to:{cy:130},dur:500,delay:200},{id:'b8',from:{cy:50},to:{cy:130},dur:500,delay:500}
+                    ]},
+                    { title:'뺄 때는 펜치로!', desc:'손으로 빼지 말고 펜치로 안쪽에서 톡 쳐서 빼냅니다', show:['rod','b1','b2','b3','b4','b5','b6','b7','b8'], anim:[
+                        {id:'b8',to:{cy:50},dur:500},{id:'b7',to:{cy:50},dur:500,delay:200}
+                    ]},
+                    { title:'장력 테스트', desc:'교체 후 상하 작동을 여러 번 테스트합니다', show:['rod','b1','b2','b3','b4','b5','b6','check'], anim:[
+                        {id:'check',from:{scale:0},to:{scale:1},dur:600}
+                    ]}
+                ]
+            },
+            drop: {
+                parts: [
+                    { id:'hood', type:'rect', x:100, y:30, w:200, h:60, rx:6, fill:'#60a5fa', label:'후드 하단' },
+                    { id:'cap', type:'path', d:'M160 90 L160 150 Q160 170 180 175 L220 175 Q240 170 240 150 L240 90', fill:'#fbbf24', label:'나팔캡' },
+                    { id:'tray', type:'ellipse', cx:200, cy:200, rx:55, ry:18, fill:'#fbbf24', label:'기름받이' },
+                    { id:'oil', type:'ellipse', cx:200, cy:200, rx:30, ry:10, fill:'#a16207', label:'기름때' },
+                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
+                ],
+                steps: [
+                    { title:'나팔캡 분리', desc:'후드 하단의 나팔캡을 손으로 돌려 분리합니다', show:['hood','cap','tray'], anim:[
+                        {id:'cap',anim:'rotate',dur:800},{id:'cap',to:{y:120},dur:600,delay:800}
+                    ]},
+                    { title:'기름받이 분리', desc:'기름받이를 반시계방향으로 돌려 빼냅니다', show:['hood','tray','oil'], anim:[
+                        {id:'tray',anim:'rotate',dur:800},{id:'tray',to:{cy:240},dur:600,delay:600},{id:'oil',to:{cy:240},dur:600,delay:600}
+                    ]},
+                    { title:'기름 버리고 세척', desc:'기름을 버리고 중성 세제로 세척합니다', show:['tray','oil'], anim:[
+                        {id:'oil',to:{rx:0,ry:0},dur:800}
+                    ]},
+                    { title:'역순 재조립', desc:'물기를 닦고 시계방향으로 돌려 체결합니다', show:['hood','cap','tray','check'], anim:[
+                        {id:'tray',from:{cy:240},to:{cy:200},dur:600},{id:'cap',from:{y:120},to:{y:0},dur:600,delay:400},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:1000}
+                    ]}
+                ]
+            },
+            bulb: {
+                parts: [
+                    { id:'hood', type:'rect', x:110, y:30, w:180, h:40, rx:6, fill:'#60a5fa', label:'후드 하단' },
+                    { id:'rubber', type:'ellipse', cx:200, cy:85, rx:45, ry:10, fill:'#f87171', label:'등받침 고무' },
+                    { id:'plate', type:'rect', x:130, y:100, w:140, h:20, rx:5, fill:'#fbbf24', label:'등하판' },
+                    { id:'bulb', type:'circle', cx:200, cy:155, r:30, fill:'#4ade80', label:'💡 갓등' },
+                    { id:'wire', type:'path', d:'M235 140 L270 120 L290 120', fill:'none', stroke:'#f87171', sw:2, label:'전원선' },
+                    { id:'check', type:'circle', cx:200, cy:155, r:18, fill:'#4ade80', label:'✓ OK' }
+                ],
+                steps: [
+                    { title:'등받침 고무 끼우기', desc:'등받침 고무를 후드 하단에 끼웁니다', show:['hood','rubber'], anim:[
+                        {id:'rubber',from:{cy:200},to:{cy:85},dur:700}
+                    ]},
+                    { title:'등하판 올려 끼우기', desc:'고무 위에 등하판을 올려 끼웁니다', show:['hood','rubber','plate'], anim:[
+                        {id:'plate',from:{y:220},to:{y:100},dur:700}
+                    ]},
+                    { title:'갓등 장착', desc:'등하판 위에 갓등(LED·삼파장·아크릴)을 장착합니다', show:['hood','rubber','plate','bulb'], anim:[
+                        {id:'bulb',from:{cy:260},to:{cy:155},dur:700}
+                    ]},
+                    { title:'전원 연결 · 점등 테스트', desc:'전원선을 연결하고 점등 테스트 후 완료합니다', show:['hood','rubber','plate','bulb','wire','check'], anim:[
+                        {id:'wire',from:{opacity:0},to:{opacity:1},dur:500},{id:'bulb',anim:'glow',dur:1200,delay:500},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:1200}
+                    ]}
+                ]
+            }
+        };
+
+        /* ── 애니메이션 엔진: Canvas 기반 조립 시뮬레이터 ── */
+        function createManualAnimPlayer(containerId, key) {
+            const data = manualAnimData[key];
+            if (!data) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const W = 400, H = 260;
+            const canvas = document.createElement('canvas');
+            canvas.width = W * 2; canvas.height = H * 2;
+            canvas.style.cssText = 'width:100%;height:100%;border-radius:12px;';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(2, 2);
+
+            let currentStep = 0;
+            let animating = false;
+            let animFrame = null;
+            let partStates = {};
+
+            // 파트 초기 상태
+            function resetParts() {
+                partStates = {};
+                data.parts.forEach(p => {
+                    partStates[p.id] = { ...p, opacity: 1, scale: 1, rotation: 0, glowing: false };
+                });
+            }
+            resetParts();
+
+            const colors = {
+                '#60a5fa': [96,165,250], '#fbbf24': [251,191,36], '#f87171': [248,113,113],
+                '#4ade80': [74,222,128], '#a16207': [162,98,7], '#38bdf8': [56,189,248]
             };
-            return (illustrations[iconKey] || [])[stepIdx] || '';
+
+            function parseColor(c, alpha) {
+                const rgb = colors[c] || [255,255,255];
+                return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha !== undefined ? alpha : 1})`;
+            }
+
+            function drawPart(p, st) {
+                if (st.opacity <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = st.opacity;
+                const sc = st.scale || 1;
+
+                if (st.type === 'rect') {
+                    const cx = (st.x || p.x) + (st.w || p.w)/2;
+                    const cy = (st.y || p.y) + (st.h || p.h)/2;
+                    ctx.translate(cx, cy);
+                    if (st.rotation) ctx.rotate(st.rotation);
+                    ctx.scale(sc, sc);
+                    const w = st.w || p.w, h = st.h || p.h, rx = st.rx || p.rx || 0;
+                    ctx.beginPath();
+                    ctx.roundRect(-w/2, -h/2, w, h, rx);
+                    ctx.fillStyle = parseColor(p.fill, 0.15);
+                    ctx.fill();
+                    ctx.strokeStyle = parseColor(p.fill, 0.7);
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    // Label
+                    ctx.fillStyle = parseColor(p.fill, 0.9);
+                    ctx.font = 'bold 11px "Pretendard",sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.label, 0, 4);
+                } else if (st.type === 'circle') {
+                    const cx = st.cx !== undefined ? st.cx : p.cx;
+                    const cy = st.cy !== undefined ? st.cy : p.cy;
+                    const r = st.r || p.r;
+                    ctx.translate(cx, cy);
+                    ctx.scale(sc, sc);
+                    if (st.glowing) {
+                        ctx.shadowColor = parseColor(p.fill, 0.6);
+                        ctx.shadowBlur = 20;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(0, 0, r, 0, Math.PI * 2);
+                    ctx.fillStyle = parseColor(p.fill, 0.2);
+                    ctx.fill();
+                    ctx.strokeStyle = parseColor(p.fill, 0.8);
+                    ctx.lineWidth = 2.5;
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = parseColor(p.fill, 0.95);
+                    ctx.font = r > 14 ? 'bold 13px "Pretendard",sans-serif' : 'bold 10px "Pretendard",sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.label, 0, 4);
+                } else if (st.type === 'ellipse') {
+                    const cx = st.cx !== undefined ? st.cx : p.cx;
+                    const cy = st.cy !== undefined ? st.cy : p.cy;
+                    const rx = st.rx !== undefined ? st.rx : p.rx;
+                    const ry = st.ry !== undefined ? st.ry : p.ry;
+                    ctx.translate(cx, cy);
+                    if (st.rotation) ctx.rotate(st.rotation);
+                    ctx.scale(sc, sc);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, Math.max(rx,0), Math.max(ry,0), 0, 0, Math.PI * 2);
+                    ctx.fillStyle = parseColor(p.fill, 0.2);
+                    ctx.fill();
+                    ctx.strokeStyle = parseColor(p.fill, 0.7);
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    if (rx > 5) {
+                        ctx.fillStyle = parseColor(p.fill, 0.9);
+                        ctx.font = 'bold 10px "Pretendard",sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(p.label, 0, 4);
+                    }
+                } else if (st.type === 'path') {
+                    ctx.translate(0, st.y || 0);
+                    ctx.scale(sc, sc);
+                    const path2d = new Path2D(st.d || p.d);
+                    if (p.fill && p.fill !== 'none') {
+                        ctx.fillStyle = parseColor(p.fill, 0.15);
+                        ctx.fill(path2d);
+                    }
+                    ctx.strokeStyle = parseColor(p.stroke || p.fill, 0.8);
+                    ctx.lineWidth = p.sw || 2.5;
+                    ctx.stroke(path2d);
+                    ctx.fillStyle = parseColor(p.stroke || p.fill, 0.8);
+                    ctx.font = 'bold 10px "Pretendard",sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.label, 200, (st.d || p.d).includes('M160') ? 185 : 225);
+                }
+                ctx.restore();
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                // BG
+                const grad = ctx.createLinearGradient(0, 0, 0, H);
+                grad.addColorStop(0, '#0a0a14');
+                grad.addColorStop(1, '#060610');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, W, H);
+                // Grid dots
+                ctx.fillStyle = 'rgba(255,255,255,0.03)';
+                for (let x = 20; x < W; x += 20) for (let y = 20; y < H; y += 20) {
+                    ctx.fillRect(x, y, 1, 1);
+                }
+                // Draw visible parts
+                const step = data.steps[currentStep];
+                data.parts.forEach(p => {
+                    const st = partStates[p.id];
+                    if (step.show.includes(p.id) && st) drawPart(p, st);
+                });
+                // Step label
+                ctx.fillStyle = 'rgba(96,165,250,0.8)';
+                ctx.font = 'bold 10px "Pretendard",sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(`STEP ${currentStep + 1} / ${data.steps.length}`, 12, 20);
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.font = 'bold 14px "Pretendard",sans-serif';
+                ctx.fillText(step.title, 12, 38);
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.font = '11px "Pretendard",sans-serif';
+                ctx.fillText(step.desc, 12, 54);
+            }
+
+            // 이징 함수
+            function easeOutBack(t) {
+                const c1 = 1.70158, c3 = c1 + 1;
+                return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+            }
+            function easeOutElastic(t) {
+                if (t === 0 || t === 1) return t;
+                return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * (2 * Math.PI / 3)) + 1;
+            }
+
+            function runAnimations(anims, onDone) {
+                animating = true;
+                const startTime = performance.now();
+                const totalDur = Math.max(...anims.map(a => (a.dur || 600) + (a.delay || 0)));
+
+                function tick(now) {
+                    const elapsed = now - startTime;
+                    let allDone = true;
+
+                    anims.forEach(a => {
+                        const delay = a.delay || 0;
+                        const dur = a.dur || 600;
+                        const t = Math.max(0, Math.min(1, (elapsed - delay) / dur));
+                        if (t < 1) allDone = false;
+                        const et = a.anim === 'bounce' ? easeOutElastic(t) : easeOutBack(t);
+                        const st = partStates[a.id];
+                        if (!st) return;
+
+                        if (a.anim === 'rotate') {
+                            st.rotation = t * Math.PI * 2;
+                        } else if (a.anim === 'bounce') {
+                            const bounceY = Math.sin(t * Math.PI * 3) * 15 * (1 - t);
+                            st.y = (st.y || data.parts.find(p=>p.id===a.id).y) + bounceY * 0.1;
+                        } else if (a.anim === 'glow') {
+                            st.glowing = t > 0.3;
+                            st.scale = 1 + Math.sin(t * Math.PI) * 0.15;
+                        } else {
+                            if (a.to) {
+                                const p = data.parts.find(p => p.id === a.id);
+                                Object.keys(a.to).forEach(k => {
+                                    const from = a.from ? a.from[k] : (st[k] !== undefined ? st[k] : p[k]);
+                                    const to = a.to[k];
+                                    if (k === 'scale') {
+                                        st[k] = from + (to - from) * easeOutElastic(t);
+                                    } else {
+                                        st[k] = from + (to - from) * et;
+                                    }
+                                });
+                            }
+                            if (a.from && !a.to) {
+                                Object.keys(a.from).forEach(k => {
+                                    const p = data.parts.find(p => p.id === a.id);
+                                    st[k] = a.from[k] + ((p[k] || 0) - a.from[k]) * et;
+                                });
+                            }
+                        }
+                    });
+
+                    draw();
+                    if (!allDone) {
+                        animFrame = requestAnimationFrame(tick);
+                    } else {
+                        animating = false;
+                        if (onDone) onDone();
+                    }
+                }
+                animFrame = requestAnimationFrame(tick);
+            }
+
+            function goToStep(idx) {
+                if (animating) { cancelAnimationFrame(animFrame); animating = false; }
+                currentStep = idx;
+                // 파트 초기 위치로 리셋
+                resetParts();
+                // 이전 단계까지의 최종 상태를 즉시 적용
+                for (let s = 0; s < idx; s++) {
+                    data.steps[s].anim.forEach(a => {
+                        const st = partStates[a.id];
+                        if (!st) return;
+                        if (a.to) Object.keys(a.to).forEach(k => st[k] = a.to[k]);
+                        if (a.anim === 'rotate') st.rotation = 0;
+                        if (a.anim === 'glow') { st.glowing = true; st.scale = 1; }
+                    });
+                }
+                // 현재 단계 from 값 설정
+                const step = data.steps[idx];
+                step.anim.forEach(a => {
+                    const st = partStates[a.id];
+                    if (!st) return;
+                    if (a.from) {
+                        Object.keys(a.from).forEach(k => st[k] = a.from[k]);
+                    }
+                });
+                draw();
+                // 애니메이션 시작
+                runAnimations(step.anim);
+                // 버튼 활성화 업데이트
+                container.querySelectorAll('.mnl-step-btn').forEach((btn, bi) => {
+                    btn.classList.toggle('!bg-blue-500/25', bi === idx);
+                    btn.classList.toggle('!border-blue-400/50', bi === idx);
+                    btn.classList.toggle('!text-blue-300', bi === idx);
+                });
+            }
+
+            // Build UI
+            const wrap = document.createElement('div');
+            wrap.className = 'relative';
+            wrap.appendChild(canvas);
+
+            // Step buttons
+            const btnBar = document.createElement('div');
+            btnBar.className = 'flex gap-2 mt-3 flex-wrap';
+            data.steps.forEach((s, si) => {
+                const btn = document.createElement('button');
+                btn.className = 'mnl-step-btn flex-1 min-w-0 px-3 py-2.5 rounded-xl text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.06] hover:text-white/80 transition-all text-center leading-tight';
+                btn.innerHTML = `<span class="block text-[10px] text-blue-400/60 mb-0.5">STEP ${si+1}</span>${s.title}`;
+                btn.onclick = () => goToStep(si);
+                btnBar.appendChild(btn);
+            });
+
+            // Auto-play / replay
+            const autoBtn = document.createElement('button');
+            autoBtn.className = 'mt-2 w-full py-2 rounded-xl text-[11px] font-bold border border-cyan-400/20 bg-cyan-400/[0.05] text-cyan-300 hover:bg-cyan-400/10 transition-all flex items-center justify-center gap-2';
+            autoBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> 전체 순서 자동 재생';
+            autoBtn.onclick = () => {
+                let step = 0;
+                function playNext() {
+                    if (step >= data.steps.length) return;
+                    goToStep(step);
+                    const dur = Math.max(...data.steps[step].anim.map(a => (a.dur||600)+(a.delay||0))) + 600;
+                    step++;
+                    if (step < data.steps.length) setTimeout(playNext, dur);
+                }
+                playNext();
+            };
+
+            container.innerHTML = '';
+            container.appendChild(wrap);
+            container.appendChild(btnBar);
+            container.appendChild(autoBtn);
+
+            // 초기 렌더
+            draw();
+            // 뷰포트에 보이면 자동 1단계 재생
+            const obs = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    goToStep(0);
+                    obs.disconnect();
+                }
+            }, { threshold: 0.3 });
+            obs.observe(container);
         }
 
         document.getElementById('manual-list').innerHTML = manuals.map((m, i) => {
-            // 단계별 일러스트+설명을 카드형으로 렌더링
-            const stepsHtml = m.steps.map((s, si) => {
-                const svg = manualStepSVG(m.icon, si);
-                return `
-                <div class="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition group">
-                    ${svg ? `<div class="w-full aspect-[10/7] bg-[#0a0a12] rounded-xl mb-3 flex items-center justify-center overflow-hidden p-2">${svg}</div>` : ''}
-                    <div class="flex gap-2.5 items-start">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-blue-500/15 border border-blue-400/25 text-[12px] font-black text-blue-300 flex items-center justify-center mt-0.5">${si + 1}</span>
-                        <p class="text-[13px] md:text-[14px] text-white/75 leading-relaxed">${s}</p>
-                    </div>
-                </div>`;
-            }).join('');
-
             return `
             <div class="reveal bg-gradient-to-b from-[#0d0d11] to-[#060609] border border-white/5 rounded-3xl p-6 md:p-8 hover:border-blue-400/20 transition">
-                <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-start justify-between gap-4 mb-5">
                     <div class="flex items-start gap-4 min-w-0">
                         <div class="shrink-0 w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center text-blue-300">
                             ${manualIcons[m.icon] || '<span class="text-blue-400 text-lg font-bold">' + (i + 1) + '</span>'}
@@ -3727,12 +3807,13 @@
                 </div>
                 ${m.caption ? `<p class="text-sm text-white/55 leading-relaxed mb-5 md:pl-16">${m.caption}</p>` : ''}
                 <div class="md:pl-16">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        ${stepsHtml}
-                    </div>
+                    <div id="manual-anim-${m.icon}" class="w-full"></div>
                 </div>
             </div>`;
         }).join('');
+
+        // 플레이어 초기화
+        manuals.forEach(m => createManualAnimPlayer('manual-anim-' + m.icon, m.icon));
 
         // 시공갤러리 렌더 (실사진)
         const galleryGridEl = document.getElementById('gallery-grid');
