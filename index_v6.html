@@ -1900,13 +1900,12 @@
     <!-- 스크립트 로직 -->
     <script>
         // 데이터 정의
-        const productList = (() => {
-            const cats = [...new Set(ACE_DATA.product_lineup.map(p => p.cat))];
-            return cats.map(c => {
-                const count = ACE_DATA.product_lineup.filter(p => p.cat === c).length;
-                return c + " (" + count + "종)";
-            });
-        })();
+        let productList = [
+            "갤럭시 B타입 (12종)", "양옆태엽[BEST] (11종)", "갤럭시 C타입 원통필터 (4종)",
+            "파이프 (24종)", "스파이얼 (14종)", "후레쉬볼/주름관 (35종)",
+            "LED조명 (22종)", "LED우주선 (7종)", "갤럭시 A타입 (4종)",
+            "갤럭시 C타입 (5종)", "갤럭시 D타입 (4종)"
+        ];
 
         const partsItems = [
             { img: "parts/p01.png", name: "FVD 방화담파", cat: "상부/FVD" },
