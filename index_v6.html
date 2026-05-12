@@ -1493,15 +1493,17 @@
         <!-- 4. PARTS 페이지 -->
         <div id="page-parts" class="page min-h-screen pt-24 pb-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-16 text-center">
-                    <h1 data-cms="pt_title" class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">부품소개</h1>
-                    <p data-cms="pt_desc" class="text-xl text-gray-400">유성에이스의 다양한 부품을 소개합니다.</p>
+                <div class="mb-12 text-center">
+                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PARTS CATALOG · 45 ITEMS</div>
+                    <h1 data-cms="pt_title" class="text-5xl md:text-7xl font-black tracking-[-0.04em] leading-[0.95] mb-6">부품소개</h1>
+                    <p data-cms="pt_desc" class="text-xl text-white/55 max-w-2xl mx-auto">유성에이스 후드를 구성하는 모든 부품을 한눈에. 각 부품의 실물 누끼 사진으로 확인하세요.</p>
                 </div>
-                <div>
-                    <h2 class="text-3xl font-bold mb-8 border-b border-white/10 pb-4">부품 목록</h2>
-                    <div id="parts-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <!-- JS로 채워짐 -->
-                    </div>
+                <!-- Category Filter -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10" id="parts-filter">
+                    <button onclick="filterParts('all')" class="parts-filter-btn active px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-white/10 text-white transition-all">전체</button>
+                </div>
+                <div id="parts-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <!-- JS로 채워짐 -->
                 </div>
             </div>
         </div>
@@ -1909,13 +1911,54 @@
             "25. 하향식코브라 제품군", "26. 후레쉬볼 제품군", "27. 후레쉬볼 모터제품군", "28. 후레쉬볼 갓제품군"
         ];
 
-        const partsList = [
-            "01. 원형상향모터", "02. 원형측향모터", "03. 사각측향모터", "04. FVD 방화담파", "05. FVD 휴즈",
-            "06. 150Ø기름받이", "07. 기름받이 속", "08. 일체형기름받이", "09. 태엽감속기", "10. 속링",
-            "11. 천정형캡", "12. 꼬마나팔", "13. 190Ø갓", "14. 150Ø나팔", "15. 210Ø갓",
-            "16. 250Ø갓", "17. 320Ø갓", "18. 420Ø갓", "19. 유지망5단", "20. 유지망8단",
-            "21. 450Ø갓", "22. 520Ø갓", "23. 125Ø반후지", "24. 150Ø반후지"
+        const partsItems = [
+            { img: "parts/p01.png", name: "FVD 방화담파", cat: "상부/FVD" },
+            { img: "parts/p02.png", name: "VD 풍속조절기", cat: "상부/FVD" },
+            { img: "parts/p03.png", name: "반후지 (크롬)", cat: "상부" },
+            { img: "parts/p04.png", name: "사각 측향모터", cat: "상부/모터" },
+            { img: "parts/p05.png", name: "원형 상향모터", cat: "상부/모터" },
+            { img: "parts/p06.png", name: "원형 측향모터", cat: "상부/모터" },
+            { img: "parts/p07.png", name: "천정형 캡", cat: "연결부품" },
+            { img: "parts/p08.png", name: "측향모터 (B타입)", cat: "상부/모터" },
+            { img: "parts/p09.png", name: "5단 유지망", cat: "유지망/필터" },
+            { img: "parts/p10.png", name: "등링", cat: "텐션/부품" },
+            { img: "parts/p11.png", name: "빠찌링 (베어링)", cat: "텐션/부품" },
+            { img: "parts/p12.png", name: "사각 태엽감속기", cat: "텐션/부품" },
+            { img: "parts/p13.png", name: "속링", cat: "텐션/부품" },
+            { img: "parts/p14.png", name: "철제 태엽감속기", cat: "텐션/부품" },
+            { img: "parts/p15.png", name: "FVD 휴즈", cat: "상부/FVD" },
+            { img: "parts/p16.png", name: "휴즈핀", cat: "상부/FVD" },
+            { img: "parts/p17.png", name: "1중망", cat: "유지망/필터" },
+            { img: "parts/p18.png", name: "8단 유지망", cat: "유지망/필터" },
+            { img: "parts/p19.png", name: "갓 기름받이", cat: "기름받이" },
+            { img: "parts/p20.png", name: "기름받이망", cat: "유지망/필터" },
+            { img: "parts/p21.png", name: "기름받이 속", cat: "기름받이" },
+            { img: "parts/p22.png", name: "롱망", cat: "유지망/필터" },
+            { img: "parts/p23.png", name: "150Ø 기름받이", cat: "기름받이" },
+            { img: "parts/p24.png", name: "일체형 기름받이", cat: "기름받이" },
+            { img: "parts/p25.png", name: "150Ø 나팔", cat: "갓/나팔" },
+            { img: "parts/p26.png", name: "210Ø 갓+나팔", cat: "갓/나팔" },
+            { img: "parts/p27.png", name: "250Ø 갓+나팔", cat: "갓/나팔" },
+            { img: "parts/p28.png", name: "속레일", cat: "연결부품" },
+            { img: "parts/p29.png", name: "연결캡 (상부)", cat: "연결부품" },
+            { img: "parts/p30.png", name: "연결캡 (하부)", cat: "연결부품" },
+            { img: "parts/p31.png", name: "일자형 기름받이", cat: "기름받이" },
+            { img: "parts/p32.png", name: "티구찌", cat: "연결부품" },
+            { img: "parts/p33.png", name: "210Ø 갓 (크롬)", cat: "갓제품" },
+            { img: "parts/p34.png", name: "250Ø 갓", cat: "갓제품" },
+            { img: "parts/p35.png", name: "304용 200Ø 갓", cat: "갓제품" },
+            { img: "parts/p36.png", name: "320Ø 갓+나팔", cat: "갓/나팔" },
+            { img: "parts/p37.png", name: "350Ø 갓+나팔", cat: "갓/나팔" },
+            { img: "parts/p38.png", name: "450Ø 갓", cat: "갓제품" },
+            { img: "parts/p39.png", name: "520Ø 갓", cat: "갓제품" },
+            { img: "parts/p40.png", name: "자바라 하부봉대", cat: "하부" },
+            { img: "parts/p41.png", name: "후레쉬볼 (검정)", cat: "후레쉬볼" },
+            { img: "parts/p42.png", name: "후레쉬볼 (동)", cat: "후레쉬볼" },
+            { img: "parts/p43.png", name: "후레쉬볼 (신주)", cat: "후레쉬볼" },
+            { img: "parts/p44.png", name: "후레쉬볼 (은)", cat: "후레쉬볼" },
+            { img: "parts/p45.png", name: "후레쉬볼 커버 (상·하)", cat: "후레쉬볼" }
         ];
+        const partsList = partsItems.map((p, i) => `${String(i+1).padStart(2,'0')}. ${p.name}`);
 
         const features = [
             { id: 'swing', title: '360도 스윙', desc: '파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없습니다.', visual: '<div class="w-64 h-64 border-4 border-dashed border-blue-500 rounded-full animate-[spin_20s_linear_infinite]"></div>' },
@@ -3040,12 +3083,40 @@
             return `<button onclick="selectProduct(${i})" class="text-left text-[13px] text-black/80 hover:text-blue-600 py-2 transition-colors truncate font-bold">${clean}</button>`;
         }).join('');
 
-        document.getElementById('parts-grid').innerHTML = partsList.map(p => 
-            `<div class="bg-[#111] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-[#1a1a1c] transition-colors cursor-pointer group">
-                <div class="w-20 h-20 bg-white/5 rounded-full mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="text-2xl opacity-50">⚙️</span>
+        // Parts category filter setup
+        const partsCats = [...new Set(partsItems.map(p => p.cat))];
+        const partsFilterEl = document.getElementById('parts-filter');
+        partsCats.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'parts-filter-btn px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-transparent text-white/50 hover:bg-white/5 transition-all';
+            btn.textContent = cat;
+            btn.onclick = () => filterParts(cat);
+            partsFilterEl.appendChild(btn);
+        });
+
+        function filterParts(cat) {
+            document.querySelectorAll('.parts-filter-btn').forEach(b => {
+                b.classList.toggle('active', b.textContent === (cat === 'all' ? '전체' : cat));
+                if (b.textContent === (cat === 'all' ? '전체' : cat)) {
+                    b.classList.add('bg-white/10', 'text-white');
+                    b.classList.remove('bg-transparent', 'text-white/50');
+                } else {
+                    b.classList.remove('bg-white/10', 'text-white');
+                    b.classList.add('bg-transparent', 'text-white/50');
+                }
+            });
+            document.querySelectorAll('.part-card').forEach(card => {
+                card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+            });
+        }
+
+        document.getElementById('parts-grid').innerHTML = partsItems.map((p, i) =>
+            `<div class="part-card bg-[#111] border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center hover:bg-[#1a1a1c] hover:border-blue-500/30 transition-all cursor-pointer group" data-cat="${p.cat}">
+                <div class="w-full aspect-square bg-white/[0.03] rounded-xl mb-3 flex items-center justify-center overflow-hidden p-3">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <span class="text-sm text-gray-300 font-medium">${p}</span>
+                <div class="text-[10px] font-bold tracking-widest text-blue-400/70 mb-1">${p.cat}</div>
+                <span class="text-sm text-gray-200 font-bold">${p.name}</span>
             </div>`
         ).join('');
 
