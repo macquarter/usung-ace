@@ -785,97 +785,173 @@
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                    <!-- 좌측: CSS 후드 일러스트 + 빨아드리는 애니메이션 + 플로팅 스펙 칩 -->
-                    <div class="relative r-anim r-tilt">
-                        <div class="suction-stage relative aspect-[4/5] rounded-[3rem] overflow-hidden bg-gradient-to-b from-[#f5f5f7] to-white shadow-[0_50px_120px_-30px_rgba(0,0,0,.25)] border border-black/5">
-                            <!-- 천정 -->
-                            <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-b from-black/15 to-transparent"></div>
-                            <!-- 덕트 파이프 -->
-                            <div class="absolute left-1/2 -translate-x-1/2 top-3 w-3 h-16 bg-gradient-to-b from-slate-400 to-slate-600 rounded-b-lg shadow-md"></div>
-                            <!-- 후드 본체 -->
-                            <div class="absolute left-1/2 -translate-x-1/2 top-[19%] w-[62%] h-[26%]"
-                                 style="background:linear-gradient(180deg,#e2e8f0 0%,#94a3b8 50%,#475569 100%); clip-path:polygon(18% 0%, 82% 0%, 100% 100%, 0% 100%); box-shadow:0 25px 60px -15px rgba(0,102,204,.35);">
-                                <div class="absolute inset-x-0 top-0 h-[2px] bg-white/70"></div>
-                                <div class="absolute inset-x-0 bottom-0 h-1.5 bg-black/40"></div>
-                                <!-- 흡입구 LED -->
-                                <div class="absolute left-1/2 -translate-x-1/2 bottom-[2px] w-[55%] h-[3px] rounded-full bg-yellow-200 blur-[1px]"></div>
-                            </div>
-                            <!-- 후드 그림자 -->
-                            <div class="absolute left-1/2 -translate-x-1/2 top-[44%] w-[70%] h-3 rounded-full bg-blue-500/15 blur-md"></div>
-
-                            <!-- 빨려 올라가는 입자들 (suction particles) -->
-                            <div class="suction-particles absolute inset-x-0 top-[50%] bottom-[18%] pointer-events-none">
-                                <span></span><span></span><span></span><span></span><span></span>
-                                <span></span><span></span><span></span><span></span><span></span>
-                                <span></span><span></span>
-                            </div>
-
-                            <!-- 화로 / 베이스 -->
-                            <div class="absolute left-1/2 -translate-x-1/2 bottom-[12%] w-[58%] h-3 rounded-full"
-                                 style="background:linear-gradient(180deg,#1e293b,#0f172a); box-shadow:0 -8px 30px -4px rgba(255,140,0,.5);"></div>
-                            <div class="absolute left-1/2 -translate-x-1/2 bottom-[15%] w-12 h-3 rounded-full bg-orange-400/40 blur-md anim-flame"></div>
-
-                            <div class="absolute inset-x-0 bottom-0 h-[14%] bg-gradient-to-t from-white via-white/90 to-transparent"></div>
-                            <div class="absolute bottom-6 left-8 right-8">
-                                <div class="text-[11px] font-bold tracking-[0.22em] text-blue-600">USUNG ACE GALAXY</div>
-                                <div class="text-2xl font-black tracking-tight mt-1">D-Type · 스윙텐션 / FVD</div>
-                            </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-black/5 mt-8">
+                    <!-- Left: 3D Canvas Hood Animation -->
+                    <div class="relative bg-gradient-to-br from-[#f0f3f8] to-[#dde3ee] min-h-[500px]" id="hood-3d-wrap">
+                        <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
+                        <!-- Floating labels -->
+                        <div class="absolute top-[8%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">01</div>
+                            <div class="text-[13px] font-black text-gray-800">125Ø · 150Ø 토출</div>
                         </div>
-                        <div class="absolute top-8 -left-3 md:left-10 bg-white/85 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-black/5">
-                            <div class="text-blue-600 font-black text-[10px]">01</div>
-                            <div class="font-bold text-sm">125Ø · 150Ø 토출</div>
+                        <div class="absolute top-[38%] right-[8%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 0.8s infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">03</div>
+                            <div class="text-[13px] font-black text-gray-800">F.V.D 방화담퍼</div>
                         </div>
-                        <div class="absolute top-1/3 -right-3 md:right-10 bg-white/85 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-black/5">
-                            <div class="text-blue-600 font-black text-[10px]">03</div>
-                            <div class="font-bold text-sm">F.V.D 방화담파</div>
-                        </div>
-                        <div class="absolute bottom-1/3 -left-3 md:left-10 bg-white/85 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-black/5">
-                            <div class="text-blue-600 font-black text-[10px]">04</div>
-                            <div class="font-bold text-sm">맞춤 제작</div>
+                        <div class="absolute bottom-[22%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 1.2s infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">04</div>
+                            <div class="text-[13px] font-black text-gray-800">360° 스윙</div>
                         </div>
                     </div>
-
-                    <!-- 우측: 4가지 핵심 장점 -->
-                    <div class="space-y-12 r-stagger-alt">
-                        <div class="flex gap-6 group">
-                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl grid place-items-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14 14 0 0 0 0 20"/><path d="M12 2a14 14 0 0 1 0 20"/></svg>
+                    <!-- Right: Feature Detail Text -->
+                    <div class="bg-[#0a0c18] p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+                        <div class="space-y-7">
+                            <div>
+                                <h3 class="text-[17px] font-black text-white mb-2">01 테이블 기준 360° 스윙</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전 되어 부러질 염려가 없어 편리합니다.</p>
                             </div>
                             <div>
-                                <h4 data-cms="t1_t" class="text-2xl font-black mb-2 tracking-tight">테이블 기준 360° 스윙</h4>
-                                <p data-cms="t1_d" class="text-black/55 leading-relaxed">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전되어 부러질 염려가 없어 편리합니다.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 group">
-                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl grid place-items-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                <h3 class="text-[17px] font-black text-white mb-2">02 간편한 내부청소</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
                             </div>
                             <div>
-                                <h4 data-cms="t2_t" class="text-2xl font-black mb-2 tracking-tight">간편한 내부청소</h4>
-                                <p data-cms="t2_d" class="text-black/55 leading-relaxed">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 group">
-                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl grid place-items-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 12l8 10 8-10z"/></svg>
+                                <h3 class="text-[17px] font-black text-white mb-2">03 안전 · 유지관리 옵션</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]"><span class="text-blue-400 font-bold">FVD방화댐퍼:</span> 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방할 수 있습니다. (이미 화재가 난 경우는 해당하지 않음)</p>
+                                <p class="text-[13px] text-white/55 leading-[1.85] mt-2"><span class="text-blue-400 font-bold">터치분리:</span> 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능합니다. 후드 관리 뿐만 아니라 모터 수명 연장에도 긍정적 효과가 있습니다.</p>
                             </div>
                             <div>
-                                <h4 data-cms="t3_t" class="text-2xl font-black mb-2 tracking-tight">안전·유지관리 옵션</h4>
-                                <p data-cms="t3_d" class="text-black/55 leading-relaxed">FVD방화댐퍼: 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방. 터치분리: 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 group">
-                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl grid place-items-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-                            </div>
-                            <div>
-                                <h4 data-cms="t4_t" class="text-2xl font-black mb-2 tracking-tight">맞춤형 제작</h4>
-                                <p data-cms="t4_d" class="text-black/55 leading-relaxed">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
+                                <h3 class="text-[17px] font-black text-white mb-2">04 맞춤형 제작</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                </div>
+                <script>
+                // ── 3D Hood Canvas Animation ──
+                (function(){
+                    const wrap = document.getElementById('hood-3d-wrap');
+                    const canvas = document.getElementById('hood3d-canvas');
+                    if(!canvas || !wrap) return;
+                    const ctx = canvas.getContext('2d');
+                    let W, H, dpr;
+                    function resize(){
+                        dpr = window.devicePixelRatio || 1;
+                        W = wrap.clientWidth; H = wrap.clientHeight;
+                        canvas.width = W * dpr; canvas.height = H * dpr;
+                        ctx.setTransform(dpr,0,0,dpr,0,0);
+                    }
+                    resize();
+                    window.addEventListener('resize', resize);
+                    let time = 0, running = false;
+                    function metalG(x,y,w,h,r,g,b){
+                        const gd=ctx.createLinearGradient(x,y,x,y+h);
+                        gd.addColorStop(0,`rgb(${r+50},${g+50},${b+50})`);
+                        gd.addColorStop(0.2,`rgb(${r+25},${g+25},${b+25})`);
+                        gd.addColorStop(0.5,`rgb(${r},${g},${b})`);
+                        gd.addColorStop(0.8,`rgb(${Math.max(0,r-20)},${Math.max(0,g-20)},${Math.max(0,b-20)})`);
+                        gd.addColorStop(1,`rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)})`);
+                        return gd;
+                    }
+                    function draw(){
+                        time += 0.012;
+                        ctx.clearRect(0,0,W,H);
+                        const bg = ctx.createLinearGradient(0,0,W,H);
+                        bg.addColorStop(0,'#f0f3f8'); bg.addColorStop(1,'#dde3ee');
+                        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+                        const cx = W*0.48, cy = H*0.42;
+                        const scale = Math.min(W/600, H/550);
+                        const swing = Math.sin(time*0.8)*3;
+                        ctx.save();
+                        ctx.translate(cx, cy);
+                        ctx.scale(scale, scale);
+                        ctx.rotate(swing*Math.PI/180);
+                        // 상부 파이프
+                        ctx.save();
+                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=12; ctx.shadowOffsetY=4;
+                        const pG=ctx.createLinearGradient(-8,-200,8,-200);
+                        pG.addColorStop(0,'#b0b8c4'); pG.addColorStop(0.3,'#d4dae4');
+                        pG.addColorStop(0.5,'#e8ecf2'); pG.addColorStop(0.7,'#d0d8e2'); pG.addColorStop(1,'#a0aab6');
+                        ctx.fillStyle=pG; ctx.beginPath(); ctx.roundRect(-8,-220,16,130,4); ctx.fill();
+                        ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.fillRect(-5,-218,4,126);
+                        ctx.restore();
+                        // FVD 방화댐퍼
+                        ctx.save();
+                        const fvdY=-95;
+                        ctx.shadowColor='rgba(251,146,60,0.3)'; ctx.shadowBlur=10;
+                        const fG=ctx.createLinearGradient(-100,fvdY,100,fvdY);
+                        fG.addColorStop(0,'#fb923c'); fG.addColorStop(0.5,'#fdba74'); fG.addColorStop(1,'#f97316');
+                        ctx.fillStyle=fG; ctx.beginPath(); ctx.roundRect(-100,fvdY,200,6,3); ctx.fill();
+                        ctx.restore();
+                        // 후드 본체
+                        ctx.save();
+                        ctx.shadowColor='rgba(0,0,0,0.2)'; ctx.shadowBlur=25; ctx.shadowOffsetY=10;
+                        const topW=260, topD=40, hoodH=60, topY=-85;
+                        ctx.beginPath();
+                        ctx.moveTo(-topW/2,topY); ctx.lineTo(topW/2,topY);
+                        ctx.lineTo(topW/2-20,topY-topD); ctx.lineTo(-topW/2+20,topY-topD); ctx.closePath();
+                        const tG=ctx.createLinearGradient(0,topY-topD,0,topY);
+                        tG.addColorStop(0,'#8a9bae'); tG.addColorStop(0.5,'#a0b0c2'); tG.addColorStop(1,'#7a8a9c');
+                        ctx.fillStyle=tG; ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(-topW/2,topY); ctx.lineTo(topW/2,topY);
+                        ctx.lineTo(topW/2+15,topY+hoodH); ctx.lineTo(-topW/2-15,topY+hoodH); ctx.closePath();
+                        const frG=ctx.createLinearGradient(0,topY,0,topY+hoodH);
+                        frG.addColorStop(0,'#5a6778'); frG.addColorStop(0.3,'#6b7a8c');
+                        frG.addColorStop(0.6,'#4a5668'); frG.addColorStop(1,'#3a4555');
+                        ctx.fillStyle=frG; ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(-topW/2+20,topY+5); ctx.lineTo(topW/2-20,topY+5);
+                        ctx.lineTo(topW/2-25,topY+15); ctx.lineTo(-topW/2+25,topY+15); ctx.closePath();
+                        ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(topW/2,topY); ctx.lineTo(topW/2-20,topY-topD);
+                        ctx.lineTo(topW/2-5,topY+hoodH-topD); ctx.lineTo(topW/2+15,topY+hoodH); ctx.closePath();
+                        ctx.fillStyle='rgba(40,50,60,0.7)'; ctx.fill();
+                        ctx.restore();
+                        // 하부 파이프
+                        const swA=Math.sin(time*0.6)*5;
+                        ctx.save();
+                        ctx.translate(0,topY+hoodH);
+                        ctx.rotate(swA*Math.PI/180);
+                        ctx.fillStyle=metalG(-12,0,24,20,160,170,180);
+                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=8;
+                        ctx.beginPath(); ctx.roundRect(-12,0,24,20,4); ctx.fill();
+                        const lpG=ctx.createLinearGradient(-7,20,7,20);
+                        lpG.addColorStop(0,'#a0aab6'); lpG.addColorStop(0.3,'#ccd4de');
+                        lpG.addColorStop(0.5,'#dde4ee'); lpG.addColorStop(0.7,'#c4ccd8'); lpG.addColorStop(1,'#98a2ae');
+                        ctx.fillStyle=lpG; ctx.shadowColor='rgba(0,0,0,0.12)'; ctx.shadowBlur=6;
+                        ctx.beginPath(); ctx.roundRect(-7,20,14,160,4); ctx.fill();
+                        ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fillRect(-4,22,3,156);
+                        // 나팔캡
+                        ctx.beginPath();
+                        ctx.moveTo(-10,180); ctx.quadraticCurveTo(-40,210,-45,230);
+                        ctx.lineTo(45,230); ctx.quadraticCurveTo(40,210,10,180); ctx.closePath();
+                        const cG=ctx.createLinearGradient(-45,180,45,230);
+                        cG.addColorStop(0,'#c0c8d4'); cG.addColorStop(0.5,'#9aa4b0'); cG.addColorStop(1,'#7a8490');
+                        ctx.fillStyle=cG; ctx.shadowColor='rgba(0,0,0,0.18)'; ctx.shadowBlur=10; ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(-5,182); ctx.quadraticCurveTo(-30,200,-32,210);
+                        ctx.lineTo(32,210); ctx.quadraticCurveTo(30,200,5,182); ctx.closePath();
+                        ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fill();
+                        ctx.restore();
+                        ctx.restore();
+                        // 스톱바
+                        const sbX=cx-160*scale, sbY=cy+30*scale;
+                        ctx.save();
+                        ctx.fillStyle=metalG(sbX,sbY,30*scale,5*scale,200,160,60);
+                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=6;
+                        ctx.beginPath(); ctx.roundRect(sbX,sbY,30*scale,5*scale,2); ctx.fill();
+                        ctx.restore();
+                        if(running) requestAnimationFrame(draw);
+                    }
+                    const obs = new IntersectionObserver((e) => {
+                        if(e[0].isIntersecting && !running){ running=true; draw(); }
+                        if(!e[0].isIntersecting){ running=false; }
+                    }, { threshold: 0.15 });
+                    obs.observe(wrap);
+                })();
+                </script>
 
                 <!-- 스탯 스트립 (스크롤 시 카운터 애니메이션) -->
                 <div class="mt-32 grid grid-cols-2 md:grid-cols-4 gap-px bg-black/10 rounded-3xl overflow-hidden border border-black/5 r-anim r-zoom">
@@ -1465,283 +1541,7 @@
             </section>
 
             <!-- PRODUCT GRID -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 r-stagger">
-                    <!-- JS로 채워짐 -->
-                </div>
-                <p id="products-empty" class="hidden text-center text-white/40 mt-12">해당 카테고리 제품이 없습니다.</p>
-            </section>
-
-            <!-- INTERACTIVE 3D PRODUCT SHOWCASE -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 r-anim r-up">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-white/5">
-                    <!-- Left: 3D Canvas Hood Animation -->
-                    <div class="relative bg-gradient-to-br from-[#f0f3f8] to-[#dde3ee] min-h-[500px]" id="hood-3d-wrap">
-                        <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
-                        <!-- Floating labels -->
-                        <div class="absolute top-[8%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">01</div>
-                            <div class="text-[13px] font-black text-gray-800">125Ø · 150Ø 토출</div>
-                        </div>
-                        <div class="absolute top-[38%] right-[8%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 0.8s infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">03</div>
-                            <div class="text-[13px] font-black text-gray-800">F.V.D 방화담파</div>
-                        </div>
-                        <div class="absolute bottom-[22%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 1.2s infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">04</div>
-                            <div class="text-[13px] font-black text-gray-800">360° 스윙</div>
-                        </div>
-                    </div>
-                    <!-- Right: Feature Detail Text -->
-                    <div class="bg-[#0a0c18] p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-                        <div class="space-y-7">
-                            <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">01 테이블 기준 360° 스윙</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전 되어 부러질 염려가 없어 편리합니다.</p>
-                            </div>
-                            <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">02 간편한 내부청소</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
-                            </div>
-                            <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">03 안전 · 유지관리 옵션</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]"><span class="text-blue-400 font-bold">FVD방화댐퍼:</span> 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방할 수 있습니다. (이미 화재가 난 경우는 해당하지 않음)</p>
-                                <p class="text-[13px] text-white/55 leading-[1.85] mt-2"><span class="text-blue-400 font-bold">터치분리:</span> 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능합니다. 후드 관리 뿐만 아니라 모터 수명 연장에도 긍정적 효과가 있습니다.</p>
-                            </div>
-                            <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">04 맞춤형 제작</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <script>
-            // ── 3D Hood Canvas Animation ──
-            (function(){
-                const wrap = document.getElementById('hood-3d-wrap');
-                const canvas = document.getElementById('hood3d-canvas');
-                if(!canvas || !wrap) return;
-                const ctx = canvas.getContext('2d');
-                let W, H, dpr;
-                function resize(){
-                    dpr = window.devicePixelRatio || 1;
-                    W = wrap.clientWidth; H = wrap.clientHeight;
-                    canvas.width = W * dpr; canvas.height = H * dpr;
-                    ctx.setTransform(dpr,0,0,dpr,0,0);
-                }
-                resize();
-                window.addEventListener('resize', resize);
-
-                let time = 0;
-                let running = false;
-
-                // 메탈릭 그라디언트 헬퍼
-                function metalG(x,y,w,h,r,g,b){
-                    const gd=ctx.createLinearGradient(x,y,x,y+h);
-                    gd.addColorStop(0,`rgb(${r+50},${g+50},${b+50})`);
-                    gd.addColorStop(0.2,`rgb(${r+25},${g+25},${b+25})`);
-                    gd.addColorStop(0.5,`rgb(${r},${g},${b})`);
-                    gd.addColorStop(0.8,`rgb(${Math.max(0,r-20)},${Math.max(0,g-20)},${Math.max(0,b-20)})`);
-                    gd.addColorStop(1,`rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)})`);
-                    return gd;
-                }
-
-                function draw(){
-                    time += 0.012;
-                    ctx.clearRect(0,0,W,H);
-
-                    // BG gradient (match the wrapper's light gradient)
-                    const bg = ctx.createLinearGradient(0,0,W,H);
-                    bg.addColorStop(0,'#f0f3f8'); bg.addColorStop(1,'#dde3ee');
-                    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-
-                    const cx = W * 0.48, cy = H * 0.42;
-                    const scale = Math.min(W/600, H/550);
-                    const swing = Math.sin(time * 0.8) * 3; // subtle swing
-
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.scale(scale, scale);
-                    ctx.rotate(swing * Math.PI / 180);
-
-                    // ─── 천정 연결부 ───
-                    // 상부 파이프 (수직)
-                    ctx.save();
-                    ctx.shadowColor = 'rgba(0,0,0,0.15)';
-                    ctx.shadowBlur = 12;
-                    ctx.shadowOffsetY = 4;
-                    const pipeGrad = ctx.createLinearGradient(-8,-200,8,-200);
-                    pipeGrad.addColorStop(0,'#b0b8c4');
-                    pipeGrad.addColorStop(0.3,'#d4dae4');
-                    pipeGrad.addColorStop(0.5,'#e8ecf2');
-                    pipeGrad.addColorStop(0.7,'#d0d8e2');
-                    pipeGrad.addColorStop(1,'#a0aab6');
-                    ctx.fillStyle = pipeGrad;
-                    ctx.beginPath();
-                    ctx.roundRect(-8, -220, 16, 130, 4);
-                    ctx.fill();
-                    // 파이프 하이라이트
-                    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-                    ctx.fillRect(-5, -218, 4, 126);
-                    ctx.restore();
-
-                    // ─── FVD 방화댐퍼 (주황 라인) ───
-                    ctx.save();
-                    const fvdY = -95;
-                    ctx.shadowColor = 'rgba(251,146,60,0.3)';
-                    ctx.shadowBlur = 10;
-                    const fvdGrad = ctx.createLinearGradient(-100,fvdY,100,fvdY);
-                    fvdGrad.addColorStop(0,'#fb923c');
-                    fvdGrad.addColorStop(0.5,'#fdba74');
-                    fvdGrad.addColorStop(1,'#f97316');
-                    ctx.fillStyle = fvdGrad;
-                    ctx.beginPath();
-                    ctx.roundRect(-100, fvdY, 200, 6, 3);
-                    ctx.fill();
-                    ctx.restore();
-
-                    // ─── 후드 본체 (3D 사다리꼴) ───
-                    ctx.save();
-                    ctx.shadowColor = 'rgba(0,0,0,0.2)';
-                    ctx.shadowBlur = 25;
-                    ctx.shadowOffsetY = 10;
-
-                    // 후드 상면 (투시도)
-                    const topW = 260, topD = 40, hoodH = 60;
-                    const topY = -85;
-                    // 상면 (밝은 면)
-                    ctx.beginPath();
-                    ctx.moveTo(-topW/2, topY);
-                    ctx.lineTo(topW/2, topY);
-                    ctx.lineTo(topW/2 - 20, topY - topD);
-                    ctx.lineTo(-topW/2 + 20, topY - topD);
-                    ctx.closePath();
-                    const topGrad = ctx.createLinearGradient(0, topY-topD, 0, topY);
-                    topGrad.addColorStop(0,'#8a9bae');
-                    topGrad.addColorStop(0.5,'#a0b0c2');
-                    topGrad.addColorStop(1,'#7a8a9c');
-                    ctx.fillStyle = topGrad;
-                    ctx.fill();
-
-                    // 후드 정면 (메인 면)
-                    ctx.beginPath();
-                    ctx.moveTo(-topW/2, topY);
-                    ctx.lineTo(topW/2, topY);
-                    ctx.lineTo(topW/2 + 15, topY + hoodH);
-                    ctx.lineTo(-topW/2 - 15, topY + hoodH);
-                    ctx.closePath();
-                    const frontGrad = ctx.createLinearGradient(0, topY, 0, topY + hoodH);
-                    frontGrad.addColorStop(0,'#5a6778');
-                    frontGrad.addColorStop(0.3,'#6b7a8c');
-                    frontGrad.addColorStop(0.6,'#4a5668');
-                    frontGrad.addColorStop(1,'#3a4555');
-                    ctx.fillStyle = frontGrad;
-                    ctx.fill();
-
-                    // 반사 하이라이트
-                    ctx.beginPath();
-                    ctx.moveTo(-topW/2 + 20, topY + 5);
-                    ctx.lineTo(topW/2 - 20, topY + 5);
-                    ctx.lineTo(topW/2 - 25, topY + 15);
-                    ctx.lineTo(-topW/2 + 25, topY + 15);
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(255,255,255,0.08)';
-                    ctx.fill();
-
-                    // 후드 우측면
-                    ctx.beginPath();
-                    ctx.moveTo(topW/2, topY);
-                    ctx.lineTo(topW/2 - 20, topY - topD);
-                    ctx.lineTo(topW/2 - 5, topY + hoodH - topD);
-                    ctx.lineTo(topW/2 + 15, topY + hoodH);
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(40,50,60,0.7)';
-                    ctx.fill();
-                    ctx.restore();
-
-                    // ─── 하부 파이프 (스윙) ───
-                    const swingAngle = Math.sin(time * 0.6) * 5;
-                    ctx.save();
-                    ctx.translate(0, topY + hoodH);
-                    ctx.rotate(swingAngle * Math.PI / 180);
-
-                    // 파이프 연결부
-                    ctx.fillStyle = metalG(-12, 0, 24, 20, 160, 170, 180);
-                    ctx.shadowColor = 'rgba(0,0,0,0.15)';
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    ctx.roundRect(-12, 0, 24, 20, 4);
-                    ctx.fill();
-
-                    // 하부 파이프 본체
-                    const lpGrad = ctx.createLinearGradient(-7, 20, 7, 20);
-                    lpGrad.addColorStop(0,'#a0aab6');
-                    lpGrad.addColorStop(0.3,'#ccd4de');
-                    lpGrad.addColorStop(0.5,'#dde4ee');
-                    lpGrad.addColorStop(0.7,'#c4ccd8');
-                    lpGrad.addColorStop(1,'#98a2ae');
-                    ctx.fillStyle = lpGrad;
-                    ctx.shadowColor = 'rgba(0,0,0,0.12)';
-                    ctx.shadowBlur = 6;
-                    ctx.beginPath();
-                    ctx.roundRect(-7, 20, 14, 160, 4);
-                    ctx.fill();
-                    // 하이라이트
-                    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-                    ctx.fillRect(-4, 22, 3, 156);
-
-                    // ─── 나팔캡 (하단) ───
-                    ctx.beginPath();
-                    ctx.moveTo(-10, 180);
-                    ctx.quadraticCurveTo(-40, 210, -45, 230);
-                    ctx.lineTo(45, 230);
-                    ctx.quadraticCurveTo(40, 210, 10, 180);
-                    ctx.closePath();
-                    const capGrad = ctx.createLinearGradient(-45,180,45,230);
-                    capGrad.addColorStop(0,'#c0c8d4');
-                    capGrad.addColorStop(0.5,'#9aa4b0');
-                    capGrad.addColorStop(1,'#7a8490');
-                    ctx.fillStyle = capGrad;
-                    ctx.shadowColor = 'rgba(0,0,0,0.18)';
-                    ctx.shadowBlur = 10;
-                    ctx.fill();
-                    // 나팔캡 하이라이트
-                    ctx.beginPath();
-                    ctx.moveTo(-5,182);
-                    ctx.quadraticCurveTo(-30,200,-32,210);
-                    ctx.lineTo(32,210);
-                    ctx.quadraticCurveTo(30,200,5,182);
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(255,255,255,0.08)';
-                    ctx.fill();
-
-                    ctx.restore(); // 하부 파이프 끝
-
-                    ctx.restore(); // 메인 transform 끝
-
-                    // ─── 스톱바 표시 (좌측 작은 바) ───
-                    const sbX = cx - 160*scale, sbY = cy + 30*scale;
-                    ctx.save();
-                    ctx.fillStyle = metalG(sbX, sbY, 30*scale, 5*scale, 200, 160, 60);
-                    ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=6;
-                    ctx.beginPath();
-                    ctx.roundRect(sbX, sbY, 30*scale, 5*scale, 2);
-                    ctx.fill();
-                    ctx.restore();
-
-                    if(running) requestAnimationFrame(draw);
-                }
-
-                // 뷰포트 진입 시 시작
-                const obs = new IntersectionObserver((entries) => {
-                    if(entries[0].isIntersecting && !running){ running=true; draw(); }
-                    if(!entries[0].isIntersecting){ running=false; }
-                }, { threshold: 0.15 });
-                obs.observe(wrap);
-            })();
-            </script>
-
+            
             <!-- (카테고리 필터 + 그리드는 히어로 바로 아래로 이동됨) -->
 
             <!-- CTA -->
