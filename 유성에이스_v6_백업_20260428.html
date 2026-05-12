@@ -232,33 +232,6 @@
         .anim-split-l    { animation: split-x-rev 3s ease-in-out infinite; }
         .anim-split-r    { animation: split-x 3s ease-in-out infinite; }
 
-        /* Scroll indicator (mouse wheel animation) */
-        .scroll-mouse {
-            width: 26px; height: 42px;
-            border: 2px solid rgba(255,255,255,0.35);
-            border-radius: 13px;
-            position: relative;
-        }
-        .scroll-wheel {
-            width: 4px; height: 8px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 2px;
-            position: absolute;
-            left: 50%; transform: translateX(-50%);
-            top: 8px;
-            animation: scroll-wheel-anim 2s ease-in-out infinite;
-        }
-        @keyframes scroll-wheel-anim {
-            0%   { top: 8px; opacity: 1; }
-            50%  { top: 22px; opacity: 0.2; }
-            100% { top: 8px; opacity: 1; }
-        }
-        #scroll-indicator { animation: scroll-fade-bounce 2.5s ease-in-out infinite; }
-        @keyframes scroll-fade-bounce {
-            0%, 100% { transform: translate(-50%, 0); }
-            50%      { transform: translate(-50%, 6px); }
-        }
-
         .ring-pulse::before, .ring-pulse::after {
             content:''; position:absolute; inset:0; border-radius:9999px;
             border:2px solid rgba(59,130,246,.45);
@@ -506,8 +479,7 @@
             #gallery-modal .gm-specs { grid-template-columns: 1fr; }
         }
         body.gm-lock { overflow: hidden; }
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-</style>
+    </style>
 </head>
 <body class="antialiased selection:bg-white/30">
 
@@ -556,23 +528,19 @@
                                             <div class="text-[12px] text-black/45 mt-0.5">스윙태엽/FVD/유지망 통합 시스템</div>
                                         </button>
                                         <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">양옆태엽 <span class="text-[10px] px-1.5 py-0.5 bg-red-500 text-white rounded-full ml-1">BEST</span></div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">양옆태엽 스윙 시리즈</div>
-                                        </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">LED 조명</div>
+                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">스윙텐션 시리즈</div>
                                             <div class="text-[12px] text-black/45 mt-0.5">LED/할로겐 등제품 및 아크릴등</div>
                                         </button>
                                         <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">파이프</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">스텐파이프(도금/도장) · 스파이럴</div>
+                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">스텐파이프 라인</div>
+                                            <div class="text-[12px] text-black/45 mt-0.5">125/150 스텐파이프(도금/도장)</div>
                                         </button>
                                         <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">주름관</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">플렉시블 연결관</div>
+                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">스파이럴 시리즈</div>
+                                            <div class="text-[12px] text-black/45 mt-0.5">원형/사각 측향모터 스파이럴</div>
                                         </button>
                                         <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">하향식 후드</div>
+                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">후레쉬볼/코브라</div>
                                             <div class="text-[12px] text-black/45 mt-0.5">하향식 및 특수 배기 제품군</div>
                                         </button>
                                     </div>
@@ -591,20 +559,42 @@
                         </div>
                     </div>
 
-                    <!-- 부품소개 -->
+                    <!-- 부품/집진기 -->
                     <div class="nav-item relative">
                         <button onclick="navigate('parts')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
-                            부품소개
+                            부품/집진기
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="dropdown absolute top-full left-1/2 mt-3 w-72 bg-white/95 backdrop-blur-2xl border border-black/5 rounded-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,.25)] p-3 z-50">
                             <button onclick="navigate('parts')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
                                 <div class="font-bold text-sm text-black">부품 갤러리</div>
-                                <div class="text-[11px] text-black/45 mt-0.5">50종 정밀 부품</div>
+                                <div class="text-[11px] text-black/45 mt-0.5">24종 정밀 부품</div>
                             </button>
                             <button onclick="navigate('parts')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
-                                <div class="font-bold text-sm text-black">부품소개</div>
-                                <div class="text-[11px] text-black/45 mt-0.5">50종 정밀 부품</div>
+                                <div class="font-bold text-sm text-black">집진기 / 참바</div>
+                                <div class="text-[11px] text-black/45 mt-0.5">25 / 50 루베 시스템</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 고기집 덕트 -->
+                    <div class="nav-item relative">
+                        <button onclick="navigate('products')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
+                            고기집 덕트
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="dropdown absolute top-full left-1/2 mt-3 w-80 bg-white/95 backdrop-blur-2xl border border-black/5 rounded-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,.25)] p-3 z-50">
+                            <button onclick="navigate('products')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
+                                <div class="font-bold text-sm text-black">직화 후드 솔루션</div>
+                                <div class="text-[11px] text-black/45 mt-0.5">갤럭시 시리즈 · 텐션 라인</div>
+                            </button>
+                            <button onclick="navigate('parts')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
+                                <div class="font-bold text-sm text-black">집진기 + 닥트 패키지</div>
+                                <div class="text-[11px] text-black/45 mt-0.5">25/50 루베 · 연기·기름 동시 포집</div>
+                            </button>
+                            <button onclick="navigate('about','inquiry-section')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
+                                <div class="font-bold text-sm text-black">시공 사례 / 견적 상담</div>
+                                <div class="text-[11px] text-black/45 mt-0.5">매장 규모별 맞춤 설계</div>
                             </button>
                         </div>
                     </div>
@@ -631,19 +621,15 @@
                             <div class="p-3">
                                 <button onclick="navigate('notice')" class="w-full p-4 rounded-2xl hover:bg-red-50 transition text-left group">
                                     <div class="text-[15px] font-black text-black group-hover:text-red-600 transition">공지사항</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">중요공지, 이벤트 확인하세요.</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">A/S 안내, 이벤트, 중요 공지를 확인하세요</div>
                                 </button>
                                 <button onclick="navigate('board')" class="w-full p-4 rounded-2xl hover:bg-blue-50 transition text-left group">
                                     <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition">게시판</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">유성에이스 Q&amp;A</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">고객 문의, 시공 후기, Q&amp;A를 남겨주세요</div>
                                 </button>
                                 <button onclick="navigate('archive')" class="w-full p-4 rounded-2xl hover:bg-emerald-50 transition text-left group">
                                     <div class="text-[15px] font-black text-black group-hover:text-emerald-600 transition">자료실</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">특허, 인증서 등</div>
-                                </button>
-                                <button onclick="navigate('about','inquiry-section')" class="w-full p-4 rounded-2xl hover:bg-amber-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-amber-600 transition">시공 사례 / 견적 상담</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">매장 규모별 맞춤 설계</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">카탈로그, 도면, 인증서를 다운로드하세요</div>
                                 </button>
                             </div>
                             <div class="bg-[#fafafa] border-t border-black/5 px-5 py-4 flex items-center justify-between">
@@ -674,7 +660,8 @@
                 <button onclick="navigate('home'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">홈</button>
                 <button onclick="navigate('about'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">회사소개</button>
                 <button onclick="navigate('products'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">제품소개</button>
-                <button onclick="navigate('parts'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">부품소개</button>
+                <button onclick="navigate('parts'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">부품/집진기</button>
+                <button onclick="navigate('products'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">고기집 덕트</button>
                 <button onclick="navigate('gallery'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">시공갤러리</button>
                 <button onclick="navigate('tech'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">기술</button>
                 <button onclick="navigate('manual'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">사용방법</button>
@@ -699,7 +686,7 @@
                 
                 <!-- Hero Text -->
                 <div id="anim-hero" class="scroll-element z-10 text-center px-6">
-                    <div data-cms="h_tag" class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2007 · USUNG ACE</div>
+                    <div data-cms="h_tag" class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · USUNG ACE</div>
                     <h1 class="text-5xl md:text-7xl lg:text-[110px] font-black tracking-[-0.04em] mb-7 leading-[0.95]"><span data-cms="h_title1">대한민국 덕트</span><br/><span data-cms="h_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">No.1</span></h1>
                     <p data-cms="h_sub" class="text-xl md:text-3xl text-white/55 font-medium tracking-tight">오늘을 이끄는 원동력.</p>
                 </div>
@@ -759,26 +746,18 @@
 
                 <!-- Final CTA — 한 번 쓰면 다시 못 돌아갑니다 -->
                 <div id="anim-cta" class="scroll-element z-20 bg-black/80 backdrop-blur-sm opacity-0 scale-90 pointer-events-none px-6">
-                    <div data-cms="h_cta_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">SINCE 2007 · PROVEN QUALITY</div>
+                    <div data-cms="h_cta_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">14 YEARS · 28 PRODUCTS</div>
                     <h2 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] text-center max-w-5xl">
                         <span data-cms="h_cta_title1">한 번 쓰면,</span> <br/>
                         <span data-cms="h_cta_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">다시 못 돌아갑니다.</span>
                     </h2>
                     <p data-cms="h_cta_desc" class="mt-7 text-base md:text-lg text-white/55 max-w-xl text-center leading-relaxed">
-                        마케팅 없이 입소문만으로 성장한 품질의 차이, 직접 경험해 보세요.
+                        ACE 후드를 쓰시는 업소와 손님 모두 대만족. 그 차이는 직접 써보시면 알게 됩니다.
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center mt-8">
                         <button onclick="navigate('products')" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform">제품 라인업 보기</button>
                         <button onclick="navigate('about','inquiry-section')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">견적 문의</button>
                     </div>
-                </div>
-
-                <!-- Scroll Down Indicator (animated mouse wheel) -->
-                <div id="scroll-indicator" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 cursor-pointer transition-opacity duration-700" onclick="window.scrollBy({top:window.innerHeight,behavior:'smooth'})">
-                    <div class="scroll-mouse">
-                        <div class="scroll-wheel"></div>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-[0.25em] text-white/40 uppercase">Scroll</span>
                 </div>
             </div>
         </div>
@@ -841,7 +820,7 @@
                         </div>
                         <div class="absolute bottom-1/3 -left-3 md:left-10 bg-white/85 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-black/5">
                             <div class="text-blue-600 font-black text-[10px]">04</div>
-                            <div class="font-bold text-sm">맞춤 제작</div>
+                            <div class="font-bold text-sm">360° 스윙</div>
                         </div>
                     </div>
 
@@ -852,8 +831,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14 14 0 0 0 0 20"/><path d="M12 2a14 14 0 0 1 0 20"/></svg>
                             </div>
                             <div>
-                                <h4 data-cms="t1_t" class="text-2xl font-black mb-2 tracking-tight">테이블 기준 360° 스윙</h4>
-                                <p data-cms="t1_d" class="text-black/55 leading-relaxed">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전되어 부러질 염려가 없어 편리합니다.</p>
+                                <h4 data-cms="t1_t" class="text-2xl font-black mb-2 tracking-tight">360° 자유로운 스윙</h4>
+                                <p data-cms="t1_d" class="text-black/55 leading-relaxed">파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없어 편리합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -861,8 +840,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                             </div>
                             <div>
-                                <h4 data-cms="t2_t" class="text-2xl font-black mb-2 tracking-tight">간편한 내부청소</h4>
-                                <p data-cms="t2_d" class="text-black/55 leading-relaxed">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
+                                <h4 data-cms="t2_t" class="text-2xl font-black mb-2 tracking-tight">간편한 내부 청소</h4>
+                                <p data-cms="t2_d" class="text-black/55 leading-relaxed">상하부를 연결하는 파이프링이 간단히 분리되어 누구나 손쉽게 내부 청소가 가능합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -870,8 +849,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 12l8 10 8-10z"/></svg>
                             </div>
                             <div>
-                                <h4 data-cms="t3_t" class="text-2xl font-black mb-2 tracking-tight">안전·유지관리 옵션</h4>
-                                <p data-cms="t3_d" class="text-black/55 leading-relaxed">FVD방화댐퍼: 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방. 터치분리: 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능.</p>
+                                <h4 data-cms="t3_t" class="text-2xl font-black mb-2 tracking-tight">화재로부터 안전</h4>
+                                <p data-cms="t3_d" class="text-black/55 leading-relaxed">화로와 80~150mm 떨어져 시공되어 화재로부터 안전하며, F.V.D 방화담파가 즉각 대응합니다.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 group">
@@ -879,8 +858,8 @@
                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
                             </div>
                             <div>
-                                <h4 data-cms="t4_t" class="text-2xl font-black mb-2 tracking-tight">맞춤형 제작</h4>
-                                <p data-cms="t4_d" class="text-black/55 leading-relaxed">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
+                                <h4 data-cms="t4_t" class="text-2xl font-black mb-2 tracking-tight">스톱바 브레이크 시스템</h4>
+                                <p data-cms="t4_d" class="text-black/55 leading-relaxed">텐션이 흘러내리거나 와이어줄이 끊어져도 스톱바가 브레이크 역할을 하여 후드가 갑자기 떨어지지 않아 안전합니다.</p>
                             </div>
                         </div>
                     </div>
@@ -893,7 +872,7 @@
                         <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">제품 라인업</div>
                     </div>
                     <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
+                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="14">0</span><span class="text-blue-600">y</span></div>
                         <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">엔지니어링</div>
                     </div>
                     <div class="bg-white p-8 text-center">
@@ -953,8 +932,8 @@
                         </div>
                         <div class="px-8 pb-10 pt-2">
                             <div class="text-[11px] tracking-[0.22em] font-bold text-blue-400">01 / SWING</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">테이블 기준 360° 스윙</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전되어 부러질 염려가 없어 편리합니다.</p>
+                            <h3 class="text-3xl font-black tracking-tight mt-2">360° 자유로운 스윙</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed">파이프가 고정되지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없습니다.</p>
                         </div>
                     </div>
 
@@ -974,9 +953,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-red-400">02 / CLEAN</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">간편한 내부청소</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-red-400">02 / FIRE-VENT-DAMPER</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2">F.V.D 방화담파</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed">풍속조절 겸용 방화담파가 내장되어 화재 발생 시 즉각 차단·보호합니다.</p>
                         </div>
                     </div>
 
@@ -999,9 +978,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-cyan-300">03 / SAFETY</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">안전·유지관리 옵션</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">FVD방화댐퍼: 200~220도에서 댐퍼가 닫혀 화재 예방. 터치분리로 상부 파이프도 청소 가능.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-cyan-300">03 / CLEAN</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2">분리·청소 가능</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed">상하부를 연결하는 파이프링이 손쉽게 분리되어 누구나 내부 청소가 가능합니다.</p>
                         </div>
                     </div>
 
@@ -1029,9 +1008,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-purple-300">04 / CUSTOM</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">맞춤형 제작</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단·연장 가능.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-purple-300">04 / TENSION</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2">상하작동 텐션</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed">와이어가 끊어져도 스톱바(브레이크)가 작동해 후드가 갑자기 떨어지지 않습니다.</p>
                         </div>
                     </div>
                 </div>
@@ -1039,8 +1018,8 @@
                 <!-- 마퀴 — 핵심 키워드 흐름 -->
                 <div class="mt-14 overflow-hidden border-y border-white/10 py-6 r-anim r-mask">
                     <div class="marquee-track text-5xl md:text-6xl font-black tracking-tight text-white/10">
-                        <span>360° SWING</span><span>·</span><span>EASY CLEAN</span><span>·</span><span>FVD SAFETY</span><span>·</span><span>CUSTOM FIT</span><span>·</span><span>MADE IN KOREA</span><span>·</span>
-                        <span>360° SWING</span><span>·</span><span>EASY CLEAN</span><span>·</span><span>FVD SAFETY</span><span>·</span><span>CUSTOM FIT</span><span>·</span><span>MADE IN KOREA</span><span>·</span>
+                        <span>360° SWING</span><span>·</span><span>F.V.D PROTECTION</span><span>·</span><span>CLEAN-READY</span><span>·</span><span>STOPBAR SAFETY</span><span>·</span><span>MADE IN KOREA</span><span>·</span>
+                        <span>360° SWING</span><span>·</span><span>F.V.D PROTECTION</span><span>·</span><span>CLEAN-READY</span><span>·</span><span>STOPBAR SAFETY</span><span>·</span><span>MADE IN KOREA</span><span>·</span>
                     </div>
                 </div>
             </div>
@@ -1056,7 +1035,7 @@
                         대한민국의 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">불 앞에서</span>.
                     </h2>
                     <p class="mt-6 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-                        프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지. 유성에이스는 매일 수많은 전문가들의 작업 환경을 쾌적하게 지켜내고 있습니다.
+                        고깃집부터 대형 프랜차이즈, 호텔 주방까지 — 유성에이스는 매일 수천 개의 화로 위에서 일합니다.
                     </p>
                 </div>
 
@@ -1069,7 +1048,7 @@
                             <h3 class="text-3xl font-black tracking-tight text-white mt-2">직화 고깃집</h3>
                         </div>
                         <div class="relative">
-                            <p class="text-white/55 leading-relaxed text-sm">테이블마다 떨어지는 기름을 방지하며 360도 스윙으로 자유롭게 연기 흡입 가능.</p>
+                            <p class="text-white/55 leading-relaxed text-sm">테이블마다 떨어지는 후드 · 360° 스윙으로 손님 이동에 방해 없음. 기름·연기 동시 포집.</p>
                             <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
                                 <span>갤럭시 시리즈 추천</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -1087,7 +1066,7 @@
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">매장 전체 통일 규격 · 부품 교체 표준화. F.V.D 방화담파로 다점포 안전 일괄 관리.</p>
                             <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
-                                <span>스파이럴 + 통합 패키지</span>
+                                <span>스파이럴 + 집진기 패키지</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </div>
                         </div>
@@ -1098,12 +1077,12 @@
                         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-cyan-500/10 blur-3xl group-hover:bg-cyan-500/20 transition"></div>
                         <div class="relative">
                             <div class="text-[10px] tracking-[0.22em] font-bold text-cyan-300">USE CASE 03</div>
-                            <h3 class="text-3xl font-black tracking-tight text-white mt-2">공장 / 연구실</h3>
+                            <h3 class="text-3xl font-black tracking-tight text-white mt-2">호텔 / 대형 주방</h3>
                         </div>
                         <div class="relative">
-                            <p class="text-white/55 leading-relaxed text-sm">연기가 가득한 현장에서도, 정밀한 환기가 필요한 연구실에서도 환기 솔루션을 제공합니다.</p>
+                            <p class="text-white/55 leading-relaxed text-sm">스텐파이프 라인의 위생적 마감 · 25/50 루베 집진기로 대용량 주방 환기까지 한 번에.</p>
                             <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
-                                <span>맞춤형 환기 시스템</span>
+                                <span>스텐파이프 + 집진기</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </div>
                         </div>
@@ -1202,7 +1181,7 @@
                     <div>
                         <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">REAL CONSTRUCTION</div>
                         <h2 class="text-5xl md:text-7xl font-black tracking-[-0.04em] leading-[0.95]">
-                            20년 동안 쌓아온<br/>
+                            14년 동안 쌓아온<br/>
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">진짜 현장 사진.</span>
                         </h2>
                     </div>
@@ -1217,18 +1196,18 @@
             </div>
         </section>
 
-        <!-- ===== 유성에이스 VIDEO SHOWCASE ===== -->
+        <!-- ===== 고기집 덕트 VIDEO SHOWCASE ===== -->
         <section class="py-16 bg-gradient-to-b from-black via-[#050a14] to-black border-t border-white/5">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     <div class="lg:col-span-5 r-anim r-left">
-                        <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">USUNG ACE IN ACTION</div>
+                        <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">FOR YAKINIKU & KOREAN BBQ</div>
                         <h2 class="text-4xl md:text-6xl font-black tracking-[-0.04em] leading-[0.98] mb-6">
-                            유성에이스 후드,<br/>
+                            고기집 덕트,<br/>
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">움직이는 모습 그대로.</span>
                         </h2>
                         <p class="text-lg text-white/55 leading-relaxed mb-8">
-                            360° 스윙, 상하 텐션, FVD 방화댐퍼의 작동을 영상으로 만나보세요. 20년 노하우가 만든 부드럽고 정확한 움직임.
+                            360° 스윙, 상하 텐션, FVD 방화담파의 작동을 영상으로 만나보세요. 14년 노하우가 만든 부드럽고 정확한 움직임.
                         </p>
                         <a href="https://m.blog.naver.com/ysungace" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-bold hover:bg-blue-500 hover:text-white transition">
                             네이버 블로그에서 영상 보기
@@ -1278,13 +1257,13 @@
         <div id="page-about" class="page min-h-screen pt-24 pb-12">
             <!-- HERO -->
             <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
-                <div data-cms="a_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2007 · ABOUT US</div>
+                <div data-cms="a_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2012 · ABOUT US</div>
                 <h1 class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
                     <span data-cms="a_title1">신뢰와 나눔 속에</span><br/>
                     <span data-cms="a_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">사랑받는 기업으로.</span>
                 </h1>
                 <p data-cms="a_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
-                    업계가 뒤따라오는 혁신의 시작점, 그 중심에는 언제나 유성에이스가 있습니다. 속도가 아닌 올바른 방향으로 세운 우리만의 기준은 모방할 수 없는 자부심이 되어 고객님의 신뢰에 보답합니다.
+                    새로운 환경, 새로운 기술로 한걸음 앞서가는 유성에이스. 친환경 도시개발에 앞장서며, 최고의 기술과 품질로 SERVICE를 통한 고객만족을 실현합니다.
                 </p>
             </section>
 
@@ -1299,10 +1278,10 @@
                         </h2>
                     </div>
                     <div class="lg:col-span-8 space-y-6 text-lg text-white/70 leading-relaxed">
-                        <p data-cms="a_ceo_p1">현장의 가치를 기술로 실현하는 환기 솔루션의 리더, <strong class="text-white">유성에이스</strong>입니다. 저희는 창립 이래 '현장 중심의 기술력'과 '고객 최우선의 가치'를 바탕으로 주방 환기 시스템의 혁신을 이끌어왔습니다.</p>
-                        <p data-cms="a_ceo_p2">설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다. 국내에서 직접 생산하는 제조사이며, 고객과 사용자의 입장에서 현장에서 발생하는 수많은 변수와 고충을 해결하는 '파트너'로서 고객사와 함께 성장해왔습니다.</p>
-                        <p data-cms="a_ceo_p3">유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다. 실제 현장에서 기기를 다루는 분들의 목소리에 귀를 기울여, 더 안전하고 효율적인 환기 환경을 만드는 것이 우리의 사명입니다.</p>
-                        <p data-cms="a_ceo_p4" class="text-white">앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다. 변함없는 믿음과 성원을 보내주시는 고객 여러분께 진심으로 감사의 말씀을 올립니다.</p>
+                        <p data-cms="a_ceo_p1">직화기 닥트(DUCT)시설의 흐름이 변해가는 시대에 심혈을 기울여 완성된 저희 <strong class="text-white">유성에이스</strong>는 그간 사용중 불편함을 개선하고, 가능성·편리성·시각화에 정성을 쏟았습니다.</p>
+                        <p data-cms="a_ceo_p2">특히 기름이 새거나 흐르는 것을 방지하는 위생적인 제품 개발에 초점을 두었으며, 후드 시공 시 누구나 편리하도록 개선했습니다.</p>
+                        <p data-cms="a_ceo_p3">그 결과 이미 저희 ACE후드를 사용하시는 업소와 손님 모두 대만족해 하십니다. 유성에이스는 여기에 만족하지 않고 직화기후드 부분 특허와 함께 신제품 개발, 수출에도 역점을 두고 있습니다.</p>
+                        <p data-cms="a_ceo_p4" class="text-white">늘 저희 제품을 애용해 주시는 모든 분들께 감사드리며, 사장님의 사업 번창을 진심으로 기원합니다.</p>
                     </div>
                 </div>
             </section>
@@ -1388,7 +1367,7 @@
                         <span data-cms="a_promise1">최고의 기술과 품질로</span><br/>
                         <span data-cms="a_promise2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">SERVICE를 통한 고객만족 실현.</span>
                     </h2>
-                    <p data-cms="a_promise_desc" class="text-lg text-white/60 max-w-3xl">친환경 도시개발에 앞장서가는 기업, 유성에이스는 2007년부터 한길만 걸어온 대한민국 덕트 No.1입니다.</p>
+                    <p data-cms="a_promise_desc" class="text-lg text-white/60 max-w-3xl">친환경 도시개발에 앞장서가는 기업, 유성에이스는 14년간 한길만 걸어온 대한민국 덕트 No.1입니다.</p>
                 </div>
             </section>
 
@@ -1453,13 +1432,13 @@
         <div id="page-products" class="page min-h-screen pt-24 pb-24">
             <!-- HERO -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 r-anim r-mask-up">
-                <div data-cms="p_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PRODUCT LINEUP · 148 MODELS</div>
+                <div data-cms="p_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PRODUCT LINEUP · 28 MODELS</div>
                 <h1 id="product-title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
-                    <span data-cms="p_title1">148가지 제품,</span><br/>
+                    <span data-cms="p_title1">28가지 제품,</span><br/>
                     <span data-cms="p_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 장인정신.</span>
                 </h1>
                 <p data-cms="p_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
-                    갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지. 유성에이스의 전 제품 라인업을 실제 사진과 함께 살펴보세요.
+                    갤럭시 시리즈부터 등제품, 스텐파이프, 스파이얼, 모터, 갓제품, 코브라, 후레쉬볼까지. 유성에이스의 전 제품 라인업을 한눈에 살펴보세요.
                 </p>
             </section>
 
@@ -1482,7 +1461,7 @@
                     <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-blue-500/10 blur-3xl"></div>
                     <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">NEED HELP CHOOSING?</div>
                     <h3 data-cms="p_cta_title" class="text-3xl md:text-5xl font-black tracking-tight mb-4">매장에 맞는 제품,<br/>직접 상담드립니다.</h3>
-                    <p data-cms="p_cta_desc" class="text-white/55 mb-8">20년 노하우로 매장 규모·화로 종류·천정고에 맞춤 최적의 제품을 추천해드립니다.</p>
+                    <p data-cms="p_cta_desc" class="text-white/55 mb-8">14년 노하우로 매장 규모·화로 종류·천정고에 맞춤 최적의 제품을 추천해드립니다.</p>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <a href="tel:1588-9123" class="px-6 py-3 rounded-full bg-white text-black font-bold hover:scale-105 transition">📞 1588-9123</a>
                         <button onclick="navigate('gallery')" class="px-6 py-3 rounded-full border border-white/20 text-white font-bold hover:bg-white/10 transition">시공 갤러리 보기 →</button>
@@ -1494,17 +1473,45 @@
         <!-- 4. PARTS 페이지 -->
         <div id="page-parts" class="page min-h-screen pt-24 pb-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-12 text-center">
-                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PARTS CATALOG · 50 ITEMS</div>
-                    <h1 data-cms="pt_title" class="text-5xl md:text-7xl font-black tracking-[-0.04em] leading-[0.95] mb-6">부품소개</h1>
-                    <p data-cms="pt_desc" class="text-xl text-white/55 max-w-2xl mx-auto">유성에이스 후드를 구성하는 모든 부품을 한눈에. 각 부품의 실물 누끼 사진으로 확인하세요.</p>
+                <div class="mb-16 text-center">
+                    <h1 data-cms="pt_title" class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">부품 및 집진기</h1>
+                    <p data-cms="pt_desc" class="text-xl text-gray-400">유성에이스의 다양한 부품과 고성능 집진기를 소개합니다.</p>
                 </div>
-                <!-- Category Filter -->
-                <div class="flex flex-wrap justify-center gap-2 mb-10" id="parts-filter">
-                    <button onclick="filterParts('all')" class="parts-filter-btn active px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-white/10 text-white transition-all">전체</button>
+                <div class="mb-24">
+                    <h2 class="text-3xl font-bold mb-8 border-b border-white/10 pb-4">집진기 & 참바</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-[#111] rounded-3xl p-8 border border-white/5">
+                            <h3 class="text-xl font-semibold mb-6 text-blue-400">01. 집진기</h3>
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-gray-400 uppercase bg-white/5">
+                                    <tr><th class="px-6 py-3">규격</th><th class="px-6 py-3">사이즈</th><th class="px-6 py-3">무게</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5">
+                                    <tr><td class="px-6 py-4">25 루베</td><td class="px-6 py-4">660 × 1450 × 530 = 300Ø</td><td class="px-6 py-4">80kg</td></tr>
+                                    <tr><td class="px-6 py-4">50 루베</td><td class="px-6 py-4">1120 × 1450 × 530 = 400Ø</td><td class="px-6 py-4">131kg</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="bg-[#111] rounded-3xl p-8 border border-white/5">
+                            <h3 class="text-xl font-semibold mb-6 text-blue-400">02. 참 바</h3>
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-gray-400 uppercase bg-white/5">
+                                    <tr><th class="px-6 py-3">규격</th><th class="px-6 py-3">사이즈</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5">
+                                    <tr><td class="px-6 py-4">600 × 600 × 600</td><td class="px-6 py-4">300Ø</td></tr>
+                                    <tr><td class="px-6 py-4">800 × 800 × 600</td><td class="px-6 py-4">350Ø</td></tr>
+                                    <tr><td class="px-6 py-4">900 × 900 × 800</td><td class="px-6 py-4">400Ø</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div id="parts-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <!-- JS로 채워짐 -->
+                <div>
+                    <h2 class="text-3xl font-bold mb-8 border-b border-white/10 pb-4">부품 목록</h2>
+                    <div id="parts-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- JS로 채워짐 -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1527,7 +1534,7 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
                 <div data-cms="g_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">CONSTRUCTION GALLERY</div>
                 <h1 data-cms="g_title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
-                    20년의 시공,<br/>
+                    14년의 시공,<br/>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">전국 곳곳에 있습니다.</span>
                 </h1>
                 <p data-cms="g_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
@@ -1589,7 +1596,7 @@
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 후드 안에.</span>
                 </h1>
                 <p class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
-                    20년 동안 한길만 걸어온 유성에이스가 직접 설계하고, 매장에서 검증한 핵심 기술들을 모두 공개합니다.
+                    14년 동안 한길만 걸어온 유성에이스가 직접 설계하고, 매장에서 검증한 핵심 기술들을 모두 공개합니다.
                 </p>
             </section>
 
@@ -1616,7 +1623,7 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 reveal">
                 <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">FULL LINEUP</div>
                 <h2 class="text-4xl md:text-6xl font-black tracking-[-0.04em] leading-[0.95] mb-12">
-                    148가지 제품,<br/>
+                    28가지 제품,<br/>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 표준 부품.</span>
                 </h2>
                 <div id="lineup-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -1632,7 +1639,7 @@
                         매장에 어울리는 모델,<br/>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">함께 골라드립니다.</span>
                     </h2>
-                    <p class="text-lg text-white/55 max-w-2xl mx-auto mb-8">20년 노하우로 매장 규모, 메뉴, 인테리어에 맞는 최적 라인을 추천해 드립니다.</p>
+                    <p class="text-lg text-white/55 max-w-2xl mx-auto mb-8">14년 노하우로 매장 규모, 메뉴, 인테리어에 맞는 최적 라인을 추천해 드립니다.</p>
                     <div class="flex flex-wrap items-center justify-center gap-4">
                         <a href="tel:1588-9123" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black font-bold hover:bg-blue-500 hover:text-white transition">
                             1588-9123 전화 상담
@@ -1684,7 +1691,7 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm6 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>
                                 <span class="text-[10px] font-black tracking-[0.2em]">PINNED · 이벤트</span>
                             </div>
-                            <h3 class="text-xl font-black mb-2 leading-tight">창립 기념 감사 프로모션</h3>
+                            <h3 class="text-xl font-black mb-2 leading-tight">창립 14주년 감사 프로모션</h3>
                             <p class="text-white/85 text-sm leading-relaxed">갤럭시 A·B 타입 일괄 견적 시 최대 15% 할인 + F.V.D 방화담파 무상 업그레이드. 5월 31일까지!</p>
                             <div class="mt-5 flex items-center justify-between text-[11px] text-white/80 font-semibold">
                                 <span>2026.04.01 ~ 2026.05.31</span>
@@ -1730,8 +1737,8 @@
                     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <div>
                             <div class="text-[11px] font-bold tracking-[0.2em] text-blue-600 mb-2">BOARD · 게시판</div>
-                            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-black">게시판</h1>
-                            <p class="text-black/55 text-sm md:text-base mt-3">유성에이스 Q&amp;A — 문의사항, 시공 후기를 자유롭게 남겨주세요.</p>
+                            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-black">고객 게시판</h1>
+                            <p class="text-black/55 text-sm md:text-base mt-3">시공 후기, 문의사항, Q&amp;A를 자유롭게 남겨주세요. 관리자가 확인 후 답변 드립니다.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="relative">
@@ -1793,16 +1800,17 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         ARCHIVE · 자료실
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-black mb-4">자료실</h1>
-                    <p class="text-black/55 text-base max-w-2xl mx-auto">유성에이스의 특허, 디자인등록, 인증서 등 홍보 자료를 확인하세요.</p>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-black mb-4">다운로드 센터</h1>
+                    <p class="text-black/55 text-base max-w-2xl mx-auto">카탈로그, 제품 도면, 인증서, 설치 매뉴얼을 한곳에서 다운로드하세요.<br class="hidden md:block">모든 자료는 무료로 제공됩니다.</p>
                 </div>
 
                 <!-- Filter chips -->
                 <div class="flex flex-wrap justify-center gap-2 mb-10 reveal">
                     <button class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold shadow-lg shadow-emerald-500/20">전체 자료</button>
-                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📋 특허</button>
-                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">🎨 디자인등록</button>
+                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📘 카탈로그</button>
+                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📐 제품 도면</button>
                     <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📜 인증서</button>
+                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">🛠 설치 매뉴얼</button>
                 </div>
 
                 <!-- Grid -->
@@ -1811,20 +1819,20 @@
                 <!-- Stats bar -->
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
                     <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-blue-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">특허 보유</div>
+                        <div class="text-3xl font-black text-emerald-600">12</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">TOTAL FILES</div>
                     </div>
                     <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-purple-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">디자인등록</div>
+                        <div class="text-3xl font-black text-teal-600">2.4K</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">DOWNLOADS</div>
                     </div>
                     <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-emerald-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">인증서</div>
+                        <div class="text-3xl font-black text-cyan-600">28</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">PRODUCTS</div>
                     </div>
                     <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-green-600">20y</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">기술 노하우</div>
+                        <div class="text-3xl font-black text-green-600">FREE</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">모든 자료 무료</div>
                     </div>
                 </div>
             </div>
@@ -1839,7 +1847,7 @@
                 <div class="lg:col-span-5">
                     <img src="logo-white.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
                     <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
-                        대한민국 덕트 No.1 — 2007년부터 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
+                        대한민국 덕트 No.1 — 14년간 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
                     </p>
                     <a href="https://m.blog.naver.com/ysungace" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-blue-400 hover:text-blue-300 transition-colors">
                         NAVER BLOG
@@ -1850,7 +1858,7 @@
                     <h4 class="text-white font-bold mb-5 text-xs tracking-[0.24em]">PRODUCTS</h4>
                     <ul class="space-y-3 text-sm text-white/55">
                         <li><button onclick="navigate('products')" class="hover:text-white transition-colors">제품소개</button></li>
-                        <li><button onclick="navigate('parts')" class="hover:text-white transition-colors">부품소개</button></li>
+                        <li><button onclick="navigate('parts')" class="hover:text-white transition-colors">부품 / 집진기</button></li>
                         <li><button onclick="navigate('gallery')" class="hover:text-white transition-colors">시공갤러리</button></li>
                         <li><button onclick="navigate('manual')" class="hover:text-white transition-colors">사용방법</button></li>
                     </ul>
@@ -1869,7 +1877,7 @@
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-white.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
                 <div class="flex space-x-6 text-xs text-white/35">
-                    <span>SINCE 2007</span>
+                    <span>SINCE 2012</span>
                     <span>·</span>
                     <span>대한민국 덕트 No.1</span>
                 </div>
@@ -1900,66 +1908,25 @@
     <!-- 스크립트 로직 -->
     <script>
         // 데이터 정의
-        let productList = [
-            "갤럭시 B타입 (12종)", "양옆태엽[BEST] (11종)", "갤럭시 C타입 원통필터 (4종)",
-            "파이프 (24종)", "스파이얼 (14종)", "후레쉬볼/주름관 (35종)",
-            "LED조명 (22종)", "LED우주선 (7종)", "갤럭시 A타입 (4종)",
-            "갤럭시 C타입 (5종)", "갤럭시 D타입 (4종)"
+        const productList = [
+            "1. 갤럭시A타입(스윙태엽/FVD/유지망/520갓등)", "2. 갤럭시B타입(스윙태엽/FVD/유지망)", "3. 갤럭시B타입(스윙태엽/FVD/유지망/스텐)",
+            "4. 갤럭시C타입(스윙태엽/FVD/유지망/520갓)", "5. 갤럭시D타입(스윙텐션/FVD/유지망/520갓등)", "6. 갤럭시D타입(스윙텐션/FVD/유지망/스텐)",
+            "7. 스윙텐션/FVD-등제품(LED/할로겐)", "8. 스윙텐션/FVD-등제품(LED/할로겐)", "9. 스윙텐션/FVD-아크릴등(삼파장/LED/할로겐)",
+            "10. 스윙텐션/FVD-아크릴한지(필름등/LED/할로겐)", "11. 150스윙텐션/FVD-스텐파이프(도금)", "12. 125스윙텐션/FVD-스텐파이프(도금)",
+            "13. 150스윙텐션/FVD-스텐파이프(도장)", "14. 125스윙텐션/FVD-스텐파이프(도장)", "15. 150스윙텐션/FVD-스파이얼",
+            "16. 125스윙텐션/FVD-스파이얼", "17. 스윙텐션/걸봉/속봉-스파이얼", "18. 스윙태엽/걸봉/속봉-스파이얼",
+            "19. 스윙텐션/원형상향/측향모터-스파이얼", "20. 스윙텐션/사각측향모터-스파이얼", "21. 고정텐션/125사각측향-스파이얼",
+            "22. 스윙텐션/100원형측향-스파이얼", "23. 스윙텐션/FVD/스텐 갓제품", "24. 150스윙텐션",
+            "25. 하향식코브라 제품군", "26. 후레쉬볼 제품군", "27. 후레쉬볼 모터제품군", "28. 후레쉬볼 갓제품군"
         ];
 
-        const partsItems = [
-            { img: "parts/p01.png", name: "FVD 방화담파", cat: "상부/FVD", desc: "방화 기능과 풍량 조절을 통합한 댐퍼. 화재 시 퓨즈가 녹으면 날개가 자동으로 닫혀 덕트를 통한 불꽃·연기 확산을 차단합니다.", specs: "FVD = Fire Volume Damper / 72°C 퓨즈 용단식" },
-            { img: "parts/p02.png", name: "VD 풍속조절기", cat: "상부/FVD", desc: "덕트 내 공기 흐름량을 수동으로 조절하는 볼륨댐퍼. 날개 각도를 조절하여 테이블별·구역별 배연량을 균형있게 설정합니다.", specs: "VD = Volume Damper / 레버 수동 조작" },
-            { img: "parts/p03.png", name: "반후지 (크롬)", cat: "상부", desc: "후드 본체와 덕트 연결부의 마감 커버. 크롬 도금 처리로 내식성·미관이 우수하며 원형 덕트 입구부를 깔끔하게 마감합니다.", specs: "크롬 도금 강판 / 다양한 직경 규격" },
-            { img: "parts/p04.png", name: "사각 측향모터", cat: "상부/모터", desc: "사각형 덕트에 탑재되는 측면 방향 배기 팬 모터. 후드 측면으로 연기·열기를 배출하도록 설계되어 주방 레이아웃에 맞게 설치합니다.", specs: "사각 덕트 전용 / 측면 배기" },
-            { img: "parts/p05.png", name: "원형 상향모터", cat: "상부/모터", desc: "원형 덕트에 탑재되는 상부 방향 배기 팬 모터. 연기를 위쪽으로 직접 배출하며 천장 덕트 수직 연결 구조에 적합합니다.", specs: "원형 덕트 전용 / 상향 배기" },
-            { img: "parts/p06.png", name: "원형 측향모터 (좌)", cat: "상부/모터", desc: "원형 덕트에 탑재되는 측면 방향 배기 팬 모터. 공간 제약이 있는 환경에서 옆 방향으로 배기할 수 있도록 설계됩니다.", specs: "원형 덕트 전용 / 측면 배기" },
-            { img: "parts/p07.png", name: "천정형캡", cat: "상부", desc: "덕트가 천장을 관통하는 부위를 마감하는 캡. 천장면과 덕트 사이 틈새를 깔끔하게 처리하여 미관을 살립니다.", specs: "천장 관통부 마감용" },
-            { img: "parts/p08.png", name: "원형 측향모터 (우)", cat: "상부/모터", desc: "원형 측향모터의 우측 방향 버전. 설치 방향에 따라 좌/우를 선택하여 최적의 배기 경로를 구성합니다.", specs: "원형 덕트 전용 / 우측 배기" },
-            { img: "parts/p09.png", name: "5단 유지망", cat: "필터/유지망", desc: "5단 구조의 그리스 필터. 연기 속 유증기(기름 입자)를 효과적으로 걸러 덕트 내부 기름 축적과 화재 위험을 줄입니다.", specs: "스테인리스 스틸 / 세척 후 재사용" },
-            { img: "parts/p10.png", name: "등링", cat: "부품", desc: "조명등을 후드 본체에 고정하는 링 형태의 부속. LED 또는 할로겐 등기구를 안정적으로 체결합니다.", specs: "조명 고정용 링" },
-            { img: "parts/p11.png", name: "빠찌링 (베어링)", cat: "부품", desc: "텐션 시스템의 장력을 미세 조절하는 핵심 부품. 6개로 시작하여 1~2개씩 추가하면 느슨해진 텐션을 복원할 수 있습니다.", specs: "텐션 조절용 / 초기 6개~최대 10개" },
-            { img: "parts/p12.png", name: "사각 태엽감속기", cat: "부품", desc: "태엽 방식으로 후드 승강을 제어하는 감속기. 후드를 올렸다 놓으면 태엽의 힘으로 부드럽게 내려오는 자동 복원 기능을 제공합니다.", specs: "사각형 타입 / 태엽 감속" },
-            { img: "parts/p13.png", name: "속링", cat: "부품", desc: "파이프 내부에 삽입되어 연결부를 보강하는 링. 파이프 간 접합 시 기밀성을 높이고 이탈을 방지합니다.", specs: "파이프 내부 보강용" },
-            { img: "parts/p14.png", name: "철제 태엽감속기", cat: "부품", desc: "철제 소재의 태엽 감속기. 사각 태엽감속기 대비 내구성이 높아 대형 후드나 고하중 환경에 적합합니다.", specs: "철제 / 고하중 대응" },
-            { img: "parts/p15.png", name: "FVD 휴즈", cat: "부품", desc: "FVD 방화담파에 장착되는 온도 감응 퓨즈. 72°C에서 용단되어 댐퍼를 자동 차단시키는 화재 안전 핵심 부품입니다.", specs: "72°C 용단 / 교체형" },
-            { img: "parts/p16.png", name: "휴즈핀", cat: "부품", desc: "FVD 휴즈를 댐퍼 본체에 고정하는 핀. 화재 시 휴즈가 녹으면 핀이 해제되어 댐퍼 날개가 닫힙니다.", specs: "휴즈 고정용 핀" },
-            { img: "parts/p17.png", name: "1중망", cat: "필터/유지망", desc: "단층 구조의 기름 필터망. 간단한 구조로 청소가 용이하며, 경량 배연 환경에서 기본 그리스 필터링 역할을 합니다.", specs: "스테인리스 / 1중 구조" },
-            { img: "parts/p18.png", name: "8단 유지망", cat: "필터/유지망", desc: "8단 고밀도 그리스 필터. 5단 유지망 대비 더 촘촘한 필터링으로 기름 입자를 정밀하게 포집합니다.", specs: "스테인리스 / 8단 고밀도" },
-            { img: "parts/p19.png", name: "갓 기름받이", cat: "하부/기름받이", desc: "갓(조명커버) 하단에 장착되어 흘러내리는 기름을 받아 모으는 트레이. 테이블 오염을 방지합니다.", specs: "갓 전용 기름받이" },
-            { img: "parts/p20.png", name: "기름받이망", cat: "하부/기름받이", desc: "기름받이 위에 올려 기름과 이물질을 1차 필터링하는 망. 기름받이 청소 주기를 연장시킵니다.", specs: "스테인리스 메시망" },
-            { img: "parts/p21.png", name: "기름받이 (속)", cat: "하부/기름받이", desc: "기름받이의 내부 트레이. 외부 케이스에서 분리하여 세척할 수 있는 탈착식 구조입니다.", specs: "탈착식 내부 트레이" },
-            { img: "parts/p22.png", name: "롱망", cat: "필터/유지망", desc: "길이가 긴 형태의 유지망. 대형 후드나 넓은 흡입구에 적합하며 넓은 면적의 그리스를 필터링합니다.", specs: "대형 후드용 / 롱 타입" },
-            { img: "parts/p23.png", name: "150Ø 기름받이", cat: "하부/기름받이", desc: "150mm 직경 규격의 표준 기름받이. 유성에이스 대부분의 모델에 호환되는 범용 사이즈입니다.", specs: "직경 150mm / 표준 규격" },
-            { img: "parts/p24.png", name: "일체형 기름받이", cat: "하부/기름받이", desc: "이음새 없이 한 장의 판으로 압착 성형한 기름받이. 이음새에서 기름이 새는 문제를 원천 차단합니다.", specs: "일체형 압착 / 누유 0%" },
-            { img: "parts/p25.png", name: "150Ø 나팔캡", cat: "하부/나팔·갓", desc: "150mm 직경의 나팔 형태 하부 캡. 기름받이에서 모인 기름을 한 곳으로 유도하여 쉽게 비울 수 있습니다.", specs: "직경 150mm / 나사식 체결" },
-            { img: "parts/p26.png", name: "210Ø 갓+나팔", cat: "하부/나팔·갓", desc: "210mm 직경의 조명 갓과 나팔캡 세트. 조명 집광과 기름 집진을 동시에 수행합니다.", specs: "직경 210mm / 갓+나팔 세트" },
-            { img: "parts/p27.png", name: "250Ø 갓+나팔", cat: "하부/나팔·갓", desc: "250mm 직경의 조명 갓과 나팔캡 세트. 중형 후드에 적합한 사이즈입니다.", specs: "직경 250mm / 갓+나팔 세트" },
-            { img: "parts/p28.png", name: "속레일", cat: "부품", desc: "후드 승강 구조의 내부 슬라이드 레일. 속봉이 레일을 따라 이동하며 안정적인 상하 작동을 보장합니다.", specs: "슬라이드 레일 / 승강 구조" },
-            { img: "parts/p29.png", name: "연결캡 (상부)", cat: "부품", desc: "상부 덕트와 파이프를 연결하는 캡 부속. 상부 구조물과 하부 파이프 사이의 기밀 연결을 담당합니다.", specs: "상부 연결용 캡" },
-            { img: "parts/p30.png", name: "연결캡 (하부)", cat: "부품", desc: "하부 파이프와 후드 본체를 연결하는 캡 부속. 터치 분리 기능으로 청소 시 손쉽게 분리할 수 있습니다.", specs: "하부 연결용 / 터치 분리" },
-            { img: "parts/p31.png", name: "일자형 기름받이", cat: "하부/기름받이", desc: "직선형으로 제작된 기름받이. 벽면 설치형 후드나 특수 구조에서 공간 효율을 높입니다.", specs: "직선형 / 벽면 설치 대응" },
-            { img: "parts/p32.png", name: "티구찌 (상부)", cat: "부품", desc: "T자 형태의 연결 부속. 덕트 분기점이나 파이프 교차 지점에서 방향을 전환하는 데 사용합니다.", specs: "T형 연결 / 분기점용" },
-            { img: "parts/p33.png", name: "210Ø 갓 (크롬)", cat: "하부/나팔·갓", desc: "210mm 직경의 크롬 도금 조명 갓. 고급스러운 외관으로 매장 인테리어 품격을 높입니다.", specs: "직경 210mm / 크롬 도금" },
-            { img: "parts/p34.png", name: "250Ø 갓", cat: "하부/나팔·갓", desc: "250mm 직경의 조명 갓. 중형 후드 하단의 조명을 감싸며 집광 효과를 줍니다.", specs: "직경 250mm" },
-            { img: "parts/p35.png", name: "304용 200Ø 갓", cat: "하부/나팔·갓", desc: "STS 304 스텐 전용 200mm 직경 갓. 내식성이 뛰어난 304 스텐 소재로 장기간 변색 없이 사용 가능합니다.", specs: "STS 304 / 직경 200mm" },
-            { img: "parts/p36.png", name: "320Ø 갓+나팔", cat: "하부/나팔·갓", desc: "320mm 직경의 대형 갓+나팔 세트. 넓은 흡입 범위와 강한 조명 집광 효과를 제공합니다.", specs: "직경 320mm / 대형" },
-            { img: "parts/p37.png", name: "350Ø 갓+나팔", cat: "하부/나팔·갓", desc: "350mm 직경의 대형 갓+나팔 세트. LED 조명 시리즈에 주로 사용됩니다.", specs: "직경 350mm / LED 시리즈 대응" },
-            { img: "parts/p38.png", name: "450Ø 갓", cat: "하부/나팔·갓", desc: "450mm 직경의 특대형 갓. LED우주선 시리즈 등 대형 조명 후드에 장착됩니다.", specs: "직경 450mm / 특대형" },
-            { img: "parts/p39.png", name: "520Ø 갓", cat: "하부/나팔·갓", desc: "520mm 직경의 최대 사이즈 갓. 갤럭시 A·D 타입 등 프리미엄 라인의 대형 조명을 커버합니다.", specs: "직경 520mm / 갤럭시 시리즈" },
-            { img: "parts/p40.png", name: "자바라 하부봉대", cat: "하부/나팔·갓", desc: "후레쉬볼(자바라) 하단을 지지하는 봉대. 자바라의 유연한 움직임을 안정적으로 가이드합니다.", specs: "자바라 하부 지지대" },
-            { img: "parts/p41.png", name: "후레쉬볼 (검정)", cat: "후레쉬볼", desc: "검정색 후레쉬볼(자바라). 후드와 고정 덕트를 유연하게 연결하며 설치 각도·위치 보정이 가능합니다.", specs: "검정색 / 알루미늄 플렉시블" },
-            { img: "parts/p42.png", name: "후레쉬볼 (동)", cat: "후레쉬볼", desc: "동색 후레쉬볼(자바라). 동 도금 마감으로 고급스러운 외관을 제공하며 한식·일식 매장에 인기입니다.", specs: "동색 도금 / 플렉시블" },
-            { img: "parts/p43.png", name: "후레쉬볼 (신주)", cat: "후레쉬볼", desc: "신주(황동)색 후레쉬볼. 따뜻한 골드톤으로 전통적인 분위기의 매장에 잘 어울립니다.", specs: "신주색 / 플렉시블" },
-            { img: "parts/p44.png", name: "후레쉬볼 (은)", cat: "후레쉬볼", desc: "은색 후레쉬볼(자바라). 가장 범용적인 컬러로 모던한 인테리어에 자연스럽게 조화됩니다.", specs: "은색 / 가장 범용적" },
-            { img: "parts/p45.png", name: "후레쉬볼 커버 (상/하)", cat: "후레쉬볼", desc: "후레쉬볼 상·하단을 감싸는 커버 세트. 연결부를 깔끔하게 마감하고 기름 누출을 방지합니다.", specs: "상하 커버 세트" },
-            { img: "parts/p46.png", name: "FVD 방화담파 (정면)", cat: "상부/FVD", desc: "FVD 방화담파의 정면 뷰. 댐퍼 날개와 퓨즈 구조를 정면에서 확인할 수 있습니다.", specs: "FVD 정면 상세 뷰" },
-            { img: "parts/p47.png", name: "VD 풍속조절기 (정면)", cat: "상부/FVD", desc: "VD 풍속조절기의 정면 뷰. 레버 조작부와 날개 각도 구조가 보입니다.", specs: "VD 정면 상세 뷰" },
-            { img: "parts/p48.png", name: "반후지 크롬 (정면)", cat: "상부", desc: "반후지 크롬의 정면 상세 뷰. 크롬 도금 표면 처리와 체결 구조를 확인할 수 있습니다.", specs: "반후지 정면 상세 뷰" },
-            { img: "parts/p49.png", name: "원형 측향모터 (측면)", cat: "상부/모터", desc: "원형 측향모터의 측면 뷰. 모터 하우징과 팬 블레이드 구조를 확인할 수 있습니다.", specs: "측향모터 측면 상세 뷰" },
-            { img: "parts/p50.png", name: "원형 태엽감속기 (정면)", cat: "부품", desc: "원형 태엽감속기의 정면 뷰. 태엽 코일과 감속 기어 구조가 보입니다.", specs: "원형 태엽감속기 상세 뷰" }
+        const partsList = [
+            "01. 원형상향모터", "02. 원형측향모터", "03. 사각측향모터", "04. FVD 방화담파", "05. FVD 휴즈",
+            "06. 150Ø기름받이", "07. 기름받이 속", "08. 일체형기름받이", "09. 태엽감속기", "10. 속링",
+            "11. 천정형캡", "12. 꼬마나팔", "13. 190Ø갓", "14. 150Ø나팔", "15. 210Ø갓",
+            "16. 250Ø갓", "17. 320Ø갓", "18. 420Ø갓", "19. 유지망5단", "20. 유지망8단",
+            "21. 450Ø갓", "22. 520Ø갓", "23. 125Ø반후지", "24. 150Ø반후지"
         ];
-        const partsList = partsItems.map((p, i) => `${String(i+1).padStart(2,'0')}. ${p.name}`);
 
         const features = [
             { id: 'swing', title: '360도 스윙', desc: '파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없습니다.', visual: '<div class="w-64 h-64 border-4 border-dashed border-blue-500 rounded-full animate-[spin_20s_linear_infinite]"></div>' },
@@ -1982,7 +1949,7 @@
             core_technologies: [
                 {
                     id: "swing-360", code: "TECH 01", title_ko: "360° 스윙 메커니즘", title_en: "360° SWING",
-                    icon: "swing",
+                    icon: "swing", imageIdx: 46,
                     summary: "파이프가 고정되지 않고 시계추 모양으로 360° 회전합니다.",
                     description: "기존 후드 파이프는 고정식이라 손님이 부딪히거나 청소 중 외부 충격을 받으면 휘거나 부러지기 쉬웠습니다. 유성에이스는 후드 파이프 상단을 회전 베어링으로 받쳐 시계추처럼 360° 자유롭게 스윙되도록 설계했습니다. 외부 충격을 흡수하고 원위치로 자동 복귀합니다.",
                     benefits: ["외부 충격 시 파이프 손상 0% — 자유 회전으로 충격 흡수","청소 시 손쉬운 위치 이동","손님 동선 방해 시 쉬운 회피","교체 비용·다운타임 대폭 절감"],
@@ -1990,7 +1957,7 @@
                 },
                 {
                     id: "fvd", code: "TECH 02", title_ko: "F.V.D 방화담파", title_en: "FIRE & VOLUME DAMPER",
-                    icon: "flame",
+                    icon: "flame", imageIdx: 42,
                     summary: "풍속조절과 방화담파를 동시에 수행하는 일체형 안전장치.",
                     description: "F.V.D는 Fire & Volume Damper의 약자로, 평상시에는 매장의 환기 풍속을 손쉽게 조절하다가 화재가 감지되면 휴즈가 즉시 끊어지면서 댐퍼가 자동으로 닫혀 불길이 덕트를 타고 번지는 것을 차단합니다. 별도의 방화 시설 없이 후드 자체가 1차 방화벽 역할을 합니다.",
                     benefits: ["화재 발생 시 자동 차단 — 별도 조작 불필요","풍속 단계별 조절로 에너지 절약","방화 인증 휴즈 표준 탑재","보험·소방 점검 대응 용이"],
@@ -1998,7 +1965,7 @@
                 },
                 {
                     id: "tension", code: "TECH 03", title_ko: "상하작동 텐션 시스템", title_en: "VERTICAL TENSION",
-                    icon: "spring",
+                    icon: "spring", imageIdx: 33,
                     summary: "베어링 수량으로 장력을 미세 조절하는 정밀 텐션.",
                     description: "후드의 높이를 손가락 하나로 자유롭게 조절할 수 있는 텐션 시스템입니다. 빠찌링(베어링)을 6개 정도 끼워 시작하고, 사용 중 느슨해지면 1~2개씩 추가하여 장력을 미세조정합니다. 와이어가 끊어져도 걸링(스톱바·브레이크)이 후드 추락을 막아 안전합니다.",
                     benefits: ["단계 없는 무단 높이 조절","베어링 추가만으로 평생 텐션 유지","스톱바 브레이크 — 와이어 단선 시에도 안전","고기 굽는 위치에 따라 즉시 최적화"],
@@ -2006,7 +1973,7 @@
                 },
                 {
                     id: "clean", code: "TECH 04", title_ko: "분리 청소 가능 구조", title_en: "MODULAR CLEAN",
-                    icon: "clean",
+                    icon: "clean", imageIdx: 24,
                     summary: "도구 없이 손으로 분리, 위생 점검이 매일 가능한 구조.",
                     description: "후드 사용에서 가장 큰 골칫거리는 기름때 청소입니다. 유성에이스는 상하부를 연결하는 파이프링·기름받이·나팔캡을 모두 손으로 돌려서 분리할 수 있도록 설계했습니다. 연장 없이도 매일 분해해 세척할 수 있어 위생 등급을 항상 최상위로 유지합니다.",
                     benefits: ["도구 없이 손으로 분리","기름 누유 방지 일체형 기름받이","매일 세척 가능 — 위생 점검 만점","조립도 1분 이내"],
@@ -2014,7 +1981,7 @@
                 },
                 {
                     id: "trumpet", code: "TECH 05", title_ko: "일체형 기름받이 + 나팔캡", title_en: "INTEGRATED GREASE TRAP",
-                    icon: "drop",
+                    icon: "drop", imageIdx: 25,
                     summary: "기름이 새거나 흐르지 않는 위생 일체형 설계.",
                     description: "기존 후드는 기름받이 이음새로 기름이 새어 손님 테이블을 더럽히는 사고가 잦았습니다. 유성에이스는 기름받이를 단일 부품으로 압착 성형해 누유 위험을 원천 차단했습니다. 나팔캡은 기름받이 하단에 결합되어 받은 기름을 한 곳으로 모아 손쉽게 비울 수 있습니다.",
                     benefits: ["이음새 없는 일체형 — 누유 0%","150Ø 표준 + 옵션 사이즈","테이블·바닥 오염 방지","위생 등급 향상"],
@@ -2022,7 +1989,7 @@
                 },
                 {
                     id: "lighting", code: "TECH 06", title_ko: "통합 LED 라이팅", title_en: "INTEGRATED LED",
-                    icon: "bulb",
+                    icon: "bulb", imageIdx: 2,
                     summary: "LED·할로겐·삼파장·아크릴등 다양한 조명 옵션.",
                     description: "후드 자체가 매장 조명의 일부가 됩니다. 갤럭시 시리즈는 520Ø·420Ø·320Ø 등 다양한 갓 사이즈에 LED·할로겐·삼파장·아크릴 한지등을 장착할 수 있어, 매장 컨셉에 맞춰 분위기를 만들 수 있습니다. 후드와 조명 배선을 일체화해 별도 공사를 최소화합니다.",
                     benefits: ["후드 + 매장 조명 통합 시공","LED 저전력으로 운영비 절감","교체형 등기구 — 유지보수 간편","다양한 갓 디자인으로 인테리어 자유도"],
@@ -2030,19 +1997,19 @@
                 },
                 {
                     id: "swing-spring", code: "TECH 07", title_ko: "스윙 태엽 / 외부태엽", title_en: "SPRING SWING",
-                    icon: "gear",
+                    icon: "gear", imageIdx: 3,
                     summary: "태엽 감속기 기반의 자동 복원 메커니즘.",
                     description: "스윙 태엽은 후드를 위로 올렸다가 손을 떼면 태엽 감속기의 힘으로 부드럽게 내려오는 자동 복원 시스템입니다. 갤럭시 A·B·C 타입에 적용되며, 와이어 절단이나 텐션 마모 시에도 외부태엽 옵션으로 손쉽게 교체할 수 있습니다.",
                     benefits: ["한 손으로 부드러운 상하 조작","감속기 내장 — 급강하 방지","내·외부 태엽 옵션 선택","교체 작업 10분 내 완료"],
                     specs: {"방식":"태엽 감속기","옵션":"내부·외부태엽 A·B","교체성":"사각피스 4개","적용":"갤럭시 A·B·C"}
                 },
                 {
-                    id: "custom-fit", code: "TECH 08", title_ko: "맞춤형 제작", title_en: "CUSTOM FIT",
-                    icon: "ruler",
-                    summary: "필요한 기장으로 맞춤 제작 가능.",
-                    description: "필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다. 매장 규모와 천장 높이에 관계없이 최적의 설치가 가능합니다.",
-                    benefits: ["기본기장 L1800 기준 절단·연장","매장 규모별 맞춤 대응","다양한 천장 높이 호환","현장 환경 최적화 설치"],
-                    specs: {"기본기장":"L1800","조절":"절단 / 연장 가능","대응":"다양한 현장","방식":"맞춤 제작"}
+                    id: "dust-collector", code: "TECH 08", title_ko: "대형 집진기 시스템", title_en: "DUST COLLECTOR",
+                    icon: "wind", imageIdx: 31,
+                    summary: "25 / 50 루베급 집진기로 대용량 주방까지 커버.",
+                    description: "갤럭시 후드 라인과 함께 운영되는 대형 집진기 시스템입니다. 25루베·50루베급 모터가 매장 전체의 연기·기름 입자를 한 번에 처리해, 호텔·뷔페·대형 프랜차이즈 매장의 환기 부담을 해소합니다. 후드와 동일 브랜드 통합 운영으로 A/S가 단일화됩니다.",
+                    benefits: ["25 / 50 루베 풍량 옵션","후드와 단일 브랜드 통합 A/S","대형 매장 환기 부담 해소","원형 상향·측향 / 사각 측향 모터 선택"],
+                    specs: {"풍량":"25 / 50 m³","모터":"원형 상향·측향 / 사각","필터":"다단 유지망 5단·8단","적용":"호텔·뷔페·프랜차이즈"}
                 }
             ],
             use_cases: [
@@ -2060,161 +2027,41 @@
                 },
                 {
                     id:"hotel", title:"호텔 / 대형 주방", subtitle:"뷔페 · 호텔 · 카페테리아",
-                    recommended:["스텐파이프 도금/도장","맞춤형 환기 설계","사각 측향 모터"],
-                    story:"스텐파이프 라인의 위생적 마감 + 맞춤형 환기 설계로 대형 시설 환기 부담 해소.",
+                    recommended:["스텐파이프 도금/도장","25 / 50루베 집진기","사각 측향 모터"],
+                    story:"스텐파이프 라인의 위생적 마감 + 대용량 집진기로 한 번에 환기 부담 해소.",
                     kpi:[{label:"풍량",value:"25~50 m³"},{label:"모터 옵션",value:"3종"}]
                 }
             ],
             product_lineup: [
-  { img: "products/p001_01갤럭시B_150Ø스파이럴_내부태엽_검정함마스파이얼.jpg", name: "갤럭시B 150Ø스파이럴 내부태엽 검정함마스파이얼", cat: "갤럭시 B타입", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p002_01갤럭시B_150Ø스파이럴_내부태엽_동함마스파이얼.jpg", name: "갤럭시B 150Ø스파이럴 내부태엽 동함마스파이얼", cat: "갤럭시 B타입", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p003_01갤럭시B_150Ø스파이럴_내부태엽_실버함마스파이얼.jpg", name: "갤럭시B 150Ø스파이럴 내부태엽 실버함마스파이얼", cat: "갤럭시 B타입", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p004_01갤럭시B_150Ø스파이럴_내부태엽_황색함마.jpg", name: "갤럭시B 150Ø스파이럴 내부태엽 황색함마", cat: "갤럭시 B타입", finish: "노랑함마", pipe: "스파이얼" },
-  { img: "products/p005_01갤럭시B_150Ø스파이럴_양옆태엽_동함마스파이얼.jpg", name: "갤럭시B 150Ø스파이럴 양옆태엽 동함마스파이얼", cat: "갤럭시 B타입", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p006_01갤럭시B_304스텐_내부태엽_헤어라인.jpg", name: "갤럭시B 304스텐 내부태엽 헤어라인", cat: "갤럭시 B타입", finish: "헤어라인, 304스텐", pipe: "" },
-  { img: "products/p007_01갤럭시B_304스텐_양옆태엽_파이프_동.jpg", name: "갤럭시B 304스텐 양옆태엽(파이프) 동", cat: "갤럭시 B타입", finish: "304스텐", pipe: "" },
-  { img: "products/p008_01갤럭시B_304스텐_양옆태엽_파이프_신주.jpg", name: "갤럭시B 304스텐 양옆태엽(파이프) 신주", cat: "갤럭시 B타입", finish: "신주, 304스텐", pipe: "" },
-  { img: "products/p009_01갤럭시B_304스텐_양옆태엽_파이프_크롬.jpg", name: "갤럭시B 304스텐 양옆태엽(파이프) 크롬", cat: "갤럭시 B타입", finish: "크롬, 304스텐", pipe: "" },
-  { img: "products/p010_01갤럭시B_304스텐_양옆태엽_파이프_헤어라인.jpg", name: "갤럭시B 304스텐 양옆태엽(파이프) 헤어라인", cat: "갤럭시 B타입", finish: "헤어라인, 304스텐", pipe: "" },
-  { img: "products/p011_01갤럭시B_304스텐_양옆태엽_파이프_흑도금.jpg", name: "갤럭시B 304스텐 양옆태엽(파이프) 흑도금", cat: "갤럭시 B타입", finish: "흑도금, 304스텐", pipe: "" },
-  { img: "products/p012_01갤럭시B_304스텐_양옆태엽_헤드_헤어라인.jpg", name: "갤럭시B 304스텐 양옆태엽(헤드) 헤어라인", cat: "갤럭시 B타입", finish: "헤어라인, 304스텐", pipe: "" },
-  { img: "products/p013_02_304스텐_헤드FVD_양옆태엽_헤드.jpg", name: "304스텐(헤드FVD) 양옆태엽(헤드)", cat: "양옆태엽[BEST]", finish: "304스텐", pipe: "" },
-  { img: "products/p014_02유성에이스_304스텐_헤드FVD_양옆태엽_파이프.jpg", name: "스텐(헤드FVD) 양옆태엽(파이프)", cat: "양옆태엽[BEST]", finish: "304스텐", pipe: "" },
-  { img: "products/p015_03갤럭시C_150Ø5단유지망_내부태엽_검정함마.jpg", name: "갤럭시C 150Ø5단유지망 내부태엽 검정함마", cat: "갤럭시 C타입 원통필터", finish: "검정함마", pipe: "" },
-  { img: "products/p016_03갤럭시C_150Ø5단유지망_내부태엽_동함마.jpg", name: "갤럭시C 150Ø5단유지망 내부태엽 동함마", cat: "갤럭시 C타입 원통필터", finish: "동함마", pipe: "" },
-  { img: "products/p017_03갤럭시C_150Ø5단유지망_내부태엽_실버함마.jpg", name: "갤럭시C 150Ø5단유지망 내부태엽 실버함마", cat: "갤럭시 C타입 원통필터", finish: "실버함마", pipe: "" },
-  { img: "products/p018_03갤럭시C_150Ø5단유지망_내부태엽_황색함마.jpg", name: "갤럭시C 150Ø5단유지망 내부태엽 황색함마", cat: "갤럭시 C타입 원통필터", finish: "노랑함마", pipe: "" },
-  { img: "products/p019_09_150Ø_스텐도금_FVD_텐션_신주.jpg", name: "150Ø 스텐도금 (FVD) 텐션 신주", cat: "파이프", finish: "도금, 신주", pipe: "" },
-  { img: "products/p020_09_150Ø_스텐도금_반후지_텐션_동.jpg", name: "150Ø 스텐도금 (반후지) 텐션 동", cat: "파이프", finish: "도금", pipe: "" },
-  { img: "products/p021_09_150Ø_스텐도금_반후지_텐션_크롬.jpg", name: "150Ø 스텐도금 (반후지) 텐션 크롬", cat: "파이프", finish: "도금, 크롬", pipe: "" },
-  { img: "products/p022_09_150Ø_스텐도금_반후지_텐션_헤어라인.jpg", name: "150Ø 스텐도금 (반후지) 텐션 헤어라인", cat: "파이프", finish: "도금, 헤어라인", pipe: "" },
-  { img: "products/p023_09_150Ø_스텐도금_반후지_텐션_흑도금.jpg", name: "150Ø 스텐도금 (반후지) 텐션 흑도금", cat: "파이프", finish: "흑도금", pipe: "" },
-  { img: "products/p024_09_150Ø_스텐도장_FVD_텐션_실버함마.jpg", name: "150Ø 스텐도장 (FVD) 텐션 실버함마", cat: "파이프", finish: "실버함마", pipe: "" },
-  { img: "products/p025_09_150Ø_스텐도장_FVD_텐션_주황함마.jpg", name: "150Ø 스텐도장 (FVD) 텐션 주황함마", cat: "파이프", finish: "주황함마", pipe: "" },
-  { img: "products/p026_09_150Ø_스텐도장_반후지_텐션_검정함마.jpg", name: "150Ø 스텐도장 (반후지) 텐션 검정함마", cat: "파이프", finish: "검정함마", pipe: "" },
-  { img: "products/p027_09_150Ø_스텐도장_반후지_텐션_동함마.jpg", name: "150Ø 스텐도장 (반후지) 텐션 동함마", cat: "파이프", finish: "동함마", pipe: "" },
-  { img: "products/p028_10_125Ø_FVD_텐션_스텐도금_크롬.jpg", name: "125Ø(FVD) 텐션 스텐도금 크롬", cat: "파이프", finish: "도금, 크롬", pipe: "" },
-  { img: "products/p029_10_125Ø_반후지_텐션_동.jpg", name: "125Ø(반후지) 텐션 동", cat: "파이프", finish: "동", pipe: "" },
-  { img: "products/p030_10_125Ø_반후지_텐션_스텐도금_신주.jpg", name: "125Ø(반후지) 텐션 스텐도금 신주", cat: "파이프", finish: "도금, 신주", pipe: "" },
-  { img: "products/p031_10_125Ø_반후지_텐션_스텐도금_헤어라인.jpg", name: "125Ø(반후지) 텐션 스텐도금 헤어라인", cat: "파이프", finish: "도금, 헤어라인", pipe: "" },
-  { img: "products/p032_10_125Ø_반후지_텐션_스텐도금_흑도금.jpg", name: "125Ø(반후지) 텐션 스텐도금 흑도금", cat: "파이프", finish: "흑도금", pipe: "" },
-  { img: "products/p033_11.jpg", name: "11", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p034_14_125Ø_반후지_스윙텐션_은스텐파이프210Ø갓.jpg", name: "125Ø(반후지) 스윙텐션 은스텐파이프210Ø갓", cat: "파이프", finish: "은", pipe: "스텐파이프" },
-  { img: "products/p035_14_125Ø_반후지_텐션_스텐도장_검정함마.jpg", name: "125Ø(반후지) 텐션 스텐도장 검정함마", cat: "파이프", finish: "검정함마", pipe: "" },
-  { img: "products/p036_14_125Ø_반후지_텐션_스텐도장_동함마.jpg", name: "125Ø(반후지) 텐션 스텐도장 동함마", cat: "파이프", finish: "동함마", pipe: "" },
-  { img: "products/p037_14_125Ø_반후지_텐션_스텐도장_실버함마.jpg", name: "125Ø(반후지) 텐션 스텐도장 실버함마", cat: "파이프", finish: "실버함마", pipe: "" },
-  { img: "products/p038_14_125Ø_반후지_텐션_스텐도장_주황함마.jpg", name: "125Ø(반후지) 텐션 스텐도장 주황함마", cat: "파이프", finish: "주황함마", pipe: "" },
-  { img: "products/p039_15_FVD_주황함마_스파이얼.jpg", name: "FVD.주황함마 스파이얼", cat: "스파이얼", finish: "주황함마", pipe: "스파이얼" },
-  { img: "products/p040_15_FVD실버함마_스파이얼.jpg", name: "FVD실버함마 스파이얼", cat: "스파이얼", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p041_15_150Ø_반후지_텐션_스파이얼_검정함마.jpg", name: "150Ø(반후지) 텐션 스파이얼 검정함마", cat: "스파이얼", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p042_15_150Ø_반후지_텐션_스파이얼_동함마.jpg", name: "150Ø(반후지) 텐션 스파이얼 동함마", cat: "스파이얼", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p043_16.jpg", name: "16", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p044_17.jpg", name: "17", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p045_18.jpg", name: "18", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p046_18_125Ø_반후지_스윙텐션_스파이얼_동함마210Ø갓.jpg", name: "125Ø(반후지) 스윙텐션 스파이얼 동함마210Ø갓", cat: "스파이얼", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p047_18_125Ø_FVD_텐션_스파이얼_황색함마.jpg", name: "125Ø(FVD) 텐션 스파이얼 황색함마", cat: "스파이얼", finish: "노랑함마", pipe: "스파이얼" },
-  { img: "products/p048_18_125Ø_반후지_텐션_스파이얼_검정함마.jpg", name: "125Ø(반후지) 텐션 스파이얼 검정함마", cat: "스파이얼", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p049_18_125Ø_반후지_텐션_스파이얼_동함마.jpg", name: "125Ø(반후지) 텐션 스파이얼 동함마", cat: "스파이얼", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p050_18_125Ø_반후지_텐션_스파이얼_실버함마.jpg", name: "125Ø(반후지) 텐션 스파이얼 실버함마", cat: "스파이얼", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p051_19.jpg", name: "19", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p052_1유성에이스_은자바라.jpg", name: "은자바라", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p053_25.jpg", name: "25", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p054_26.jpg", name: "26", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p055_27.jpg", name: "27", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p056_28.jpg", name: "28", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p057_2유성에이스_동자바라.jpg", name: "동자바라", cat: "후레쉬볼/주름관", finish: "동", pipe: "후레쉬볼" },
-  { img: "products/p058_3유성에이스_신주자바라.jpg", name: "신주자바라", cat: "후레쉬볼/주름관", finish: "신주", pipe: "후레쉬볼" },
-  { img: "products/p059_4유성에이스_검정자바라.jpg", name: "검정자바라", cat: "후레쉬볼/주름관", finish: "", pipe: "후레쉬볼" },
-  { img: "products/p060_5유성에이스_흑도금자바라.jpg", name: "흑도금자바라", cat: "후레쉬볼/주름관", finish: "흑도금", pipe: "후레쉬볼" },
-  { img: "products/p061_6유성에이스_실버자바라.jpg", name: "실버자바라", cat: "후레쉬볼/주름관", finish: "", pipe: "후레쉬볼" },
-  { img: "products/p062_7.jpg", name: "7", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p063_8.jpg", name: "8", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p064_9.jpg", name: "9", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p065_DSC_4680_copy.jpg", name: "DSC 4680", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p066_DSC_4683_copy.jpg", name: "DSC 4683", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p067_DSC_4692_copy.jpg", name: "DSC 4692", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p068_DSC_4697_copy.jpg", name: "DSC 4697", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p069_DSC_4708_copy.jpg", name: "DSC 4708", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p070_DSC_4714_copy.jpg", name: "DSC 4714", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p071_DSC_4723_copy.jpg", name: "DSC 4723", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p072_DSC_4726_copy.jpg", name: "DSC 4726", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p073_DSC_4734_copy.jpg", name: "DSC 4734", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p074_DSC_4754_copy.jpg", name: "DSC 4754", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p075_DSC_4760_copy.jpg", name: "DSC 4760", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p076_DSC_4763_copy.jpg", name: "DSC 4763", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p077_DSC_4770_copy.jpg", name: "DSC 4770", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p078_DSC_4774_copy.jpg", name: "DSC 4774", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p079_DSC_4778_copy.jpg", name: "DSC 4778", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p080_DSC_4783_copy.jpg", name: "DSC 4783", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p081_DSC_4787_copy.jpg", name: "DSC 4787", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p082_DSC_4790_copy.jpg", name: "DSC 4790", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p083_DSC_4796_copy.jpg", name: "DSC 4796", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p084_DSC_4801_copy.jpg", name: "DSC 4801", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p085_DSC_4805_copy.jpg", name: "DSC 4805", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p086_DSC_4809_copy.jpg", name: "DSC 4809", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p087_DSC_4813_copy.jpg", name: "DSC 4813", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p088_DSC_4820_copy.jpg", name: "DSC 4820", cat: "후레쉬볼/주름관", finish: "", pipe: "" },
-  { img: "products/p089_FVD양옆태엽검정함마스텐파이프.jpg", name: "FVD양옆태엽검정함마스텐파이프", cat: "양옆태엽[BEST]", finish: "검정함마", pipe: "스텐파이프" },
-  { img: "products/p090_LED350갓등신주브론즈스텐파이프.jpg", name: "LED350갓등신주브론즈스텐파이프", cat: "LED조명", finish: "신주", pipe: "스텐파이프" },
-  { img: "products/p091_LED350갓등은스텐파이프.jpg", name: "LED350갓등은스텐파이프", cat: "LED조명", finish: "은", pipe: "스텐파이프" },
-  { img: "products/p092_LED350둥근갓등검정함마스텐파이프.jpg", name: "LED350둥근갓등검정함마스텐파이프", cat: "LED조명", finish: "검정함마", pipe: "스텐파이프" },
-  { img: "products/p093_LED350둥근갓등동스텐파이프.jpg", name: "LED350둥근갓등동스텐파이프", cat: "LED조명", finish: "", pipe: "스텐파이프" },
-  { img: "products/p094_LED350둥근갓등동함마스파이얼.jpg", name: "LED350둥근갓등동함마스파이얼", cat: "LED조명", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p095_LED400파이아크릴갓등검정함마스텐파이프.jpg", name: "LED400파이아크릴갓등검정함마스텐파이프", cat: "LED조명", finish: "검정함마", pipe: "스텐파이프" },
-  { img: "products/p096_LED400파이아크릴갓등동함마스텐파이프.jpg", name: "LED400파이아크릴갓등동함마스텐파이프", cat: "LED조명", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p097_LED450갓등검정함마스파이얼.jpg", name: "LED450갓등검정함마스파이얼", cat: "LED조명", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p098_LED450갓등동스텐파이프.jpg", name: "LED450갓등동스텐파이프", cat: "LED조명", finish: "", pipe: "스텐파이프" },
-  { img: "products/p099_LED450갓등실버함마스텐파이프.jpg", name: "LED450갓등실버함마스텐파이프", cat: "LED조명", finish: "실버함마", pipe: "스텐파이프" },
-  { img: "products/p100_LED450노랑우주선동함마스텐파이프.jpg", name: "LED450노랑우주선동함마스텐파이프", cat: "LED우주선", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p101_LED450빨강우주선검정함마스텐파이프.jpg", name: "LED450빨강우주선검정함마스텐파이프", cat: "LED우주선", finish: "검정함마", pipe: "스텐파이프" },
-  { img: "products/p102_LED450우주선동스텐파이프.jpg", name: "LED450우주선동스텐파이프", cat: "LED우주선", finish: "", pipe: "스텐파이프" },
-  { img: "products/p103_LED450우주선동함마스파이얼.jpg", name: "LED450우주선동함마스파이얼", cat: "LED우주선", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p104_LED450우주선스텐파이프_후레쉬볼.jpg", name: "LED450우주선스텐파이프+후레쉬볼", cat: "LED우주선", finish: "", pipe: "스텐파이프, 후레쉬볼" },
-  { img: "products/p105_LED450우주선스텐파이프_후레쉬볼_접은거.jpg", name: "LED450우주선스텐파이프+후레쉬볼(접은거)", cat: "LED우주선", finish: "", pipe: "스텐파이프, 후레쉬볼" },
-  { img: "products/p106_LED450우주선신주스텐파이프.jpg", name: "LED450우주선신주스텐파이프", cat: "LED우주선", finish: "신주", pipe: "스텐파이프" },
-  { img: "products/p107_LED600파이갓등검정함마스파이얼.jpg", name: "LED600파이갓등검정함마스파이얼", cat: "LED조명", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p108_LED600파이갓등신주스텐파이프.jpg", name: "LED600파이갓등신주스텐파이프", cat: "LED조명", finish: "신주", pipe: "스텐파이프" },
-  { img: "products/p109_LED빨강항아리등스텐파이프.jpg", name: "LED빨강항아리등스텐파이프", cat: "LED조명", finish: "", pipe: "스텐파이프" },
-  { img: "products/p110_LED원형등스파이얼_스텐파이프.jpg", name: "LED원형등스파이얼+스텐파이프", cat: "LED조명", finish: "", pipe: "스파이얼, 스텐파이프" },
-  { img: "products/p111_LED항아리갓등동함마스파이얼.jpg", name: "LED항아리갓등동함마스파이얼", cat: "LED조명", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p112_갤럭시A검정함마스파이얼.jpg", name: "갤럭시A검정함마스파이얼", cat: "갤럭시 A타입", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p113_갤럭시A노랑함마스파이얼.jpg", name: "갤럭시A노랑함마스파이얼", cat: "갤럭시 A타입", finish: "노랑함마", pipe: "스파이얼" },
-  { img: "products/p114_갤럭시A동함마스파이얼양옆태엽.jpg", name: "갤럭시A동함마스파이얼양옆태엽", cat: "갤럭시 A타입", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p115_갤럭시A실버함마스파이얼.jpg", name: "갤럭시A실버함마스파이얼", cat: "갤럭시 A타입", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p116_갤럭시C검정함마스파이얼.jpg", name: "갤럭시C검정함마스파이얼", cat: "갤럭시 C타입", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p117_갤럭시C노랑함마스파이얼.jpg", name: "갤럭시C노랑함마스파이얼", cat: "갤럭시 C타입", finish: "노랑함마", pipe: "스파이얼" },
-  { img: "products/p118_갤럭시C동함마스파이얼.jpg", name: "갤럭시C동함마스파이얼", cat: "갤럭시 C타입", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p119_갤럭시C실버함마스파이얼.jpg", name: "갤럭시C실버함마스파이얼", cat: "갤럭시 C타입", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p120_갤럭시C양옆태엽.jpg", name: "갤럭시C양옆태엽", cat: "갤럭시 C타입", finish: "", pipe: "" },
-  { img: "products/p121_갤럭시D검정함마스파이얼.jpg", name: "갤럭시D검정함마스파이얼", cat: "갤럭시 D타입", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p122_갤럭시D노랑함마스파이얼.jpg", name: "갤럭시D노랑함마스파이얼", cat: "갤럭시 D타입", finish: "노랑함마", pipe: "스파이얼" },
-  { img: "products/p123_갤럭시D동함마스파이얼.jpg", name: "갤럭시D동함마스파이얼", cat: "갤럭시 D타입", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p124_갤럭시D실버함마스파이얼.jpg", name: "갤럭시D실버함마스파이얼", cat: "갤럭시 D타입", finish: "실버함마", pipe: "스파이얼" },
-  { img: "products/p125_사각LED등.jpg", name: "사각LED등", cat: "LED조명", finish: "", pipe: "" },
-  { img: "products/p126_스윙태엽_검정함마스파이얼.jpg", name: "스윙태엽 검정함마스파이얼", cat: "파이프", finish: "검정함마", pipe: "스파이얼" },
-  { img: "products/p127_스윙태엽_동함마스텐파이프.jpg", name: "스윙태엽 동함마스텐파이프", cat: "파이프", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p128_스윙태엽_은스텐파이프.jpg", name: "스윙태엽 은스텐파이프", cat: "파이프", finish: "은", pipe: "스텐파이프" },
-  { img: "products/p129_양옆태엽_동함마스텐파이프.jpg", name: "양옆태엽 동함마스텐파이프", cat: "양옆태엽[BEST]", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p130_양옆태엽_동함마스텐파이프210Ø갓_BBQ_Exhaust_Hood_Kore.jpg", name: "양옆태엽 동함마스텐파이프210Ø갓", cat: "양옆태엽[BEST]", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p131_양옆태엽_스파이얼.jpg", name: "양옆태엽 스파이얼", cat: "양옆태엽[BEST]", finish: "", pipe: "스파이얼" },
-  { img: "products/p132_양옆태엽_은스텐파이프.jpg", name: "양옆태엽 은스텐파이프", cat: "양옆태엽[BEST]", finish: "은", pipe: "스텐파이프" },
-  { img: "products/p133_양옆태엽_은스텐파이프210Ø갓.jpg", name: "양옆태엽 은스텐파이프210Ø갓", cat: "양옆태엽[BEST]", finish: "은", pipe: "스텐파이프" },
-  { img: "products/p134_양옆태엽동함마스텐파이프90-110.jpg", name: "양옆태엽동함마스텐파이프90-110", cat: "양옆태엽[BEST]", finish: "동함마", pipe: "스텐파이프" },
-  { img: "products/p135_양옆태엽동함마스파이얼.jpg", name: "양옆태엽동함마스파이얼", cat: "양옆태엽[BEST]", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p136_양옆태엽동함마스파이얼90-110.jpg", name: "양옆태엽동함마스파이얼90-110", cat: "양옆태엽[BEST]", finish: "동함마", pipe: "스파이얼" },
-  { img: "products/p137_원형LED등_스텐파이프.jpg", name: "원형LED등,스텐파이프", cat: "LED조명", finish: "", pipe: "스텐파이프" },
-  { img: "products/p138_유성에이스_yusungace_양옆태엽_동스텐파이프.jpg", name: "양옆태엽 동스텐파이프", cat: "양옆태엽[BEST]", finish: "동", pipe: "스텐파이프" },
-  { img: "products/p139_유성에이스_신형동자바라.jpg", name: "신형동자바라", cat: "후레쉬볼/주름관", finish: "동", pipe: "후레쉬볼" },
-  { img: "products/p140_유성에이스_신형신주자바라.jpg", name: "신형신주자바라", cat: "후레쉬볼/주름관", finish: "신주", pipe: "후레쉬볼" },
-  { img: "products/p141_유성에이스_신형은자바라.jpg", name: "신형은자바라", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p142_유성에이스_신형헤어라인자바라.jpg", name: "신형헤어라인자바라", cat: "후레쉬볼/주름관", finish: "헤어라인", pipe: "후레쉬볼" },
-  { img: "products/p143_유성에이스_신형흑도금자바라.jpg", name: "신형흑도금자바라", cat: "후레쉬볼/주름관", finish: "흑도금", pipe: "후레쉬볼" },
-  { img: "products/p144_유성에이스_은자바라210Ø갓.jpg", name: "은자바라210Ø갓", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p145_유성에이스_은자바라250Ø갓.jpg", name: "은자바라250Ø갓", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p146_유성에이스_은자바라320Ø갓.jpg", name: "은자바라320Ø갓", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p147_유성에이스_은자바라350Ø갓.jpg", name: "은자바라350Ø갓", cat: "후레쉬볼/주름관", finish: "은", pipe: "후레쉬볼" },
-  { img: "products/p148_측향동자바라.jpg", name: "측향동자바라", cat: "후레쉬볼/주름관", finish: "동", pipe: "후레쉬볼" },
-]
+                { no:1, name:"갤럭시 A 타입", spec:"스윙태엽 / FVD / 유지망 / 520갓등", category:"갤럭시" },
+                { no:2, name:"갤럭시 B 타입", spec:"스윙태엽 / FVD / 유지망", category:"갤럭시" },
+                { no:3, name:"갤럭시 B 타입 (스텐)", spec:"스윙태엽 / FVD / 유지망 / 스텐", category:"갤럭시" },
+                { no:4, name:"갤럭시 C 타입", spec:"스윙태엽 / FVD / 유지망 / 520갓", category:"갤럭시" },
+                { no:5, name:"갤럭시 D 타입", spec:"스윙텐션 / FVD / 유지망 / 520갓등", category:"갤럭시" },
+                { no:6, name:"갤럭시 D 타입 (스텐)", spec:"스윙텐션 / FVD / 유지망 / 스텐", category:"갤럭시" },
+                { no:7, name:"스윙텐션 등제품 I", spec:"FVD / LED / 할로겐", category:"등제품" },
+                { no:8, name:"스윙텐션 등제품 II", spec:"FVD / LED / 할로겐", category:"등제품" },
+                { no:9, name:"스윙텐션 아크릴등", spec:"FVD / 삼파장 / LED", category:"등제품" },
+                { no:10, name:"스윙텐션 아크릴 한지등", spec:"FVD / 필름등 / LED", category:"등제품" },
+                { no:11, name:"150 스윙텐션 스텐파이프(도금)", spec:"FVD / 150Ø", category:"스텐파이프" },
+                { no:12, name:"125 스윙텐션 스텐파이프(도금)", spec:"FVD / 125Ø", category:"스텐파이프" },
+                { no:13, name:"150 스윙텐션 스텐파이프(도장)", spec:"FVD / 150Ø", category:"스텐파이프" },
+                { no:14, name:"125 스윙텐션 스텐파이프(도장)", spec:"FVD / 125Ø", category:"스텐파이프" },
+                { no:15, name:"150 스윙텐션 스파이얼", spec:"FVD / 150Ø", category:"스파이얼" },
+                { no:16, name:"125 스윙텐션 스파이얼", spec:"FVD / 125Ø", category:"스파이얼" },
+                { no:17, name:"스윙텐션 걸봉/속봉", spec:"스파이얼", category:"스파이얼" },
+                { no:18, name:"스윙태엽 걸봉/속봉", spec:"스파이얼", category:"스파이얼" },
+                { no:19, name:"스윙텐션 원형상향/측향모터", spec:"스파이얼", category:"모터" },
+                { no:20, name:"스윙텐션 사각측향모터", spec:"스파이얼", category:"모터" },
+                { no:21, name:"고정텐션 125 사각측향", spec:"스파이얼", category:"모터" },
+                { no:22, name:"스윙텐션 100 원형측향", spec:"스파이얼", category:"모터" },
+                { no:23, name:"스윙텐션 FVD 스텐 갓제품", spec:"FVD / 스텐 갓", category:"갓제품" },
+                { no:24, name:"150 스윙텐션", spec:"기본형", category:"기본" },
+                { no:25, name:"하향식 코브라", spec:"코브라 시리즈", category:"코브라" },
+                { no:26, name:"후레쉬볼", spec:"후레쉬볼 시리즈", category:"후레쉬볼" },
+                { no:27, name:"후레쉬볼 모터", spec:"모터 옵션", category:"후레쉬볼" },
+                { no:28, name:"후레쉬볼 갓", spec:"갓 옵션", category:"후레쉬볼" }
+            ]
         };
 
         // ============================================
@@ -2326,22 +2173,25 @@
 
         const lineupGridEl = document.getElementById('lineup-grid');
         if (lineupGridEl) {
-            // catColor moved to catColor2 in products section
-            /* Show unique categories summary instead of 148 individual items */
-            const catSummary = [...new Set(ACE_DATA.product_lineup.map(p => p.cat))].map(c => {
-                const items = ACE_DATA.product_lineup.filter(p => p.cat === c);
-                return { cat: c, count: items.length, sample: items[0] };
-            });
-            lineupGridEl.innerHTML = catSummary.map((s, i) => `
-                <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.05] hover:border-blue-400/30 transition group cursor-pointer" onclick="navigate('products');setTimeout(()=>filterProducts(this.dataset.cat),100)" data-cat="${s.cat}">
+            const catColor = {
+                "갤럭시":"text-blue-300 bg-blue-500/10 border-blue-400/20",
+                "등제품":"text-amber-200 bg-amber-500/10 border-amber-400/20",
+                "스텐파이프":"text-cyan-200 bg-cyan-500/10 border-cyan-400/20",
+                "스파이얼":"text-emerald-200 bg-emerald-500/10 border-emerald-400/20",
+                "모터":"text-purple-200 bg-purple-500/10 border-purple-400/20",
+                "갓제품":"text-pink-200 bg-pink-500/10 border-pink-400/20",
+                "기본":"text-white/70 bg-white/5 border-white/15",
+                "코브라":"text-red-200 bg-red-500/10 border-red-400/20",
+                "후레쉬볼":"text-orange-200 bg-orange-500/10 border-orange-400/20"
+            };
+            lineupGridEl.innerHTML = ACE_DATA.product_lineup.map(p => `
+                <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.05] hover:border-blue-400/30 transition group">
                     <div class="flex items-start justify-between mb-2">
-                        <div class="w-12 h-12 rounded-xl overflow-hidden bg-[#0a0e18] border border-white/5">
-                            <img src="${s.sample.img}" alt="${s.cat}" loading="lazy" class="w-full h-full object-contain p-1" />
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300">${s.count}종</span>
+                        <div class="text-[9px] font-bold tracking-widest text-white/35">${String(p.no).padStart(2,'0')}</div>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${catColor[p.category] || catColor['기본']}">${p.category}</span>
                     </div>
-                    <div class="text-sm font-bold text-white leading-snug">${s.cat}</div>
-                    <div class="text-[11px] text-white/45 mt-1">제품 보기 →</div>
+                    <div class="text-sm font-bold text-white leading-snug">${p.name}</div>
+                    <div class="text-[11px] text-white/45 mt-1">${p.spec}</div>
                 </div>
             `).join('');
         }
@@ -2353,31 +2203,40 @@
         const productFilterEl = document.getElementById('product-filter');
         if (productsGridEl && productFilterEl) {
             const catColor2 = {
-                "갤럭시 A타입":       { text:"text-blue-300",    bg:"bg-blue-500/10",    border:"border-blue-400/25",    hex:"#60a5fa" },
-                "갤럭시 B타입":       { text:"text-sky-300",     bg:"bg-sky-500/10",     border:"border-sky-400/25",     hex:"#38bdf8" },
-                "갤럭시 C타입":       { text:"text-indigo-300",  bg:"bg-indigo-500/10",  border:"border-indigo-400/25",  hex:"#818cf8" },
-                "갤럭시 C타입 원통필터":{ text:"text-violet-300", bg:"bg-violet-500/10",  border:"border-violet-400/25",  hex:"#a78bfa" },
-                "갤럭시 D타입":       { text:"text-purple-300",  bg:"bg-purple-500/10",  border:"border-purple-400/25",  hex:"#c084fc" },
-                "양옆태엽[BEST]":     { text:"text-amber-200",   bg:"bg-amber-500/10",   border:"border-amber-400/25",   hex:"#fbbf24" },
-                "LED조명":            { text:"text-yellow-200",  bg:"bg-yellow-500/10",  border:"border-yellow-400/25",  hex:"#facc15" },
-                "LED우주선":          { text:"text-orange-200",  bg:"bg-orange-500/10",  border:"border-orange-400/25",  hex:"#fb923c" },
-                "파이프":             { text:"text-cyan-200",    bg:"bg-cyan-500/10",    border:"border-cyan-400/25",    hex:"#22d3ee" },
-                "스파이얼":           { text:"text-emerald-200", bg:"bg-emerald-500/10", border:"border-emerald-400/25", hex:"#34d399" },
-                "후레쉬볼/주름관":    { text:"text-rose-200",    bg:"bg-rose-500/10",    border:"border-rose-400/25",    hex:"#fb7185" }
+                "갤럭시":     { text:"text-blue-300",    bg:"bg-blue-500/10",    border:"border-blue-400/25",    hex:"#60a5fa" },
+                "등제품":     { text:"text-amber-200",   bg:"bg-amber-500/10",   border:"border-amber-400/25",   hex:"#fbbf24" },
+                "스텐파이프": { text:"text-cyan-200",    bg:"bg-cyan-500/10",    border:"border-cyan-400/25",    hex:"#22d3ee" },
+                "스파이얼":   { text:"text-emerald-200", bg:"bg-emerald-500/10", border:"border-emerald-400/25", hex:"#34d399" },
+                "모터":       { text:"text-purple-200",  bg:"bg-purple-500/10",  border:"border-purple-400/25",  hex:"#c084fc" },
+                "갓제품":     { text:"text-pink-200",    bg:"bg-pink-500/10",    border:"border-pink-400/25",    hex:"#f472b6" },
+                "기본":       { text:"text-white/70",    bg:"bg-white/5",        border:"border-white/15",       hex:"#94a3b8" },
+                "코브라":     { text:"text-red-200",     bg:"bg-red-500/10",     border:"border-red-400/25",     hex:"#f87171" },
+                "후레쉬볼":   { text:"text-orange-200",  bg:"bg-orange-500/10",  border:"border-orange-400/25",  hex:"#fb923c" }
             };
 
-            // Product images loaded from photos
+            // Inline SVG illustration per category (no external images)
+            const catIcon = {
+                "갤럭시":     '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="60" cy="60" r="38" opacity=".35"/><circle cx="60" cy="60" r="26"/><circle cx="60" cy="60" r="14"/><path d="M60 12v18M60 90v18M12 60h18M90 60h18"/><circle cx="60" cy="60" r="4" fill="currentColor"/></svg>',
+                "등제품":     '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M60 18v14"/><path d="M40 38h40l-6 36H46z"/><path d="M46 74c0 8 6 14 14 14s14-6 14-14"/><circle cx="60" cy="56" r="6" opacity=".5"/></svg>',
+                "스텐파이프": '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="50" y="14" width="20" height="92" rx="4"/><path d="M50 40h20M50 60h20M50 80h20" opacity=".5"/></svg>',
+                "스파이얼":   '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M60 20c-22 0-40 12-40 26s18 14 40 14 40 0 40 14-18 26-40 26"/><path d="M20 46h80M20 74h80" opacity=".4"/></svg>',
+                "모터":       '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="26"/><circle cx="60" cy="60" r="8" fill="currentColor"/><path d="M60 20v14M60 86v14M20 60h14M86 60h14M31 31l10 10M79 79l10 10M31 89l10-10M79 41l10-10"/></svg>',
+                "갓제품":     '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M30 72 60 28l30 44z"/><path d="M26 72h68"/><path d="M42 86h36" opacity=".5"/></svg>',
+                "코브라":     '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M30 20v30c0 14 10 24 30 24s30-10 30-24V20"/><circle cx="60" cy="86" r="12"/><path d="M56 84l2 4 4-6 2 4" opacity=".7"/></svg>',
+                "후레쉬볼":   '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="60" cy="60" r="30"/><path d="M30 60h60M60 30v60M38 38l44 44M82 38 38 82" opacity=".4"/></svg>',
+                "기본":       '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="30" y="30" width="60" height="60" rx="8"/><path d="M30 50h60M50 30v60" opacity=".4"/></svg>'
+            };
 
             // Category tally
-            const categories = ["전체", ...Array.from(new Set(ACE_DATA.product_lineup.map(p => p.cat)))];
+            const categories = ["전체", ...Array.from(new Set(ACE_DATA.product_lineup.map(p => p.category)))];
             let activeCat = "전체";
 
             function renderFilter() {
                 productFilterEl.innerHTML = categories.map(c => {
-                    const count = c === "전체" ? ACE_DATA.product_lineup.length : ACE_DATA.product_lineup.filter(p => p.cat === c).length;
+                    const count = c === "전체" ? ACE_DATA.product_lineup.length : ACE_DATA.product_lineup.filter(p => p.category === c).length;
                     const active = c === activeCat;
-                    const col = catColor2[c] || { text:"text-white/70", bg:"bg-white/5", border:"border-white/15", hex:"#94a3b8" };
-                    return `<button onclick="filterProducts(this.dataset.cat)" data-cat="${c}" class="px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition border ${active ? 'bg-white text-black border-white' : `${col.text} ${col.bg} ${col.border} hover:bg-white/10`}">
+                    const col = catColor2[c] || catColor2['기본'];
+                    return `<button onclick="filterProducts('${c}')" class="px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition border ${active ? 'bg-white text-black border-white' : `${col.text} ${col.bg} ${col.border} hover:bg-white/10`}">
                         ${c} <span class="opacity-60 ml-1">${count}</span>
                     </button>`;
                 }).join('');
@@ -2386,28 +2245,31 @@
             function renderGrid() {
                 const filtered = activeCat === "전체"
                     ? ACE_DATA.product_lineup
-                    : ACE_DATA.product_lineup.filter(p => p.cat === activeCat);
+                    : ACE_DATA.product_lineup.filter(p => p.category === activeCat);
 
                 document.getElementById('products-empty').classList.toggle('hidden', filtered.length > 0);
 
-                productsGridEl.innerHTML = filtered.map((p, idx) => {
-                    const col = catColor2[p.cat] || { text:"text-white/70", bg:"bg-white/5", border:"border-white/15", hex:"#94a3b8" };
-                    const tags = [p.finish, p.pipe].filter(Boolean);
+                productsGridEl.innerHTML = filtered.map(p => {
+                    const col = catColor2[p.category] || catColor2['기본'];
+                    const icon = catIcon[p.category] || catIcon['기본'];
                     return `
                     <article class="group relative rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden hover:border-blue-400/40 transition-all hover:-translate-y-1 duration-500">
-                        <!-- Product Photo -->
-                        <div class="relative aspect-[4/3] overflow-hidden bg-[#0a0e18]">
-                            <img src="${p.img}" alt="${p.name}" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-110" />
-                            <div class="absolute top-4 right-4">
-                                <span class="text-[9px] font-bold px-2.5 py-1 rounded-full border backdrop-blur-sm ${col.text} ${col.bg} ${col.border}">${p.cat}</span>
+                        <!-- Visual -->
+                        <div class="relative aspect-[4/3] overflow-hidden" style="background: radial-gradient(500px 300px at 50% 40%, ${col.hex}22, transparent 70%), linear-gradient(180deg, #0b1220 0%, #050810 100%);">
+                            <div class="absolute inset-0 flex items-center justify-center ${col.text} opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-700">
+                                <div class="w-28 h-28">${icon}</div>
                             </div>
-                            <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute top-4 left-4 text-[9px] font-bold tracking-[0.22em] text-white/50">NO.${String(p.no).padStart(2,'0')}</div>
+                            <div class="absolute top-4 right-4">
+                                <span class="text-[9px] font-bold px-2.5 py-1 rounded-full border ${col.text} ${col.bg} ${col.border}">${p.category}</span>
+                            </div>
+                            <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent"></div>
                         </div>
                         <!-- Content -->
                         <div class="p-5">
-                            <h3 class="text-[15px] font-black tracking-tight text-white leading-snug mb-2 line-clamp-2">${p.name}</h3>
+                            <h3 class="text-lg font-black tracking-tight text-white leading-snug mb-2">${p.name}</h3>
                             <div class="flex flex-wrap gap-1.5">
-                                ${tags.map(t => `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/55">${t}</span>`).join('')}
+                                ${p.spec.split('/').map(s => `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/55">${s.trim()}</span>`).join('')}
                             </div>
                             <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
                                 <span class="text-white/35">USUNG ACE</span>
@@ -2442,454 +2304,454 @@
         // ================================================================
         const galleryItems = [
             {
-                url: "gallery/g01.jpg",
-                title: "시공 현장 01",
-                category: "시공갤러리", code: "SITE-01",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-1889624440_PFQwhvNH_85166b7ea85b1d5fa3241c778c1c111c63b7ee71_230x180.jpg",
+                title: "450Ø 우주선",
+                category: "우주선 후드", code: "SPACE-450",
+                desc: "지름 450mm의 원형 우주선형 후드. 넓은 화로 면적을 균일하게 커버하며, 중앙 포인트 조명이 테이블 전체를 환하게 비춥니다. 천정 노출 시공 시 인테리어 포인트가 되는 대표 제품입니다.",
+                features: ["450Ø 대형 원형 갓", "센터 LED 조명 내장", "F.V.D 방화담파", "360° 스윙 파이프", "분리 청소 가능"],
+                specs: { "직경": "450mm", "토출구": "125Ø / 150Ø", "조명": "LED", "재질": "스텐/도금", "적용 화로": "원형 대형" },
+                tags: ["대형매장", "비주얼 포인트", "중앙조명"]
             },
             {
-                url: "gallery/g02.jpg",
-                title: "시공 현장 02",
-                category: "시공갤러리", code: "SITE-02",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-1889624440_VG2Bxnbp_9f0a76cc66bf479ff5953b38399f0991bd7ab7d0_230x180.jpg",
+                title: "600Ø 우주선",
+                category: "우주선 후드", code: "SPACE-600",
+                desc: "지름 600mm 초대형 우주선 후드. 숯불·직화 특화 대형 매장과 프리미엄 다이닝에서 선호하는 제품으로, 넓은 커버리지와 강력한 흡입력을 자랑합니다.",
+                features: ["600Ø 초대형 갓", "고출력 흡입", "F.V.D 방화담파", "360° 스윙", "안전 브레이크 시스템"],
+                specs: { "직경": "600mm", "토출구": "150Ø", "조명": "LED / 할로겐", "재질": "스텐/도금", "적용": "숯불·직화 대형" },
+                tags: ["프리미엄", "대형 화로", "숯불 전문"]
             },
             {
-                url: "gallery/g03.jpg",
-                title: "시공 현장 03",
-                category: "시공갤러리", code: "SITE-03",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-1889624440_eWpgAyDb_40664657439e85eb9f7f8426f0095d4c87943b19_230x180.jpg",
+                title: "아크릴등",
+                category: "등제품", code: "LIGHT-ACRYL",
+                desc: "아크릴 디퓨저를 통한 부드러운 확산광 타입. 직접 광원이 손님에게 노출되지 않아 눈이 편안하고, 깔끔한 매장 분위기를 만듭니다. 삼파장·LED 모두 호환.",
+                features: ["아크릴 확산 디퓨저", "삼파장 / LED 호환", "스윙텐션 장착", "F.V.D 방화담파"],
+                specs: { "광원": "삼파장 / LED", "확산재": "아크릴", "갓 타입": "원형", "연결": "스윙텐션" },
+                tags: ["무드등", "확산광", "카페형 매장"]
             },
             {
-                url: "gallery/g04.jpg",
-                title: "시공 현장 04",
-                category: "시공갤러리", code: "SITE-04",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_u3ZJEwaH_e9775f4901836c9fe908b5bf9b51864e56962197_230x180.jpg",
+                title: "외부태엽B",
+                category: "외부태엽", code: "SPRING-EXT-B",
+                desc: "후드 외부에 노출된 B타입 태엽 감속기. 위아래 텐션을 부드럽게 조절하며, 와이어 장력을 장기간 안정적으로 유지합니다. 교체·유지보수가 쉬운 구조입니다.",
+                features: ["외부 노출형 태엽", "사각부 피스 4개 구조", "와이어 장력 안정화", "손쉬운 교체"],
+                specs: { "타입": "B (표준)", "위치": "외부 노출", "구조": "사각 피스 ×4", "호환": "전 갤럭시" },
+                tags: ["부품", "유지보수", "교체용"]
             },
             {
-                url: "gallery/g05.jpg",
-                title: "시공 현장 05",
-                category: "시공갤러리", code: "SITE-05",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_LzDbV3Te_3dcf67ea978721c68528ed765943166ef66ad807_230x180.jpg",
+                title: "외부태엽A",
+                category: "외부태엽", code: "SPRING-EXT-A",
+                desc: "외부 태엽 A타입. 고하중 후드에 최적화된 강화 스프링 구조로, 대형 갓이나 스텐 후드에 주로 적용됩니다.",
+                features: ["강화 스프링", "고하중 대응", "와이어 리턴 구조", "정밀 감속"],
+                specs: { "타입": "A (강화)", "하중": "중대형", "구조": "사각 피스 ×4", "호환": "대형 갤럭시 / 우주선" },
+                tags: ["부품", "고하중", "대형매장"]
             },
             {
-                url: "gallery/g06.jpg",
-                title: "시공 현장 06",
-                category: "시공갤러리", code: "SITE-06",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-1889624440_wvr53ic1_04f10b9b27125eec43341b354079e941bfb9d678_230x180.jpg",
+                title: "350Ø 갓등 LED b",
+                category: "갓등 LED", code: "HAT-LED-350B",
+                desc: "350파이 갓등 LED B타입. 중소형 테이블에 적합한 사이즈로, LED 광원과 메탈 갓이 조화를 이루는 실용적인 주력 모델입니다.",
+                features: ["350Ø 갓", "LED 광원", "스윙텐션", "F.V.D 방화담파", "분리 청소"],
+                specs: { "직경": "350mm", "광원": "LED", "타입": "B", "연결": "스윙텐션" },
+                tags: ["중소형", "LED", "주력모델"]
             },
             {
-                url: "gallery/g07.jpg",
-                title: "시공 현장 07",
-                category: "시공갤러리", code: "SITE-07",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_PeMJhwgp_a0e7696fda393c3b4842090d9bc8add026f0bf3f_230x180.jpg",
+                title: "350Ø 갓등 LED",
+                category: "갓등 LED", code: "HAT-LED-350",
+                desc: "350Ø 기본 갓등 LED 모델. 14년 노하우로 완성된 가장 보편적인 갓등 라인으로, 고기집 대부분의 테이블 크기에 맞춘 표준 규격.",
+                features: ["표준 350Ø 갓", "LED 광원", "스윙텐션", "손쉬운 교체"],
+                specs: { "직경": "350mm", "광원": "LED", "형태": "원형 갓", "호환": "전 매장" },
+                tags: ["스탠다드", "주력", "LED"]
             },
             {
-                url: "gallery/g08.jpg",
-                title: "시공 현장 08",
-                category: "시공갤러리", code: "SITE-08",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_fRYuaIwO_97d0cd7560ce780639538a886084ad3e72cd3d20_230x180.jpg",
+                title: "신주스텐코브라 220",
+                category: "코브라", code: "COBRA-BRASS-220",
+                desc: "신주(황동) 도금 스텐 코브라 220mm. 고급스러운 골드톤 마감으로 프리미엄 매장과 한정식·일식당에서 선호. 코브라형 흡입구가 화로 위를 정확히 타격합니다.",
+                features: ["황동 도금 마감", "220mm 헤드", "정밀 흡입각", "코브라형 넥", "고정 텐션"],
+                specs: { "헤드 직경": "220mm", "재질": "스텐 + 신주 도금", "타입": "코브라", "마감": "골드톤" },
+                tags: ["프리미엄", "한정식", "인테리어"]
             },
             {
-                url: "gallery/g09.jpg",
-                title: "시공 현장 09",
-                category: "시공갤러리", code: "SITE-09",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_K4PxA1Md_06174ca386b59965f07f57b3394074a5b39f8246_230x180.jpg",
+                title: "은스텐코브라 270",
+                category: "코브라", code: "COBRA-SILVER-270",
+                desc: "은색 스텐 코브라 270mm. 모던하고 깔끔한 실버 마감으로 캐주얼 매장과 프랜차이즈에 광범위하게 시공되는 대중적 모델.",
+                features: ["실버 스텐 마감", "270mm 헤드", "코브라형 곡선", "스윙 작동"],
+                specs: { "헤드 직경": "270mm", "재질": "스텐", "타입": "코브라", "마감": "실버" },
+                tags: ["프랜차이즈", "모던", "스텐"]
             },
             {
-                url: "gallery/g10.jpg",
-                title: "시공 현장 10",
-                category: "시공갤러리", code: "SITE-10",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2009155547_N6sz0x98_d94bea90e45de5a4f1606fc7979fc87dbd59c5ea_230x180.jpg",
+                title: "동스텐코브라 270",
+                category: "코브라", code: "COBRA-COPPER-270",
+                desc: "동(Copper) 도금 스텐 코브라 270mm. 따뜻한 구리톤이 한식/고깃집 특유의 정서와 어울리며, 빈티지·레트로 인테리어에 포인트가 되는 제품.",
+                features: ["구리 도금 마감", "270mm 헤드", "빈티지 톤", "내열 표면 처리"],
+                specs: { "헤드 직경": "270mm", "재질": "스텐 + 동 도금", "타입": "코브라", "마감": "구리톤" },
+                tags: ["빈티지", "레트로", "한식당"]
             },
             {
-                url: "gallery/g11.jpg",
-                title: "시공 현장 11",
-                category: "시공갤러리", code: "SITE-11",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_BR9ijA87_9e2238927d040ae6d4bde236dace9c3771ee31d6_230x180.jpg",
+                title: "유지망 갓등",
+                category: "등제품 / 필터", code: "HAT-MESH",
+                desc: "갓등에 유지망(기름 필터)을 결합한 올인원 타입. 기름 비산을 1차로 잡아 조명 오염을 줄이고 청소 주기를 크게 늘려줍니다.",
+                features: ["유지망 내장 갓", "기름 비산 차단", "청소 주기 2배", "LED 광원"],
+                specs: { "필터": "스텐 유지망", "단수": "5단 / 8단 선택", "광원": "LED", "적용": "직화 전용" },
+                tags: ["위생", "청소 편의", "필터 내장"]
             },
             {
-                url: "gallery/g12.jpg",
-                title: "시공 현장 12",
-                category: "시공갤러리", code: "SITE-12",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_Xxp1FVOI_8894d485deedc0814621ee027ad13c7c4bd41638_230x180.jpg",
+                title: "장수천",
+                category: "시공 현장", code: "SITE-JANGSUCHEON",
+                desc: "장수천 직화 매장 시공 사례. 갤럭시 D타입을 메인으로 배치하여 테이블별 독립 흡입과 균일한 조도를 확보했습니다. 14년 유성에이스 현장 노하우가 담긴 대표 시공.",
+                features: ["갤럭시 D타입 기반", "테이블별 개별 후드", "균일 조도", "천정 매립 덕트"],
+                specs: { "매장": "장수천", "메인 제품": "갤럭시 D", "설치 수량": "다수", "공사 기간": "2~3일" },
+                tags: ["시공 레퍼런스", "갤럭시 D", "고기집"]
             },
             {
-                url: "gallery/g13.jpg",
-                title: "시공 현장 13",
-                category: "시공갤러리", code: "SITE-13",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_Yrao7VA3_baaccdc04461f5d05a4564dc8c6385c95c17d154_230x180.jpg",
+                title: "갤럭시 D타입",
+                category: "갤럭시", code: "GALAXY-D",
+                desc: "갤럭시 D타입. 스윙텐션과 F.V.D 방화담파, 유지망, 520 갓등을 모두 장착한 풀옵션 플래그십. 대부분의 직화 고깃집에서 선호하는 베스트셀러 모델.",
+                features: ["스윙텐션", "F.V.D 방화담파", "유지망 내장", "520 갓등", "360° 스윙", "분리 청소"],
+                specs: { "모델": "갤럭시 D", "갓": "520 갓등", "텐션": "스윙텐션", "조명": "LED", "토출": "125Ø/150Ø" },
+                tags: ["플래그십", "베스트셀러", "풀옵션"]
             },
             {
-                url: "gallery/g14.jpg",
-                title: "시공 현장 14",
-                category: "시공갤러리", code: "SITE-14",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_FQYSZvcU_45e26cc0f589cdeca86bd2f8eeee1bfa64aaeea1_230x180.jpg",
+                title: "갤럭시 C타입",
+                category: "갤럭시", code: "GALAXY-C",
+                desc: "갤럭시 C타입. 스윙태엽 기반의 경제적인 플래그십 대안. 520 갓과 유지망, F.V.D를 갖춰 기본기가 탄탄한 중가형 모델.",
+                features: ["스윙태엽", "F.V.D", "유지망", "520 갓", "360° 스윙"],
+                specs: { "모델": "갤럭시 C", "텐션": "스윙태엽", "갓": "520", "필터": "유지망" },
+                tags: ["중가형", "경제형", "밸런스"]
             },
             {
-                url: "gallery/g15.jpg",
-                title: "시공 현장 15",
-                category: "시공갤러리", code: "SITE-15",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_7vjSCHrQ_4470759c3cfd75a94f989ac21dc9f11e7ad0646c_230x180.jpg",
+                title: "스윙텐션",
+                category: "텐션 시스템", code: "SWING-TENSION",
+                desc: "유성에이스의 핵심 기술 — 스윙텐션. 상하 작동 시 베어링 수량으로 장력을 미세 조절할 수 있어, 사용자의 체감 무게를 원하는 대로 세팅할 수 있습니다.",
+                features: ["상하 자유 작동", "베어링 수량 조절", "미세 장력 세팅", "스톱바 브레이크", "장기 내구성"],
+                specs: { "방식": "베어링 텐션", "조정": "베어링 추가/제거", "베어링": "기본 6개", "브레이크": "스톱바 기본 장착" },
+                tags: ["핵심 기술", "안전", "사용자 맞춤"]
             },
             {
-                url: "gallery/g16.jpg",
-                title: "시공 현장 16",
-                category: "시공갤러리", code: "SITE-16",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_AOeCyaq6_fd5c648a95dc4549f0dad1db35fcacad2c351707_230x180.jpg",
+                title: "직화기 후드 시공",
+                category: "시공 사례", code: "SITE-DIRECT-FIRE",
+                desc: "직화기 전용 후드 시공 현장. 화로와 후드 간 80~150mm의 안전 이격 거리를 정확히 준수하고, 스윙 반경 내 장애물이 없도록 설계.",
+                features: ["80~150mm 안전거리", "스윙 반경 확보", "덕트 경사 최적화", "화재 안전 검수"],
+                specs: { "안전 거리": "80~150mm", "F.V.D": "기본 장착", "토출": "150Ø", "인증": "화재 안전" },
+                tags: ["안전 시공", "직화", "레퍼런스"]
             },
             {
-                url: "gallery/g17.jpg",
-                title: "시공 현장 17",
-                category: "시공갤러리", code: "SITE-17",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_haglyRnV_aa05d4562851f1dbe0b3f59e03b511f42a8894f3_230x180.jpg",
+                title: "한식당 시공",
+                category: "시공 사례", code: "SITE-KOREAN",
+                desc: "한식 BBQ 전문점 시공 사례. 단체 손님이 많은 한식당 특성에 맞춰 대형 갓등과 강화 텐션을 적용, 높은 회전율에도 안정적으로 작동합니다.",
+                features: ["대형 갓등", "강화 텐션", "고회전 내구성", "인테리어 조화"],
+                specs: { "업종": "한식 BBQ", "갓": "520 이상", "텐션": "강화형", "회전율": "高" },
+                tags: ["한식당", "단체석", "내구성"]
             },
             {
-                url: "gallery/g18.jpg",
-                title: "시공 현장 18",
-                category: "시공갤러리", code: "SITE-18",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_wRzu8sEL_b52bdfac108d6364e900a3bc16743ecd9e10452f_230x180.jpg",
+                title: "갤럭시 시리즈",
+                category: "갤럭시", code: "GALAXY-SERIES",
+                desc: "갤럭시 A/B/C/D 전 시리즈. 14년간 유성에이스가 축적한 노하우의 총집합으로, 매장 규모·인테리어·예산에 따라 최적 모델을 선택할 수 있습니다.",
+                features: ["A/B/C/D 4종 구성", "공통 플랫폼", "스윙 기본 장착", "F.V.D 공통"],
+                specs: { "라인업": "A / B / C / D", "공통": "360° 스윙, F.V.D", "차이": "텐션 방식, 갓 사이즈, 조명", "누적 판매": "No.1 국내" },
+                tags: ["시그니처", "베스트셀러", "풀 라인업"]
             },
             {
-                url: "gallery/g19.jpg",
-                title: "시공 현장 19",
-                category: "시공갤러리", code: "SITE-19",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_1bomQ2pM_d44ea282c22032cc609980c9fe5d9af02373d1f2_230x180.jpg",
+                title: "F.V.D 후드",
+                category: "F.V.D 시스템", code: "FVD-HOOD",
+                desc: "F.V.D (Fire Velocity Damper) — 풍속 조절과 방화 담파를 겸한 유성에이스 핵심 부품. 화로에서 올라오는 불꽃이 덕트로 전파되는 것을 물리적으로 차단합니다.",
+                features: ["풍속 조절", "방화 담파", "불꽃 전파 차단", "덕트 내 화재 예방", "자동 복귀"],
+                specs: { "기능": "풍속 + 방화 통합", "위치": "후드 상부", "작동": "자동", "소재": "내열 스텐" },
+                tags: ["안전", "핵심 기술", "화재 예방"]
             },
             {
-                url: "gallery/g20.jpg",
-                title: "시공 현장 20",
-                category: "시공갤러리", code: "SITE-20",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_7C42rV93_3e29ed7cf28655a7c461618327a86a435215fc8e_230x180.jpg",
+                title: "ACE 후드",
+                category: "대표 제품", code: "ACE-HOOD",
+                desc: "유성에이스의 대표 ACE 후드. 파이프 기반 360° 스윙 구조와 분리 청소, 스톱바 안전 시스템이 결합된 플래그십 직화 후드.",
+                features: ["파이프 스윙 구조", "분리 청소", "스톱바 브레이크", "F.V.D 통합", "LED 옵션"],
+                specs: { "구조": "파이프 스윙", "청소": "분리형", "안전": "스톱바 기본", "조명": "LED 옵션" },
+                tags: ["플래그십", "대표", "ACE"]
             },
             {
-                url: "gallery/g21.jpg",
-                title: "시공 현장 21",
-                category: "시공갤러리", code: "SITE-21",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_AFz3jSmo_ebcd523fe01ba756b3c6df04491816acd39141b9_230x180.jpg",
+                title: "원형 상향 시공",
+                category: "모터 / 시공", code: "MOTOR-UP-ROUND",
+                desc: "원형 상향 모터 시공 사례. 천정으로 수직 토출되는 구조로, 천정 덕트 공간이 확보된 매장에 적합합니다. 흡입 효율이 가장 뛰어난 타입.",
+                features: ["수직 상향 토출", "고효율 흡입", "원형 커버", "저소음 모터"],
+                specs: { "타입": "원형 상향 모터", "토출": "천정 수직", "효율": "최고 등급", "적용": "천정 공간 확보 매장" },
+                tags: ["시공 타입", "고효율", "상향"]
             },
             {
-                url: "gallery/g22.jpg",
-                title: "시공 현장 22",
-                category: "시공갤러리", code: "SITE-22",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mzpN8wfv_507615e5af30fe73194ff4c980598c8078619e97_230x180.jpg",
+                title: "고기집 덕트",
+                category: "시공 사례", code: "SITE-BBQ-DUCT",
+                desc: "고기집 전용 덕트 시공. 360° 스윙 후드가 테이블마다 내려오며, 기름·연기·냄새를 동시에 포집하는 유성에이스 특화 시공법.",
+                features: ["테이블별 개별 후드", "360° 스윙 자유도", "동시 포집 (기름+연기+냄새)", "위생 관리"],
+                specs: { "업종": "직화 고깃집", "후드 간격": "테이블당 1대", "덕트 종단": "집진기 연결", "관리": "월 1회 세척" },
+                tags: ["직화 전문", "스윙", "위생"]
             },
             {
-                url: "gallery/g23.jpg",
-                title: "시공 현장 23",
-                category: "시공갤러리", code: "SITE-23",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_8JBk97cF_fbc62ecbde74d6ab6067a28daad10e25b71a0847_230x180.jpg",
+                title: "직화 전문점",
+                category: "시공 사례", code: "SITE-DIRECT",
+                desc: "직화 전문점 토탈 시공. 프리미엄 직화 다이닝에 맞춰 우주선형과 갓등을 혼합 배치, 테이블별 맞춤 후드를 설계했습니다.",
+                features: ["우주선 + 갓등 혼합", "프리미엄 마감", "맞춤 설계", "무소음 모터"],
+                specs: { "업종": "직화 다이닝", "후드": "우주선 600Ø + 갓등", "배치": "테이블별 커스텀", "급배기": "독립 계통" },
+                tags: ["프리미엄", "직화", "토탈 시공"]
             },
             {
-                url: "gallery/g24.jpg",
-                title: "시공 현장 24",
-                category: "시공갤러리", code: "SITE-24",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mWREZcgu_b7702da350eaf07bde1a85c65b40b717cb5676f5_230x180.jpg",
+                title: "스파이얼 라인",
+                category: "스파이얼", code: "SPIRAL-LINE",
+                desc: "스파이얼 덕트를 활용한 천정 노출 시공. 둥근 나선 형상의 덕트가 인테리어 요소로 작동하며, 박스 덕트보다 압력 손실이 적어 흡입 효율이 높습니다.",
+                features: ["나선형 덕트", "낮은 압력 손실", "천정 노출 인테리어", "고효율 흡입"],
+                specs: { "형태": "스파이얼(나선)", "직경": "150Ø / 125Ø", "재질": "도금 스틸", "소음": "저소음" },
+                tags: ["천정 노출", "인테리어", "고효율"]
             },
             {
-                url: "gallery/g25.jpg",
-                title: "시공 현장 25",
-                category: "시공갤러리", code: "SITE-25",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mnMW5lus_31e4d47d38b1ee6f765131d2c558c2872228126a_230x180.jpg",
+                title: "프랜차이즈 매장",
+                category: "시공 사례", code: "SITE-FRANCHISE",
+                desc: "프랜차이즈 본사 스탠다드 시공. 전국 점포에 동일한 품질을 공급하기 위한 표준 매뉴얼 기반 시공으로, 재현성과 유지보수성을 최우선으로 설계.",
+                features: ["표준 매뉴얼 시공", "재현성 확보", "전국 A/S 네트워크", "교체 부품 표준화"],
+                specs: { "대상": "프랜차이즈 본사", "표준화": "100%", "A/S": "전국", "공사 기간": "점포당 1일" },
+                tags: ["프랜차이즈", "표준화", "전국 A/S"]
             },
             {
-                url: "gallery/g26.jpg",
-                title: "시공 현장 26",
-                category: "시공갤러리", code: "SITE-26",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_415qXZTA_a87b619edf213740d209c73415dd537cb059e1f5_230x180.jpg",
+                title: "아크릴 한지등",
+                category: "등제품", code: "LIGHT-HANJI",
+                desc: "아크릴 베이스에 한지 필름을 덧댄 한지등 스타일. 한식당·전통주점의 분위기에 맞춘 프리미엄 감성 라인으로, 은은한 확산광이 특징입니다.",
+                features: ["한지 필름 디퓨저", "아크릴 베이스", "은은한 확산광", "LED 광원"],
+                specs: { "디퓨저": "아크릴 + 한지 필름", "광원": "LED / 필름등", "분위기": "웜톤", "적용": "한식·전통주점" },
+                tags: ["한식 감성", "한지", "웜톤"]
             },
             {
-                url: "gallery/g27.jpg",
-                title: "시공 현장 27",
-                category: "시공갤러리", code: "SITE-27",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_1hWUAoEY_52cdc9815e70a1c2ae1daf12d6c9c6bf3fcda2c7_230x180.jpg",
+                title: "갤럭시 A타입",
+                category: "갤럭시", code: "GALAXY-A",
+                desc: "갤럭시 시리즈의 엔트리 A타입. 스윙태엽 + F.V.D + 520 갓등 기본 구성으로, 소형~중형 매장에 가장 많이 시공되는 표준 모델.",
+                features: ["스윙태엽", "F.V.D", "유지망", "520 갓등", "기본 360° 스윙"],
+                specs: { "모델": "갤럭시 A", "텐션": "스윙태엽", "갓": "520", "포지션": "엔트리" },
+                tags: ["엔트리", "소~중형", "표준"]
             },
             {
-                url: "gallery/g28.jpg",
-                title: "시공 현장 28",
-                category: "시공갤러리", code: "SITE-28",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_CFI6aTNP_4e46ea464045b3841944c05b6e9b1248bf5716d4_230x180.jpg",
+                title: "갤럭시 B타입",
+                category: "갤럭시", code: "GALAXY-B",
+                desc: "갤럭시 B타입. A타입 대비 갓등이 생략된 미니멀 구성으로, 별도 조명이 있는 매장이나 인테리어 중심 공간에 적합합니다.",
+                features: ["스윙태엽", "F.V.D", "유지망", "미니멀 마감", "360° 스윙"],
+                specs: { "모델": "갤럭시 B", "텐션": "스윙태엽", "조명": "미장착", "포지션": "미니멀" },
+                tags: ["미니멀", "인테리어", "중가형"]
             },
             {
-                url: "gallery/g29.jpg",
-                title: "시공 현장 29",
-                category: "시공갤러리", code: "SITE-29",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_aGCEAzyS_981c2026115c3da4b5097c1edc229f9cd607209f_230x180.jpg",
+                title: "스텐 후드",
+                category: "스텐 마감", code: "STEEL-HOOD",
+                desc: "풀 스텐 마감 후드. 녹·부식·기름 오염에 강하고 내구성이 최고 등급. 위생 인증이 필요한 프랜차이즈·호텔·대형 주방에 주로 시공됩니다.",
+                features: ["풀 스텐(304/316)", "부식 저항", "위생 인증", "내구 10년+", "식기세척기 세척 가능"],
+                specs: { "재질": "스텐 304 / 316", "내구": "10년+", "위생": "HACCP 대응", "가공": "용접 심리스" },
+                tags: ["위생", "고내구", "호텔·프랜차이즈"]
             },
             {
-                url: "gallery/g30.jpg",
-                title: "시공 현장 30",
-                category: "시공갤러리", code: "SITE-30",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_meAv0wph_76d1ad9f52dd89c07a26f1c726d6cd8861cb4bb3_230x180.jpg",
+                title: "도금 파이프",
+                category: "파이프", code: "PIPE-PLATE",
+                desc: "도금 스텐 파이프 라인. 스텐 대비 원가가 낮으면서 은빛 마감을 유지하는 실용적 선택. 150Ø·125Ø 규격 제공.",
+                features: ["스텐 도금 마감", "경제적 원가", "150Ø / 125Ø", "F.V.D 호환"],
+                specs: { "직경": "150Ø / 125Ø", "마감": "스텐 도금", "텐션": "스윙텐션", "장점": "경제성" },
+                tags: ["경제형", "도금", "파이프"]
             },
             {
-                url: "gallery/g31.jpg",
-                title: "시공 현장 31",
-                category: "시공갤러리", code: "SITE-31",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_bXFR1nQm_8e963e21b602cd1cec1ecb925bdd082c835d6699_230x180.jpg",
+                title: "도장 파이프",
+                category: "파이프", code: "PIPE-PAINT",
+                desc: "분체 도장 파이프. 블랙·그레이 등 다양한 컬러 선택이 가능해 인테리어와 통일감 있는 마감을 만들 수 있습니다.",
+                features: ["분체 도장", "컬러 선택 가능", "인테리어 매칭", "내열 코팅"],
+                specs: { "직경": "150Ø / 125Ø", "마감": "분체 도장", "컬러": "블랙/그레이/커스텀", "내열": "150°C" },
+                tags: ["컬러", "인테리어", "커스텀"]
             },
             {
-                url: "gallery/g32.jpg",
-                title: "시공 현장 32",
-                category: "시공갤러리", code: "SITE-32",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_IbVPJY7F_e46c7e21239efd842cd5cb505009219437f5df80_230x180.jpg",
+                title: "스텐 갓제품",
+                category: "갓제품", code: "HAT-STAINLESS",
+                desc: "풀 스텐 갓제품. 갓 자체가 스텐으로 제작되어 기름·열·부식에 가장 강한 프리미엄 라인. 장기간 변색 없이 사용 가능합니다.",
+                features: ["풀 스텐 갓", "부식·변색 없음", "장기 내구", "프리미엄 마감"],
+                specs: { "재질": "스텐 304", "갓 직경": "350~520", "F.V.D": "기본", "내구": "10년+" },
+                tags: ["프리미엄", "스텐", "장수명"]
             },
             {
-                url: "gallery/g33.jpg",
-                title: "시공 현장 33",
-                category: "시공갤러리", code: "SITE-33",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_w1iqkEVU_2633ce7bbc3bdccf88e33088278a44d74b5d1a5c_230x180.jpg",
+                title: "측향 모터",
+                category: "모터", code: "MOTOR-SIDE",
+                desc: "측향 배기 모터. 천정 공간이 확보되지 않는 저층 매장에서 벽면으로 배기를 빼는 구조. 설치 유연성이 높습니다.",
+                features: ["측면 배기", "저층 매장 최적", "저소음", "유연한 설치"],
+                specs: { "방향": "측향", "규격": "원형 / 사각", "소음": "저소음", "적용": "저층 매장" },
+                tags: ["저층", "측면 배기", "유연"]
             },
             {
-                url: "gallery/g34.jpg",
-                title: "시공 현장 34",
-                category: "시공갤러리", code: "SITE-34",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_dK47TS8k_f45b285e6060dffeb9e1df01ab96ffb300908217_230x180.jpg",
+                title: "후레쉬볼",
+                category: "후레쉬볼", code: "FRESHBALL",
+                desc: "유성에이스 독자 개발 후레쉬볼. 구(球) 형태 흡입구가 화로 위 공기를 360° 방향에서 빨아들이는 혁신적 구조로, 기존 평면 후드보다 흡입 효율이 높습니다.",
+                features: ["구형 360° 흡입", "혁신적 구조", "고효율", "소형화 가능", "특허 기술"],
+                specs: { "형태": "구형 (Ball)", "흡입": "360°", "지름": "소/중/대", "특허": "유성에이스 독자" },
+                tags: ["특허", "혁신", "고효율"]
             },
             {
-                url: "gallery/g35.jpg",
-                title: "시공 현장 35",
-                category: "시공갤러리", code: "SITE-35",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_xYNLfmHO_4ec0589af9e103ddca4efe722a23bf5f2b2391ce_230x180.jpg",
+                title: "코브라 제품",
+                category: "코브라", code: "COBRA-STANDARD",
+                desc: "코브라 시리즈 스탠다드 모델. 뱀 머리 형태의 흡입구가 화로 위를 정확히 조준하며, 하향식 배치로 천정 공간이 좁은 매장에 적합합니다.",
+                features: ["코브라형 헤드", "하향식 구조", "정밀 조준", "좁은 천정 호환"],
+                specs: { "타입": "하향 코브라", "헤드": "220 / 270mm", "재질": "스텐", "공간": "저천정 OK" },
+                tags: ["하향식", "저천정", "코브라"]
             },
             {
-                url: "gallery/g36.jpg",
-                title: "시공 현장 36",
-                category: "시공갤러리", code: "SITE-36",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ovPd1nG3_6a5de6766dcf6855f90e1eb3ba418709a1be0b01_230x180.jpg",
+                title: "150 스윙텐션",
+                category: "스윙텐션", code: "SWING-150",
+                desc: "150Ø 스윙텐션 모델. 표준 파이프 규격으로, 대형 매장과 강한 흡입력이 필요한 현장에 시공됩니다.",
+                features: ["150Ø 파이프", "스윙텐션", "F.V.D", "대형 적용"],
+                specs: { "직경": "150Ø", "텐션": "스윙", "F.V.D": "O", "적용": "대형 매장" },
+                tags: ["150파이", "대형", "표준"]
             },
             {
-                url: "gallery/g37.jpg",
-                title: "시공 현장 37",
-                category: "시공갤러리", code: "SITE-37",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_kyAnISf4_c3393ebee21608437055e38898fc025d96924a5e_230x180.jpg",
+                title: "125 스윙텐션",
+                category: "스윙텐션", code: "SWING-125",
+                desc: "125Ø 스윙텐션 모델. 중소형 매장의 표준 규격으로, 150Ø 대비 날렵한 비주얼과 경제적인 설치비가 장점.",
+                features: ["125Ø 파이프", "경량화", "스윙텐션", "F.V.D"],
+                specs: { "직경": "125Ø", "텐션": "스윙", "적용": "중소형", "장점": "경량·경제" },
+                tags: ["125파이", "중소형", "경제형"]
             },
             {
-                url: "gallery/g38.jpg",
-                title: "시공 현장 38",
-                category: "시공갤러리", code: "SITE-38",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_xif0sbSo_c8da836b03341ec9f74f9435b25173ca8be470a9_230x180.jpg",
+                title: "사각 측향",
+                category: "모터", code: "MOTOR-SIDE-RECT",
+                desc: "사각 측향 모터. 벽면 흡입구가 사각형 개구부로 처리되어, 벽면 마감과 통일성 있는 인테리어를 만들 수 있습니다.",
+                features: ["사각 벽면 개구", "인테리어 매칭", "스윙텐션 호환", "스파이얼 덕트 연결"],
+                specs: { "형태": "사각 측향", "연결": "스파이얼", "적용": "벽면 노출", "인테리어": "매칭 OK" },
+                tags: ["사각", "벽면", "인테리어"]
             },
             {
-                url: "gallery/g39.jpg",
-                title: "시공 현장 39",
-                category: "시공갤러리", code: "SITE-39",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ixjfZWIE_4bc3a11e067b0de147114531fb778ac6e1784bef_230x180.jpg",
+                title: "원형 측향",
+                category: "모터", code: "MOTOR-SIDE-ROUND",
+                desc: "원형 측향 모터. 원형 파이프 형태로 깔끔하게 정리되며, 공간 절약과 청소 편의성이 장점.",
+                features: ["원형 측향", "공간 절약", "청소 편의", "스윙텐션 호환"],
+                specs: { "형태": "원형 측향", "연결": "스파이얼", "청소": "분리형", "적용": "표준" },
+                tags: ["원형", "측향", "공간 절약"]
             },
             {
-                url: "gallery/g40.jpg",
-                title: "시공 현장 40",
-                category: "시공갤러리", code: "SITE-40",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_3ZLHyY1b_b4223c18b07da29410c388fddc18231e8185192d_230x180.jpg",
+                title: "걸봉 속봉",
+                category: "구조 부품", code: "BAR-IN-OUT",
+                desc: "걸봉/속봉 분리 구조. 겉봉과 속봉을 너트 피스로 간단히 분리하여 내부 청소가 가능하며, 유성에이스 후드의 청소 편의성을 대표하는 핵심 설계입니다.",
+                features: ["걸봉/속봉 분리", "너트 피스 체결", "손 분리 가능", "내부 청소"],
+                specs: { "구조": "걸봉 + 속봉", "체결": "너트 피스", "청소": "수분 이내", "적용": "전 제품" },
+                tags: ["청소 편의", "핵심 구조", "분리형"]
             },
             {
-                url: "gallery/g41.jpg",
-                title: "시공 현장 41",
-                category: "시공갤러리", code: "SITE-41",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ITox8qOK_53bae0561f5275137bf93d350c8ed8200de59399_230x180.jpg",
+                title: "고정 텐션",
+                category: "텐션 시스템", code: "FIXED-TENSION",
+                desc: "고정 텐션 방식. 상하 작동이 필요 없는 설치 환경에서 장력을 고정하여 설치하며, 스윙텐션 대비 구조가 단순해 A/S 빈도가 낮습니다.",
+                features: ["고정형 텐션", "단순 구조", "A/S 빈도 낮음", "125 사각 측향 등 호환"],
+                specs: { "방식": "고정", "장점": "단순·고내구", "호환": "125 측향 모터", "A/S": "최저" },
+                tags: ["고정형", "단순 구조", "고내구"]
             },
             {
-                url: "gallery/g42.jpg",
-                title: "시공 현장 42",
-                category: "시공갤러리", code: "SITE-42",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_byxiY437_8ab8e4cede369cb5f0899e8c532c89773ec5f6a4_230x180.jpg",
+                title: "삼파장 등",
+                category: "등제품", code: "LIGHT-3WL",
+                desc: "삼파장 조명 등제품. 따뜻한 색온도와 높은 연색성(CRI)으로 고기 색감을 가장 먹음직스럽게 표현하는 광원. 고깃집 조명의 베스트셀러.",
+                features: ["삼파장 램프", "고연색 CRI 85+", "웜톤 3000K", "고기 색감 강조"],
+                specs: { "광원": "삼파장", "색온도": "3000K", "CRI": "85+", "적용": "직화 고깃집" },
+                tags: ["웜톤", "고연색", "베스트셀러"]
             },
             {
-                url: "gallery/g43.jpg",
-                title: "시공 현장 43",
-                category: "시공갤러리", code: "SITE-43",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_hQ4celuE_07a859e701ef43b2822acfae4474f9262024ec13_230x180.jpg",
+                title: "필름등",
+                category: "등제품", code: "LIGHT-FILM",
+                desc: "필름등은 얇은 확산 필름을 갓 내부에 적용해 눈부심 없는 부드러운 확산광을 제공합니다. 천정이 낮은 매장에서 특히 효과적입니다.",
+                features: ["확산 필름 디퓨저", "눈부심 없음", "저천정 최적", "LED 호환"],
+                specs: { "디퓨저": "확산 필름", "광원": "LED", "눈부심": "없음", "적용": "저천정" },
+                tags: ["저천정", "확산광", "눈부심 차단"]
             },
             {
-                url: "gallery/g44.jpg",
-                title: "시공 현장 44",
-                category: "시공갤러리", code: "SITE-44",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_3a4TEvDf_e690309ca328b688a90f27e19855bbd83b64b484_230x180.jpg",
+                title: "할로겐 라이팅",
+                category: "등제품", code: "LIGHT-HALOGEN",
+                desc: "할로겐 조명 라이팅. 자연광에 가장 가까운 색온도와 연색성으로, 프리미엄 한우·스테이크 전문점에서 요리의 퀄리티를 극대화합니다.",
+                features: ["할로겐 램프", "자연광 근접 CRI 95+", "컬러 재현 최고", "스팟 광원"],
+                specs: { "광원": "할로겐", "CRI": "95+", "색온도": "3000K", "적용": "프리미엄 다이닝" },
+                tags: ["프리미엄", "CRI 95+", "한우 전문"]
             },
             {
-                url: "gallery/g45.jpg",
-                title: "시공 현장 45",
-                category: "시공갤러리", code: "SITE-45",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_2tAEaW1G_b3b305a41875d3938b52503507131a8bd7088474_230x180.jpg",
+                title: "LED 라인",
+                category: "등제품", code: "LIGHT-LED",
+                desc: "LED 라인. 저소비전력·장수명의 대표 광원으로, 전기료와 유지비를 최소화하면서도 충분한 밝기를 제공. 현대 매장의 표준.",
+                features: ["LED", "장수명 30,000h+", "저소비전력", "발열 최소"],
+                specs: { "광원": "LED", "수명": "30,000h+", "소비전력": "~10W", "색온도": "2700~5000K" },
+                tags: ["저전력", "장수명", "표준"]
             },
             {
-                url: "gallery/g46.jpg",
-                title: "시공 현장 46",
-                category: "시공갤러리", code: "SITE-46",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_tRADzYIr_1d6dd4eb30bacb658d5e67341eb51777875b8fbb_230x180.jpg",
+                title: "갓등 시리즈",
+                category: "등제품", code: "HAT-LIGHT-SERIES",
+                desc: "갓등 전 시리즈. 220/270/350/450/520 등 다양한 사이즈로 매장 규모와 테이블 크기에 맞춰 선택할 수 있는 유성에이스의 가장 대중적인 라인.",
+                features: ["220~520 사이즈", "LED/할로겐/삼파장 선택", "F.V.D 호환", "유지망 내장 가능"],
+                specs: { "사이즈": "220 / 270 / 350 / 450 / 520", "광원": "LED/할로겐/삼파장", "필터": "유지망 옵션" },
+                tags: ["풀 라인업", "대중적", "다양한 사이즈"]
             },
             {
-                url: "gallery/g47.jpg",
-                title: "시공 현장 47",
-                category: "시공갤러리", code: "SITE-47",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_BAoFdfly_f06d0d0336df576647b48611a7be0c5a7c181913_230x180.jpg",
+                title: "유지망 5단",
+                category: "필터", code: "MESH-5",
+                desc: "5단 유지망. 5겹의 스텐 메쉬가 기름 입자를 단계적으로 포집해 덕트 오염을 최소화합니다. 표준 매장 기본 사양.",
+                features: ["5단 스텐 메쉬", "기름 포집", "덕트 보호", "세척 재사용"],
+                specs: { "단수": "5단", "재질": "스텐 304", "세척": "주 1회", "교체": "연 1회" },
+                tags: ["필터", "표준", "세척 가능"]
             },
             {
-                url: "gallery/g48.jpg",
-                title: "시공 현장 48",
-                category: "시공갤러리", code: "SITE-48",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_NvR8gBTm_5ce18863946816215f7d729b0dde892c5e5cf865_230x180.jpg",
+                title: "유지망 8단",
+                category: "필터", code: "MESH-8",
+                desc: "8단 유지망. 5단 대비 포집 효율 1.5배. 기름이 많이 발생하는 삼겹살·곱창 전문점, 대형 프랜차이즈에 권장.",
+                features: ["8단 스텐 메쉬", "포집 1.5배", "대형 매장 권장", "세척 재사용"],
+                specs: { "단수": "8단", "재질": "스텐 304", "포집률": "5단 대비 1.5배", "권장": "삼겹살/곱창" },
+                tags: ["고효율", "대형매장", "고유분 업종"]
             },
             {
-                url: "gallery/g49.jpg",
-                title: "시공 현장 49",
-                category: "시공갤러리", code: "SITE-49",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_XPlyVNe0_bf908b5f58e5d15a21637da8a277715a00816cf3_230x180.jpg",
+                title: "기름받이",
+                category: "필터", code: "OIL-TRAY",
+                desc: "기름받이 부품. 후드 내부에 떨어지는 기름을 모아 외부로 배출하지 않고 위생적으로 관리합니다. 도구 없이 손으로 돌려 분리 가능.",
+                features: ["손 분리 구조", "위생 관리", "기름 흘림 차단", "나팔/기름받이속 세트"],
+                specs: { "분리": "손", "구성": "나팔 + 기름받이 + 받이속", "재질": "스텐 / 도금", "청소": "주 1회" },
+                tags: ["위생", "손 분리", "청소 편의"]
             },
             {
-                url: "gallery/g50.jpg",
-                title: "시공 현장 50",
-                category: "시공갤러리", code: "SITE-50",
-                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
-                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
-                specs: { "시공": "유성에이스", "품질": "프리미엄" },
-                tags: ["시공사례", "유성에이스"]
+                url: "https://usungace.com/data/file/sub51/thumb-2034394491_YH3yrM1z_7012717abc7ee46130cb4f8f20b670f95b10d761_230x180.jpg",
+                title: "태엽 감속기",
+                category: "구조 부품", code: "SPRING-GEAR",
+                desc: "태엽 감속기. 후드의 상하 작동 속도를 감속해 부드럽고 안전한 움직임을 만듭니다. 사각부 피스 4개 구조로 교체가 간편합니다.",
+                features: ["상하 작동 감속", "부드러운 움직임", "사각 피스 ×4", "손쉬운 교체"],
+                specs: { "구조": "태엽 감속기", "피스": "사각 ×4", "교체 시간": "10분 이내", "수명": "3~5년" },
+                tags: ["핵심 부품", "교체 쉬움", "안전"]
             }
         ];
 
@@ -3067,15 +2929,15 @@
 
         // --- 자료실 데이터 ---
         const archiveItems = [
-            { type: "특허", color: "blue", category: "특허", title: "360° 스윙 파이프 메커니즘 특허", desc: "시계추형 360도 회전 파이프 구조 특허", size: "—", pages: "—", downloads: "—", date: "2015.06.10" },
-            { type: "특허", color: "blue", category: "특허", title: "FVD 방화댐퍼 일체형 후드 특허", desc: "풍속조절 겸용 방화댐퍼 내장 환기 후드", size: "—", pages: "—", downloads: "—", date: "2017.03.22" },
-            { type: "특허", color: "blue", category: "특허", title: "스윙텐션 상하작동 시스템 특허", desc: "베어링 기반 장력 미세조절 상하작동 구조", size: "—", pages: "—", downloads: "—", date: "2018.09.15" },
-            { type: "디자인", color: "purple", category: "디자인등록", title: "갤럭시 A타입 디자인등록", desc: "450Ø 대형 원형 갓 디자인등록", size: "—", pages: "—", downloads: "—", date: "2016.11.08" },
-            { type: "디자인", color: "purple", category: "디자인등록", title: "갤럭시 D타입 디자인등록", desc: "600Ø 초대형 갓 프리미엄 디자인등록", size: "—", pages: "—", downloads: "—", date: "2019.04.20" },
-            { type: "디자인", color: "purple", category: "디자인등록", title: "아크릴등 후드 디자인등록", desc: "아크릴 커버 LED 일체형 후드 디자인", size: "—", pages: "—", downloads: "—", date: "2020.01.15" },
-            { type: "인증", color: "emerald", category: "인증서", title: "F.V.D 방화담파 시험 성적서", desc: "KS 인증 시험 성적서 및 품질 보증서", size: "—", pages: "—", downloads: "—", date: "2026.02.28" },
-            { type: "인증", color: "emerald", category: "인증서", title: "ISO 9001 품질경영시스템 인증서", desc: "2025 갱신 인증서", size: "—", pages: "—", downloads: "—", date: "2026.01.15" },
-            { type: "인증", color: "emerald", category: "인증서", title: "사업자등록증", desc: "유성에이스 사업자등록증", size: "—", pages: "—", downloads: "—", date: "2007.01.01" }
+            { type: "PDF", color: "red", category: "카탈로그", title: "유성에이스 2026 통합 카탈로그", desc: "갤럭시 A~D 및 전 제품 라인업 상세 소개", size: "24.8 MB", pages: 156, downloads: 842, date: "2026.04.05" },
+            { type: "PDF", color: "red", category: "카탈로그", title: "고기집 덕트 전문 가이드북", desc: "직화구이 매장 최적 설계 가이드", size: "12.3 MB", pages: 48, downloads: 521, date: "2026.03.20" },
+            { type: "DWG", color: "blue", category: "도면", title: "갤럭시 A타입 상세 도면 패키지", desc: "AutoCAD 설계 도면 / 3D 뷰 포함", size: "8.7 MB", pages: 12, downloads: 389, date: "2026.03.15" },
+            { type: "DWG", color: "blue", category: "도면", title: "스파이럴 125 / 150 파이프 도면", desc: "원형/사각 측향모터 포함 전체 도면", size: "5.4 MB", pages: 8, downloads: 267, date: "2026.03.10" },
+            { type: "PDF", color: "emerald", category: "인증서", title: "F.V.D 방화담파 시험 성적서", desc: "KS 인증 시험 성적서 및 품질 보증서", size: "2.1 MB", pages: 6, downloads: 198, date: "2026.02.28" },
+            { type: "PDF", color: "emerald", category: "인증서", title: "ISO 9001 품질경영시스템 인증서", desc: "2025 갱신 인증서", size: "1.2 MB", pages: 2, downloads: 112, date: "2026.01.15" },
+            { type: "PDF", color: "amber", category: "매뉴얼", title: "태엽감속기 교체 매뉴얼", desc: "단계별 사진과 함께 따라하는 10분 교체법", size: "4.5 MB", pages: 18, downloads: 456, date: "2026.02.10" },
+            { type: "MP4", color: "purple", category: "매뉴얼", title: "분리청소 구조 시연 영상 (가이드)", desc: "실제 매장에서 촬영한 분리청소 시연", size: "48.2 MB", pages: "—", downloads: 723, date: "2026.01.28" },
+            { type: "PDF", color: "amber", category: "매뉴얼", title: "설치 전 체크리스트", desc: "현장 답사 및 설치 전 확인사항 모음", size: "0.8 MB", pages: 4, downloads: 334, date: "2025.12.15" }
         ];
         const archiveColorMap = {
             red: { bg: "from-red-500 to-rose-600", chip: "bg-red-50 text-red-700", btn: "hover:bg-red-600" },
@@ -3101,9 +2963,15 @@
                         <div class="p-5">
                             <h4 class="text-base font-black text-black mb-1.5 leading-snug line-clamp-2 group-hover:text-emerald-600 transition">${a.title}</h4>
                             <p class="text-[12px] text-black/55 leading-relaxed mb-4 line-clamp-2">${a.desc}</p>
-                            <div class="flex items-center gap-3 text-[10px] text-black/45 font-bold tracking-wide">
-                                <span>${a.date}</span>
+                            <div class="flex items-center gap-3 text-[10px] text-black/45 font-bold tracking-wide mb-4 pb-4 border-b border-black/5">
+                                <span>📄 ${a.pages}p</span>
+                                <span>⬇ ${a.downloads.toLocaleString()}</span>
+                                <span class="ml-auto">${a.date}</span>
                             </div>
+                            <button class="w-full py-2.5 rounded-xl bg-black text-white text-[12px] font-black ${c.btn} transition flex items-center justify-center gap-2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                DOWNLOAD
+                            </button>
                         </div>
                     </div>
                 `;
@@ -3115,7 +2983,7 @@
                 title: "태엽감속기 교체방법",
                 subtitle: "SPRING REDUCER REPLACEMENT",
                 icon: "gear",
-                
+                imageIdx: [3, 4],
                 highlight: "사각피스 4개 → 10분 내 교체",
                 caption: "외부태엽 A·B 타입은 사각 피스만 풀면 현장에서 직접 교체 가능합니다.",
                 steps: [
@@ -3129,7 +2997,7 @@
                 title: "속봉·겉봉 분리방법",
                 subtitle: "INNER / OUTER ROD SEPARATION",
                 icon: "rod",
-                
+                imageIdx: [16, 17],
                 highlight: "너트피스만 풀면 OK",
                 caption: "걸링의 너트피스를 빼고 돌리면 속봉과 겉봉이 분리됩니다. 청소 시 필수 단계입니다.",
                 steps: [
@@ -3143,7 +3011,7 @@
                 title: "빠찌링(베어링) 교체방법",
                 subtitle: "BEARING RING REPLACEMENT",
                 icon: "bearing",
-                
+                imageIdx: [32, 33],
                 highlight: "초기 6개 → 필요 시 ±1~2개",
                 caption: "베어링을 몇 개 추가하는 것만으로 평생 사용할 텐션을 유지할 수 있습니다.",
                 steps: [
@@ -3157,7 +3025,7 @@
                 title: "나팔캡·기름받이 분리방법",
                 subtitle: "TRUMPET CAP & OIL TRAP",
                 icon: "drop",
-                
+                imageIdx: [24, 25],
                 highlight: "도구 없이 손으로 OK",
                 caption: "일체형 성형된 기름받이와 나팔캡. 누유 걱정 없이 손으로 돌려 매일 세척합니다.",
                 steps: [
@@ -3171,7 +3039,7 @@
                 title: "등제품 조립순서",
                 subtitle: "LIGHT FIXTURE ASSEMBLY",
                 icon: "bulb",
-                
+                imageIdx: [6, 7, 8, 9],
                 highlight: "4단계 · 3분 내 조립",
                 caption: "아크릴등·한지등·LED 등제품은 모두 동일한 조립 순서를 따릅니다.",
                 steps: [
@@ -3189,67 +3057,14 @@
             return `<button onclick="selectProduct(${i})" class="text-left text-[13px] text-black/80 hover:text-blue-600 py-2 transition-colors truncate font-bold">${clean}</button>`;
         }).join('');
 
-        // Parts category filter setup
-        const partsCats = [...new Set(partsItems.map(p => p.cat))];
-        const partsFilterEl = document.getElementById('parts-filter');
-        partsCats.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'parts-filter-btn px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-transparent text-white/50 hover:bg-white/5 transition-all';
-            btn.textContent = cat;
-            btn.onclick = () => filterParts(cat);
-            partsFilterEl.appendChild(btn);
-        });
-
-        function filterParts(cat) {
-            document.querySelectorAll('.parts-filter-btn').forEach(b => {
-                b.classList.toggle('active', b.textContent === (cat === 'all' ? '전체' : cat));
-                if (b.textContent === (cat === 'all' ? '전체' : cat)) {
-                    b.classList.add('bg-white/10', 'text-white');
-                    b.classList.remove('bg-transparent', 'text-white/50');
-                } else {
-                    b.classList.remove('bg-white/10', 'text-white');
-                    b.classList.add('bg-transparent', 'text-white/50');
-                }
-            });
-            document.querySelectorAll('.part-card').forEach(card => {
-                card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
-            });
-        }
-
-        document.getElementById('parts-grid').innerHTML = partsItems.map((p, i) =>
-            `<div class="part-card bg-[#111] border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center hover:bg-[#1a1a1c] hover:border-blue-500/30 transition-all cursor-pointer group" data-cat="${p.cat}" onclick="openPartModal(${i})">
-                <div class="w-full aspect-square bg-white/[0.03] rounded-xl mb-3 flex items-center justify-center overflow-hidden p-3">
-                    <img src="${p.img}" alt="${p.name}" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+        document.getElementById('parts-grid').innerHTML = partsList.map(p => 
+            `<div class="bg-[#111] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-[#1a1a1c] transition-colors cursor-pointer group">
+                <div class="w-20 h-20 bg-white/5 rounded-full mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="text-2xl opacity-50">⚙️</span>
                 </div>
-                <div class="text-[10px] font-bold tracking-widest text-blue-400/70 mb-1">${p.cat}</div>
-                <span class="text-sm text-gray-200 font-bold">${p.name}</span>
+                <span class="text-sm text-gray-300 font-medium">${p}</span>
             </div>`
         ).join('');
-
-        // Parts modal
-        window.openPartModal = function(idx) {
-            const p = partsItems[idx];
-            const modal = document.getElementById('part-modal');
-            document.getElementById('pm-img').src = p.img;
-            document.getElementById('pm-img').alt = p.name;
-            document.getElementById('pm-cat').textContent = p.cat;
-            document.getElementById('pm-name').textContent = p.name;
-            document.getElementById('pm-desc').textContent = p.desc;
-            document.getElementById('pm-specs').textContent = p.specs;
-            // Nav
-            document.getElementById('pm-prev').onclick = () => openPartModal((idx - 1 + partsItems.length) % partsItems.length);
-            document.getElementById('pm-next').onclick = () => openPartModal((idx + 1) % partsItems.length);
-            document.getElementById('pm-counter').textContent = (idx+1) + ' / ' + partsItems.length;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        };
-        window.closePartModal = function() {
-            const modal = document.getElementById('part-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = '';
-        };
 
         document.getElementById('feature-buttons').innerHTML = features.map(f => 
             `<button onclick="openModal('${f.id}')" class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 transition-all text-sm font-medium flex items-center gap-2 group">
@@ -3493,14 +3308,15 @@
             const activePage = document.querySelector('.page.active');
             const isLightPage = activePage && lightPages.includes(activePage.id);
 
-            if (window.scrollY > 50 || isLightPage) {
+            if (window.scrollY > 50) {
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.remove('bg-transparent');
                 if(navLogo) navLogo.src = 'logo-white.png';
             } else {
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.add('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-white.png';
+                // 라이트 배경 페이지에서는 다크 로고, 다크 배경에서는 화이트 로고
+                if(navLogo) navLogo.src = isLightPage ? 'logo-dark.png' : 'logo-white.png';
             }
 
             // Home 페이지 스크롤 애니메이션 (간이 구현)
@@ -3516,10 +3332,6 @@
                     if (val > inMax) return outMax;
                     return outMin + (outMax - outMin) * ((val - inMin) / (inMax - inMin));
                 };
-
-                // Scroll indicator — hide after scrolling
-                const scrollInd = document.getElementById('scroll-indicator');
-                if (scrollInd) scrollInd.style.opacity = scrollY > 80 ? '0' : '1';
 
                 // Hero
                 const heroOpacity = mapRange(progress, 0, 0.2, 1, 0);
@@ -3647,35 +3459,5 @@
 
     <!-- 유성에이스 전문 CS 챗봇 "에이스봇" -->
     <script src="chatbot.js"></script>
-
-    <!-- Parts Detail Modal -->
-    <div id="part-modal" class="hidden fixed inset-0 z-[200] items-center justify-center bg-black/80 backdrop-blur-md" onclick="if(event.target===this)closePartModal()">
-        <div class="relative bg-[#111] border border-white/10 rounded-3xl max-w-lg w-[92%] mx-auto overflow-hidden shadow-2xl">
-            <button onclick="closePartModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/20 hover:text-white transition">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-            <div class="bg-white/[0.03] flex items-center justify-center p-8 aspect-square max-h-[340px]">
-                <img id="pm-img" src="" alt="" class="max-w-full max-h-full object-contain" />
-            </div>
-            <div class="p-6">
-                <div id="pm-cat" class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2"></div>
-                <h3 id="pm-name" class="text-2xl font-black text-white mb-3"></h3>
-                <p id="pm-desc" class="text-[14px] text-white/60 leading-relaxed mb-4"></p>
-                <div class="bg-white/[0.03] border border-white/5 rounded-xl px-4 py-3 mb-4">
-                    <div class="text-[9px] font-bold tracking-[0.22em] text-white/40 mb-1">SPECIFICATIONS</div>
-                    <div id="pm-specs" class="text-sm text-white/75 font-medium"></div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <button id="pm-prev" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
-                    </button>
-                    <span id="pm-counter" class="text-xs text-white/40 font-bold tracking-wider"></span>
-                    <button id="pm-next" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
