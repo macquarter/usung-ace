@@ -558,37 +558,33 @@
                                 <!-- 좌: CATEGORIES -->
                                 <div class="col-span-4 bg-[#fafafa] p-8 border-r border-black/5">
                                     <div class="text-[10px] tracking-[0.24em] font-bold text-black/40 mb-6">CATEGORIES</div>
-                                    <div class="space-y-5">
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">갤럭시 A~D타입</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">스윙태엽/FVD/유지망 통합 시스템</div>
+                                    <div class="space-y-4" id="mega-cat-list">
+                                        <button onclick="navigate('products');setTimeout(()=>filterProducts('갤럭시 A타입'),100)" onmouseenter="megaHoverCat(['갤럭시 A타입','갤럭시 B타입','갤럭시 C타입','갤럭시 D타입','갤럭시 C타입 원통필터'])" class="block text-left group w-full">
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">갤럭시 A~D타입</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5">스윙태엽/FVD/유지망 통합</div>
                                         </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">양옆태엽 <span class="text-[10px] px-1.5 py-0.5 bg-red-500 text-white rounded-full ml-1">BEST</span></div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">양옆태엽 스윙 시리즈</div>
+                                        <button onclick="navigate('products');setTimeout(()=>filterProducts('양옆태엽[BEST]'),100)" onmouseenter="megaHoverCat(['양옆태엽[BEST]'])" class="block text-left group w-full">
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">양옆태엽 <span class="text-[10px] px-1.5 py-0.5 bg-red-500 text-white rounded-full ml-1">BEST</span></div>
+                                            <div class="text-[11px] text-black/45 mt-0.5">양옆태엽 스윙 시리즈</div>
                                         </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">LED 조명</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">LED/할로겐 등제품 및 아크릴등</div>
+                                        <button onclick="navigate('products');setTimeout(()=>filterProducts('LED조명'),100)" onmouseenter="megaHoverCat(['LED조명','LED우주선'])" class="block text-left group w-full">
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">LED 조명 / 우주선</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5">LED/할로겐 등제품 및 아크릴등</div>
                                         </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">파이프</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">스텐파이프(도금/도장) · 스파이럴</div>
+                                        <button onclick="navigate('products');setTimeout(()=>filterProducts('파이프'),100)" onmouseenter="megaHoverCat(['파이프','스파이얼'])" class="block text-left group w-full">
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">파이프 / 스파이얼</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5">스텐파이프(도금/도장) · 스파이럴</div>
                                         </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">주름관</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">플렉시블 연결관</div>
-                                        </button>
-                                        <button onclick="navigate('products')" class="block text-left group">
-                                            <div class="text-[17px] font-black text-black tracking-tight group-hover:text-blue-600 transition">하향식 후드</div>
-                                            <div class="text-[12px] text-black/45 mt-0.5">하향식 및 특수 배기 제품군</div>
+                                        <button onclick="navigate('products');setTimeout(()=>filterProducts('후레쉬볼/주름관'),100)" onmouseenter="megaHoverCat(['후레쉬볼/주름관'])" class="block text-left group w-full">
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">후레쉬볼 / 주름관</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5">플렉시블 연결관</div>
                                         </button>
                                     </div>
                                 </div>
                                 <!-- 우: FULL PRODUCT LIST -->
                                 <div class="col-span-8 p-8">
                                     <div class="flex items-center justify-between mb-5">
-                                        <div class="text-[10px] tracking-[0.24em] font-bold text-black/40">FULL PRODUCT LIST (28)</div>
+                                        <div class="text-[10px] tracking-[0.24em] font-bold text-black/40" id="mega-list-title">FULL PRODUCT LIST (148)</div>
                                         <button onclick="navigate('products')" class="text-[12px] font-semibold text-blue-600 hover:text-blue-700">모두 보기 →</button>
                                     </div>
                                     <div class="grid grid-cols-2 gap-x-6 gap-y-1 max-h-[58vh] overflow-y-auto custom-scrollbar pr-2" id="mega-menu-list">
@@ -1459,16 +1455,29 @@
 
         <!-- 3. PRODUCTS 페이지 -->
         <div id="page-products" class="page min-h-screen pt-24 pb-24">
-            <!-- HERO -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 r-anim r-mask-up">
-                <div data-cms="p_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">PRODUCT LINEUP · 148 MODELS</div>
-                <h1 id="product-title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
+            <!-- HERO (compact) -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 r-anim r-mask-up">
+                <div data-cms="p_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">PRODUCT LINEUP · 148 MODELS</div>
+                <h1 id="product-title" class="text-4xl md:text-5xl lg:text-6xl font-black tracking-[-0.04em] leading-[0.95] mb-4">
                     <span data-cms="p_title1">148가지 제품,</span><br/>
                     <span data-cms="p_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 장인정신.</span>
                 </h1>
-                <p data-cms="p_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed">
-                    갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지. 유성에이스의 전 제품 라인업을 실제 사진과 함께 살펴보세요.
+                <p data-cms="p_desc" class="text-base md:text-lg text-white/60 max-w-3xl leading-relaxed">
+                    갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지 — 유성에이스의 전 제품 라인업을 실제 사진과 함께 살펴보세요.
                 </p>
+            </section>
+
+            <!-- CATEGORY FILTER (히어로 바로 아래) -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 mt-4 r-anim r-up">
+                <div id="product-filter" class="flex flex-wrap gap-2"></div>
+            </section>
+
+            <!-- PRODUCT GRID -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 r-stagger">
+                    <!-- JS로 채워짐 -->
+                </div>
+                <p id="products-empty" class="hidden text-center text-white/40 mt-12">해당 카테고리 제품이 없습니다.</p>
             </section>
 
             <!-- INTERACTIVE PRODUCT FEATURE SHOWCASE (PPT slide 4 기반) -->
@@ -1547,18 +1556,7 @@
                 </div>
             </section>
 
-            <!-- CATEGORY FILTER -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 r-anim r-up">
-                <div id="product-filter" class="flex flex-wrap gap-2"></div>
-            </section>
-
-            <!-- PRODUCT GRID -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 r-stagger">
-                    <!-- JS로 채워짐 -->
-                </div>
-                <p id="products-empty" class="hidden text-center text-white/40 mt-12">해당 카테고리 제품이 없습니다.</p>
-            </section>
+            <!-- (카테고리 필터 + 그리드는 히어로 바로 아래로 이동됨) -->
 
             <!-- CTA -->
             <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-28 text-center r-anim r-zoom">
@@ -1732,16 +1730,16 @@
         <!-- ============================================== -->
         <!-- 공지사항 (Notice) — TIMELINE + PINNED DESIGN     -->
         <!-- ============================================== -->
-        <div id="page-notice" class="page min-h-screen pt-24 pb-16 bg-gradient-to-b from-[#fff5f5] via-white to-white">
+        <div id="page-notice" class="page min-h-screen pt-24 pb-16">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Hero -->
                 <div class="text-center mb-12 reveal">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-100 text-red-700 text-[11px] font-bold tracking-[0.18em] mb-5">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-400/20 text-red-400 text-[11px] font-bold tracking-[0.18em] mb-5">
                         <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                         NOTICE · 공지사항
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black tracking-tight text-black mb-4">유성에이스 소식</h1>
-                    <p class="text-black/55 text-base max-w-xl mx-auto">중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.</p>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">유성에이스 소식</h1>
+                    <p class="text-white/55 text-base max-w-xl mx-auto">중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.</p>
                 </div>
 
                 <!-- Pinned cards -->
@@ -1781,9 +1779,9 @@
                 <!-- Timeline -->
                 <div class="reveal">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-black/20 to-transparent"></div>
-                        <div class="text-[10px] tracking-[0.24em] font-black text-black/50">TIMELINE · 최근 공지</div>
-                        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-black/20 to-transparent"></div>
+                        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                        <div class="text-[10px] tracking-[0.24em] font-black text-white/50">TIMELINE · 최근 공지</div>
+                        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                     </div>
                     <div class="relative pl-8 md:pl-12">
                         <!-- vertical line -->
@@ -1807,20 +1805,20 @@
         <!-- ============================================== -->
         <!-- 게시판 (Board) — TRADITIONAL LIST/TABLE DESIGN   -->
         <!-- ============================================== -->
-        <div id="page-board" class="page min-h-screen pt-24 pb-16 bg-[#f7f8fa]">
+        <div id="page-board" class="page min-h-screen pt-24 pb-16">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Hero -->
                 <div class="mb-10 reveal">
                     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <div>
-                            <div class="text-[11px] font-bold tracking-[0.2em] text-blue-600 mb-2">BOARD · 게시판</div>
-                            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-black">게시판</h1>
-                            <p class="text-black/55 text-sm md:text-base mt-3">유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.</p>
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-2">BOARD · 게시판</div>
+                            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-white">게시판</h1>
+                            <p class="text-white/55 text-sm md:text-base mt-3">유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="relative">
-                                <input id="board-search" type="text" placeholder="검색어 입력" oninput="renderBoard()" class="pl-9 pr-4 py-2.5 rounded-full bg-white border border-black/10 text-sm w-56 focus:outline-none focus:border-blue-500">
-                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-black/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                <input id="board-search" type="text" placeholder="검색어 입력" oninput="renderBoard()" class="pl-9 pr-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-sm text-white w-56 focus:outline-none focus:border-blue-500 placeholder-white/30">
+                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                             </div>
                             <!-- 글쓰기는 CMS 관리자 모드에서만 노출 -->
                         </div>
@@ -1830,7 +1828,7 @@
                 <!-- Category + Sort bar -->
                 <div class="flex flex-wrap items-center justify-between gap-3 mb-5 reveal">
                     <div id="board-cat-tabs" class="flex flex-wrap gap-2"></div>
-                    <div class="flex items-center gap-1 bg-white border border-black/10 rounded-full p-1">
+                    <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded-full p-1">
                         <button onclick="setBoardSort('latest')" id="sort-latest" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">최신순</button>
                         <button onclick="setBoardSort('views')" id="sort-views" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">조회순</button>
                         <button onclick="setBoardSort('num')" id="sort-num" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">번호순</button>
@@ -1838,8 +1836,8 @@
                 </div>
 
                 <!-- Table -->
-                <div class="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden reveal">
-                    <div class="hidden md:grid grid-cols-[60px_90px_1fr_120px_110px_80px] gap-x-3 px-6 py-4 border-b border-black/5 text-[11px] tracking-[0.15em] font-black text-black/50 bg-[#fafbfc]">
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden reveal">
+                    <div class="hidden md:grid grid-cols-[60px_90px_1fr_120px_110px_80px] gap-x-3 px-6 py-4 border-b border-white/10 text-[11px] tracking-[0.15em] font-black text-white/40 bg-white/[0.02]">
                         <div>번호</div>
                         <div>분류</div>
                         <div>제목</div>
@@ -1852,13 +1850,13 @@
 
                 <!-- Pagination -->
                 <div class="mt-8 flex items-center justify-center gap-1 reveal">
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 flex items-center justify-center text-black/50 hover:bg-black/5">‹</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/5">‹</button>
                     <button class="w-9 h-9 rounded-lg bg-blue-600 text-white font-bold text-sm">1</button>
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 text-black/70 font-semibold text-sm hover:bg-black/5">2</button>
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 text-black/70 font-semibold text-sm hover:bg-black/5">3</button>
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 text-black/70 font-semibold text-sm hover:bg-black/5">4</button>
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 text-black/70 font-semibold text-sm hover:bg-black/5">5</button>
-                    <button class="w-9 h-9 rounded-lg bg-white border border-black/10 flex items-center justify-center text-black/50 hover:bg-black/5">›</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 text-white/70 font-semibold text-sm hover:bg-white/5">2</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 text-white/70 font-semibold text-sm hover:bg-white/5">3</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 text-white/70 font-semibold text-sm hover:bg-white/5">4</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 text-white/70 font-semibold text-sm hover:bg-white/5">5</button>
+                    <button class="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/5">›</button>
                 </div>
             </div>
         </div>
@@ -1866,24 +1864,24 @@
         <!-- ============================================== -->
         <!-- 자료실 (Archive) — CARD GRID DOWNLOAD DESIGN     -->
         <!-- ============================================== -->
-        <div id="page-archive" class="page min-h-screen pt-24 pb-16 bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+        <div id="page-archive" class="page min-h-screen pt-24 pb-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Hero -->
                 <div class="text-center mb-14 reveal">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold tracking-[0.18em] mb-5">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-[11px] font-bold tracking-[0.18em] mb-5">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         ARCHIVE · 자료실
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-black mb-4">자료실</h1>
-                    <p class="text-black/55 text-base max-w-2xl mx-auto">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-4">자료실</h1>
+                    <p class="text-white/55 text-base max-w-2xl mx-auto">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
                 </div>
 
                 <!-- Filter chips -->
                 <div class="flex flex-wrap justify-center gap-2 mb-10 reveal">
                     <button class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold shadow-lg shadow-emerald-500/20">전체 자료</button>
-                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📋 특허</button>
-                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">🎨 디자인등록</button>
-                    <button class="px-5 py-2 rounded-full bg-white border border-emerald-200 text-emerald-700 text-[12px] font-bold hover:bg-emerald-50">📜 인증서</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">특허</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">디자인등록</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">인증서</button>
                 </div>
 
                 <!-- Grid -->
@@ -1891,21 +1889,21 @@
 
                 <!-- Stats bar -->
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
-                    <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-blue-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">특허 보유</div>
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
+                        <div class="text-3xl font-black text-blue-400">3</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">특허 보유</div>
                     </div>
-                    <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-purple-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">디자인등록</div>
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
+                        <div class="text-3xl font-black text-purple-400">3</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">디자인등록</div>
                     </div>
-                    <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-emerald-600">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">인증서</div>
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
+                        <div class="text-3xl font-black text-emerald-400">3</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">인증서</div>
                     </div>
-                    <div class="rounded-2xl bg-white/80 backdrop-blur border border-emerald-100 p-5 text-center">
-                        <div class="text-3xl font-black text-green-600">20y</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-black/50 mt-1">기술 노하우</div>
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
+                        <div class="text-3xl font-black text-green-400">20y</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">기술 노하우</div>
                     </div>
                 </div>
             </div>
@@ -3009,23 +3007,23 @@
             return defaultNoticeItems;
         })();
         const noticeTagClasses = {
-            blue: "bg-blue-100 text-blue-700",
-            amber: "bg-amber-100 text-amber-700",
-            slate: "bg-slate-100 text-slate-700",
-            pink: "bg-pink-100 text-pink-700"
+            blue: "bg-blue-500/15 text-blue-400 border border-blue-400/20",
+            amber: "bg-amber-500/15 text-amber-400 border border-amber-400/20",
+            slate: "bg-white/10 text-white/60 border border-white/10",
+            pink: "bg-pink-500/15 text-pink-400 border border-pink-400/20"
         };
         const noticeTimelineEl = document.getElementById('notice-timeline');
         if (noticeTimelineEl) {
             noticeTimelineEl.innerHTML = noticeItems.map(n => `
                 <div class="relative">
-                    <div class="absolute -left-[30px] md:-left-[38px] top-5 w-3.5 h-3.5 rounded-full bg-white border-[3px] border-red-500 shadow-md"></div>
-                    <div class="group bg-white rounded-2xl border border-black/5 hover:border-red-300 hover:shadow-xl hover:shadow-red-500/5 transition-all p-5 md:p-6 cursor-pointer">
+                    <div class="absolute -left-[30px] md:-left-[38px] top-5 w-3.5 h-3.5 rounded-full bg-black border-[3px] border-red-500 shadow-md"></div>
+                    <div class="group rounded-2xl border border-white/10 bg-white/[0.03] hover:border-red-400/30 hover:bg-white/[0.06] transition-all p-5 md:p-6 cursor-pointer">
                         <div class="flex items-center gap-3 mb-2">
-                            <span class="text-[11px] font-black text-black/40 tracking-wider">${n.date}</span>
+                            <span class="text-[11px] font-black text-white/40 tracking-wider">${n.date}</span>
                             <span class="text-[10px] px-2 py-0.5 rounded-full font-black ${noticeTagClasses[n.tagColor] || noticeTagClasses.slate}">${n.tag}</span>
                         </div>
-                        <h4 class="text-base md:text-lg font-black text-black group-hover:text-red-600 transition mb-1.5 leading-snug">${n.title}</h4>
-                        <p class="text-sm text-black/55 leading-relaxed">${n.excerpt}</p>
+                        <h4 class="text-base md:text-lg font-black text-white group-hover:text-red-400 transition mb-1.5 leading-snug">${n.title}</h4>
+                        <p class="text-sm text-white/55 leading-relaxed">${n.excerpt}</p>
                     </div>
                 </div>
             `).join('');
@@ -3067,10 +3065,10 @@
             return defaultBoardItems;
         })();
         const boardCatClasses = {
-            emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",
-            blue: "bg-blue-50 text-blue-700 border-blue-200",
-            amber: "bg-amber-50 text-amber-700 border-amber-200",
-            slate: "bg-slate-100 text-slate-700 border-slate-200"
+            emerald: "bg-emerald-500/15 text-emerald-400 border-emerald-400/20",
+            blue: "bg-blue-500/15 text-blue-400 border-blue-400/20",
+            amber: "bg-amber-500/15 text-amber-400 border-amber-400/20",
+            slate: "bg-white/10 text-white/60 border-white/10"
         };
         // Deterministic comment count per post
         boardItems.forEach((p, i) => { p.comments = ((p.num * 7 + 3) % 9) + 1; });
@@ -3094,7 +3092,7 @@
             if (catTabsEl) {
                 catTabsEl.innerHTML = boardCategories.map(c => {
                     const active = c.name === boardFilter;
-                    return `<button onclick="setBoardFilter('${c.name}')" class="px-4 py-1.5 rounded-full text-[12px] font-bold transition ${active ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-white border border-black/10 text-black/70 hover:bg-black/5'}">${c.name} <span class="${active ? 'opacity-70' : 'opacity-50'} ml-1">${c.count}</span></button>`;
+                    return `<button onclick="setBoardFilter('${c.name}')" class="px-4 py-1.5 rounded-full text-[12px] font-bold transition ${active ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'border border-white/10 text-white/60 hover:bg-white/5'}">${c.name} <span class="${active ? 'opacity-70' : 'opacity-50'} ml-1">${c.count}</span></button>`;
                 }).join('');
             }
             // Sort buttons
@@ -3102,9 +3100,9 @@
                 const b = document.getElementById('sort-' + k);
                 if (!b) return;
                 if (k === boardSort) {
-                    b.className = 'px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-black text-white transition';
+                    b.className = 'px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white text-black transition';
                 } else {
-                    b.className = 'px-3.5 py-1.5 rounded-full text-[11px] font-bold text-black/60 hover:text-black transition';
+                    b.className = 'px-3.5 py-1.5 rounded-full text-[11px] font-bold text-white/50 hover:text-white transition';
                 }
             });
 
@@ -3118,29 +3116,29 @@
             const listEl = document.getElementById('board-list');
             if (!listEl) return;
             if (list.length === 0) {
-                listEl.innerHTML = '<div class="py-16 text-center text-black/40 text-sm">검색 결과가 없습니다.</div>';
+                listEl.innerHTML = '<div class="py-16 text-center text-white/40 text-sm">검색 결과가 없습니다.</div>';
                 return;
             }
             listEl.innerHTML = list.map(p => `
-                <div class="grid grid-cols-[50px_1fr_70px] md:grid-cols-[60px_90px_1fr_120px_110px_80px] gap-x-3 px-4 md:px-6 py-4 border-b border-black/5 items-center hover:bg-blue-50/50 cursor-pointer transition group">
-                    <div class="text-[12px] text-black/40 font-mono text-center md:text-left">${p.num}</div>
+                <div class="grid grid-cols-[50px_1fr_70px] md:grid-cols-[60px_90px_1fr_120px_110px_80px] gap-x-3 px-4 md:px-6 py-4 border-b border-white/5 items-center hover:bg-white/[0.04] cursor-pointer transition group">
+                    <div class="text-[12px] text-white/30 font-mono text-center md:text-left">${p.num}</div>
                     <div class="hidden md:block">
                         <span class="inline-block px-2 py-0.5 rounded text-[10px] font-black border ${boardCatClasses[p.catColor]}">${p.cat}</span>
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
                             <span class="md:hidden inline-block px-1.5 py-0.5 rounded text-[9px] font-black border ${boardCatClasses[p.catColor]}">${p.cat}</span>
-                            <span class="text-sm md:text-[15px] font-bold text-black group-hover:text-blue-600 transition truncate">${p.title}</span>
+                            <span class="text-sm md:text-[15px] font-bold text-white group-hover:text-blue-400 transition truncate">${p.title}</span>
                             ${p.isNew ? '<span class="flex-shrink-0 px-1.5 py-0.5 rounded bg-red-500 text-white text-[9px] font-black">NEW</span>' : ''}
-                            <span class="flex-shrink-0 text-[11px] text-blue-500 font-bold">[${p.comments}]</span>
+                            <span class="flex-shrink-0 text-[11px] text-blue-400 font-bold">[${p.comments}]</span>
                         </div>
-                        <div class="md:hidden flex items-center gap-2 mt-1 text-[11px] text-black/40">
+                        <div class="md:hidden flex items-center gap-2 mt-1 text-[11px] text-white/35">
                             <span>${p.author}</span>·<span>${p.date}</span>·<span>조회 ${p.views}</span>
                         </div>
                     </div>
-                    <div class="hidden md:block text-[13px] text-black/60 font-semibold truncate">${p.author}</div>
-                    <div class="hidden md:block text-[12px] text-black/45 font-mono">${p.date}</div>
-                    <div class="text-[12px] text-black/45 text-right font-mono">${p.views.toLocaleString()}</div>
+                    <div class="hidden md:block text-[13px] text-white/50 font-semibold truncate">${p.author}</div>
+                    <div class="hidden md:block text-[12px] text-white/35 font-mono">${p.date}</div>
+                    <div class="text-[12px] text-white/35 text-right font-mono">${p.views.toLocaleString()}</div>
                 </div>
             `).join('');
         }
@@ -3170,7 +3168,7 @@
             archiveGridEl.innerHTML = archiveItems.map(a => {
                 const c = archiveColorMap[a.color] || archiveColorMap.blue;
                 return `
-                    <div class="group bg-white rounded-3xl border border-black/5 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300">
+                    <div class="group rounded-3xl border border-white/10 bg-white/[0.03] overflow-hidden hover:border-emerald-400/30 hover:-translate-y-1 transition-all duration-300">
                         <div class="relative h-36 bg-gradient-to-br ${c.bg} flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 20%, white 2px, transparent 2px); background-size: 24px 24px;"></div>
                             <div class="relative text-center text-white">
@@ -3180,9 +3178,9 @@
                             <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/25 backdrop-blur text-white text-[10px] font-black tracking-wider">${a.category}</div>
                         </div>
                         <div class="p-5">
-                            <h4 class="text-base font-black text-black mb-1.5 leading-snug line-clamp-2 group-hover:text-emerald-600 transition">${a.title}</h4>
-                            <p class="text-[12px] text-black/55 leading-relaxed mb-4 line-clamp-2">${a.desc}</p>
-                            <div class="flex items-center gap-3 text-[10px] text-black/45 font-bold tracking-wide">
+                            <h4 class="text-base font-black text-white mb-1.5 leading-snug line-clamp-2 group-hover:text-emerald-400 transition">${a.title}</h4>
+                            <p class="text-[12px] text-white/50 leading-relaxed mb-4 line-clamp-2">${a.desc}</p>
+                            <div class="flex items-center gap-3 text-[10px] text-white/35 font-bold tracking-wide">
                                 <span>${a.date}</span>
                             </div>
                         </div>
@@ -3264,11 +3262,27 @@
             }
         ];
 
-        // 초기 렌더링
-        document.getElementById('mega-menu-list').innerHTML = productList.map((p, i) => {
-            const clean = p.replace(/^\d+\.\s*/, '').replace(/\(([^)]+)\)/, '<span class="text-black/40 font-medium"> ($1)</span>');
-            return `<button onclick="selectProduct(${i})" class="text-left text-[13px] text-black/80 hover:text-blue-600 py-2 transition-colors truncate font-bold">${clean}</button>`;
-        }).join('');
+        // 초기 렌더링 — 메가메뉴 제품 리스트 (실제 product_lineup 기반)
+        function renderMegaList(filterCats) {
+            const list = filterCats
+                ? ACE_DATA.product_lineup.filter(p => filterCats.includes(p.cat))
+                : ACE_DATA.product_lineup;
+            const titleEl = document.getElementById('mega-list-title');
+            if (titleEl) titleEl.textContent = filterCats ? `FILTERED (${list.length})` : `FULL PRODUCT LIST (${list.length})`;
+            document.getElementById('mega-menu-list').innerHTML = list.map((p, i) => {
+                return `<button onclick="navigate('products');setTimeout(()=>filterProducts('${p.cat.replace(/'/g,"\\'")}'),100)" class="text-left text-[13px] text-black/80 hover:text-blue-600 py-1.5 transition-colors truncate font-bold">${p.name}</button>`;
+            }).join('');
+        }
+        renderMegaList();
+
+        // 메가메뉴 카테고리 호버 시 제품 리스트 필터링
+        window.megaHoverCat = function(cats) {
+            renderMegaList(cats);
+        };
+        // 메가메뉴 영역 나가면 전체 리스트로 복귀
+        document.querySelector('#mega-cat-list')?.closest('.col-span-4')?.addEventListener('mouseleave', function() {
+            renderMegaList();
+        });
 
         // Parts category filter setup
         const partsCats = [...new Set(partsItems.map(p => p.cat))];
@@ -3570,7 +3584,7 @@
             const navbar = document.getElementById('navbar');
             const navLogo = document.getElementById('nav-logo');
             // 라이트 배경 페이지 감지
-            const lightPages = ['page-notice','page-board','page-archive'];
+            const lightPages = [];
             const activePage = document.querySelector('.page.active');
             const isLightPage = activePage && lightPages.includes(activePage.id);
 
