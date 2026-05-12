@@ -783,6 +783,7 @@
                     <p data-cms="t_desc" class="mt-6 text-lg text-black/55 max-w-2xl mx-auto leading-relaxed">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
+                    <p class="mt-4 text-sm font-bold tracking-widest text-blue-500/80 uppercase">"흔들려도 안심, 360° 자유 스윙 후드"</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-black/5 mt-8">
@@ -1025,14 +1026,20 @@
                         ];
                         const ghostAlphas = [0.04, 0.06, 0.08, 0.08, 0.06, 0.04];
                         for(let i = 0; i < ghostAngles.length; i++){
+                            ctx.save();
+                            ctx.translate(ghostAngles[i] / 22 * 35, 0);
                             drawHood(ghostAngles[i], ghostAlphas[i], false);
+                            ctx.restore();
                         }
 
-                        // ── 메인 후드 (실체) ──
+                        // ── 메인 후드 (실체) — 좌우 이동 + 회전 ──
+                        ctx.save();
+                        ctx.translate(Math.sin(time * 0.7) * 35, 0);
                         drawHood(mainSwing, 1.0, true);
+                        ctx.restore();
 
                         // ── 치수 라벨 (dimension annotations) ──
-                        if(isMain !== false){
+                        {
                             ctx.save();
                             ctx.font = 'bold 11px "Pretendard","SF Pro",system-ui,sans-serif';
 
@@ -3613,30 +3620,47 @@
 
         /* ══════════ 사용법 특징 비주얼 캔버스 (YouTube 기반) ══════════ */
         (function initUsageFeatureCanvases(){
+            const canvasInstances = [];
             function setupCanvas(id, drawFn){
                 const c = document.getElementById(id);
                 if(!c) return;
                 const wrap = c.parentElement;
                 const ctx = c.getContext('2d');
-                let W, H, dpr, t=0, running=false;
+                let W=0, H=0, dpr, t=0, running=false, inited=false;
                 function resize(){
                     dpr = window.devicePixelRatio||1;
-                    W = wrap.clientWidth; H = wrap.clientHeight;
+                    const nw = wrap.clientWidth, nh = wrap.clientHeight;
+                    if(nw<1||nh<1) return; // 히든 상태면 스킵
+                    W=nw; H=nh;
                     c.width=W*dpr; c.height=H*dpr;
                     ctx.setTransform(dpr,0,0,dpr,0,0);
+                    inited=true;
                 }
                 resize(); window.addEventListener('resize',resize);
                 function loop(){
+                    if(!inited){ resize(); }
+                    if(W<1||H<1){ running=false; return; }
                     t+=0.015; ctx.clearRect(0,0,W,H);
                     drawFn(ctx,W,H,t);
                     if(running) requestAnimationFrame(loop);
                 }
                 const obs=new IntersectionObserver(e=>{
-                    if(e[0].isIntersecting&&!running){running=true;loop();}
+                    if(e[0].isIntersecting&&!running){resize();running=true;loop();}
                     if(!e[0].isIntersecting){running=false;}
-                },{threshold:0.15});
+                },{threshold:0.05});
                 obs.observe(wrap);
+                canvasInstances.push({resize,wrap,obs,startLoop:function(){if(!running){resize();running=true;loop();}}});
             }
+            // 페이지 전환 시 캔버스 재초기화 트리거
+            window._usageCanvasReactivate = function(){
+                canvasInstances.forEach(function(inst){
+                    inst.resize();
+                    // 화면에 보이면 시작
+                    if(inst.wrap.clientWidth>0 && inst.wrap.clientHeight>0){
+                        inst.startLoop();
+                    }
+                });
+            };
 
             // 공통 배경
             function drawBG(ctx,W,H){
@@ -4899,6 +4923,12 @@
             // 네비바 톤 즉시 재계산
             if (typeof updateNavTone === 'function') updateNavTone();
 
+            // 사용방법 페이지 캔버스 재활성화 (hidden→visible 전환 후 크기 재계산)
+            if (pageId === 'manual' && typeof window._usageCanvasReactivate === 'function') {
+                setTimeout(window._usageCanvasReactivate, 100);
+                setTimeout(window._usageCanvasReactivate, 500);
+            }
+
             // 섹션 스크롤
             if (section) scrollToSection(section);
         }
@@ -4977,28 +5007,28 @@
                 document.getElementById('anim-product').style.transform = `scale(${prodScale}) translateY(${prodY}px)`;
                 document.getElementById('anim-product').style.opacity = prodOpacity;
 
-                // Text 1
-                const t1Opacity = mapRange(progress, 0.3, 0.4, 0, 1) * mapRange(progress, 0.4, 0.5, 1, 0);
-                const t1Y = mapRange(progress, 0.3, 0.5, 50, -50);
+                // Text 1 — 나타난 후 다음 섹션이 올 때까지 유지
+                const t1Opacity = mapRange(progress, 0.25, 0.35, 0, 1) * mapRange(progress, 0.42, 0.5, 1, 0);
+                const t1Y = mapRange(progress, 0.25, 0.35, 40, 0);
                 document.getElementById('anim-text1').style.transform = `translateY(${t1Y}px)`;
                 document.getElementById('anim-text1').style.opacity = t1Opacity;
 
-                // Text 2
-                const t2Opacity = mapRange(progress, 0.45, 0.55, 0, 1) * mapRange(progress, 0.55, 0.65, 1, 0);
-                const t2Y = mapRange(progress, 0.45, 0.65, 50, -50);
+                // Text 2 — 나타난 후 다음 섹션이 올 때까지 유지
+                const t2Opacity = mapRange(progress, 0.45, 0.55, 0, 1) * mapRange(progress, 0.62, 0.7, 1, 0);
+                const t2Y = mapRange(progress, 0.45, 0.55, 40, 0);
                 document.getElementById('anim-text2').style.transform = `translateY(${t2Y}px)`;
                 document.getElementById('anim-text2').style.opacity = t2Opacity;
 
-                // Features
-                const fOpacity = mapRange(progress, 0.6, 0.7, 0, 1) * mapRange(progress, 0.7, 0.8, 1, 0);
-                const fY = mapRange(progress, 0.6, 0.8, 50, -50);
+                // Features — 나타난 후 CTA 올 때까지 유지
+                const fOpacity = mapRange(progress, 0.62, 0.72, 0, 1) * mapRange(progress, 0.82, 0.9, 1, 0);
+                const fY = mapRange(progress, 0.62, 0.72, 40, 0);
                 document.getElementById('anim-features').style.transform = `translateY(${fY}px)`;
                 document.getElementById('anim-features').style.opacity = fOpacity;
                 document.getElementById('anim-features').style.pointerEvents = fOpacity > 0.5 ? 'auto' : 'none';
 
-                // CTA
-                const ctaOpacity = mapRange(progress, 0.8, 0.9, 0, 1);
-                const ctaScale = mapRange(progress, 0.8, 0.9, 0.9, 1);
+                // CTA — 마지막 섹션, 나타나면 계속 유지
+                const ctaOpacity = mapRange(progress, 0.85, 0.95, 0, 1);
+                const ctaScale = mapRange(progress, 0.85, 0.95, 0.9, 1);
                 document.getElementById('anim-cta').style.transform = `scale(${ctaScale})`;
                 document.getElementById('anim-cta').style.opacity = ctaOpacity;
                 document.getElementById('anim-cta').style.pointerEvents = ctaOpacity > 0.5 ? 'auto' : 'none';
