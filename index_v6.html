@@ -790,17 +790,21 @@
                     <div class="relative bg-gradient-to-br from-[#f0f3f8] to-[#dde3ee] min-h-[500px]" id="hood-3d-wrap">
                         <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
                         <!-- Floating labels -->
-                        <div class="absolute top-[8%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">01</div>
-                            <div class="text-[13px] font-black text-gray-800">125Ø · 150Ø 토출</div>
+                        <div class="absolute top-[5%] left-[5%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">150Ø</div>
+                            <div class="text-[13px] font-black text-gray-800">상부 파이프</div>
                         </div>
-                        <div class="absolute top-[38%] right-[8%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 0.8s infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">03</div>
-                            <div class="text-[13px] font-black text-gray-800">F.V.D 방화담퍼</div>
+                        <div class="absolute top-[32%] right-[5%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 0.6s infinite">
+                            <div class="text-[9px] font-bold text-orange-500 tracking-wider">F.V.D</div>
+                            <div class="text-[13px] font-black text-gray-800">방화담퍼</div>
                         </div>
-                        <div class="absolute bottom-[22%] left-[6%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 1.2s infinite">
-                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">04</div>
-                            <div class="text-[13px] font-black text-gray-800">360° 스윙</div>
+                        <div class="absolute bottom-[30%] right-[5%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 1s infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">125Ø</div>
+                            <div class="text-[13px] font-black text-gray-800">하부 파이프</div>
+                        </div>
+                        <div class="absolute bottom-[8%] left-[5%] z-[2] bg-white/90 backdrop-blur rounded-xl px-3.5 py-2 shadow-lg border border-black/5" style="animation:floatLabel 3s ease-in-out 1.4s infinite">
+                            <div class="text-[9px] font-bold text-blue-500 tracking-wider">520Ø</div>
+                            <div class="text-[13px] font-black text-gray-800">나팔캡 기름받이</div>
                         </div>
                     </div>
                     <!-- Right: Feature Detail Text -->
@@ -827,7 +831,7 @@
                     </div>
                 </div>
                 <script>
-                // ── 3D Hood Canvas Animation ──
+                // ── 3D Hood Canvas Animation v2 — Dynamic 360° Swing with Ghost Effect ──
                 (function(){
                     const wrap = document.getElementById('hood-3d-wrap');
                     const canvas = document.getElementById('hood3d-canvas');
@@ -843,107 +847,258 @@
                     resize();
                     window.addEventListener('resize', resize);
                     let time = 0, running = false;
-                    function metalG(x,y,w,h,r,g,b){
-                        const gd=ctx.createLinearGradient(x,y,x,y+h);
-                        gd.addColorStop(0,`rgb(${r+50},${g+50},${b+50})`);
-                        gd.addColorStop(0.2,`rgb(${r+25},${g+25},${b+25})`);
-                        gd.addColorStop(0.5,`rgb(${r},${g},${b})`);
-                        gd.addColorStop(0.8,`rgb(${Math.max(0,r-20)},${Math.max(0,g-20)},${Math.max(0,b-20)})`);
-                        gd.addColorStop(1,`rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)})`);
-                        return gd;
+
+                    // 파이프 색상 팔레트 (다크 브라운/블랙 실제 제품 기반)
+                    const PIPE_DARK = '#2a1f17';
+                    const PIPE_MID  = '#4a3628';
+                    const PIPE_LIGHT= '#6b5443';
+                    const PIPE_HI   = '#8a7260';
+                    const GOLD_DARK = '#8B6914';
+                    const GOLD_MID  = '#C49B2A';
+                    const GOLD_LIGHT= '#E8C44A';
+                    const CEIL_COL  = '#e8e8e8';
+
+                    function pipeGradH(x,w,y,h){
+                        const g=ctx.createLinearGradient(x,y,x+w,y);
+                        g.addColorStop(0,PIPE_DARK); g.addColorStop(0.15,PIPE_MID);
+                        g.addColorStop(0.4,PIPE_LIGHT); g.addColorStop(0.55,PIPE_HI);
+                        g.addColorStop(0.7,PIPE_LIGHT); g.addColorStop(0.9,PIPE_MID);
+                        g.addColorStop(1,PIPE_DARK);
+                        return g;
                     }
+                    function metalRing(x,w,y,h){
+                        const g=ctx.createLinearGradient(x,y,x+w,y);
+                        g.addColorStop(0,'#888'); g.addColorStop(0.3,'#ccc');
+                        g.addColorStop(0.5,'#eee'); g.addColorStop(0.7,'#ccc'); g.addColorStop(1,'#888');
+                        return g;
+                    }
+
+                    // 전체 후드 1체를 그리는 함수 (고스트용 재활용)
+                    function drawHood(swingAngle, alpha, isMain){
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+
+                        // 피봇 포인트 (천장 연결점)
+                        const pivotY = -180;
+
+                        // 상부 파이프 (150Ø) — 천장~피봇
+                        const upLen = 60;
+                        ctx.save();
+                        ctx.fillStyle = pipeGradH(-10, 20, pivotY - upLen, upLen);
+                        ctx.shadowColor = isMain ? 'rgba(0,0,0,0.25)' : 'transparent';
+                        ctx.shadowBlur = isMain ? 8 : 0; ctx.shadowOffsetY = 3;
+                        ctx.beginPath(); ctx.roundRect(-10, pivotY - upLen, 20, upLen, 3); ctx.fill();
+                        // 하이라이트 스트라이프
+                        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+                        ctx.fillRect(-6, pivotY - upLen + 2, 4, upLen - 4);
+                        ctx.restore();
+
+                        // 연결 링 (나사타입 — 실버)
+                        ctx.save();
+                        ctx.fillStyle = metalRing(-14, 28, pivotY - 4, 8);
+                        ctx.beginPath(); ctx.roundRect(-14, pivotY - 4, 28, 8, 4); ctx.fill();
+                        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                        ctx.fillRect(-10, pivotY - 2, 8, 4);
+                        ctx.restore();
+
+                        // ── 스윙되는 하부 전체 ──
+                        ctx.save();
+                        ctx.translate(0, pivotY);
+                        ctx.rotate(swingAngle * Math.PI / 180);
+
+                        // FVD 방화댐퍼 존 (오렌지 링)
+                        const fvdY = 15;
+                        ctx.save();
+                        ctx.shadowColor = isMain ? 'rgba(251,146,60,0.4)' : 'transparent';
+                        ctx.shadowBlur = isMain ? 12 : 0;
+                        const fG = ctx.createLinearGradient(-16, fvdY, 16, fvdY);
+                        fG.addColorStop(0,'#e87c1e'); fG.addColorStop(0.5,'#fdba74'); fG.addColorStop(1,'#e87c1e');
+                        ctx.fillStyle = fG;
+                        ctx.beginPath(); ctx.roundRect(-16, fvdY, 32, 6, 3); ctx.fill();
+                        ctx.restore();
+
+                        // 중간 파이프 (110Ø)
+                        ctx.save();
+                        ctx.fillStyle = pipeGradH(-8, 16, 24, 110);
+                        ctx.shadowColor = isMain ? 'rgba(0,0,0,0.2)' : 'transparent';
+                        ctx.shadowBlur = isMain ? 6 : 0; ctx.shadowOffsetY = 2;
+                        ctx.beginPath(); ctx.roundRect(-8, 24, 16, 110, 2); ctx.fill();
+                        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                        ctx.fillRect(-5, 26, 3, 106);
+                        ctx.restore();
+
+                        // 하부 연결 링
+                        ctx.save();
+                        ctx.fillStyle = metalRing(-12, 24, 132, 8);
+                        ctx.beginPath(); ctx.roundRect(-12, 132, 24, 8, 4); ctx.fill();
+                        ctx.restore();
+
+                        // 하부 파이프 (125Ø)
+                        ctx.save();
+                        ctx.fillStyle = pipeGradH(-9, 18, 140, 100);
+                        ctx.shadowColor = isMain ? 'rgba(0,0,0,0.2)' : 'transparent';
+                        ctx.shadowBlur = isMain ? 6 : 0;
+                        ctx.beginPath(); ctx.roundRect(-9, 140, 18, 100, 2); ctx.fill();
+                        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                        ctx.fillRect(-6, 142, 3, 96);
+                        ctx.restore();
+
+                        // 나팔캡 (520Ø갓 기름받이)
+                        ctx.save();
+                        ctx.shadowColor = isMain ? 'rgba(0,0,0,0.3)' : 'transparent';
+                        ctx.shadowBlur = isMain ? 15 : 0; ctx.shadowOffsetY = isMain ? 5 : 0;
+                        ctx.beginPath();
+                        ctx.moveTo(-12, 240);
+                        ctx.quadraticCurveTo(-55, 275, -62, 305);
+                        ctx.lineTo(62, 305);
+                        ctx.quadraticCurveTo(55, 275, 12, 240);
+                        ctx.closePath();
+                        const capG = ctx.createLinearGradient(-62, 240, 62, 305);
+                        capG.addColorStop(0, '#888'); capG.addColorStop(0.25, '#b8b8b8');
+                        capG.addColorStop(0.5, '#d4d4d4'); capG.addColorStop(0.75, '#b0b0b0');
+                        capG.addColorStop(1, '#787878');
+                        ctx.fillStyle = capG; ctx.fill();
+                        // 캡 하이라이트
+                        ctx.beginPath();
+                        ctx.moveTo(-6, 242);
+                        ctx.quadraticCurveTo(-40, 268, -45, 285);
+                        ctx.lineTo(45, 285);
+                        ctx.quadraticCurveTo(40, 268, 6, 242);
+                        ctx.closePath();
+                        ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fill();
+                        ctx.restore();
+
+                        // 기름받이 그릇 (캡 아래)
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.ellipse(0, 308, 50, 6, 0, 0, Math.PI*2);
+                        const bowlG = ctx.createRadialGradient(0,308,5,0,308,50);
+                        bowlG.addColorStop(0,'#c0c0c0'); bowlG.addColorStop(1,'#888');
+                        ctx.fillStyle = bowlG; ctx.fill();
+                        ctx.restore();
+
+                        ctx.restore(); // 스윙 transform 복원
+                        ctx.restore(); // globalAlpha 복원
+                    }
+
                     function draw(){
-                        time += 0.012;
+                        time += 0.014;
                         ctx.clearRect(0,0,W,H);
+
+                        // 배경 그라디언트
                         const bg = ctx.createLinearGradient(0,0,W,H);
                         bg.addColorStop(0,'#f0f3f8'); bg.addColorStop(1,'#dde3ee');
                         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-                        const cx = W*0.48, cy = H*0.42;
-                        const scale = Math.min(W/600, H/550);
-                        const swing = Math.sin(time*0.8)*3;
+
+                        const cx = W*0.48, cy = H*0.38;
+                        const scale = Math.min(W/520, H/620) * 0.85;
+
+                        // 메인 스윙 각도 (역동적 시계추)
+                        const mainSwing = Math.sin(time * 0.7) * 22;
+
                         ctx.save();
                         ctx.translate(cx, cy);
                         ctx.scale(scale, scale);
-                        ctx.rotate(swing*Math.PI/180);
-                        // 상부 파이프
+
+                        // ── 천장 플레이트 ──
                         ctx.save();
-                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=12; ctx.shadowOffsetY=4;
-                        const pG=ctx.createLinearGradient(-8,-200,8,-200);
-                        pG.addColorStop(0,'#b0b8c4'); pG.addColorStop(0.3,'#d4dae4');
-                        pG.addColorStop(0.5,'#e8ecf2'); pG.addColorStop(0.7,'#d0d8e2'); pG.addColorStop(1,'#a0aab6');
-                        ctx.fillStyle=pG; ctx.beginPath(); ctx.roundRect(-8,-220,16,130,4); ctx.fill();
-                        ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.fillRect(-5,-218,4,126);
+                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=10; ctx.shadowOffsetY=3;
+                        ctx.fillStyle = CEIL_COL;
+                        ctx.beginPath(); ctx.roundRect(-80, -260, 160, 20, 6); ctx.fill();
+                        // 천장 볼트
+                        ctx.fillStyle='#bbb';
+                        ctx.beginPath(); ctx.arc(-55,-250,4,0,Math.PI*2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(55,-250,4,0,Math.PI*2); ctx.fill();
+                        ctx.fillStyle='rgba(255,255,255,0.4)';
+                        ctx.beginPath(); ctx.arc(-56,-251,1.5,0,Math.PI*2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(54,-251,1.5,0,Math.PI*2); ctx.fill();
                         ctx.restore();
-                        // FVD 방화댐퍼
+
+                        // ── 고스트 (잔상) 이펙트 — 여러 이전 위치 ──
+                        const ghostAngles = [
+                            mainSwing * -0.85,
+                            mainSwing * -0.55,
+                            mainSwing * -0.25,
+                            mainSwing * 0.25,
+                            mainSwing * 0.55,
+                            mainSwing * 0.85
+                        ];
+                        const ghostAlphas = [0.04, 0.06, 0.08, 0.08, 0.06, 0.04];
+                        for(let i = 0; i < ghostAngles.length; i++){
+                            drawHood(ghostAngles[i], ghostAlphas[i], false);
+                        }
+
+                        // ── 메인 후드 (실체) ──
+                        drawHood(mainSwing, 1.0, true);
+
+                        // ── 치수 라벨 (dimension annotations) ──
+                        if(isMain !== false){
+                            ctx.save();
+                            ctx.font = 'bold 11px "Pretendard","SF Pro",system-ui,sans-serif';
+
+                            // 150Ø 상부 파이프
+                            ctx.fillStyle = 'rgba(59,130,246,0.85)';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('150Ø', 18, -210);
+                            // 가이드라인
+                            ctx.strokeStyle='rgba(59,130,246,0.3)'; ctx.lineWidth=0.8;
+                            ctx.setLineDash([3,3]);
+                            ctx.beginPath(); ctx.moveTo(12,-210); ctx.lineTo(16,-210); ctx.stroke();
+                            ctx.setLineDash([]);
+
+                            // 1.9m 높이
+                            ctx.save();
+                            ctx.translate(-45, 20);
+                            ctx.fillStyle='rgba(100,100,100,0.6)'; ctx.textAlign='center';
+                            ctx.font='bold 10px "Pretendard",system-ui,sans-serif';
+                            ctx.fillText('1.9m', 0, 0);
+                            // 세로 화살표
+                            ctx.strokeStyle='rgba(100,100,100,0.3)'; ctx.lineWidth=0.7;
+                            ctx.beginPath(); ctx.moveTo(0,-140); ctx.lineTo(0,-10); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(0,10); ctx.lineTo(0,120); ctx.stroke();
+                            ctx.restore();
+
+                            // 520Ø 나팔캡
+                            const capLabelY = 290;
+                            ctx.fillStyle = 'rgba(59,130,246,0.85)';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('520Ø갓', 70, capLabelY);
+                            ctx.strokeStyle='rgba(59,130,246,0.3)'; ctx.lineWidth=0.8;
+                            ctx.setLineDash([3,3]);
+                            ctx.beginPath(); ctx.moveTo(62,capLabelY-3); ctx.lineTo(68,capLabelY-3); ctx.stroke();
+                            ctx.setLineDash([]);
+
+                            ctx.restore();
+                        }
+
+                        // ── 360° 스윙 표시 원호 ──
                         ctx.save();
-                        const fvdY=-95;
-                        ctx.shadowColor='rgba(251,146,60,0.3)'; ctx.shadowBlur=10;
-                        const fG=ctx.createLinearGradient(-100,fvdY,100,fvdY);
-                        fG.addColorStop(0,'#fb923c'); fG.addColorStop(0.5,'#fdba74'); fG.addColorStop(1,'#f97316');
-                        ctx.fillStyle=fG; ctx.beginPath(); ctx.roundRect(-100,fvdY,200,6,3); ctx.fill();
-                        ctx.restore();
-                        // 후드 본체
+                        ctx.strokeStyle = 'rgba(59,130,246,0.2)';
+                        ctx.lineWidth = 1.5;
+                        ctx.setLineDash([6,4]);
+                        ctx.beginPath();
+                        ctx.arc(0, -180, 340, 0.35*Math.PI, 0.65*Math.PI);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        // 화살표 끝
+                        ctx.fillStyle='rgba(59,130,246,0.35)';
                         ctx.save();
-                        ctx.shadowColor='rgba(0,0,0,0.2)'; ctx.shadowBlur=25; ctx.shadowOffsetY=10;
-                        const topW=260, topD=40, hoodH=60, topY=-85;
-                        ctx.beginPath();
-                        ctx.moveTo(-topW/2,topY); ctx.lineTo(topW/2,topY);
-                        ctx.lineTo(topW/2-20,topY-topD); ctx.lineTo(-topW/2+20,topY-topD); ctx.closePath();
-                        const tG=ctx.createLinearGradient(0,topY-topD,0,topY);
-                        tG.addColorStop(0,'#8a9bae'); tG.addColorStop(0.5,'#a0b0c2'); tG.addColorStop(1,'#7a8a9c');
-                        ctx.fillStyle=tG; ctx.fill();
-                        ctx.beginPath();
-                        ctx.moveTo(-topW/2,topY); ctx.lineTo(topW/2,topY);
-                        ctx.lineTo(topW/2+15,topY+hoodH); ctx.lineTo(-topW/2-15,topY+hoodH); ctx.closePath();
-                        const frG=ctx.createLinearGradient(0,topY,0,topY+hoodH);
-                        frG.addColorStop(0,'#5a6778'); frG.addColorStop(0.3,'#6b7a8c');
-                        frG.addColorStop(0.6,'#4a5668'); frG.addColorStop(1,'#3a4555');
-                        ctx.fillStyle=frG; ctx.fill();
-                        ctx.beginPath();
-                        ctx.moveTo(-topW/2+20,topY+5); ctx.lineTo(topW/2-20,topY+5);
-                        ctx.lineTo(topW/2-25,topY+15); ctx.lineTo(-topW/2+25,topY+15); ctx.closePath();
-                        ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fill();
-                        ctx.beginPath();
-                        ctx.moveTo(topW/2,topY); ctx.lineTo(topW/2-20,topY-topD);
-                        ctx.lineTo(topW/2-5,topY+hoodH-topD); ctx.lineTo(topW/2+15,topY+hoodH); ctx.closePath();
-                        ctx.fillStyle='rgba(40,50,60,0.7)'; ctx.fill();
+                        ctx.translate(340*Math.cos(0.63*Math.PI), -180+340*Math.sin(0.63*Math.PI));
+                        ctx.rotate(0.63*Math.PI+Math.PI/2);
+                        ctx.beginPath(); ctx.moveTo(0,-5); ctx.lineTo(4,3); ctx.lineTo(-4,3); ctx.closePath(); ctx.fill();
                         ctx.restore();
-                        // 하부 파이프
-                        const swA=Math.sin(time*0.6)*5;
-                        ctx.save();
-                        ctx.translate(0,topY+hoodH);
-                        ctx.rotate(swA*Math.PI/180);
-                        ctx.fillStyle=metalG(-12,0,24,20,160,170,180);
-                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=8;
-                        ctx.beginPath(); ctx.roundRect(-12,0,24,20,4); ctx.fill();
-                        const lpG=ctx.createLinearGradient(-7,20,7,20);
-                        lpG.addColorStop(0,'#a0aab6'); lpG.addColorStop(0.3,'#ccd4de');
-                        lpG.addColorStop(0.5,'#dde4ee'); lpG.addColorStop(0.7,'#c4ccd8'); lpG.addColorStop(1,'#98a2ae');
-                        ctx.fillStyle=lpG; ctx.shadowColor='rgba(0,0,0,0.12)'; ctx.shadowBlur=6;
-                        ctx.beginPath(); ctx.roundRect(-7,20,14,160,4); ctx.fill();
-                        ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fillRect(-4,22,3,156);
-                        // 나팔캡
-                        ctx.beginPath();
-                        ctx.moveTo(-10,180); ctx.quadraticCurveTo(-40,210,-45,230);
-                        ctx.lineTo(45,230); ctx.quadraticCurveTo(40,210,10,180); ctx.closePath();
-                        const cG=ctx.createLinearGradient(-45,180,45,230);
-                        cG.addColorStop(0,'#c0c8d4'); cG.addColorStop(0.5,'#9aa4b0'); cG.addColorStop(1,'#7a8490');
-                        ctx.fillStyle=cG; ctx.shadowColor='rgba(0,0,0,0.18)'; ctx.shadowBlur=10; ctx.fill();
-                        ctx.beginPath();
-                        ctx.moveTo(-5,182); ctx.quadraticCurveTo(-30,200,-32,210);
-                        ctx.lineTo(32,210); ctx.quadraticCurveTo(30,200,5,182); ctx.closePath();
-                        ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fill();
+                        // 360° 텍스트
+                        ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
+                        ctx.fillStyle='rgba(59,130,246,0.45)';
+                        ctx.textAlign='center';
+                        ctx.fillText('360° SWING', 0, -180 + 340*Math.sin(0.5*Math.PI) + 18);
                         ctx.restore();
-                        ctx.restore();
-                        // 스톱바
-                        const sbX=cx-160*scale, sbY=cy+30*scale;
-                        ctx.save();
-                        ctx.fillStyle=metalG(sbX,sbY,30*scale,5*scale,200,160,60);
-                        ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=6;
-                        ctx.beginPath(); ctx.roundRect(sbX,sbY,30*scale,5*scale,2); ctx.fill();
-                        ctx.restore();
+
+                        ctx.restore(); // 전체 transform 복원
+
                         if(running) requestAnimationFrame(draw);
                     }
+
                     const obs = new IntersectionObserver((e) => {
                         if(e[0].isIntersecting && !running){ running=true; draw(); }
                         if(!e[0].isIntersecting){ running=false; }
@@ -1582,13 +1737,127 @@
 
         <!-- 5. MANUAL 페이지 -->
         <div id="page-manual" class="page min-h-screen pt-24 pb-12">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-16 text-center">
                     <h1 data-cms="m_title" class="text-4xl md:text-6xl font-bold tracking-tighter mb-6">사용방법</h1>
                     <p data-cms="m_desc" class="text-xl text-gray-400">유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.</p>
                 </div>
+
+                <!-- ★ 제품 사용 특징 비주얼 가이드 (YouTube 기반) -->
+                <div class="mb-20">
+                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-4">PRODUCT FEATURES · VIDEO GUIDE</div>
+                    <h2 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-white leading-tight">
+                        유성에이스 후드,<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">5가지 핵심 특징.</span>
+                    </h2>
+                    <p class="text-sm text-white/50 mb-10">유성에이스 공식 영상에서 확인할 수 있는 제품의 차별화 포인트를 시각 가이드로 정리했습니다.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="usage-features-grid">
+                        <!-- 1. 기름유도장치 -->
+                        <div class="group relative bg-gradient-to-br from-[#0e1117] to-[#0a0c12] rounded-2xl border border-white/5 overflow-hidden hover:border-blue-400/20 transition-all">
+                            <div class="relative h-52 overflow-hidden">
+                                <canvas id="usage-canvas-oil" class="w-full h-full"></canvas>
+                                <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">01</div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-black text-white mb-1.5">기름유도장치 (기름받이속)</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed">사용 중에 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.</p>
+                                <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                                    기름 흘림 ZERO
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 무소음 설계 -->
+                        <div class="group relative bg-gradient-to-br from-[#0e1117] to-[#0a0c12] rounded-2xl border border-white/5 overflow-hidden hover:border-blue-400/20 transition-all">
+                            <div class="relative h-52 overflow-hidden">
+                                <canvas id="usage-canvas-silent" class="w-full h-full"></canvas>
+                                <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">02</div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-black text-white mb-1.5">무소음 흡입 설계</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed">흡입구 공기압이 강해도 휘파람 소리가 나지 않습니다. 정밀한 에어플로우 설계로 매장 내 쾌적한 환경을 유지합니다.</p>
+                                <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                                    소음 없는 강력 흡입
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 나사타입 분리 -->
+                        <div class="group relative bg-gradient-to-br from-[#0e1117] to-[#0a0c12] rounded-2xl border border-white/5 overflow-hidden hover:border-blue-400/20 transition-all">
+                            <div class="relative h-52 overflow-hidden">
+                                <canvas id="usage-canvas-screw" class="w-full h-full"></canvas>
+                                <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">03</div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-black text-white mb-1.5">나사타입 간편 분리</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed">상하부를 연결하는 파이프링이 나사타입으로 조립되어 분리가 쉬우며, 누구나 손쉽게 내부청소가 가능합니다.</p>
+                                <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                                    도구 없이 손쉬운 분리
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. 유지망필터 -->
+                        <div class="group relative bg-gradient-to-br from-[#0e1117] to-[#0a0c12] rounded-2xl border border-white/5 overflow-hidden hover:border-blue-400/20 transition-all">
+                            <div class="relative h-52 overflow-hidden">
+                                <canvas id="usage-canvas-filter" class="w-full h-full"></canvas>
+                                <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">04</div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-black text-white mb-1.5">유지망필터</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed">기름을 여과하여 모터 및 덕트 내부를 청결하게 합니다. 모터 수명을 오래 유지하고, 화재를 예방하는 이중 효과가 있습니다.</p>
+                                <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                                    모터수명 연장 + 화재예방
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. 360° 스윙 (풀와이드) -->
+                        <div class="md:col-span-2 group relative bg-gradient-to-br from-[#0e1117] to-[#0a0c12] rounded-2xl border border-white/5 overflow-hidden hover:border-blue-400/20 transition-all">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                                <div class="relative h-60 overflow-hidden">
+                                    <canvas id="usage-canvas-swing" class="w-full h-full"></canvas>
+                                    <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">05</div>
+                                </div>
+                                <div class="p-6 md:p-8 flex flex-col justify-center">
+                                    <h3 class="text-xl font-black text-white mb-2">360° 자유 스윙</h3>
+                                    <p class="text-[13px] text-white/50 leading-relaxed mb-4">파이프가 고정되어 있지 않고 자유롭게 스윙(swing)되어 편리합니다. 시계추처럼 부드럽게 회전하여 부러질 염려가 전혀 없으며, 테이블 기준으로 어느 방향이든 자유롭게 움직입니다.</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-[11px] font-bold text-blue-300">파이프 파손 ZERO</div>
+                                        <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-[11px] font-bold text-blue-300">360° 회전</div>
+                                        <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-[11px] font-bold text-blue-300">시계추 원리</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 영상 참조 링크 -->
+                    <div class="mt-8 text-center">
+                        <a href="https://www.youtube.com/watch?v=VNgsryiCnQY" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-500/10 border border-red-400/20 text-red-300 text-sm font-bold hover:bg-red-500/20 transition-colors">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><polygon fill="#fff" points="9.545,15.568 15.818,12 9.545,8.432"/></svg>
+                            유성에이스 공식 영상 보기
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 구분선 -->
+                <div class="relative mb-16">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-[#07070a] px-6 text-[11px] font-bold tracking-[0.32em] text-white/30">MAINTENANCE GUIDE</span>
+                    </div>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
                 <div id="manual-list" class="space-y-12">
                     <!-- JS로 채워짐 -->
+                </div>
                 </div>
             </div>
         </div>
@@ -3341,6 +3610,407 @@
                 <svg class="group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>`
         ).join('');
+
+        /* ══════════ 사용법 특징 비주얼 캔버스 (YouTube 기반) ══════════ */
+        (function initUsageFeatureCanvases(){
+            function setupCanvas(id, drawFn){
+                const c = document.getElementById(id);
+                if(!c) return;
+                const wrap = c.parentElement;
+                const ctx = c.getContext('2d');
+                let W, H, dpr, t=0, running=false;
+                function resize(){
+                    dpr = window.devicePixelRatio||1;
+                    W = wrap.clientWidth; H = wrap.clientHeight;
+                    c.width=W*dpr; c.height=H*dpr;
+                    ctx.setTransform(dpr,0,0,dpr,0,0);
+                }
+                resize(); window.addEventListener('resize',resize);
+                function loop(){
+                    t+=0.015; ctx.clearRect(0,0,W,H);
+                    drawFn(ctx,W,H,t);
+                    if(running) requestAnimationFrame(loop);
+                }
+                const obs=new IntersectionObserver(e=>{
+                    if(e[0].isIntersecting&&!running){running=true;loop();}
+                    if(!e[0].isIntersecting){running=false;}
+                },{threshold:0.15});
+                obs.observe(wrap);
+            }
+
+            // 공통 배경
+            function drawBG(ctx,W,H){
+                const bg=ctx.createLinearGradient(0,0,W,H);
+                bg.addColorStop(0,'#0e1117'); bg.addColorStop(1,'#0a0c12');
+                ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+            }
+            // 파이프 그라디언트 (가로 방향 — 원통형 효과)
+            function pipeG(ctx,x,w,dark,light){
+                const g=ctx.createLinearGradient(x,0,x+w,0);
+                g.addColorStop(0,dark); g.addColorStop(0.2,light);
+                g.addColorStop(0.45,'#e8d5a0'); g.addColorStop(0.55,'#e8d5a0');
+                g.addColorStop(0.8,light); g.addColorStop(1,dark);
+                return g;
+            }
+
+            // ─── 01: 기름유도장치 ───
+            setupCanvas('usage-canvas-oil', function(ctx,W,H,t){
+                drawBG(ctx,W,H);
+                const cx=W*0.35, scale=Math.min(W/300,H/220);
+                ctx.save(); ctx.translate(cx,H*0.1); ctx.scale(scale,scale);
+
+                // 파이프
+                ctx.fillStyle=pipeG(ctx,-12,24,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-12,0,24,140,3); ctx.fill();
+                // 하이라이트
+                ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.fillRect(-8,2,5,136);
+
+                // 나팔캡
+                ctx.beginPath();
+                ctx.moveTo(-14,140); ctx.quadraticCurveTo(-50,170,-55,190);
+                ctx.lineTo(55,190); ctx.quadraticCurveTo(50,170,14,140); ctx.closePath();
+                const cg=ctx.createLinearGradient(-55,140,55,190);
+                cg.addColorStop(0,'#777'); cg.addColorStop(0.5,'#bbb'); cg.addColorStop(1,'#777');
+                ctx.fillStyle=cg; ctx.fill();
+
+                // 기름받이 (그릇 모양)
+                ctx.beginPath();
+                ctx.ellipse(0,195,42,8,0,0,Math.PI);
+                ctx.lineTo(-42,195); ctx.closePath();
+                ctx.fillStyle='#555'; ctx.fill();
+                ctx.beginPath(); ctx.ellipse(0,195,42,8,0,0,Math.PI*2);
+                const bowlG=ctx.createRadialGradient(0,195,5,0,195,42);
+                bowlG.addColorStop(0,'#c0c0c0'); bowlG.addColorStop(1,'#666');
+                ctx.fillStyle=bowlG; ctx.fill();
+
+                // 기름 방울 (떨어지지 않는 것을 보여줌 — X 표시)
+                const dropY = 120 + Math.sin(t*2)*5;
+                ctx.save();
+                ctx.globalAlpha=0.4;
+                ctx.fillStyle='#e8a030';
+                ctx.beginPath();
+                ctx.moveTo(30,dropY); ctx.quadraticCurveTo(30,dropY+12,36,dropY+16);
+                ctx.quadraticCurveTo(42,dropY+12,42,dropY); ctx.quadraticCurveTo(36,dropY-5,30,dropY);
+                ctx.fill();
+                // X 표시
+                ctx.strokeStyle='#ff4444'; ctx.lineWidth=2.5;
+                ctx.beginPath(); ctx.moveTo(28,dropY-5); ctx.lineTo(46,dropY+20); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(46,dropY-5); ctx.lineTo(28,dropY+20); ctx.stroke();
+                ctx.restore();
+
+                ctx.restore();
+
+                // 라벨
+                ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(52,211,153,0.7)'; ctx.textAlign='left';
+                ctx.fillText('기름 흘림 없음 ✓',W*0.58,H*0.4);
+                ctx.font='10px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.3)';
+                ctx.fillText('일체형 성형 구조',W*0.58,H*0.55);
+            });
+
+            // ─── 02: 무소음 흡입 ───
+            setupCanvas('usage-canvas-silent', function(ctx,W,H,t){
+                drawBG(ctx,W,H);
+                const cx=W*0.4, cy=H*0.5;
+
+                // 후드 단면 (흡입구)
+                ctx.save(); ctx.translate(cx,cy);
+                const s=Math.min(W/300,H/220);
+                ctx.scale(s,s);
+
+                // 파이프 상단
+                ctx.fillStyle=pipeG(ctx,-10,20,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-10,-80,20,80,3); ctx.fill();
+
+                // 나팔 흡입구
+                ctx.beginPath();
+                ctx.moveTo(-12,0); ctx.quadraticCurveTo(-45,25,-50,45);
+                ctx.lineTo(50,45); ctx.quadraticCurveTo(45,25,12,0); ctx.closePath();
+                const ng=ctx.createLinearGradient(-50,0,50,45);
+                ng.addColorStop(0,'#888'); ng.addColorStop(0.5,'#bbb'); ng.addColorStop(1,'#888');
+                ctx.fillStyle=ng; ctx.fill();
+
+                // 공기 흐름 화살표 (부드러운 곡선)
+                for(let i=0;i<5;i++){
+                    const phase = t*1.5 + i*1.2;
+                    const progress = (phase%3)/3;
+                    const alpha = progress<0.5?progress*2:(1-progress)*2;
+                    ctx.save();
+                    ctx.globalAlpha=alpha*0.3;
+                    ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1.5;
+                    const startX = -30+i*15;
+                    const startY = 60 - progress*100;
+                    ctx.beginPath();
+                    ctx.moveTo(startX,startY+20);
+                    ctx.quadraticCurveTo(startX-5,startY+10,startX,startY);
+                    ctx.stroke();
+                    // 화살표 끝
+                    ctx.beginPath(); ctx.moveTo(startX-3,startY+6); ctx.lineTo(startX,startY); ctx.lineTo(startX+3,startY+6); ctx.stroke();
+                    ctx.restore();
+                }
+                ctx.restore();
+
+                // "음소거" 아이콘
+                ctx.save();
+                ctx.translate(W*0.72,H*0.35);
+                ctx.strokeStyle='rgba(52,211,153,0.6)'; ctx.lineWidth=2;
+                // 스피커 모양
+                ctx.beginPath();
+                ctx.moveTo(0,0); ctx.lineTo(-8,-6); ctx.lineTo(-14,-6);
+                ctx.lineTo(-14,6); ctx.lineTo(-8,6); ctx.lineTo(0,0); ctx.closePath();
+                ctx.stroke();
+                // X 라인 (음소거)
+                ctx.beginPath(); ctx.moveTo(5,-5); ctx.lineTo(12,5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(12,-5); ctx.lineTo(5,5); ctx.stroke();
+                ctx.restore();
+
+                ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(52,211,153,0.7)'; ctx.textAlign='left';
+                ctx.fillText('휘파람 소리 ZERO',W*0.6,H*0.55);
+                ctx.font='10px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.3)';
+                ctx.fillText('정밀 에어플로우 설계',W*0.6,H*0.68);
+            });
+
+            // ─── 03: 나사타입 분리 ───
+            setupCanvas('usage-canvas-screw', function(ctx,W,H,t){
+                drawBG(ctx,W,H);
+                const cx=W*0.38, cy=H*0.5;
+                const s=Math.min(W/300,H/220);
+                ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
+
+                // 상부 파이프
+                ctx.fillStyle=pipeG(ctx,-11,22,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-11,-70,22,70,3); ctx.fill();
+
+                // 나사 연결 링 (분리 애니메이션)
+                const sep = Math.sin(t*0.8)*0.5+0.5; // 0~1
+                const sepDist = sep*15;
+
+                // 링 상부
+                ctx.save();
+                ctx.translate(0, -sepDist/2);
+                const rg1=ctx.createLinearGradient(-16,0,16,0);
+                rg1.addColorStop(0,'#777'); rg1.addColorStop(0.5,'#ddd'); rg1.addColorStop(1,'#777');
+                ctx.fillStyle=rg1;
+                ctx.beginPath(); ctx.roundRect(-16,-4,32,8,4); ctx.fill();
+                // 나사선 표시
+                ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=0.8;
+                for(let i=0;i<3;i++){
+                    ctx.beginPath(); ctx.moveTo(-14+i*10,-2); ctx.lineTo(-10+i*10,2); ctx.stroke();
+                }
+                ctx.restore();
+
+                // 링 하부
+                ctx.save();
+                ctx.translate(0, sepDist/2);
+                ctx.fillStyle=rg1;
+                ctx.beginPath(); ctx.roundRect(-16,4,32,8,4); ctx.fill();
+                ctx.restore();
+
+                // 하부 파이프
+                ctx.save();
+                ctx.translate(0, sepDist);
+                ctx.fillStyle=pipeG(ctx,-11,22,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-11,12,22,70,3); ctx.fill();
+                ctx.restore();
+
+                // 회전 화살표
+                if(sep>0.3){
+                    ctx.save();
+                    ctx.globalAlpha=sep*0.5;
+                    ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1.5;
+                    ctx.beginPath();
+                    ctx.arc(0,6,25,-0.5*Math.PI,0.8*Math.PI);
+                    ctx.stroke();
+                    // 화살표 끝
+                    const ax=25*Math.cos(0.8*Math.PI), ay=6+25*Math.sin(0.8*Math.PI);
+                    ctx.beginPath(); ctx.moveTo(ax-4,ay-3); ctx.lineTo(ax,ay); ctx.lineTo(ax+4,ay-1); ctx.stroke();
+                    ctx.restore();
+                }
+
+                ctx.restore();
+
+                ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(96,165,250,0.7)'; ctx.textAlign='left';
+                ctx.fillText('나사타입 조립',W*0.6,H*0.35);
+                ctx.font='10px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.3)';
+                ctx.fillText('반시계 회전 → 분리',W*0.6,H*0.48);
+                ctx.fillText('시계 회전 → 체결',W*0.6,H*0.6);
+            });
+
+            // ─── 04: 유지망필터 ───
+            setupCanvas('usage-canvas-filter', function(ctx,W,H,t){
+                drawBG(ctx,W,H);
+                const cx=W*0.38, cy=H*0.48;
+                const s=Math.min(W/300,H/220);
+                ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
+
+                // 필터 본체 (원형 메쉬)
+                ctx.save();
+                ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=15; ctx.shadowOffsetY=5;
+                // 본체 원통
+                ctx.beginPath();
+                ctx.roundRect(-50,-35,100,70,8);
+                const fg=ctx.createLinearGradient(-50,-35,50,35);
+                fg.addColorStop(0,'#555'); fg.addColorStop(0.3,'#999');
+                fg.addColorStop(0.5,'#bbb'); fg.addColorStop(0.7,'#999'); fg.addColorStop(1,'#555');
+                ctx.fillStyle=fg; ctx.fill();
+                ctx.restore();
+
+                // 메쉬 패턴
+                ctx.save();
+                ctx.globalAlpha=0.3;
+                ctx.strokeStyle='#444'; ctx.lineWidth=0.5;
+                for(let i=-4;i<=4;i++){
+                    ctx.beginPath(); ctx.moveTo(-45,i*7); ctx.lineTo(45,i*7); ctx.stroke();
+                }
+                for(let i=-6;i<=6;i++){
+                    ctx.beginPath(); ctx.moveTo(i*7,-30); ctx.lineTo(i*7,30); ctx.stroke();
+                }
+                ctx.restore();
+
+                // 손잡이
+                ctx.fillStyle='#666';
+                ctx.beginPath(); ctx.roundRect(-8,-50,16,18,4); ctx.fill();
+
+                // 기름 입자가 필터에 걸리는 애니메이션
+                for(let i=0;i<8;i++){
+                    const phase = (t*1.2+i*0.8)%4;
+                    const px = -35+i*10;
+                    const py = -65+phase*20;
+                    if(py<-35){
+                        ctx.save();
+                        ctx.globalAlpha=0.5;
+                        ctx.fillStyle='#e8a030';
+                        ctx.beginPath(); ctx.arc(px,py,2.5,0,Math.PI*2); ctx.fill();
+                        ctx.restore();
+                    }
+                }
+                // 필터 아래: 깨끗한 공기
+                for(let i=0;i<5;i++){
+                    const phase=(t*1.5+i*1)%3;
+                    const px=-20+i*10;
+                    const py=40+phase*15;
+                    ctx.save();
+                    ctx.globalAlpha=(1-phase/3)*0.25;
+                    ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1;
+                    ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+8); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px-2,py+5); ctx.lineTo(px,py+8); ctx.lineTo(px+2,py+5); ctx.stroke();
+                    ctx.restore();
+                }
+
+                ctx.restore();
+
+                // 라벨
+                ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(251,191,36,0.7)'; ctx.textAlign='left';
+                ctx.fillText('기름 여과',W*0.62,H*0.3);
+                ctx.font='10px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.3)';
+                ctx.fillText('모터 보호 + 화재예방',W*0.62,H*0.43);
+                // 아이콘: 화재예방
+                ctx.save();
+                ctx.translate(W*0.65,H*0.6);
+                ctx.fillStyle='rgba(239,68,68,0.4)';
+                ctx.beginPath();
+                ctx.moveTo(0,-8); ctx.quadraticCurveTo(6,-3,5,3);
+                ctx.quadraticCurveTo(3,0,0,5); ctx.quadraticCurveTo(-3,0,-5,3);
+                ctx.quadraticCurveTo(-6,-3,0,-8); ctx.fill();
+                ctx.restore();
+                ctx.font='9px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(239,68,68,0.4)';
+                ctx.fillText('화재예방',W*0.69,H*0.63);
+            });
+
+            // ─── 05: 360° 자유 스윙 ───
+            setupCanvas('usage-canvas-swing', function(ctx,W,H,t){
+                drawBG(ctx,W,H);
+                const cx=W*0.5, cy=H*0.15;
+                const s=Math.min(W/350,H/280)*0.9;
+                ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
+
+                // 천장
+                ctx.fillStyle='#333';
+                ctx.beginPath(); ctx.roundRect(-80,-10,160,12,4); ctx.fill();
+                ctx.fillStyle='#555';
+                ctx.beginPath(); ctx.roundRect(-80,-10,160,4,2); ctx.fill();
+
+                // 피봇
+                const pivotY=2;
+
+                // 상부 고정 파이프
+                ctx.fillStyle=pipeG(ctx,-8,16,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-8,pivotY,16,30,2); ctx.fill();
+
+                // 스윙 각도
+                const swing=Math.sin(t*0.6)*28;
+
+                // 고스트 효과
+                const ghosts=[swing*-0.7,swing*-0.35,swing*0.35,swing*0.7];
+                ghosts.forEach(function(angle,gi){
+                    ctx.save();
+                    ctx.globalAlpha=0.08;
+                    ctx.translate(0,pivotY+30);
+                    ctx.rotate(angle*Math.PI/180);
+                    // 파이프
+                    ctx.fillStyle='#C49B2A';
+                    ctx.beginPath(); ctx.roundRect(-7,0,14,160,2); ctx.fill();
+                    // 나팔캡
+                    ctx.beginPath();
+                    ctx.moveTo(-10,160); ctx.quadraticCurveTo(-40,185,-45,200);
+                    ctx.lineTo(45,200); ctx.quadraticCurveTo(40,185,10,160); ctx.closePath();
+                    ctx.fillStyle='#999'; ctx.fill();
+                    ctx.restore();
+                });
+
+                // 메인 스윙 파이프
+                ctx.save();
+                ctx.translate(0,pivotY+30);
+                ctx.rotate(swing*Math.PI/180);
+
+                // 연결 링
+                const rg2=ctx.createLinearGradient(-12,0,12,0);
+                rg2.addColorStop(0,'#666'); rg2.addColorStop(0.5,'#bbb'); rg2.addColorStop(1,'#666');
+                ctx.fillStyle=rg2;
+                ctx.beginPath(); ctx.roundRect(-12,-3,24,8,4); ctx.fill();
+
+                // 하부 파이프
+                ctx.fillStyle=pipeG(ctx,-7,14,'#8B6914','#C49B2A');
+                ctx.beginPath(); ctx.roundRect(-7,5,14,155,2); ctx.fill();
+                ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.fillRect(-4,7,3,151);
+
+                // 나팔캡
+                ctx.beginPath();
+                ctx.moveTo(-10,160); ctx.quadraticCurveTo(-42,186,-48,205);
+                ctx.lineTo(48,205); ctx.quadraticCurveTo(42,186,10,160); ctx.closePath();
+                const capg=ctx.createLinearGradient(-48,160,48,205);
+                capg.addColorStop(0,'#777'); capg.addColorStop(0.5,'#bbb'); capg.addColorStop(1,'#777');
+                ctx.fillStyle=capg; ctx.fill();
+
+                ctx.restore();
+
+                // 스윙 호
+                ctx.save();
+                ctx.strokeStyle='rgba(96,165,250,0.2)'; ctx.lineWidth=1;
+                ctx.setLineDash([4,3]);
+                ctx.beginPath();
+                ctx.arc(0,pivotY+30,220,0.3*Math.PI,0.7*Math.PI);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+
+                // 360° 텍스트
+                ctx.font='bold 10px "Pretendard",system-ui,sans-serif';
+                ctx.fillStyle='rgba(96,165,250,0.5)';
+                ctx.textAlign='center';
+                ctx.fillText('360°',0,pivotY+265);
+
+                ctx.restore();
+            });
+        })();
 
         const manualIcons = {
             gear: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/><circle cx="12" cy="12" r="4"/></svg>',
