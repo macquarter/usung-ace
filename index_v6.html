@@ -2329,7 +2329,7 @@
                 return { cat: c, count: items.length, sample: items[0] };
             });
             lineupGridEl.innerHTML = catSummary.map((s, i) => `
-                <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.05] hover:border-blue-400/30 transition group cursor-pointer" onclick="navigateTo('products');filterProducts('${s.cat}')">
+                <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.05] hover:border-blue-400/30 transition group cursor-pointer" onclick="navigate('products');setTimeout(()=>filterProducts('${s.cat}'),100)">
                     <div class="flex items-start justify-between mb-2">
                         <div class="w-12 h-12 rounded-xl overflow-hidden bg-[#0a0e18] border border-white/5">
                             <img src="${s.sample.img}" alt="${s.cat}" loading="lazy" class="w-full h-full object-contain p-1" />
@@ -2372,7 +2372,7 @@
                 productFilterEl.innerHTML = categories.map(c => {
                     const count = c === "전체" ? ACE_DATA.product_lineup.length : ACE_DATA.product_lineup.filter(p => p.cat === c).length;
                     const active = c === activeCat;
-                    const col = catColor2[c] || catColor2['기본'];
+                    const col = catColor2[c] || { text:"text-white/70", bg:"bg-white/5", border:"border-white/15", hex:"#94a3b8" };
                     return `<button onclick="filterProducts('${c}')" class="px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition border ${active ? 'bg-white text-black border-white' : `${col.text} ${col.bg} ${col.border} hover:bg-white/10`}">
                         ${c} <span class="opacity-60 ml-1">${count}</span>
                     </button>`;
