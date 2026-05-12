@@ -232,6 +232,33 @@
         .anim-split-l    { animation: split-x-rev 3s ease-in-out infinite; }
         .anim-split-r    { animation: split-x 3s ease-in-out infinite; }
 
+        /* Scroll indicator (mouse wheel animation) */
+        .scroll-mouse {
+            width: 26px; height: 42px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-radius: 13px;
+            position: relative;
+        }
+        .scroll-wheel {
+            width: 4px; height: 8px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 2px;
+            position: absolute;
+            left: 50%; transform: translateX(-50%);
+            top: 8px;
+            animation: scroll-wheel-anim 2s ease-in-out infinite;
+        }
+        @keyframes scroll-wheel-anim {
+            0%   { top: 8px; opacity: 1; }
+            50%  { top: 22px; opacity: 0.2; }
+            100% { top: 8px; opacity: 1; }
+        }
+        #scroll-indicator { animation: scroll-fade-bounce 2.5s ease-in-out infinite; }
+        @keyframes scroll-fade-bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50%      { transform: translate(-50%, 6px); }
+        }
+
         .ring-pulse::before, .ring-pulse::after {
             content:''; position:absolute; inset:0; border-radius:9999px;
             border:2px solid rgba(59,130,246,.45);
@@ -743,6 +770,14 @@
                         <button onclick="navigate('products')" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform">제품 라인업 보기</button>
                         <button onclick="navigate('about','inquiry-section')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">견적 문의</button>
                     </div>
+                </div>
+
+                <!-- Scroll Down Indicator (animated mouse wheel) -->
+                <div id="scroll-indicator" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 cursor-pointer transition-opacity duration-700" onclick="window.scrollBy({top:window.innerHeight,behavior:'smooth'})">
+                    <div class="scroll-mouse">
+                        <div class="scroll-wheel"></div>
+                    </div>
+                    <span class="text-[10px] font-bold tracking-[0.25em] text-white/40 uppercase">Scroll</span>
                 </div>
             </div>
         </div>
@@ -2258,454 +2293,454 @@
         // ================================================================
         const galleryItems = [
             {
-                url: "https://usungace.com/data/file/sub51/thumb-1889624440_PFQwhvNH_85166b7ea85b1d5fa3241c778c1c111c63b7ee71_230x180.jpg",
-                title: "450Ø 우주선",
-                category: "우주선 후드", code: "SPACE-450",
-                desc: "지름 450mm의 원형 우주선형 후드. 넓은 화로 면적을 균일하게 커버하며, 중앙 포인트 조명이 테이블 전체를 환하게 비춥니다. 천정 노출 시공 시 인테리어 포인트가 되는 대표 제품입니다.",
-                features: ["450Ø 대형 원형 갓", "센터 LED 조명 내장", "F.V.D 방화담파", "360° 스윙 파이프", "분리 청소 가능"],
-                specs: { "직경": "450mm", "토출구": "125Ø / 150Ø", "조명": "LED", "재질": "스텐/도금", "적용 화로": "원형 대형" },
-                tags: ["대형매장", "비주얼 포인트", "중앙조명"]
+                url: "gallery/g01.jpg",
+                title: "시공 현장 01",
+                category: "시공갤러리", code: "SITE-01",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-1889624440_VG2Bxnbp_9f0a76cc66bf479ff5953b38399f0991bd7ab7d0_230x180.jpg",
-                title: "600Ø 우주선",
-                category: "우주선 후드", code: "SPACE-600",
-                desc: "지름 600mm 초대형 우주선 후드. 숯불·직화 특화 대형 매장과 프리미엄 다이닝에서 선호하는 제품으로, 넓은 커버리지와 강력한 흡입력을 자랑합니다.",
-                features: ["600Ø 초대형 갓", "고출력 흡입", "F.V.D 방화담파", "360° 스윙", "안전 브레이크 시스템"],
-                specs: { "직경": "600mm", "토출구": "150Ø", "조명": "LED / 할로겐", "재질": "스텐/도금", "적용": "숯불·직화 대형" },
-                tags: ["프리미엄", "대형 화로", "숯불 전문"]
+                url: "gallery/g02.jpg",
+                title: "시공 현장 02",
+                category: "시공갤러리", code: "SITE-02",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-1889624440_eWpgAyDb_40664657439e85eb9f7f8426f0095d4c87943b19_230x180.jpg",
-                title: "아크릴등",
-                category: "등제품", code: "LIGHT-ACRYL",
-                desc: "아크릴 디퓨저를 통한 부드러운 확산광 타입. 직접 광원이 손님에게 노출되지 않아 눈이 편안하고, 깔끔한 매장 분위기를 만듭니다. 삼파장·LED 모두 호환.",
-                features: ["아크릴 확산 디퓨저", "삼파장 / LED 호환", "스윙텐션 장착", "F.V.D 방화담파"],
-                specs: { "광원": "삼파장 / LED", "확산재": "아크릴", "갓 타입": "원형", "연결": "스윙텐션" },
-                tags: ["무드등", "확산광", "카페형 매장"]
+                url: "gallery/g03.jpg",
+                title: "시공 현장 03",
+                category: "시공갤러리", code: "SITE-03",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_u3ZJEwaH_e9775f4901836c9fe908b5bf9b51864e56962197_230x180.jpg",
-                title: "외부태엽B",
-                category: "외부태엽", code: "SPRING-EXT-B",
-                desc: "후드 외부에 노출된 B타입 태엽 감속기. 위아래 텐션을 부드럽게 조절하며, 와이어 장력을 장기간 안정적으로 유지합니다. 교체·유지보수가 쉬운 구조입니다.",
-                features: ["외부 노출형 태엽", "사각부 피스 4개 구조", "와이어 장력 안정화", "손쉬운 교체"],
-                specs: { "타입": "B (표준)", "위치": "외부 노출", "구조": "사각 피스 ×4", "호환": "전 갤럭시" },
-                tags: ["부품", "유지보수", "교체용"]
+                url: "gallery/g04.jpg",
+                title: "시공 현장 04",
+                category: "시공갤러리", code: "SITE-04",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_LzDbV3Te_3dcf67ea978721c68528ed765943166ef66ad807_230x180.jpg",
-                title: "외부태엽A",
-                category: "외부태엽", code: "SPRING-EXT-A",
-                desc: "외부 태엽 A타입. 고하중 후드에 최적화된 강화 스프링 구조로, 대형 갓이나 스텐 후드에 주로 적용됩니다.",
-                features: ["강화 스프링", "고하중 대응", "와이어 리턴 구조", "정밀 감속"],
-                specs: { "타입": "A (강화)", "하중": "중대형", "구조": "사각 피스 ×4", "호환": "대형 갤럭시 / 우주선" },
-                tags: ["부품", "고하중", "대형매장"]
+                url: "gallery/g05.jpg",
+                title: "시공 현장 05",
+                category: "시공갤러리", code: "SITE-05",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-1889624440_wvr53ic1_04f10b9b27125eec43341b354079e941bfb9d678_230x180.jpg",
-                title: "350Ø 갓등 LED b",
-                category: "갓등 LED", code: "HAT-LED-350B",
-                desc: "350파이 갓등 LED B타입. 중소형 테이블에 적합한 사이즈로, LED 광원과 메탈 갓이 조화를 이루는 실용적인 주력 모델입니다.",
-                features: ["350Ø 갓", "LED 광원", "스윙텐션", "F.V.D 방화담파", "분리 청소"],
-                specs: { "직경": "350mm", "광원": "LED", "타입": "B", "연결": "스윙텐션" },
-                tags: ["중소형", "LED", "주력모델"]
+                url: "gallery/g06.jpg",
+                title: "시공 현장 06",
+                category: "시공갤러리", code: "SITE-06",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_PeMJhwgp_a0e7696fda393c3b4842090d9bc8add026f0bf3f_230x180.jpg",
-                title: "350Ø 갓등 LED",
-                category: "갓등 LED", code: "HAT-LED-350",
-                desc: "350Ø 기본 갓등 LED 모델. 20년 노하우로 완성된 가장 보편적인 갓등 라인으로, 고기집 대부분의 테이블 크기에 맞춘 표준 규격.",
-                features: ["표준 350Ø 갓", "LED 광원", "스윙텐션", "손쉬운 교체"],
-                specs: { "직경": "350mm", "광원": "LED", "형태": "원형 갓", "호환": "전 매장" },
-                tags: ["스탠다드", "주력", "LED"]
+                url: "gallery/g07.jpg",
+                title: "시공 현장 07",
+                category: "시공갤러리", code: "SITE-07",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_fRYuaIwO_97d0cd7560ce780639538a886084ad3e72cd3d20_230x180.jpg",
-                title: "신주스텐코브라 220",
-                category: "코브라", code: "COBRA-BRASS-220",
-                desc: "신주(황동) 도금 스텐 코브라 220mm. 고급스러운 골드톤 마감으로 프리미엄 매장과 한정식·일식당에서 선호. 코브라형 흡입구가 화로 위를 정확히 타격합니다.",
-                features: ["황동 도금 마감", "220mm 헤드", "정밀 흡입각", "코브라형 넥", "고정 텐션"],
-                specs: { "헤드 직경": "220mm", "재질": "스텐 + 신주 도금", "타입": "코브라", "마감": "골드톤" },
-                tags: ["프리미엄", "한정식", "인테리어"]
+                url: "gallery/g08.jpg",
+                title: "시공 현장 08",
+                category: "시공갤러리", code: "SITE-08",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_K4PxA1Md_06174ca386b59965f07f57b3394074a5b39f8246_230x180.jpg",
-                title: "은스텐코브라 270",
-                category: "코브라", code: "COBRA-SILVER-270",
-                desc: "은색 스텐 코브라 270mm. 모던하고 깔끔한 실버 마감으로 캐주얼 매장과 프랜차이즈에 광범위하게 시공되는 대중적 모델.",
-                features: ["실버 스텐 마감", "270mm 헤드", "코브라형 곡선", "스윙 작동"],
-                specs: { "헤드 직경": "270mm", "재질": "스텐", "타입": "코브라", "마감": "실버" },
-                tags: ["프랜차이즈", "모던", "스텐"]
+                url: "gallery/g09.jpg",
+                title: "시공 현장 09",
+                category: "시공갤러리", code: "SITE-09",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2009155547_N6sz0x98_d94bea90e45de5a4f1606fc7979fc87dbd59c5ea_230x180.jpg",
-                title: "동스텐코브라 270",
-                category: "코브라", code: "COBRA-COPPER-270",
-                desc: "동(Copper) 도금 스텐 코브라 270mm. 따뜻한 구리톤이 한식/고깃집 특유의 정서와 어울리며, 빈티지·레트로 인테리어에 포인트가 되는 제품.",
-                features: ["구리 도금 마감", "270mm 헤드", "빈티지 톤", "내열 표면 처리"],
-                specs: { "헤드 직경": "270mm", "재질": "스텐 + 동 도금", "타입": "코브라", "마감": "구리톤" },
-                tags: ["빈티지", "레트로", "한식당"]
+                url: "gallery/g10.jpg",
+                title: "시공 현장 10",
+                category: "시공갤러리", code: "SITE-10",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_BR9ijA87_9e2238927d040ae6d4bde236dace9c3771ee31d6_230x180.jpg",
-                title: "유지망 갓등",
-                category: "등제품 / 필터", code: "HAT-MESH",
-                desc: "갓등에 유지망(기름 필터)을 결합한 올인원 타입. 기름 비산을 1차로 잡아 조명 오염을 줄이고 청소 주기를 크게 늘려줍니다.",
-                features: ["유지망 내장 갓", "기름 비산 차단", "청소 주기 2배", "LED 광원"],
-                specs: { "필터": "스텐 유지망", "단수": "5단 / 8단 선택", "광원": "LED", "적용": "직화 전용" },
-                tags: ["위생", "청소 편의", "필터 내장"]
+                url: "gallery/g11.jpg",
+                title: "시공 현장 11",
+                category: "시공갤러리", code: "SITE-11",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_Xxp1FVOI_8894d485deedc0814621ee027ad13c7c4bd41638_230x180.jpg",
-                title: "장수천",
-                category: "시공 현장", code: "SITE-JANGSUCHEON",
-                desc: "장수천 직화 매장 시공 사례. 갤럭시 D타입을 메인으로 배치하여 테이블별 독립 흡입과 균일한 조도를 확보했습니다. 20년 유성에이스 현장 노하우가 담긴 대표 시공.",
-                features: ["갤럭시 D타입 기반", "테이블별 개별 후드", "균일 조도", "천정 매립 덕트"],
-                specs: { "매장": "장수천", "메인 제품": "갤럭시 D", "설치 수량": "다수", "공사 기간": "2~3일" },
-                tags: ["시공 레퍼런스", "갤럭시 D", "고기집"]
+                url: "gallery/g12.jpg",
+                title: "시공 현장 12",
+                category: "시공갤러리", code: "SITE-12",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_Yrao7VA3_baaccdc04461f5d05a4564dc8c6385c95c17d154_230x180.jpg",
-                title: "갤럭시 D타입",
-                category: "갤럭시", code: "GALAXY-D",
-                desc: "갤럭시 D타입. 스윙텐션과 F.V.D 방화담파, 유지망, 520 갓등을 모두 장착한 풀옵션 플래그십. 대부분의 직화 고깃집에서 선호하는 베스트셀러 모델.",
-                features: ["스윙텐션", "F.V.D 방화담파", "유지망 내장", "520 갓등", "360° 스윙", "분리 청소"],
-                specs: { "모델": "갤럭시 D", "갓": "520 갓등", "텐션": "스윙텐션", "조명": "LED", "토출": "125Ø/150Ø" },
-                tags: ["플래그십", "베스트셀러", "풀옵션"]
+                url: "gallery/g13.jpg",
+                title: "시공 현장 13",
+                category: "시공갤러리", code: "SITE-13",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_FQYSZvcU_45e26cc0f589cdeca86bd2f8eeee1bfa64aaeea1_230x180.jpg",
-                title: "갤럭시 C타입",
-                category: "갤럭시", code: "GALAXY-C",
-                desc: "갤럭시 C타입. 스윙태엽 기반의 경제적인 플래그십 대안. 520 갓과 유지망, F.V.D를 갖춰 기본기가 탄탄한 중가형 모델.",
-                features: ["스윙태엽", "F.V.D", "유지망", "520 갓", "360° 스윙"],
-                specs: { "모델": "갤럭시 C", "텐션": "스윙태엽", "갓": "520", "필터": "유지망" },
-                tags: ["중가형", "경제형", "밸런스"]
+                url: "gallery/g14.jpg",
+                title: "시공 현장 14",
+                category: "시공갤러리", code: "SITE-14",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_7vjSCHrQ_4470759c3cfd75a94f989ac21dc9f11e7ad0646c_230x180.jpg",
-                title: "스윙텐션",
-                category: "텐션 시스템", code: "SWING-TENSION",
-                desc: "유성에이스의 핵심 기술 — 스윙텐션. 상하 작동 시 베어링 수량으로 장력을 미세 조절할 수 있어, 사용자의 체감 무게를 원하는 대로 세팅할 수 있습니다.",
-                features: ["상하 자유 작동", "베어링 수량 조절", "미세 장력 세팅", "스톱바 브레이크", "장기 내구성"],
-                specs: { "방식": "베어링 텐션", "조정": "베어링 추가/제거", "베어링": "기본 6개", "브레이크": "스톱바 기본 장착" },
-                tags: ["핵심 기술", "안전", "사용자 맞춤"]
+                url: "gallery/g15.jpg",
+                title: "시공 현장 15",
+                category: "시공갤러리", code: "SITE-15",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_AOeCyaq6_fd5c648a95dc4549f0dad1db35fcacad2c351707_230x180.jpg",
-                title: "직화기 후드 시공",
-                category: "시공 사례", code: "SITE-DIRECT-FIRE",
-                desc: "직화기 전용 후드 시공 현장. 화로와 후드 간 80~150mm의 안전 이격 거리를 정확히 준수하고, 스윙 반경 내 장애물이 없도록 설계.",
-                features: ["80~150mm 안전거리", "스윙 반경 확보", "덕트 경사 최적화", "화재 안전 검수"],
-                specs: { "안전 거리": "80~150mm", "F.V.D": "기본 장착", "토출": "150Ø", "인증": "화재 안전" },
-                tags: ["안전 시공", "직화", "레퍼런스"]
+                url: "gallery/g16.jpg",
+                title: "시공 현장 16",
+                category: "시공갤러리", code: "SITE-16",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_haglyRnV_aa05d4562851f1dbe0b3f59e03b511f42a8894f3_230x180.jpg",
-                title: "한식당 시공",
-                category: "시공 사례", code: "SITE-KOREAN",
-                desc: "한식 BBQ 전문점 시공 사례. 단체 손님이 많은 한식당 특성에 맞춰 대형 갓등과 강화 텐션을 적용, 높은 회전율에도 안정적으로 작동합니다.",
-                features: ["대형 갓등", "강화 텐션", "고회전 내구성", "인테리어 조화"],
-                specs: { "업종": "한식 BBQ", "갓": "520 이상", "텐션": "강화형", "회전율": "高" },
-                tags: ["한식당", "단체석", "내구성"]
+                url: "gallery/g17.jpg",
+                title: "시공 현장 17",
+                category: "시공갤러리", code: "SITE-17",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_wRzu8sEL_b52bdfac108d6364e900a3bc16743ecd9e10452f_230x180.jpg",
-                title: "갤럭시 시리즈",
-                category: "갤럭시", code: "GALAXY-SERIES",
-                desc: "갤럭시 A/B/C/D 전 시리즈. 20년간 유성에이스가 축적한 노하우의 총집합으로, 매장 규모·인테리어·예산에 따라 최적 모델을 선택할 수 있습니다.",
-                features: ["A/B/C/D 4종 구성", "공통 플랫폼", "스윙 기본 장착", "F.V.D 공통"],
-                specs: { "라인업": "A / B / C / D", "공통": "360° 스윙, F.V.D", "차이": "텐션 방식, 갓 사이즈, 조명", "누적 판매": "No.1 국내" },
-                tags: ["시그니처", "베스트셀러", "풀 라인업"]
+                url: "gallery/g18.jpg",
+                title: "시공 현장 18",
+                category: "시공갤러리", code: "SITE-18",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_1bomQ2pM_d44ea282c22032cc609980c9fe5d9af02373d1f2_230x180.jpg",
-                title: "F.V.D 후드",
-                category: "F.V.D 시스템", code: "FVD-HOOD",
-                desc: "F.V.D (Fire Velocity Damper) — 풍속 조절과 방화 담파를 겸한 유성에이스 핵심 부품. 화로에서 올라오는 불꽃이 덕트로 전파되는 것을 물리적으로 차단합니다.",
-                features: ["풍속 조절", "방화 담파", "불꽃 전파 차단", "덕트 내 화재 예방", "자동 복귀"],
-                specs: { "기능": "풍속 + 방화 통합", "위치": "후드 상부", "작동": "자동", "소재": "내열 스텐" },
-                tags: ["안전", "핵심 기술", "화재 예방"]
+                url: "gallery/g19.jpg",
+                title: "시공 현장 19",
+                category: "시공갤러리", code: "SITE-19",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_7C42rV93_3e29ed7cf28655a7c461618327a86a435215fc8e_230x180.jpg",
-                title: "ACE 후드",
-                category: "대표 제품", code: "ACE-HOOD",
-                desc: "유성에이스의 대표 ACE 후드. 파이프 기반 360° 스윙 구조와 분리 청소, 스톱바 안전 시스템이 결합된 플래그십 직화 후드.",
-                features: ["파이프 스윙 구조", "분리 청소", "스톱바 브레이크", "F.V.D 통합", "LED 옵션"],
-                specs: { "구조": "파이프 스윙", "청소": "분리형", "안전": "스톱바 기본", "조명": "LED 옵션" },
-                tags: ["플래그십", "대표", "ACE"]
+                url: "gallery/g20.jpg",
+                title: "시공 현장 20",
+                category: "시공갤러리", code: "SITE-20",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_AFz3jSmo_ebcd523fe01ba756b3c6df04491816acd39141b9_230x180.jpg",
-                title: "원형 상향 시공",
-                category: "모터 / 시공", code: "MOTOR-UP-ROUND",
-                desc: "원형 상향 모터 시공 사례. 천정으로 수직 토출되는 구조로, 천정 덕트 공간이 확보된 매장에 적합합니다. 흡입 효율이 가장 뛰어난 타입.",
-                features: ["수직 상향 토출", "고효율 흡입", "원형 커버", "저소음 모터"],
-                specs: { "타입": "원형 상향 모터", "토출": "천정 수직", "효율": "최고 등급", "적용": "천정 공간 확보 매장" },
-                tags: ["시공 타입", "고효율", "상향"]
+                url: "gallery/g21.jpg",
+                title: "시공 현장 21",
+                category: "시공갤러리", code: "SITE-21",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mzpN8wfv_507615e5af30fe73194ff4c980598c8078619e97_230x180.jpg",
-                title: "고기집 덕트",
-                category: "시공 사례", code: "SITE-BBQ-DUCT",
-                desc: "고기집 전용 덕트 시공. 360° 스윙 후드가 테이블마다 내려오며, 기름·연기·냄새를 동시에 포집하는 유성에이스 특화 시공법.",
-                features: ["테이블별 개별 후드", "360° 스윙 자유도", "동시 포집 (기름+연기+냄새)", "위생 관리"],
-                specs: { "업종": "직화 고깃집", "후드 간격": "테이블당 1대", "덕트 종단": "집진기 연결", "관리": "월 1회 세척" },
-                tags: ["직화 전문", "스윙", "위생"]
+                url: "gallery/g22.jpg",
+                title: "시공 현장 22",
+                category: "시공갤러리", code: "SITE-22",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_8JBk97cF_fbc62ecbde74d6ab6067a28daad10e25b71a0847_230x180.jpg",
-                title: "직화 전문점",
-                category: "시공 사례", code: "SITE-DIRECT",
-                desc: "직화 전문점 토탈 시공. 프리미엄 직화 다이닝에 맞춰 우주선형과 갓등을 혼합 배치, 테이블별 맞춤 후드를 설계했습니다.",
-                features: ["우주선 + 갓등 혼합", "프리미엄 마감", "맞춤 설계", "무소음 모터"],
-                specs: { "업종": "직화 다이닝", "후드": "우주선 600Ø + 갓등", "배치": "테이블별 커스텀", "급배기": "독립 계통" },
-                tags: ["프리미엄", "직화", "토탈 시공"]
+                url: "gallery/g23.jpg",
+                title: "시공 현장 23",
+                category: "시공갤러리", code: "SITE-23",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mWREZcgu_b7702da350eaf07bde1a85c65b40b717cb5676f5_230x180.jpg",
-                title: "스파이얼 라인",
-                category: "스파이얼", code: "SPIRAL-LINE",
-                desc: "스파이얼 덕트를 활용한 천정 노출 시공. 둥근 나선 형상의 덕트가 인테리어 요소로 작동하며, 박스 덕트보다 압력 손실이 적어 흡입 효율이 높습니다.",
-                features: ["나선형 덕트", "낮은 압력 손실", "천정 노출 인테리어", "고효율 흡입"],
-                specs: { "형태": "스파이얼(나선)", "직경": "150Ø / 125Ø", "재질": "도금 스틸", "소음": "저소음" },
-                tags: ["천정 노출", "인테리어", "고효율"]
+                url: "gallery/g24.jpg",
+                title: "시공 현장 24",
+                category: "시공갤러리", code: "SITE-24",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_mnMW5lus_31e4d47d38b1ee6f765131d2c558c2872228126a_230x180.jpg",
-                title: "프랜차이즈 매장",
-                category: "시공 사례", code: "SITE-FRANCHISE",
-                desc: "프랜차이즈 본사 스탠다드 시공. 전국 점포에 동일한 품질을 공급하기 위한 표준 매뉴얼 기반 시공으로, 재현성과 유지보수성을 최우선으로 설계.",
-                features: ["표준 매뉴얼 시공", "재현성 확보", "전국 A/S 네트워크", "교체 부품 표준화"],
-                specs: { "대상": "프랜차이즈 본사", "표준화": "100%", "A/S": "전국", "공사 기간": "점포당 1일" },
-                tags: ["프랜차이즈", "표준화", "전국 A/S"]
+                url: "gallery/g25.jpg",
+                title: "시공 현장 25",
+                category: "시공갤러리", code: "SITE-25",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_415qXZTA_a87b619edf213740d209c73415dd537cb059e1f5_230x180.jpg",
-                title: "아크릴 한지등",
-                category: "등제품", code: "LIGHT-HANJI",
-                desc: "아크릴 베이스에 한지 필름을 덧댄 한지등 스타일. 한식당·전통주점의 분위기에 맞춘 프리미엄 감성 라인으로, 은은한 확산광이 특징입니다.",
-                features: ["한지 필름 디퓨저", "아크릴 베이스", "은은한 확산광", "LED 광원"],
-                specs: { "디퓨저": "아크릴 + 한지 필름", "광원": "LED / 필름등", "분위기": "웜톤", "적용": "한식·전통주점" },
-                tags: ["한식 감성", "한지", "웜톤"]
+                url: "gallery/g26.jpg",
+                title: "시공 현장 26",
+                category: "시공갤러리", code: "SITE-26",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_1hWUAoEY_52cdc9815e70a1c2ae1daf12d6c9c6bf3fcda2c7_230x180.jpg",
-                title: "갤럭시 A타입",
-                category: "갤럭시", code: "GALAXY-A",
-                desc: "갤럭시 시리즈의 엔트리 A타입. 스윙태엽 + F.V.D + 520 갓등 기본 구성으로, 소형~중형 매장에 가장 많이 시공되는 표준 모델.",
-                features: ["스윙태엽", "F.V.D", "유지망", "520 갓등", "기본 360° 스윙"],
-                specs: { "모델": "갤럭시 A", "텐션": "스윙태엽", "갓": "520", "포지션": "엔트리" },
-                tags: ["엔트리", "소~중형", "표준"]
+                url: "gallery/g27.jpg",
+                title: "시공 현장 27",
+                category: "시공갤러리", code: "SITE-27",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_CFI6aTNP_4e46ea464045b3841944c05b6e9b1248bf5716d4_230x180.jpg",
-                title: "갤럭시 B타입",
-                category: "갤럭시", code: "GALAXY-B",
-                desc: "갤럭시 B타입. A타입 대비 갓등이 생략된 미니멀 구성으로, 별도 조명이 있는 매장이나 인테리어 중심 공간에 적합합니다.",
-                features: ["스윙태엽", "F.V.D", "유지망", "미니멀 마감", "360° 스윙"],
-                specs: { "모델": "갤럭시 B", "텐션": "스윙태엽", "조명": "미장착", "포지션": "미니멀" },
-                tags: ["미니멀", "인테리어", "중가형"]
+                url: "gallery/g28.jpg",
+                title: "시공 현장 28",
+                category: "시공갤러리", code: "SITE-28",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_aGCEAzyS_981c2026115c3da4b5097c1edc229f9cd607209f_230x180.jpg",
-                title: "스텐 후드",
-                category: "스텐 마감", code: "STEEL-HOOD",
-                desc: "풀 스텐 마감 후드. 녹·부식·기름 오염에 강하고 내구성이 최고 등급. 위생 인증이 필요한 프랜차이즈·호텔·대형 주방에 주로 시공됩니다.",
-                features: ["풀 스텐(304/316)", "부식 저항", "위생 인증", "내구 10년+", "식기세척기 세척 가능"],
-                specs: { "재질": "스텐 304 / 316", "내구": "10년+", "위생": "HACCP 대응", "가공": "용접 심리스" },
-                tags: ["위생", "고내구", "호텔·프랜차이즈"]
+                url: "gallery/g29.jpg",
+                title: "시공 현장 29",
+                category: "시공갤러리", code: "SITE-29",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_meAv0wph_76d1ad9f52dd89c07a26f1c726d6cd8861cb4bb3_230x180.jpg",
-                title: "도금 파이프",
-                category: "파이프", code: "PIPE-PLATE",
-                desc: "도금 스텐 파이프 라인. 스텐 대비 원가가 낮으면서 은빛 마감을 유지하는 실용적 선택. 150Ø·125Ø 규격 제공.",
-                features: ["스텐 도금 마감", "경제적 원가", "150Ø / 125Ø", "F.V.D 호환"],
-                specs: { "직경": "150Ø / 125Ø", "마감": "스텐 도금", "텐션": "스윙텐션", "장점": "경제성" },
-                tags: ["경제형", "도금", "파이프"]
+                url: "gallery/g30.jpg",
+                title: "시공 현장 30",
+                category: "시공갤러리", code: "SITE-30",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_bXFR1nQm_8e963e21b602cd1cec1ecb925bdd082c835d6699_230x180.jpg",
-                title: "도장 파이프",
-                category: "파이프", code: "PIPE-PAINT",
-                desc: "분체 도장 파이프. 블랙·그레이 등 다양한 컬러 선택이 가능해 인테리어와 통일감 있는 마감을 만들 수 있습니다.",
-                features: ["분체 도장", "컬러 선택 가능", "인테리어 매칭", "내열 코팅"],
-                specs: { "직경": "150Ø / 125Ø", "마감": "분체 도장", "컬러": "블랙/그레이/커스텀", "내열": "150°C" },
-                tags: ["컬러", "인테리어", "커스텀"]
+                url: "gallery/g31.jpg",
+                title: "시공 현장 31",
+                category: "시공갤러리", code: "SITE-31",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_IbVPJY7F_e46c7e21239efd842cd5cb505009219437f5df80_230x180.jpg",
-                title: "스텐 갓제품",
-                category: "갓제품", code: "HAT-STAINLESS",
-                desc: "풀 스텐 갓제품. 갓 자체가 스텐으로 제작되어 기름·열·부식에 가장 강한 프리미엄 라인. 장기간 변색 없이 사용 가능합니다.",
-                features: ["풀 스텐 갓", "부식·변색 없음", "장기 내구", "프리미엄 마감"],
-                specs: { "재질": "스텐 304", "갓 직경": "350~520", "F.V.D": "기본", "내구": "10년+" },
-                tags: ["프리미엄", "스텐", "장수명"]
+                url: "gallery/g32.jpg",
+                title: "시공 현장 32",
+                category: "시공갤러리", code: "SITE-32",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_w1iqkEVU_2633ce7bbc3bdccf88e33088278a44d74b5d1a5c_230x180.jpg",
-                title: "측향 모터",
-                category: "모터", code: "MOTOR-SIDE",
-                desc: "측향 배기 모터. 천정 공간이 확보되지 않는 저층 매장에서 벽면으로 배기를 빼는 구조. 설치 유연성이 높습니다.",
-                features: ["측면 배기", "저층 매장 최적", "저소음", "유연한 설치"],
-                specs: { "방향": "측향", "규격": "원형 / 사각", "소음": "저소음", "적용": "저층 매장" },
-                tags: ["저층", "측면 배기", "유연"]
+                url: "gallery/g33.jpg",
+                title: "시공 현장 33",
+                category: "시공갤러리", code: "SITE-33",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_dK47TS8k_f45b285e6060dffeb9e1df01ab96ffb300908217_230x180.jpg",
-                title: "후레쉬볼",
-                category: "후레쉬볼", code: "FRESHBALL",
-                desc: "유성에이스 독자 개발 후레쉬볼. 구(球) 형태 흡입구가 화로 위 공기를 360° 방향에서 빨아들이는 혁신적 구조로, 기존 평면 후드보다 흡입 효율이 높습니다.",
-                features: ["구형 360° 흡입", "혁신적 구조", "고효율", "소형화 가능", "특허 기술"],
-                specs: { "형태": "구형 (Ball)", "흡입": "360°", "지름": "소/중/대", "특허": "유성에이스 독자" },
-                tags: ["특허", "혁신", "고효율"]
+                url: "gallery/g34.jpg",
+                title: "시공 현장 34",
+                category: "시공갤러리", code: "SITE-34",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_xYNLfmHO_4ec0589af9e103ddca4efe722a23bf5f2b2391ce_230x180.jpg",
-                title: "코브라 제품",
-                category: "코브라", code: "COBRA-STANDARD",
-                desc: "코브라 시리즈 스탠다드 모델. 뱀 머리 형태의 흡입구가 화로 위를 정확히 조준하며, 하향식 배치로 천정 공간이 좁은 매장에 적합합니다.",
-                features: ["코브라형 헤드", "하향식 구조", "정밀 조준", "좁은 천정 호환"],
-                specs: { "타입": "하향 코브라", "헤드": "220 / 270mm", "재질": "스텐", "공간": "저천정 OK" },
-                tags: ["하향식", "저천정", "코브라"]
+                url: "gallery/g35.jpg",
+                title: "시공 현장 35",
+                category: "시공갤러리", code: "SITE-35",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ovPd1nG3_6a5de6766dcf6855f90e1eb3ba418709a1be0b01_230x180.jpg",
-                title: "150 스윙텐션",
-                category: "스윙텐션", code: "SWING-150",
-                desc: "150Ø 스윙텐션 모델. 표준 파이프 규격으로, 대형 매장과 강한 흡입력이 필요한 현장에 시공됩니다.",
-                features: ["150Ø 파이프", "스윙텐션", "F.V.D", "대형 적용"],
-                specs: { "직경": "150Ø", "텐션": "스윙", "F.V.D": "O", "적용": "대형 매장" },
-                tags: ["150파이", "대형", "표준"]
+                url: "gallery/g36.jpg",
+                title: "시공 현장 36",
+                category: "시공갤러리", code: "SITE-36",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_kyAnISf4_c3393ebee21608437055e38898fc025d96924a5e_230x180.jpg",
-                title: "125 스윙텐션",
-                category: "스윙텐션", code: "SWING-125",
-                desc: "125Ø 스윙텐션 모델. 중소형 매장의 표준 규격으로, 150Ø 대비 날렵한 비주얼과 경제적인 설치비가 장점.",
-                features: ["125Ø 파이프", "경량화", "스윙텐션", "F.V.D"],
-                specs: { "직경": "125Ø", "텐션": "스윙", "적용": "중소형", "장점": "경량·경제" },
-                tags: ["125파이", "중소형", "경제형"]
+                url: "gallery/g37.jpg",
+                title: "시공 현장 37",
+                category: "시공갤러리", code: "SITE-37",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_xif0sbSo_c8da836b03341ec9f74f9435b25173ca8be470a9_230x180.jpg",
-                title: "사각 측향",
-                category: "모터", code: "MOTOR-SIDE-RECT",
-                desc: "사각 측향 모터. 벽면 흡입구가 사각형 개구부로 처리되어, 벽면 마감과 통일성 있는 인테리어를 만들 수 있습니다.",
-                features: ["사각 벽면 개구", "인테리어 매칭", "스윙텐션 호환", "스파이얼 덕트 연결"],
-                specs: { "형태": "사각 측향", "연결": "스파이얼", "적용": "벽면 노출", "인테리어": "매칭 OK" },
-                tags: ["사각", "벽면", "인테리어"]
+                url: "gallery/g38.jpg",
+                title: "시공 현장 38",
+                category: "시공갤러리", code: "SITE-38",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ixjfZWIE_4bc3a11e067b0de147114531fb778ac6e1784bef_230x180.jpg",
-                title: "원형 측향",
-                category: "모터", code: "MOTOR-SIDE-ROUND",
-                desc: "원형 측향 모터. 원형 파이프 형태로 깔끔하게 정리되며, 공간 절약과 청소 편의성이 장점.",
-                features: ["원형 측향", "공간 절약", "청소 편의", "스윙텐션 호환"],
-                specs: { "형태": "원형 측향", "연결": "스파이얼", "청소": "분리형", "적용": "표준" },
-                tags: ["원형", "측향", "공간 절약"]
+                url: "gallery/g39.jpg",
+                title: "시공 현장 39",
+                category: "시공갤러리", code: "SITE-39",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_3ZLHyY1b_b4223c18b07da29410c388fddc18231e8185192d_230x180.jpg",
-                title: "걸봉 속봉",
-                category: "구조 부품", code: "BAR-IN-OUT",
-                desc: "걸봉/속봉 분리 구조. 겉봉과 속봉을 너트 피스로 간단히 분리하여 내부 청소가 가능하며, 유성에이스 후드의 청소 편의성을 대표하는 핵심 설계입니다.",
-                features: ["걸봉/속봉 분리", "너트 피스 체결", "손 분리 가능", "내부 청소"],
-                specs: { "구조": "걸봉 + 속봉", "체결": "너트 피스", "청소": "수분 이내", "적용": "전 제품" },
-                tags: ["청소 편의", "핵심 구조", "분리형"]
+                url: "gallery/g40.jpg",
+                title: "시공 현장 40",
+                category: "시공갤러리", code: "SITE-40",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_ITox8qOK_53bae0561f5275137bf93d350c8ed8200de59399_230x180.jpg",
-                title: "고정 텐션",
-                category: "텐션 시스템", code: "FIXED-TENSION",
-                desc: "고정 텐션 방식. 상하 작동이 필요 없는 설치 환경에서 장력을 고정하여 설치하며, 스윙텐션 대비 구조가 단순해 A/S 빈도가 낮습니다.",
-                features: ["고정형 텐션", "단순 구조", "A/S 빈도 낮음", "125 사각 측향 등 호환"],
-                specs: { "방식": "고정", "장점": "단순·고내구", "호환": "125 측향 모터", "A/S": "최저" },
-                tags: ["고정형", "단순 구조", "고내구"]
+                url: "gallery/g41.jpg",
+                title: "시공 현장 41",
+                category: "시공갤러리", code: "SITE-41",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_byxiY437_8ab8e4cede369cb5f0899e8c532c89773ec5f6a4_230x180.jpg",
-                title: "삼파장 등",
-                category: "등제품", code: "LIGHT-3WL",
-                desc: "삼파장 조명 등제품. 따뜻한 색온도와 높은 연색성(CRI)으로 고기 색감을 가장 먹음직스럽게 표현하는 광원. 고깃집 조명의 베스트셀러.",
-                features: ["삼파장 램프", "고연색 CRI 85+", "웜톤 3000K", "고기 색감 강조"],
-                specs: { "광원": "삼파장", "색온도": "3000K", "CRI": "85+", "적용": "직화 고깃집" },
-                tags: ["웜톤", "고연색", "베스트셀러"]
+                url: "gallery/g42.jpg",
+                title: "시공 현장 42",
+                category: "시공갤러리", code: "SITE-42",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_hQ4celuE_07a859e701ef43b2822acfae4474f9262024ec13_230x180.jpg",
-                title: "필름등",
-                category: "등제품", code: "LIGHT-FILM",
-                desc: "필름등은 얇은 확산 필름을 갓 내부에 적용해 눈부심 없는 부드러운 확산광을 제공합니다. 천정이 낮은 매장에서 특히 효과적입니다.",
-                features: ["확산 필름 디퓨저", "눈부심 없음", "저천정 최적", "LED 호환"],
-                specs: { "디퓨저": "확산 필름", "광원": "LED", "눈부심": "없음", "적용": "저천정" },
-                tags: ["저천정", "확산광", "눈부심 차단"]
+                url: "gallery/g43.jpg",
+                title: "시공 현장 43",
+                category: "시공갤러리", code: "SITE-43",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_3a4TEvDf_e690309ca328b688a90f27e19855bbd83b64b484_230x180.jpg",
-                title: "할로겐 라이팅",
-                category: "등제품", code: "LIGHT-HALOGEN",
-                desc: "할로겐 조명 라이팅. 자연광에 가장 가까운 색온도와 연색성으로, 프리미엄 한우·스테이크 전문점에서 요리의 퀄리티를 극대화합니다.",
-                features: ["할로겐 램프", "자연광 근접 CRI 95+", "컬러 재현 최고", "스팟 광원"],
-                specs: { "광원": "할로겐", "CRI": "95+", "색온도": "3000K", "적용": "프리미엄 다이닝" },
-                tags: ["프리미엄", "CRI 95+", "한우 전문"]
+                url: "gallery/g44.jpg",
+                title: "시공 현장 44",
+                category: "시공갤러리", code: "SITE-44",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_2tAEaW1G_b3b305a41875d3938b52503507131a8bd7088474_230x180.jpg",
-                title: "LED 라인",
-                category: "등제품", code: "LIGHT-LED",
-                desc: "LED 라인. 저소비전력·장수명의 대표 광원으로, 전기료와 유지비를 최소화하면서도 충분한 밝기를 제공. 현대 매장의 표준.",
-                features: ["LED", "장수명 30,000h+", "저소비전력", "발열 최소"],
-                specs: { "광원": "LED", "수명": "30,000h+", "소비전력": "~10W", "색온도": "2700~5000K" },
-                tags: ["저전력", "장수명", "표준"]
+                url: "gallery/g45.jpg",
+                title: "시공 현장 45",
+                category: "시공갤러리", code: "SITE-45",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_tRADzYIr_1d6dd4eb30bacb658d5e67341eb51777875b8fbb_230x180.jpg",
-                title: "갓등 시리즈",
-                category: "등제품", code: "HAT-LIGHT-SERIES",
-                desc: "갓등 전 시리즈. 220/270/350/450/520 등 다양한 사이즈로 매장 규모와 테이블 크기에 맞춰 선택할 수 있는 유성에이스의 가장 대중적인 라인.",
-                features: ["220~520 사이즈", "LED/할로겐/삼파장 선택", "F.V.D 호환", "유지망 내장 가능"],
-                specs: { "사이즈": "220 / 270 / 350 / 450 / 520", "광원": "LED/할로겐/삼파장", "필터": "유지망 옵션" },
-                tags: ["풀 라인업", "대중적", "다양한 사이즈"]
+                url: "gallery/g46.jpg",
+                title: "시공 현장 46",
+                category: "시공갤러리", code: "SITE-46",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_BAoFdfly_f06d0d0336df576647b48611a7be0c5a7c181913_230x180.jpg",
-                title: "유지망 5단",
-                category: "필터", code: "MESH-5",
-                desc: "5단 유지망. 5겹의 스텐 메쉬가 기름 입자를 단계적으로 포집해 덕트 오염을 최소화합니다. 표준 매장 기본 사양.",
-                features: ["5단 스텐 메쉬", "기름 포집", "덕트 보호", "세척 재사용"],
-                specs: { "단수": "5단", "재질": "스텐 304", "세척": "주 1회", "교체": "연 1회" },
-                tags: ["필터", "표준", "세척 가능"]
+                url: "gallery/g47.jpg",
+                title: "시공 현장 47",
+                category: "시공갤러리", code: "SITE-47",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_NvR8gBTm_5ce18863946816215f7d729b0dde892c5e5cf865_230x180.jpg",
-                title: "유지망 8단",
-                category: "필터", code: "MESH-8",
-                desc: "8단 유지망. 5단 대비 포집 효율 1.5배. 기름이 많이 발생하는 삼겹살·곱창 전문점, 대형 프랜차이즈에 권장.",
-                features: ["8단 스텐 메쉬", "포집 1.5배", "대형 매장 권장", "세척 재사용"],
-                specs: { "단수": "8단", "재질": "스텐 304", "포집률": "5단 대비 1.5배", "권장": "삼겹살/곱창" },
-                tags: ["고효율", "대형매장", "고유분 업종"]
+                url: "gallery/g48.jpg",
+                title: "시공 현장 48",
+                category: "시공갤러리", code: "SITE-48",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_XPlyVNe0_bf908b5f58e5d15a21637da8a277715a00816cf3_230x180.jpg",
-                title: "기름받이",
-                category: "필터", code: "OIL-TRAY",
-                desc: "기름받이 부품. 후드 내부에 떨어지는 기름을 모아 외부로 배출하지 않고 위생적으로 관리합니다. 도구 없이 손으로 돌려 분리 가능.",
-                features: ["손 분리 구조", "위생 관리", "기름 흘림 차단", "나팔/기름받이속 세트"],
-                specs: { "분리": "손", "구성": "나팔 + 기름받이 + 받이속", "재질": "스텐 / 도금", "청소": "주 1회" },
-                tags: ["위생", "손 분리", "청소 편의"]
+                url: "gallery/g49.jpg",
+                title: "시공 현장 49",
+                category: "시공갤러리", code: "SITE-49",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             },
             {
-                url: "https://usungace.com/data/file/sub51/thumb-2034394491_YH3yrM1z_7012717abc7ee46130cb4f8f20b670f95b10d761_230x180.jpg",
-                title: "태엽 감속기",
-                category: "구조 부품", code: "SPRING-GEAR",
-                desc: "태엽 감속기. 후드의 상하 작동 속도를 감속해 부드럽고 안전한 움직임을 만듭니다. 사각부 피스 4개 구조로 교체가 간편합니다.",
-                features: ["상하 작동 감속", "부드러운 움직임", "사각 피스 ×4", "손쉬운 교체"],
-                specs: { "구조": "태엽 감속기", "피스": "사각 ×4", "교체 시간": "10분 이내", "수명": "3~5년" },
-                tags: ["핵심 부품", "교체 쉬움", "안전"]
+                url: "gallery/g50.jpg",
+                title: "시공 현장 50",
+                category: "시공갤러리", code: "SITE-50",
+                desc: "유성에이스 시공 현장 사진입니다. 20년 노하우로 완성된 품질을 확인하세요.",
+                features: ["360° 스윙", "F.V.D 방화담파", "스윙텐션", "LED 조명"],
+                specs: { "시공": "유성에이스", "품질": "프리미엄" },
+                tags: ["시공사례", "유성에이스"]
             }
         ];
 
@@ -3279,6 +3314,10 @@
                     if (val > inMax) return outMax;
                     return outMin + (outMax - outMin) * ((val - inMin) / (inMax - inMin));
                 };
+
+                // Scroll indicator — hide after scrolling
+                const scrollInd = document.getElementById('scroll-indicator');
+                if (scrollInd) scrollInd.style.opacity = scrollY > 80 ? '0' : '1';
 
                 // Hero
                 const heroOpacity = mapRange(progress, 0, 0.2, 1, 0);
