@@ -643,7 +643,7 @@
                                 </button>
                                 <button onclick="navigate('board')" class="w-full p-4 rounded-2xl hover:bg-blue-50 transition text-left group">
                                     <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition">게시판</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">유성에이스 Q&amp;A</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">기술정보, 시공사례, 제품소식</div>
                                 </button>
                                 <button onclick="navigate('archive')" class="w-full p-4 rounded-2xl hover:bg-emerald-50 transition text-left group">
                                     <div class="text-[15px] font-black text-black group-hover:text-emerald-600 transition">자료실</div>
@@ -1815,17 +1815,14 @@
                         <div>
                             <div class="text-[11px] font-bold tracking-[0.2em] text-blue-600 mb-2">BOARD · 게시판</div>
                             <h1 class="text-3xl md:text-5xl font-black tracking-tight text-black">게시판</h1>
-                            <p class="text-black/55 text-sm md:text-base mt-3">유성에이스 Q&amp;A — 문의사항, 시공 후기를 자유롭게 남겨주세요.</p>
+                            <p class="text-black/55 text-sm md:text-base mt-3">유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="relative">
                                 <input id="board-search" type="text" placeholder="검색어 입력" oninput="renderBoard()" class="pl-9 pr-4 py-2.5 rounded-full bg-white border border-black/10 text-sm w-56 focus:outline-none focus:border-blue-500">
                                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-black/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                             </div>
-                            <button class="px-5 py-2.5 rounded-full bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition flex items-center gap-1.5">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                글쓰기
-                            </button>
+                            <!-- 글쓰기는 CMS 관리자 모드에서만 노출 -->
                         </div>
                     </div>
                 </div>
@@ -1874,11 +1871,11 @@
                 <!-- Hero -->
                 <div class="text-center mb-14 reveal">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold tracking-[0.18em] mb-5">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         ARCHIVE · 자료실
                     </div>
                     <h1 class="text-4xl md:text-6xl font-black tracking-tight text-black mb-4">자료실</h1>
-                    <p class="text-black/55 text-base max-w-2xl mx-auto">유성에이스의 특허, 디자인등록, 인증서 등 홍보 자료를 확인하세요.</p>
+                    <p class="text-black/55 text-base max-w-2xl mx-auto">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
                 </div>
 
                 <!-- Filter chips -->
@@ -3036,20 +3033,20 @@
 
         // --- 게시판 데이터 (CMS + 기본) ---
         const defaultBoardItems = [
-            { num: 142, cat: "시공후기", catColor: "emerald", title: "강남 한우 직화구이 매장 갤럭시 B 설치 후기", author: "김**", date: "2026.04.06", views: 128, isNew: true },
-            { num: 141, cat: "제품문의", catColor: "blue", title: "갤럭시 A 타입과 B 타입 차이가 궁금합니다", author: "이**", date: "2026.04.05", views: 94, isNew: true },
-            { num: 140, cat: "A/S", catColor: "amber", title: "태엽 감속기에서 이상한 소리가 나는데 원인이 뭘까요?", author: "박**", date: "2026.04.04", views: 212, isNew: false },
-            { num: 139, cat: "시공후기", catColor: "emerald", title: "부산 해운대 고기집 — F.V.D 방화담파 체감 후기", author: "최**", date: "2026.04.02", views: 305, isNew: false },
-            { num: 138, cat: "기타", catColor: "slate", title: "유성에이스 파주 본사 방문 상담 예약 가능한가요?", author: "정**", date: "2026.04.01", views: 67, isNew: false },
-            { num: 137, cat: "제품문의", catColor: "blue", title: "스파이럴 시리즈 측향모터 사양서 요청합니다", author: "윤**", date: "2026.03.30", views: 88, isNew: false },
-            { num: 136, cat: "시공후기", catColor: "emerald", title: "대전 원도심 삼겹살집 통합 LED 후드 — 손님 반응 좋아요", author: "장**", date: "2026.03.28", views: 412, isNew: false },
-            { num: 135, cat: "A/S", catColor: "amber", title: "분리청소 구조 조립 시 주의사항 문의", author: "한**", date: "2026.03.27", views: 155, isNew: false },
-            { num: 134, cat: "제품문의", catColor: "blue", title: "후레쉬볼 코브라 — 천장 낮은 매장에도 설치 가능?", author: "오**", date: "2026.03.25", views: 103, isNew: false },
-            { num: 133, cat: "시공후기", catColor: "emerald", title: "등제품 교체 10분 만에 끝 — 정말 편하네요", author: "서**", date: "2026.03.22", views: 247, isNew: false }
+            { num: 142, cat: "기술정보", catColor: "blue", title: "F.V.D 방화담파 2세대 — 폐쇄 속도 40% 향상, 스프링 수명 2배", author: "유성에이스", date: "2026.04.06", views: 328, isNew: true },
+            { num: 141, cat: "시공사례", catColor: "emerald", title: "강남 한우 직화구이 매장 갤럭시 B 시공 완료", author: "유성에이스", date: "2026.04.05", views: 194, isNew: true },
+            { num: 140, cat: "제품소식", catColor: "amber", title: "2026 신제품 갤럭시 D타입 스윙텐션 라인업 출시", author: "유성에이스", date: "2026.04.04", views: 512, isNew: false },
+            { num: 139, cat: "시공사례", catColor: "emerald", title: "부산 해운대 고기집 — LED우주선 + FVD 통합 설치", author: "유성에이스", date: "2026.04.02", views: 305, isNew: false },
+            { num: 138, cat: "기술정보", catColor: "blue", title: "360° 스윙 메커니즘의 원리와 내구성 테스트 결과", author: "유성에이스", date: "2026.04.01", views: 267, isNew: false },
+            { num: 137, cat: "제품소식", catColor: "amber", title: "스파이럴 시리즈 148종 전 제품 카탈로그 업데이트", author: "유성에이스", date: "2026.03.30", views: 188, isNew: false },
+            { num: 136, cat: "시공사례", catColor: "emerald", title: "대전 원도심 삼겹살집 통합 LED 후드 시공기", author: "유성에이스", date: "2026.03.28", views: 412, isNew: false },
+            { num: 135, cat: "기술정보", catColor: "blue", title: "태엽감속기 빠찌링(베어링) 자가 점검 가이드", author: "유성에이스", date: "2026.03.27", views: 355, isNew: false },
+            { num: 134, cat: "업계동향", catColor: "slate", title: "2026 외식업 환기설비 안전기준 강화 — 대응 방안", author: "유성에이스", date: "2026.03.25", views: 203, isNew: false },
+            { num: 133, cat: "시공사례", catColor: "emerald", title: "서울 종로 프리미엄 숯불구이 매장 양옆태엽 시공", author: "유성에이스", date: "2026.03.22", views: 247, isNew: false }
         ];
         // CMS 게시판 데이터 병합
         const boardItems = (function() {
-            const catColorMap = { '시공후기': 'emerald', '제품문의': 'blue', '문의': 'blue', 'A/S': 'amber', '기타': 'slate', '칭찬': 'emerald', '일반': 'slate' };
+            const catColorMap = { '기술정보': 'blue', '시공사례': 'emerald', '제품소식': 'amber', '업계동향': 'slate', '일반': 'slate' };
             try {
                 const cmsState = JSON.parse(localStorage.getItem('usung-cms-state-v2') || 'null');
                 if (cmsState && cmsState.boards && cmsState.boards.board && cmsState.boards.board.length > 0) {
@@ -3083,10 +3080,10 @@
 
         const boardCategories = [
             { name: '전체', count: boardItems.length },
-            { name: '시공후기', count: boardItems.filter(b => b.cat === '시공후기').length },
-            { name: '제품문의', count: boardItems.filter(b => b.cat === '제품문의').length },
-            { name: 'A/S', count: boardItems.filter(b => b.cat === 'A/S').length },
-            { name: '기타', count: boardItems.filter(b => b.cat === '기타').length }
+            { name: '기술정보', count: boardItems.filter(b => b.cat === '기술정보').length },
+            { name: '시공사례', count: boardItems.filter(b => b.cat === '시공사례').length },
+            { name: '제품소식', count: boardItems.filter(b => b.cat === '제품소식').length },
+            { name: '업계동향', count: boardItems.filter(b => b.cat === '업계동향').length }
         ];
 
         function setBoardFilter(name) { boardFilter = name; renderBoard(); }
