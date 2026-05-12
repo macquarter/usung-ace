@@ -3353,391 +3353,633 @@
             bulb: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M9 14a5 5 0 1 1 6 0c-.7.5-1 1-1 2v1H10v-1c0-1-.3-1.5-1-2z"/></svg>'
         };
 
-        /* ──────── 유지보수 가이드: 인터랙티브 조립 애니메이션 ──────── */
-        const manualAnimData = {
-            gear: {
-                parts: [
-                    { id:'body', type:'rect', x:140, y:80, w:120, h:100, rx:8, fill:'#60a5fa', label:'감속기 본체' },
-                    { id:'spring', type:'rect', x:165, y:105, w:70, h:50, rx:4, fill:'#fbbf24', label:'태엽(스프링)' },
-                    { id:'s1', type:'rect', x:148, y:88, w:10, h:10, rx:2, fill:'#f87171', label:'피스①' },
-                    { id:'s2', type:'rect', x:242, y:88, w:10, h:10, rx:2, fill:'#f87171', label:'피스②' },
-                    { id:'s3', type:'rect', x:148, y:162, w:10, h:10, rx:2, fill:'#f87171', label:'피스③' },
-                    { id:'s4', type:'rect', x:242, y:162, w:10, h:10, rx:2, fill:'#f87171', label:'피스④' },
-                    { id:'wire', type:'path', d:'M170 210 L200 195 L230 210', fill:'none', stroke:'#fbbf24', sw:2.5, label:'와이어+V고리' },
-                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
-                ],
-                steps: [
-                    { title:'피스 4개 풀기', desc:'사각피스 4개를 풀어서 태엽을 분리합니다', show:['body','spring','s1','s2','s3','s4'], anim:[
-                        {id:'s1',to:{x:110,y:55},dur:600},{id:'s2',to:{x:280,y:55},dur:600},{id:'s3',to:{x:110,y:195},dur:600},{id:'s4',to:{x:280,y:195},dur:600},{id:'spring',to:{x:165,y:30},dur:800}
-                    ]},
-                    { title:'새 태엽 끼우기', desc:'새 태엽을 사각구멍에 끼우고 피스를 채웁니다', show:['body','spring','s1','s2','s3','s4'], anim:[
-                        {id:'spring',from:{x:165,y:30},to:{x:165,y:105},dur:700},{id:'s1',from:{x:110,y:55},to:{x:148,y:88},dur:500,delay:400},{id:'s2',from:{x:280,y:55},to:{x:242,y:88},dur:500,delay:500},{id:'s3',from:{x:110,y:195},to:{x:148,y:162},dur:500,delay:600},{id:'s4',from:{x:280,y:195},to:{x:242,y:162},dur:500,delay:700}
-                    ]},
-                    { title:'와이어 V고리 걸기', desc:'파이프 안쪽에서 와이어줄을 V고리에 걸어줍니다', show:['body','spring','s1','s2','s3','s4','wire'], anim:[
-                        {id:'wire',from:{y:260},to:{y:210},dur:800}
-                    ]},
-                    { title:'작동 테스트', desc:'후드를 1~2회 올렸다 내려 감속 속도를 확인합니다', show:['body','spring','s1','s2','s3','s4','wire','check'], anim:[
-                        {id:'check',from:{scale:0},to:{scale:1},dur:600},{id:'body',anim:'bounce',dur:1200}
-                    ]}
-                ]
-            },
-            rod: {
-                parts: [
-                    { id:'outer', type:'rect', x:80, y:115, w:240, h:30, rx:15, fill:'#60a5fa', label:'겉봉' },
-                    { id:'inner', type:'rect', x:90, y:120, w:130, h:20, rx:10, fill:'#4ade80', label:'속봉' },
-                    { id:'collar', type:'rect', x:250, y:108, w:26, h:44, rx:5, fill:'#fbbf24', label:'걸링' },
-                    { id:'nut', type:'circle', cx:263, cy:130, r:7, fill:'#f87171', label:'너트피스' },
-                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
-                ],
-                steps: [
-                    { title:'너트피스 풀기', desc:'걸링에 있는 너트피스를 풀어서 빼냅니다', show:['outer','inner','collar','nut'], anim:[
-                        {id:'nut',to:{cx:320,cy:100},dur:700}
-                    ]},
-                    { title:'걸링 돌리기', desc:'걸링을 반시계방향으로 돌려 잠금을 해제합니다', show:['outer','inner','collar'], anim:[
-                        {id:'collar',anim:'rotate',dur:1000}
-                    ]},
-                    { title:'속봉·겉봉 분리', desc:'양손으로 살짝 당겨 분리합니다', show:['outer','inner','collar'], anim:[
-                        {id:'inner',to:{x:10},dur:800},{id:'outer',to:{x:160},dur:800}
-                    ]},
-                    { title:'세척 후 재조립', desc:'기름때를 세척제로 닦고 역순으로 재조립합니다', show:['outer','inner','collar','check'], anim:[
-                        {id:'inner',from:{x:10},to:{x:90},dur:700},{id:'outer',from:{x:160},to:{x:80},dur:700},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:800}
-                    ]}
-                ]
-            },
-            bearing: {
-                parts: [
-                    { id:'rod', type:'rect', x:50, y:122, w:300, h:16, rx:8, fill:'#60a5fa', label:'봉' },
-                    { id:'b1', type:'circle', cx:95, cy:130, r:12, fill:'#fbbf24', label:'①' },
-                    { id:'b2', type:'circle', cx:125, cy:130, r:12, fill:'#fbbf24', label:'②' },
-                    { id:'b3', type:'circle', cx:155, cy:130, r:12, fill:'#fbbf24', label:'③' },
-                    { id:'b4', type:'circle', cx:185, cy:130, r:12, fill:'#fbbf24', label:'④' },
-                    { id:'b5', type:'circle', cx:215, cy:130, r:12, fill:'#fbbf24', label:'⑤' },
-                    { id:'b6', type:'circle', cx:245, cy:130, r:12, fill:'#fbbf24', label:'⑥' },
-                    { id:'b7', type:'circle', cx:275, cy:130, r:12, fill:'#4ade80', label:'+1' },
-                    { id:'b8', type:'circle', cx:305, cy:130, r:12, fill:'#4ade80', label:'+2' },
-                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
-                ],
-                steps: [
-                    { title:'빠찌링 6개 끼우기', desc:'봉에 빠찌링(베어링)을 6개 끼워 넣습니다', show:['rod','b1','b2','b3','b4','b5','b6'], anim:[
-                        {id:'b1',from:{cy:50},to:{cy:130},dur:400},{id:'b2',from:{cy:50},to:{cy:130},dur:400,delay:100},{id:'b3',from:{cy:50},to:{cy:130},dur:400,delay:200},{id:'b4',from:{cy:50},to:{cy:130},dur:400,delay:300},{id:'b5',from:{cy:50},to:{cy:130},dur:400,delay:400},{id:'b6',from:{cy:50},to:{cy:130},dur:400,delay:500}
-                    ]},
-                    { title:'느슨하면 1~2개 추가', desc:'사용 후 느슨해지면 여분의 빠찌링을 추가합니다', show:['rod','b1','b2','b3','b4','b5','b6','b7','b8'], anim:[
-                        {id:'b7',from:{cy:50},to:{cy:130},dur:500,delay:200},{id:'b8',from:{cy:50},to:{cy:130},dur:500,delay:500}
-                    ]},
-                    { title:'뺄 때는 펜치로!', desc:'손으로 빼지 말고 펜치로 안쪽에서 톡 쳐서 빼냅니다', show:['rod','b1','b2','b3','b4','b5','b6','b7','b8'], anim:[
-                        {id:'b8',to:{cy:50},dur:500},{id:'b7',to:{cy:50},dur:500,delay:200}
-                    ]},
-                    { title:'장력 테스트', desc:'교체 후 상하 작동을 여러 번 테스트합니다', show:['rod','b1','b2','b3','b4','b5','b6','check'], anim:[
-                        {id:'check',from:{scale:0},to:{scale:1},dur:600}
-                    ]}
-                ]
-            },
-            drop: {
-                parts: [
-                    { id:'hood', type:'rect', x:100, y:30, w:200, h:60, rx:6, fill:'#60a5fa', label:'후드 하단' },
-                    { id:'cap', type:'path', d:'M160 90 L160 150 Q160 170 180 175 L220 175 Q240 170 240 150 L240 90', fill:'#fbbf24', label:'나팔캡' },
-                    { id:'tray', type:'ellipse', cx:200, cy:200, rx:55, ry:18, fill:'#fbbf24', label:'기름받이' },
-                    { id:'oil', type:'ellipse', cx:200, cy:200, rx:30, ry:10, fill:'#a16207', label:'기름때' },
-                    { id:'check', type:'circle', cx:200, cy:130, r:18, fill:'#4ade80', label:'✓ OK' }
-                ],
-                steps: [
-                    { title:'나팔캡 분리', desc:'후드 하단의 나팔캡을 손으로 돌려 분리합니다', show:['hood','cap','tray'], anim:[
-                        {id:'cap',anim:'rotate',dur:800},{id:'cap',to:{y:120},dur:600,delay:800}
-                    ]},
-                    { title:'기름받이 분리', desc:'기름받이를 반시계방향으로 돌려 빼냅니다', show:['hood','tray','oil'], anim:[
-                        {id:'tray',anim:'rotate',dur:800},{id:'tray',to:{cy:240},dur:600,delay:600},{id:'oil',to:{cy:240},dur:600,delay:600}
-                    ]},
-                    { title:'기름 버리고 세척', desc:'기름을 버리고 중성 세제로 세척합니다', show:['tray','oil'], anim:[
-                        {id:'oil',to:{rx:0,ry:0},dur:800}
-                    ]},
-                    { title:'역순 재조립', desc:'물기를 닦고 시계방향으로 돌려 체결합니다', show:['hood','cap','tray','check'], anim:[
-                        {id:'tray',from:{cy:240},to:{cy:200},dur:600},{id:'cap',from:{y:120},to:{y:0},dur:600,delay:400},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:1000}
-                    ]}
-                ]
-            },
-            bulb: {
-                parts: [
-                    { id:'hood', type:'rect', x:110, y:30, w:180, h:40, rx:6, fill:'#60a5fa', label:'후드 하단' },
-                    { id:'rubber', type:'ellipse', cx:200, cy:85, rx:45, ry:10, fill:'#f87171', label:'등받침 고무' },
-                    { id:'plate', type:'rect', x:130, y:100, w:140, h:20, rx:5, fill:'#fbbf24', label:'등하판' },
-                    { id:'bulb', type:'circle', cx:200, cy:155, r:30, fill:'#4ade80', label:'💡 갓등' },
-                    { id:'wire', type:'path', d:'M235 140 L270 120 L290 120', fill:'none', stroke:'#f87171', sw:2, label:'전원선' },
-                    { id:'check', type:'circle', cx:200, cy:155, r:18, fill:'#4ade80', label:'✓ OK' }
-                ],
-                steps: [
-                    { title:'등받침 고무 끼우기', desc:'등받침 고무를 후드 하단에 끼웁니다', show:['hood','rubber'], anim:[
-                        {id:'rubber',from:{cy:200},to:{cy:85},dur:700}
-                    ]},
-                    { title:'등하판 올려 끼우기', desc:'고무 위에 등하판을 올려 끼웁니다', show:['hood','rubber','plate'], anim:[
-                        {id:'plate',from:{y:220},to:{y:100},dur:700}
-                    ]},
-                    { title:'갓등 장착', desc:'등하판 위에 갓등(LED·삼파장·아크릴)을 장착합니다', show:['hood','rubber','plate','bulb'], anim:[
-                        {id:'bulb',from:{cy:260},to:{cy:155},dur:700}
-                    ]},
-                    { title:'전원 연결 · 점등 테스트', desc:'전원선을 연결하고 점등 테스트 후 완료합니다', show:['hood','rubber','plate','bulb','wire','check'], anim:[
-                        {id:'wire',from:{opacity:0},to:{opacity:1},dur:500},{id:'bulb',anim:'glow',dur:1200,delay:500},{id:'check',from:{scale:0},to:{scale:1},dur:600,delay:1200}
-                    ]}
-                ]
-            }
+        /* ──────── 유지보수 가이드: 3D 실사풍 인터랙티브 가이드 ──────── */
+        const manualGuideSteps = {
+            gear: [
+                { title:'STEP 1 — 사각피스 4개 풀기', text:'태엽감속기 외부의 사각 피스 4개(빨간색 표시 부분)를 십자 드라이버로 반시계 방향으로 돌려 풀어줍니다. 주의: 가운데 고정 피스 2개는 절대 풀지 마세요. 이 피스들은 본체 프레임을 잡아주는 역할을 합니다. 4개의 피스를 모두 풀면 태엽 모듈이 분리됩니다.' },
+                { title:'STEP 2 — 새 태엽 장착 + 피스 체결', text:'분리한 자리에 새 태엽 모듈을 사각 구멍에 맞춰 끼워 넣습니다. 방향을 확인하고(각인된 화살표가 위를 향하도록), 피스 4개를 대각선 순서(①→③→②→④)로 조여줍니다. 대각선으로 조여야 균일한 압력이 걸려 수명이 늘어납니다. 후드 중간 부분을 다시 결합합니다.' },
+                { title:'STEP 3 — 와이어줄 V고리 걸기', text:'파이프 안쪽으로 손을 넣어 와이어줄 끝을 잡습니다. 줄을 아래로 충분히 당긴 뒤, V자 모양 고리에 걸어줍니다. 와이어줄이 꼬이지 않았는지 반드시 확인하세요. 줄이 꼬이면 후드 개폐 시 한쪽으로 치우쳐 소음이 발생합니다.' },
+                { title:'STEP 4 — 작동 테스트', text:'후드를 천천히 올렸다가 내리는 동작을 1~2회 반복합니다. 감속이 균일한지(끊김 없이 부드럽게 내려오는지) 확인합니다. 한쪽으로 기울거나 속도가 불규칙하면 와이어줄 장력을 재조정하세요. 정상이면 교체 완료입니다.' }
+            ],
+            rod: [
+                { title:'STEP 1 — 너트피스 분리', text:'겉봉과 속봉을 연결하는 걸링 부분에 너트피스가 있습니다. 이 너트피스를 렌치로 풀어 빼냅니다. 너트피스는 매우 작으니 분실 주의하세요. 빼낸 피스는 자석 트레이에 올려두면 편합니다.' },
+                { title:'STEP 2 — 걸링 반시계 회전', text:'너트피스를 빼면 걸링이 자유롭게 회전할 수 있게 됩니다. 걸링을 반시계 방향으로 3~4바퀴 돌려 잠금을 완전히 해제합니다. 너무 세게 돌리면 나사산이 손상될 수 있으니 부드럽게 돌려주세요.' },
+                { title:'STEP 3 — 속봉·겉봉 분리', text:'잠금이 해제되면 양손으로 속봉과 겉봉을 각각 잡고 살짝 당깁니다. 억지로 빼지 마세요. 기름때가 굳어서 안 빠지면 WD-40 등 침투 윤활제를 뿌리고 5분 후 다시 시도합니다. 분리된 내부에 낀 기름때와 이물질을 확인합니다.' },
+                { title:'STEP 4 — 세척 후 역순 재조립', text:'분리된 속봉과 겉봉 내부를 중성 세척제와 부드러운 브러시로 닦아냅니다. 세척 후 물기를 완전히 제거하고(마른 천 + 자연건조 10분), 역순으로 재조립합니다: 속봉 삽입 → 걸링 시계방향 조임 → 너트피스 체결. 조립 후 부드럽게 슬라이드 되는지 확인하세요.' }
+            ],
+            bearing: [
+                { title:'STEP 1 — 빠찌링 6개 끼우기', text:'새 제품 설치 시 빠찌링(베어링 링)을 봉에 6개 끼워 넣습니다. 빠찌링은 봉과 겉봉 사이에서 마찰을 줄여주는 소모품입니다. 균일한 간격으로 배치해야 하며, 끼울 때 링이 변형되지 않도록 평평한 면을 밀어 넣습니다.' },
+                { title:'STEP 2 — 느슨해지면 1~2개 추가', text:'수일~수주 사용 후 후드가 살짝 흘러내리거나 느슨한 느낌이 들면, 여분의 빠찌링을 1~2개 추가로 끼워줍니다. 한 번에 많이 추가하면 너무 뻑뻑해지니 하나씩 추가하며 장력을 확인하는 게 좋습니다. 이 방법으로 평생 텐션을 유지할 수 있습니다.' },
+                { title:'STEP 3 — 제거 시 펜치 사용 (필수)', text:'빠찌링을 제거해야 할 때는 절대 맨손으로 빼지 마세요. 스테인리스 재질이라 손이 베일 수 있습니다. 반드시 펜치(뾰족한 롱노즈 추천)로 안쪽에서 바깥으로 톡 쳐서 빼냅니다. 작업 시 면장갑을 착용하면 더 안전합니다.' },
+                { title:'STEP 4 — 장력 테스트', text:'빠찌링 추가/제거 후 반드시 후드를 여러 번 올렸다 내려보며 장력을 확인합니다. 이상적인 상태: 후드를 놓았을 때 천천히 부드럽게 내려오면서 바닥에서 딱 멈추는 것. 너무 빨리 떨어지면 링 추가, 안 내려가면 링 제거가 필요합니다.' }
+            ],
+            drop: [
+                { title:'STEP 1 — 나팔캡 손으로 분리', text:'후드 하단에 달린 나팔캡(깔때기 모양 캡)을 손으로 반시계 방향으로 돌려 분리합니다. 도구가 전혀 필요 없는 손쉬운 구조입니다. 유성에이스만의 일체형 성형 방식 덕분에 누유(기름 새는 것) 없이 깔끔하게 분리됩니다.' },
+                { title:'STEP 2 — 기름받이 분리', text:'나팔캡을 빼면 기름받이가 보입니다. 기름받이를 반시계 방향으로 돌려 빼냅니다. 이 부품도 별도 도구 없이 손으로 작업합니다. 안에 모인 기름이 흘러나올 수 있으니 아래에 신문지나 키친타올을 깔아두세요.' },
+                { title:'STEP 3 — 기름 처리 + 세척', text:'기름받이에 모인 폐유를 음식물 쓰레기가 아닌 일반 쓰레기(비닐봉지에 담아)로 버립니다. 기름받이와 나팔캡을 중성 세제(주방세제 OK)와 따뜻한 물로 세척합니다. 기름때가 심하면 베이킹소다를 뿌리고 5분 후 수세미로 닦으면 깨끗해집니다.' },
+                { title:'STEP 4 — 역순 재조립 (시계방향)', text:'세척 후 물기를 완전히 닦아냅니다(물기가 남으면 기름과 섞여 악취 원인). 기름받이를 시계 방향으로 돌려 체결하고, 나팔캡도 시계 방향으로 돌려 결합합니다. 매일 또는 주 1~2회 이 과정을 반복하면 후드를 항상 청결하게 유지할 수 있습니다.' }
+            ],
+            bulb: [
+                { title:'STEP 1 — 등받침 고무 끼우기', text:'후드 하단의 원형 홈에 등받침 고무를 끼웁니다. 고무의 홈 방향을 확인하고(볼록한 면이 위를 향하도록) 균일하게 눌러 끼워줍니다. 이 고무가 등 전체의 무게를 받쳐주므로 빠짐 없이 완전히 안착시켜야 합니다.' },
+                { title:'STEP 2 — 등하판 장착', text:'등받침 고무 위에 등하판(받침 판)을 올려 끼웁니다. 등하판의 결합 홈이 고무 돌출부와 맞물리도록 방향을 맞춰야 합니다. 살짝 돌려 끼우면 딸각 소리와 함께 고정됩니다. 흔들림이 없는지 살짝 잡아당겨 확인합니다.' },
+                { title:'STEP 3 — 갓등(전구) 장착', text:'등하판 위에 갓등을 장착합니다. LED등/삼파장등/아크릴등 모두 동일한 규격이므로 그대로 올려놓으면 됩니다. 전구 소켓이 단자에 정확히 맞물리도록 가볍게 눌러 끼웁니다. 비스듬하게 들어가면 접촉 불량이 될 수 있으니 수직으로 끼우세요.' },
+                { title:'STEP 4 — 전원 연결 + 점등 테스트', text:'전원선을 콘센트에 연결하고 스위치를 켜서 점등을 확인합니다. 불이 깜빡이면 소켓 접촉 불량이니 갓등을 다시 끼워보세요. LED등의 경우 정상 점등 시 3초 이내에 최대 밝기에 도달합니다. 모든 게 정상이면 조립 완료입니다!' }
+            ]
         };
-
-        /* ── 애니메이션 엔진: Canvas 기반 조립 시뮬레이터 ── */
-        function createManualAnimPlayer(containerId, key) {
-            const data = manualAnimData[key];
-            if (!data) return;
+        /* ── 3D 실사풍 유지보수 가이드 렌더러 ── */
+        function create3DManualGuide(containerId, iconKey, guideIdx) {
+            const steps = manualGuideSteps[iconKey];
+            if (!steps) return;
             const container = document.getElementById(containerId);
             if (!container) return;
-            const W = 400, H = 260;
+
+            const W = 800, H = 500;
             const canvas = document.createElement('canvas');
-            canvas.width = W * 2; canvas.height = H * 2;
-            canvas.style.cssText = 'width:100%;height:100%;border-radius:12px;';
+            canvas.width = W; canvas.height = H;
+            canvas.style.cssText = 'width:100%;border-radius:16px;display:block;';
             const ctx = canvas.getContext('2d');
-            ctx.scale(2, 2);
 
             let currentStep = 0;
-            let animating = false;
+            let animProgress = 0;
             let animFrame = null;
-            let partStates = {};
 
-            // 파트 초기 상태
-            function resetParts() {
-                partStates = {};
-                data.parts.forEach(p => {
-                    partStates[p.id] = { ...p, opacity: 1, scale: 1, rotation: 0, glowing: false };
-                });
-            }
-            resetParts();
-
-            const colors = {
-                '#60a5fa': [96,165,250], '#fbbf24': [251,191,36], '#f87171': [248,113,113],
-                '#4ade80': [74,222,128], '#a16207': [162,98,7], '#38bdf8': [56,189,248]
-            };
-
-            function parseColor(c, alpha) {
-                const rgb = colors[c] || [255,255,255];
-                return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha !== undefined ? alpha : 1})`;
+            // 3D 헬퍼: 메탈릭 그라디언트
+            function metalGrad(x, y, w, h, baseR, baseG, baseB) {
+                const g = ctx.createLinearGradient(x, y, x, y + h);
+                g.addColorStop(0, `rgba(${baseR+60},${baseG+60},${baseB+60},1)`);
+                g.addColorStop(0.3, `rgba(${baseR+20},${baseG+20},${baseB+20},1)`);
+                g.addColorStop(0.5, `rgba(${baseR},${baseG},${baseB},1)`);
+                g.addColorStop(0.7, `rgba(${baseR-30},${baseG-30},${baseB-30},1)`);
+                g.addColorStop(1, `rgba(${Math.max(0,baseR-50)},${Math.max(0,baseG-50)},${Math.max(0,baseB-50)},1)`);
+                return g;
             }
 
-            function drawPart(p, st) {
-                if (st.opacity <= 0) return;
+            // 3D 둥근사각 with shadow + bevel
+            function draw3DRect(x, y, w, h, r, g, b, radius, shadow) {
                 ctx.save();
-                ctx.globalAlpha = st.opacity;
-                const sc = st.scale || 1;
+                if (shadow) {
+                    ctx.shadowColor = `rgba(0,0,0,0.5)`;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 4;
+                    ctx.shadowOffsetY = 6;
+                }
+                ctx.beginPath();
+                ctx.roundRect(x, y, w, h, radius || 6);
+                ctx.fillStyle = metalGrad(x, y, w, h, r, g, b);
+                ctx.fill();
+                // Top bevel highlight
+                ctx.shadowColor = 'transparent';
+                ctx.beginPath();
+                ctx.roundRect(x+1, y+1, w-2, h/3, radius || 6);
+                ctx.fillStyle = `rgba(255,255,255,0.12)`;
+                ctx.fill();
+                // Bottom edge
+                ctx.beginPath();
+                ctx.moveTo(x + (radius||6), y + h);
+                ctx.lineTo(x + w - (radius||6), y + h);
+                ctx.strokeStyle = `rgba(0,0,0,0.3)`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
 
-                if (st.type === 'rect') {
-                    const cx = (st.x || p.x) + (st.w || p.w)/2;
-                    const cy = (st.y || p.y) + (st.h || p.h)/2;
-                    ctx.translate(cx, cy);
-                    if (st.rotation) ctx.rotate(st.rotation);
-                    ctx.scale(sc, sc);
-                    const w = st.w || p.w, h = st.h || p.h, rx = st.rx || p.rx || 0;
+            // 3D 원형 (볼트/베어링)
+            function draw3DCircle(cx, cy, r, colR, colG, colB, shadow) {
+                ctx.save();
+                if (shadow) {
+                    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowOffsetX = 3;
+                    ctx.shadowOffsetY = 4;
+                }
+                const grad = ctx.createRadialGradient(cx - r*0.3, cy - r*0.3, r*0.1, cx, cy, r);
+                grad.addColorStop(0, `rgba(${colR+80},${colG+80},${colB+80},1)`);
+                grad.addColorStop(0.4, `rgba(${colR+20},${colG+20},${colB+20},1)`);
+                grad.addColorStop(0.7, `rgba(${colR},${colG},${colB},1)`);
+                grad.addColorStop(1, `rgba(${Math.max(0,colR-40)},${Math.max(0,colG-40)},${Math.max(0,colB-40)},1)`);
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                // Specular highlight
+                ctx.shadowColor = 'transparent';
+                ctx.beginPath();
+                ctx.arc(cx - r*0.25, cy - r*0.25, r*0.35, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.25)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 3D 파이프 (원통형)
+            function draw3DPipe(x, y, w, h, colR, colG, colB) {
+                ctx.save();
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 5;
+                const grad = ctx.createLinearGradient(x, y, x, y+h);
+                grad.addColorStop(0, `rgba(${colR+50},${colG+50},${colB+50},1)`);
+                grad.addColorStop(0.15, `rgba(${colR+80},${colG+80},${colB+80},1)`);
+                grad.addColorStop(0.5, `rgba(${colR},${colG},${colB},1)`);
+                grad.addColorStop(0.85, `rgba(${colR+30},${colG+30},${colB+30},1)`);
+                grad.addColorStop(1, `rgba(${Math.max(0,colR-30)},${Math.max(0,colG-30)},${Math.max(0,colB-30)},1)`);
+                ctx.beginPath();
+                ctx.roundRect(x, y, w, h, h/2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.shadowColor = 'transparent';
+                // Pipe specular
+                ctx.beginPath();
+                ctx.roundRect(x+4, y+2, w-8, h*0.25, 4);
+                ctx.fillStyle = 'rgba(255,255,255,0.18)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 나팔캡 (3D)
+            function draw3DTrumpetCap(cx, y, progress) {
+                ctx.save();
+                const topW = 80, botW = 130, h = 90;
+                const offsetY = progress * 70;
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 5;
+                ctx.beginPath();
+                ctx.moveTo(cx - topW/2, y + offsetY);
+                ctx.lineTo(cx + topW/2, y + offsetY);
+                ctx.quadraticCurveTo(cx + botW/2 + 10, y + h*0.6 + offsetY, cx + botW/2, y + h + offsetY);
+                ctx.lineTo(cx - botW/2, y + h + offsetY);
+                ctx.quadraticCurveTo(cx - botW/2 - 10, y + h*0.6 + offsetY, cx - topW/2, y + offsetY);
+                ctx.closePath();
+                const grad = ctx.createLinearGradient(cx - botW/2, y + offsetY, cx + botW/2, y + h + offsetY);
+                grad.addColorStop(0, '#d4d4d8');
+                grad.addColorStop(0.3, '#a1a1aa');
+                grad.addColorStop(0.5, '#71717a');
+                grad.addColorStop(0.8, '#a1a1aa');
+                grad.addColorStop(1, '#52525b');
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.shadowColor = 'transparent';
+                // Highlight
+                ctx.beginPath();
+                ctx.moveTo(cx - topW/2 + 8, y + 5 + offsetY);
+                ctx.lineTo(cx + topW/2 - 8, y + 5 + offsetY);
+                ctx.quadraticCurveTo(cx + botW/4, y + h*0.3 + offsetY, cx - topW/4, y + h*0.2 + offsetY);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(255,255,255,0.12)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 전구 (3D glow)
+            function draw3DBulb(cx, cy, r, on) {
+                ctx.save();
+                if (on) {
+                    // Glow
+                    const glow = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*2.5);
+                    glow.addColorStop(0, 'rgba(251,191,36,0.3)');
+                    glow.addColorStop(0.5, 'rgba(251,191,36,0.1)');
+                    glow.addColorStop(1, 'rgba(251,191,36,0)');
                     ctx.beginPath();
-                    ctx.roundRect(-w/2, -h/2, w, h, rx);
-                    ctx.fillStyle = parseColor(p.fill, 0.15);
+                    ctx.arc(cx, cy, r*2.5, 0, Math.PI*2);
+                    ctx.fillStyle = glow;
                     ctx.fill();
-                    ctx.strokeStyle = parseColor(p.fill, 0.7);
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                    // Label
-                    ctx.fillStyle = parseColor(p.fill, 0.9);
-                    ctx.font = 'bold 11px "Pretendard",sans-serif';
+                }
+                ctx.shadowColor = on ? 'rgba(251,191,36,0.5)' : 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = on ? 20 : 10;
+                const grad = ctx.createRadialGradient(cx - r*0.3, cy - r*0.3, r*0.1, cx, cy, r);
+                if (on) {
+                    grad.addColorStop(0, '#fffbe6');
+                    grad.addColorStop(0.3, '#fde68a');
+                    grad.addColorStop(0.7, '#fbbf24');
+                    grad.addColorStop(1, '#d97706');
+                } else {
+                    grad.addColorStop(0, '#e5e7eb');
+                    grad.addColorStop(0.5, '#9ca3af');
+                    grad.addColorStop(1, '#6b7280');
+                }
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI*2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.shadowColor = 'transparent';
+                // Specular
+                ctx.beginPath();
+                ctx.arc(cx - r*0.2, cy - r*0.25, r*0.35, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 화살표 (3D 느낌)
+            function drawArrow(x1, y1, x2, y2, color, label) {
+                ctx.save();
+                const angle = Math.atan2(y2-y1, x2-x1);
+                const len = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 4;
+                ctx.setLineDash([8, 4]);
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                // Arrowhead
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - 12*Math.cos(angle-0.4), y2 - 12*Math.sin(angle-0.4));
+                ctx.lineTo(x2 - 12*Math.cos(angle+0.4), y2 - 12*Math.sin(angle+0.4));
+                ctx.closePath();
+                ctx.fill();
+                if (label) {
+                    ctx.shadowColor = 'transparent';
+                    ctx.fillStyle = color;
+                    ctx.font = 'bold 11px Pretendard,sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText(p.label, 0, 4);
-                } else if (st.type === 'circle') {
-                    const cx = st.cx !== undefined ? st.cx : p.cx;
-                    const cy = st.cy !== undefined ? st.cy : p.cy;
-                    const r = st.r || p.r;
-                    ctx.translate(cx, cy);
-                    ctx.scale(sc, sc);
-                    if (st.glowing) {
-                        ctx.shadowColor = parseColor(p.fill, 0.6);
-                        ctx.shadowBlur = 20;
-                    }
-                    ctx.beginPath();
-                    ctx.arc(0, 0, r, 0, Math.PI * 2);
-                    ctx.fillStyle = parseColor(p.fill, 0.2);
-                    ctx.fill();
-                    ctx.strokeStyle = parseColor(p.fill, 0.8);
-                    ctx.lineWidth = 2.5;
-                    ctx.stroke();
-                    ctx.shadowBlur = 0;
-                    ctx.fillStyle = parseColor(p.fill, 0.95);
-                    ctx.font = r > 14 ? 'bold 13px "Pretendard",sans-serif' : 'bold 10px "Pretendard",sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(p.label, 0, 4);
-                } else if (st.type === 'ellipse') {
-                    const cx = st.cx !== undefined ? st.cx : p.cx;
-                    const cy = st.cy !== undefined ? st.cy : p.cy;
-                    const rx = st.rx !== undefined ? st.rx : p.rx;
-                    const ry = st.ry !== undefined ? st.ry : p.ry;
-                    ctx.translate(cx, cy);
-                    if (st.rotation) ctx.rotate(st.rotation);
-                    ctx.scale(sc, sc);
-                    ctx.beginPath();
-                    ctx.ellipse(0, 0, Math.max(rx,0), Math.max(ry,0), 0, 0, Math.PI * 2);
-                    ctx.fillStyle = parseColor(p.fill, 0.2);
-                    ctx.fill();
-                    ctx.strokeStyle = parseColor(p.fill, 0.7);
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                    if (rx > 5) {
-                        ctx.fillStyle = parseColor(p.fill, 0.9);
-                        ctx.font = 'bold 10px "Pretendard",sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(p.label, 0, 4);
-                    }
-                } else if (st.type === 'path') {
-                    ctx.translate(0, st.y || 0);
-                    ctx.scale(sc, sc);
-                    const path2d = new Path2D(st.d || p.d);
-                    if (p.fill && p.fill !== 'none') {
-                        ctx.fillStyle = parseColor(p.fill, 0.15);
-                        ctx.fill(path2d);
-                    }
-                    ctx.strokeStyle = parseColor(p.stroke || p.fill, 0.8);
-                    ctx.lineWidth = p.sw || 2.5;
-                    ctx.stroke(path2d);
-                    ctx.fillStyle = parseColor(p.stroke || p.fill, 0.8);
-                    ctx.font = 'bold 10px "Pretendard",sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(p.label, 200, (st.d || p.d).includes('M160') ? 185 : 225);
+                    ctx.fillText(label, (x1+x2)/2, (y1+y2)/2 - 10);
                 }
                 ctx.restore();
             }
 
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-                // BG
-                const grad = ctx.createLinearGradient(0, 0, 0, H);
-                grad.addColorStop(0, '#0a0a14');
-                grad.addColorStop(1, '#060610');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, W, H);
-                // Grid dots
-                ctx.fillStyle = 'rgba(255,255,255,0.03)';
-                for (let x = 20; x < W; x += 20) for (let y = 20; y < H; y += 20) {
-                    ctx.fillRect(x, y, 1, 1);
+            // 체크마크
+            function drawCheckmark(cx, cy, size, progress) {
+                if (progress <= 0) return;
+                ctx.save();
+                const s = size * Math.min(1, progress * 1.2);
+                ctx.shadowColor = 'rgba(34,197,94,0.5)';
+                ctx.shadowBlur = 15;
+                draw3DCircle(cx, cy, s, 34, 197, 94, false);
+                ctx.shadowColor = 'transparent';
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                const p = Math.min(1, progress);
+                ctx.beginPath();
+                ctx.moveTo(cx - s*0.35, cy);
+                if (p > 0.5) {
+                    ctx.lineTo(cx - s*0.05, cy + s*0.3);
+                    ctx.lineTo(cx + s*0.35, cy - s*0.25);
+                } else {
+                    const t = p / 0.5;
+                    ctx.lineTo(cx - s*0.35 + t*(s*0.3), cy + t*(s*0.3));
                 }
-                // Draw visible parts
-                const step = data.steps[currentStep];
-                data.parts.forEach(p => {
-                    const st = partStates[p.id];
-                    if (step.show.includes(p.id) && st) drawPart(p, st);
-                });
-                // Step label
-                ctx.fillStyle = 'rgba(96,165,250,0.8)';
-                ctx.font = 'bold 10px "Pretendard",sans-serif';
-                ctx.textAlign = 'left';
-                ctx.fillText(`STEP ${currentStep + 1} / ${data.steps.length}`, 12, 20);
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.font = 'bold 14px "Pretendard",sans-serif';
-                ctx.fillText(step.title, 12, 38);
-                ctx.fillStyle = 'rgba(255,255,255,0.4)';
-                ctx.font = '11px "Pretendard",sans-serif';
-                ctx.fillText(step.desc, 12, 54);
+                ctx.stroke();
+                ctx.restore();
             }
 
-            // 이징 함수
-            function easeOutBack(t) {
-                const c1 = 1.70158, c3 = c1 + 1;
-                return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+            // 배경 그리기
+            function drawBG() {
+                // Dark gradient bg
+                const bg = ctx.createLinearGradient(0, 0, 0, H);
+                bg.addColorStop(0, '#0c0c14');
+                bg.addColorStop(1, '#06060e');
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, W, H);
+                // Subtle grid
+                ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+                for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+                // Ambient light spot
+                const amb = ctx.createRadialGradient(W*0.35, H*0.3, 0, W*0.35, H*0.3, 300);
+                amb.addColorStop(0, 'rgba(96,165,250,0.04)');
+                amb.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = amb;
+                ctx.fillRect(0, 0, W, H);
             }
-            function easeOutElastic(t) {
-                if (t === 0 || t === 1) return t;
-                return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * (2 * Math.PI / 3)) + 1;
-            }
 
-            function runAnimations(anims, onDone) {
-                animating = true;
-                const startTime = performance.now();
-                const totalDur = Math.max(...anims.map(a => (a.dur || 600) + (a.delay || 0)));
+            // ── 각 항목별 씬 그리기 ──
+            const sceneDraw = {
+                gear(step, t) {
+                    // 감속기 본체 (스테인리스)
+                    const bodyY = step >= 3 ? 100 + Math.sin(t*3)*8*(1-t) : 100;
+                    draw3DRect(240, bodyY, 160, 130, 160, 170, 180, 10, true);
+                    // 라벨
+                    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                    ctx.font = '10px Pretendard,sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('REDUCER BODY', 320, bodyY + 150);
 
-                function tick(now) {
-                    const elapsed = now - startTime;
-                    let allDone = true;
-
-                    anims.forEach(a => {
-                        const delay = a.delay || 0;
-                        const dur = a.dur || 600;
-                        const t = Math.max(0, Math.min(1, (elapsed - delay) / dur));
-                        if (t < 1) allDone = false;
-                        const et = a.anim === 'bounce' ? easeOutElastic(t) : easeOutBack(t);
-                        const st = partStates[a.id];
-                        if (!st) return;
-
-                        if (a.anim === 'rotate') {
-                            st.rotation = t * Math.PI * 2;
-                        } else if (a.anim === 'bounce') {
-                            const bounceY = Math.sin(t * Math.PI * 3) * 15 * (1 - t);
-                            st.y = (st.y || data.parts.find(p=>p.id===a.id).y) + bounceY * 0.1;
-                        } else if (a.anim === 'glow') {
-                            st.glowing = t > 0.3;
-                            st.scale = 1 + Math.sin(t * Math.PI) * 0.15;
-                        } else {
-                            if (a.to) {
-                                const p = data.parts.find(p => p.id === a.id);
-                                Object.keys(a.to).forEach(k => {
-                                    const from = a.from ? a.from[k] : (st[k] !== undefined ? st[k] : p[k]);
-                                    const to = a.to[k];
-                                    if (k === 'scale') {
-                                        st[k] = from + (to - from) * easeOutElastic(t);
-                                    } else {
-                                        st[k] = from + (to - from) * et;
-                                    }
-                                });
-                            }
-                            if (a.from && !a.to) {
-                                Object.keys(a.from).forEach(k => {
-                                    const p = data.parts.find(p => p.id === a.id);
-                                    st[k] = a.from[k] + ((p[k] || 0) - a.from[k]) * et;
-                                });
-                            }
+                    if (step === 0) {
+                        // 피스 4개 빠져나감
+                        const offsets = [[-1,-1],[1,-1],[-1,1],[1,1]];
+                        offsets.forEach(([dx,dy], i) => {
+                            const dist = t * 50;
+                            const px = 320 + dx*70 + dx*dist;
+                            const py = bodyY+65 + dy*55 + dy*dist;
+                            draw3DCircle(px, py, 8, 200, 80, 80, true);
+                        });
+                        // 태엽 올라감
+                        draw3DRect(270, bodyY + 25 - t*80, 100, 60, 190, 160, 50, 6, true);
+                        ctx.fillStyle='#fbbf24'; ctx.font='bold 11px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('SPRING', 320, bodyY + 60 - t*80);
+                        if (t > 0.3) drawArrow(250, bodyY-20, 250, bodyY + 25 - t*80 + 30, '#f87171', '분리');
+                    } else if (step === 1) {
+                        // 새 태엽 내려옴
+                        const springY = bodyY + 25 - 80 + t * 80;
+                        draw3DRect(270, springY, 100, 60, 50, 180, 100, 6, true);
+                        ctx.fillStyle='#4ade80'; ctx.font='bold 11px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('NEW', 320, springY + 35);
+                        if (t > 0.5) {
+                            const pt = (t-0.5)*2;
+                            const offsets = [[-1,-1],[1,-1],[-1,1],[1,1]];
+                            offsets.forEach(([dx,dy]) => {
+                                const dist = (1-pt) * 50;
+                                draw3DCircle(320+dx*70+dx*dist, bodyY+65+dy*55+dy*dist, 8, 96, 165, 250, true);
+                            });
                         }
-                    });
-
-                    draw();
-                    if (!allDone) {
-                        animFrame = requestAnimationFrame(tick);
+                        if (t > 0.3) drawArrow(390, bodyY - 30, 370, springY, '#4ade80', '장착');
+                    } else if (step === 2) {
+                        draw3DRect(270, bodyY+25, 100, 60, 50, 180, 100, 6, true);
+                        [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([dx,dy])=> draw3DCircle(320+dx*70,bodyY+65+dy*55, 8, 96,165,250, true));
+                        // 와이어 + V고리
+                        const wireY = bodyY + 130 + (1-t)*60;
+                        ctx.save();
+                        ctx.strokeStyle = '#fbbf24';
+                        ctx.lineWidth = 3;
+                        ctx.shadowColor = 'rgba(251,191,36,0.3)';
+                        ctx.shadowBlur = 8;
+                        ctx.beginPath();
+                        ctx.moveTo(270, wireY+20);
+                        ctx.lineTo(320, wireY);
+                        ctx.lineTo(370, wireY+20);
+                        ctx.stroke();
+                        draw3DCircle(320, wireY, 6, 200, 50, 50, true);
+                        ctx.fillStyle='#fff'; ctx.font='bold 8px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('V', 320, wireY+3);
+                        ctx.restore();
+                        if (t > 0.3) drawArrow(260, wireY+50, 290, wireY+20, '#fbbf24', '걸기');
                     } else {
-                        animating = false;
-                        if (onDone) onDone();
+                        draw3DRect(270, bodyY+25, 100, 60, 50, 180, 100, 6, true);
+                        [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([dx,dy])=> draw3DCircle(320+dx*70,bodyY+65+dy*55, 8, 96,165,250, true));
+                        ctx.strokeStyle='#fbbf24'; ctx.lineWidth=3; ctx.beginPath();
+                        ctx.moveTo(270,bodyY+150); ctx.lineTo(320,bodyY+130); ctx.lineTo(370,bodyY+150); ctx.stroke();
+                        draw3DCircle(320, bodyY+130, 6, 200,50,50, true);
+                        drawCheckmark(320, bodyY+65, 22, t);
                     }
+                },
+                rod(step, t) {
+                    if (step === 0) {
+                        draw3DPipe(100, 155, 340, 30, 140, 160, 180);
+                        draw3DRect(340, 142, 40, 56, 180, 160, 80, 6, true);
+                        ctx.fillStyle='#fbbf24'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('걸링', 360, 138);
+                        const nutX = 360 + t * 80;
+                        draw3DCircle(nutX, 170, 10, 220, 80, 80, true);
+                        ctx.fillStyle='#fff'; ctx.font='bold 9px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('N', nutX, 173);
+                        if (t > 0.2) drawArrow(380, 170, nutX - 12, 170, '#f87171', '빼기');
+                    } else if (step === 1) {
+                        draw3DPipe(100, 155, 340, 30, 140, 160, 180);
+                        ctx.save();
+                        ctx.translate(360, 170);
+                        ctx.rotate(t * Math.PI * 2);
+                        draw3DRect(-20, -28, 40, 56, 180, 160, 80, 6, false);
+                        ctx.restore();
+                        ctx.fillStyle='rgba(251,191,36,0.7)'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('⟲ 반시계 회전', 360, 128);
+                        drawArrow(400, 140, 320, 140, '#fbbf24', '');
+                    } else if (step === 2) {
+                        const sep = t * 60;
+                        draw3DPipe(100 - sep, 160, 160, 22, 80, 190, 120);
+                        ctx.fillStyle='#4ade80'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('속봉', 180 - sep, 155);
+                        draw3DPipe(280 + sep, 155, 160, 30, 140, 160, 180);
+                        ctx.fillStyle='#60a5fa'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('겉봉', 360 + sep, 150);
+                        if (t > 0.3) {
+                            drawArrow(240, 170, 200 - sep, 170, '#f87171', '');
+                            drawArrow(300, 170, 340 + sep, 170, '#f87171', '');
+                        }
+                    } else {
+                        const sep = (1-t) * 60;
+                        draw3DPipe(100 - sep, 160, 160, 22, 80, 190, 120);
+                        draw3DPipe(280 + sep, 155, 160, 30, 140, 160, 180);
+                        draw3DRect(340, 142, 40, 56, 180, 160, 80, 6, true);
+                        if (t > 0.7) drawCheckmark(320, 170, 20, (t-0.7)*3.3);
+                    }
+                },
+                bearing(step, t) {
+                    draw3DPipe(80, 160, 360, 20, 140, 160, 180);
+                    const colors = [[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[60,200,110],[60,200,110]];
+                    if (step === 0) {
+                        for (let i = 0; i < 6; i++) {
+                            const dropT = Math.max(0, Math.min(1, (t - i*0.1) / 0.4));
+                            const by = 60 + (170-60) * easeOutBounce(dropT);
+                            draw3DCircle(120 + i*44, by, 16, ...colors[i], true);
+                            ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                            ctx.fillText(String(i+1), 120+i*44, by+3);
+                        }
+                    } else if (step === 1) {
+                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
+                        for (let i = 0; i < 2; i++) {
+                            const dropT = Math.max(0, Math.min(1, (t - 0.2 - i*0.3) / 0.5));
+                            const by = 60 + 110 * easeOutBounce(dropT);
+                            draw3DCircle(384 + i*44, by, 16, ...colors[6+i], true);
+                            ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                            ctx.fillText('+' + (i+1), 384+i*44, by+3);
+                        }
+                    } else if (step === 2) {
+                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
+                        for (let i = 1; i >= 0; i--) {
+                            const upT = Math.max(0, Math.min(1, (t - (1-i)*0.3) / 0.5));
+                            const by = 170 - upT * 110;
+                            if (upT < 1) draw3DCircle(384+i*44, by, 16, ...colors[6+i], true);
+                        }
+                        // 펜치 아이콘
+                        if (t > 0.1) {
+                            ctx.save();
+                            ctx.strokeStyle = '#f87171';
+                            ctx.lineWidth = 4;
+                            ctx.lineCap = 'round';
+                            ctx.shadowColor = 'rgba(248,113,113,0.3)';
+                            ctx.shadowBlur = 8;
+                            ctx.beginPath(); ctx.moveTo(440, 120); ctx.lineTo(410, 160); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(455, 120); ctx.lineTo(420, 160); ctx.stroke();
+                            ctx.fillStyle = '#f87171';
+                            ctx.font = 'bold 11px Pretendard'; ctx.textAlign = 'center';
+                            ctx.fillText('펜치 사용!', 448, 112);
+                            ctx.restore();
+                        }
+                    } else {
+                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
+                        drawCheckmark(320, 170, 22, t);
+                    }
+                },
+                drop(step, t) {
+                    // 후드 상단
+                    draw3DRect(180, 40, 200, 60, 120, 130, 145, 8, true);
+                    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px Pretendard'; ctx.textAlign='center';
+                    ctx.fillText('HOOD', 280, 75);
+
+                    if (step === 0) {
+                        const offY = t * 70;
+                        draw3DTrumpetCap(280, 100, t);
+                        if (t > 0.3) drawArrow(220, 140 + offY*0.5, 220, 120, '#f87171', '돌려서 분리');
+                    } else if (step === 1) {
+                        draw3DTrumpetCap(280, 100, 1);
+                        const trayY = 240 + t * 50;
+                        // 기름받이
+                        ctx.save();
+                        ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
+                        ctx.beginPath();
+                        ctx.ellipse(280, trayY, 70, 22, 0, 0, Math.PI*2);
+                        ctx.fillStyle = metalGrad(210, trayY-22, 140, 44, 160, 160, 170);
+                        ctx.fill();
+                        ctx.restore();
+                        // 기름
+                        ctx.beginPath();
+                        ctx.ellipse(280, trayY, 40, 12, 0, 0, Math.PI*2);
+                        ctx.fillStyle = 'rgba(140,90,20,0.6)';
+                        ctx.fill();
+                        ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('기름받이', 280, trayY + 40);
+                        if (t > 0.3) drawArrow(200, trayY-10, 200, trayY+20, '#fbbf24', '⟲ 빼기');
+                    } else if (step === 2) {
+                        // 세척 과정
+                        ctx.save();
+                        ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=10; ctx.shadowOffsetY=4;
+                        ctx.beginPath();
+                        ctx.ellipse(200, 200, 70, 22, 0, 0, Math.PI*2);
+                        ctx.fillStyle = metalGrad(130, 178, 140, 44, 160,160,170);
+                        ctx.fill();
+                        ctx.restore();
+                        // 기름 사라짐
+                        const oilSize = 1 - t;
+                        if (oilSize > 0) {
+                            ctx.beginPath();
+                            ctx.ellipse(200, 200, 40*oilSize, 12*oilSize, 0, 0, Math.PI*2);
+                            ctx.fillStyle = 'rgba(140,90,20,0.6)';
+                            ctx.fill();
+                        }
+                        // 깨끗한 결과
+                        if (t > 0.5) {
+                            ctx.save();
+                            ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=10; ctx.shadowOffsetY=4;
+                            ctx.beginPath();
+                            ctx.ellipse(380, 200, 70, 22, 0, 0, Math.PI*2);
+                            ctx.fillStyle = metalGrad(310, 178, 140, 44, 170,190,200);
+                            ctx.fill();
+                            ctx.restore();
+                            ctx.fillStyle='#4ade80'; ctx.font='bold 12px Pretendard'; ctx.textAlign='center';
+                            ctx.fillText('✨ 깨끗!', 380, 205);
+                        }
+                        drawArrow(270, 195, 310, 195, '#38bdf8', '세척');
+                        ctx.fillStyle='#38bdf8'; ctx.font='10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('중성세제', 290, 170);
+                    } else {
+                        draw3DTrumpetCap(280, 100, 1-t);
+                        ctx.save();
+                        ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=10;
+                        ctx.beginPath();
+                        ctx.ellipse(280, 240 + 50*(1-t), 70, 22, 0, 0, Math.PI*2);
+                        ctx.fillStyle = metalGrad(210, 218, 140, 44, 170,190,200);
+                        ctx.fill();
+                        ctx.restore();
+                        if (t > 0.7) drawCheckmark(280, 180, 22, (t-0.7)*3.3);
+                    }
+                },
+                bulb(step, t) {
+                    // 후드
+                    draw3DRect(180, 30, 200, 50, 120, 130, 145, 8, true);
+                    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px Pretendard'; ctx.textAlign='center';
+                    ctx.fillText('HOOD', 280, 60);
+
+                    if (step === 0) {
+                        // 고무 올라옴
+                        const rubberY = 280 - t * 180;
+                        ctx.save();
+                        ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=8;
+                        ctx.beginPath();
+                        ctx.ellipse(280, rubberY, 55, 14, 0, 0, Math.PI*2);
+                        ctx.fillStyle = metalGrad(225, rubberY-14, 110, 28, 180,70,70);
+                        ctx.fill();
+                        ctx.restore();
+                        ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('등받침 고무', 280, rubberY+4);
+                        if (t < 0.8) drawArrow(280, rubberY+25, 280, rubberY-5, '#fbbf24', '');
+                    } else if (step === 1) {
+                        // 고무 installed
+                        ctx.save(); ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=8;
+                        ctx.beginPath(); ctx.ellipse(280,100,55,14,0,0,Math.PI*2);
+                        ctx.fillStyle=metalGrad(225,86,110,28,180,70,70); ctx.fill(); ctx.restore();
+                        // 등하판 올라옴
+                        const plateY = 280 - t * 160;
+                        draw3DRect(210, plateY, 140, 25, 190, 170, 80, 5, true);
+                        ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('등하판', 280, plateY+16);
+                        if (t < 0.8) drawArrow(280, plateY+35, 280, plateY+10, '#fbbf24', '');
+                    } else if (step === 2) {
+                        ctx.save(); ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=8;
+                        ctx.beginPath(); ctx.ellipse(280,100,55,14,0,0,Math.PI*2);
+                        ctx.fillStyle=metalGrad(225,86,110,28,180,70,70); ctx.fill(); ctx.restore();
+                        draw3DRect(210, 120, 140, 25, 190, 170, 80, 5, true);
+                        // 전구 올라옴
+                        const bulbY = 300 - t * 110;
+                        draw3DBulb(280, bulbY, 35, false);
+                        ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
+                        ctx.fillText('갓등', 280, bulbY + 50);
+                    } else {
+                        ctx.save(); ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=8;
+                        ctx.beginPath(); ctx.ellipse(280,100,55,14,0,0,Math.PI*2);
+                        ctx.fillStyle=metalGrad(225,86,110,28,180,70,70); ctx.fill(); ctx.restore();
+                        draw3DRect(210, 120, 140, 25, 190, 170, 80, 5, true);
+                        draw3DBulb(280, 190, 35, t > 0.4);
+                        // 전원선
+                        if (t > 0.1) {
+                            ctx.save();
+                            ctx.strokeStyle = '#f87171';
+                            ctx.lineWidth = 2.5;
+                            ctx.setLineDash([6,4]);
+                            ctx.shadowColor='rgba(248,113,113,0.3)'; ctx.shadowBlur=6;
+                            ctx.beginPath();
+                            ctx.moveTo(315, 175);
+                            ctx.quadraticCurveTo(370, 150, 400, 130);
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+                            ctx.fillStyle='#f87171'; ctx.font='bold 10px Pretendard'; ctx.textAlign='left';
+                            ctx.fillText('전원선', 405, 133);
+                            ctx.restore();
+                        }
+                        if (t > 0.7) drawCheckmark(280, 250, 20, (t-0.7)*3.3);
+                    }
+                }
+            };
+
+            function easeOutBounce(x) {
+                const n1=7.5625, d1=2.75;
+                if(x<1/d1) return n1*x*x;
+                else if(x<2/d1) return n1*(x-=1.5/d1)*x+.75;
+                else if(x<2.5/d1) return n1*(x-=2.25/d1)*x+.9375;
+                else return n1*(x-=2.625/d1)*x+.984375;
+            }
+
+            function easeOutCubic(t) { return 1 - Math.pow(1-t, 3); }
+
+            function draw() {
+                drawBG();
+                const fn = sceneDraw[iconKey];
+                if (fn) fn(currentStep, animProgress);
+            }
+
+            function animateTo(step) {
+                if (animFrame) cancelAnimationFrame(animFrame);
+                currentStep = step;
+                animProgress = 0;
+                const dur = 1200;
+                const start = performance.now();
+                function tick(now) {
+                    animProgress = easeOutCubic(Math.min(1, (now - start) / dur));
+                    draw();
+                    if (animProgress < 1) animFrame = requestAnimationFrame(tick);
                 }
                 animFrame = requestAnimationFrame(tick);
-            }
-
-            function goToStep(idx) {
-                if (animating) { cancelAnimationFrame(animFrame); animating = false; }
-                currentStep = idx;
-                // 파트 초기 위치로 리셋
-                resetParts();
-                // 이전 단계까지의 최종 상태를 즉시 적용
-                for (let s = 0; s < idx; s++) {
-                    data.steps[s].anim.forEach(a => {
-                        const st = partStates[a.id];
-                        if (!st) return;
-                        if (a.to) Object.keys(a.to).forEach(k => st[k] = a.to[k]);
-                        if (a.anim === 'rotate') st.rotation = 0;
-                        if (a.anim === 'glow') { st.glowing = true; st.scale = 1; }
-                    });
-                }
-                // 현재 단계 from 값 설정
-                const step = data.steps[idx];
-                step.anim.forEach(a => {
-                    const st = partStates[a.id];
-                    if (!st) return;
-                    if (a.from) {
-                        Object.keys(a.from).forEach(k => st[k] = a.from[k]);
-                    }
-                });
-                draw();
-                // 애니메이션 시작
-                runAnimations(step.anim);
-                // 버튼 활성화 업데이트
-                container.querySelectorAll('.mnl-step-btn').forEach((btn, bi) => {
-                    btn.classList.toggle('!bg-blue-500/25', bi === idx);
-                    btn.classList.toggle('!border-blue-400/50', bi === idx);
-                    btn.classList.toggle('!text-blue-300', bi === idx);
+                // Update buttons
+                container.querySelectorAll('.mnl3d-btn').forEach((b, i) => {
+                    b.classList.toggle('mnl3d-active', i === step);
                 });
             }
 
@@ -3745,48 +3987,66 @@
             const wrap = document.createElement('div');
             wrap.className = 'relative';
             wrap.appendChild(canvas);
+            // Step info overlay (right side text)
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'mt-4 space-y-2';
+            infoDiv.id = containerId + '-info';
 
-            // Step buttons
             const btnBar = document.createElement('div');
-            btnBar.className = 'flex gap-2 mt-3 flex-wrap';
-            data.steps.forEach((s, si) => {
+            btnBar.className = 'grid grid-cols-4 gap-2 mt-3';
+            steps.forEach((s, si) => {
                 const btn = document.createElement('button');
-                btn.className = 'mnl-step-btn flex-1 min-w-0 px-3 py-2.5 rounded-xl text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.06] hover:text-white/80 transition-all text-center leading-tight';
-                btn.innerHTML = `<span class="block text-[10px] text-blue-400/60 mb-0.5">STEP ${si+1}</span>${s.title}`;
-                btn.onclick = () => goToStep(si);
+                btn.className = 'mnl3d-btn px-2 py-3 rounded-xl text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.07] transition-all text-center leading-tight';
+                btn.innerHTML = `<span class="block text-[9px] tracking-wider text-blue-400/60 mb-1">STEP ${si+1}</span><span class="text-[12px]">${s.title.split('—')[1]?.trim() || s.title}</span>`;
+                btn.onclick = () => {
+                    animateTo(si);
+                    updateInfo(si);
+                };
                 btnBar.appendChild(btn);
             });
 
-            // Auto-play / replay
+            // 자동 재생
             const autoBtn = document.createElement('button');
-            autoBtn.className = 'mt-2 w-full py-2 rounded-xl text-[11px] font-bold border border-cyan-400/20 bg-cyan-400/[0.05] text-cyan-300 hover:bg-cyan-400/10 transition-all flex items-center justify-center gap-2';
+            autoBtn.className = 'mt-2 w-full py-2.5 rounded-xl text-[12px] font-bold border border-cyan-400/20 bg-cyan-400/[0.05] text-cyan-300 hover:bg-cyan-400/10 transition-all flex items-center justify-center gap-2';
             autoBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> 전체 순서 자동 재생';
             autoBtn.onclick = () => {
-                let step = 0;
-                function playNext() {
-                    if (step >= data.steps.length) return;
-                    goToStep(step);
-                    const dur = Math.max(...data.steps[step].anim.map(a => (a.dur||600)+(a.delay||0))) + 600;
-                    step++;
-                    if (step < data.steps.length) setTimeout(playNext, dur);
+                let s = 0;
+                function next() {
+                    if (s >= steps.length) return;
+                    animateTo(s);
+                    updateInfo(s);
+                    s++;
+                    if (s < steps.length) setTimeout(next, 1800);
                 }
-                playNext();
+                next();
             };
+
+            function updateInfo(si) {
+                const s = steps[si];
+                infoDiv.innerHTML = `
+                    <div class="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="shrink-0 w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 text-[13px] font-black text-blue-300 flex items-center justify-center">${si+1}</span>
+                            <h3 class="text-[15px] font-black text-white">${s.title}</h3>
+                        </div>
+                        <p class="text-[13px] text-white/65 leading-[1.8]">${s.text}</p>
+                    </div>`;
+            }
 
             container.innerHTML = '';
             container.appendChild(wrap);
             container.appendChild(btnBar);
             container.appendChild(autoBtn);
+            container.appendChild(infoDiv);
 
-            // 초기 렌더
+            // 초기
             draw();
-            // 뷰포트에 보이면 자동 1단계 재생
+            updateInfo(0);
+
+            // Viewport trigger
             const obs = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    goToStep(0);
-                    obs.disconnect();
-                }
-            }, { threshold: 0.3 });
+                if (entries[0].isIntersecting) { animateTo(0); obs.disconnect(); }
+            }, { threshold: 0.2 });
             obs.observe(container);
         }
 
@@ -3807,13 +4067,13 @@
                 </div>
                 ${m.caption ? `<p class="text-sm text-white/55 leading-relaxed mb-5 md:pl-16">${m.caption}</p>` : ''}
                 <div class="md:pl-16">
-                    <div id="manual-anim-${m.icon}" class="w-full"></div>
+                    <div id="manual-3d-${m.icon}" class="w-full"></div>
                 </div>
             </div>`;
         }).join('');
 
-        // 플레이어 초기화
-        manuals.forEach(m => createManualAnimPlayer('manual-anim-' + m.icon, m.icon));
+        // 3D 가이드 초기화
+        manuals.forEach((m, i) => create3DManualGuide('manual-3d-' + m.icon, m.icon, i));
 
         // 시공갤러리 렌더 (실사진)
         const galleryGridEl = document.getElementById('gallery-grid');
