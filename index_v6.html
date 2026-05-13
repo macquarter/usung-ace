@@ -616,14 +616,28 @@
                         <button onclick="navigate('gallery')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">시공갤러리</button>
                     </div>
 
-                    <!-- 기술 -->
+                    <!-- 기술 (드롭다운: 코어기술 + 프로세스 + 사용방법) -->
                     <div class="nav-item relative">
-                        <button onclick="navigate('tech')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">기술</button>
-                    </div>
-
-                    <!-- 사용방법 -->
-                    <div class="nav-item relative">
-                        <button onclick="navigate('manual')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">사용방법</button>
+                        <button onclick="navigate('tech')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
+                            기술
+                            <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="dropdown absolute top-full left-1/2 mt-3 w-[360px] bg-white/95 backdrop-blur-2xl border border-black/5 rounded-[1.75rem] shadow-[0_40px_120px_-30px_rgba(0,0,0,.35)] overflow-hidden z-50">
+                            <div class="p-3">
+                                <button onclick="navigate('tech')" class="w-full p-4 rounded-2xl hover:bg-blue-50 transition text-left group">
+                                    <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition">코어 기술</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">360° 스윙, 간편청소, FVD 방화댐퍼, 맞춤제작</div>
+                                </button>
+                                <button onclick="navigate('process')" class="w-full p-4 rounded-2xl hover:bg-indigo-50 transition text-left group">
+                                    <div class="text-[15px] font-black text-black group-hover:text-indigo-600 transition">프로세스</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">현장실측부터 시공·사후관리까지 4단계</div>
+                                </button>
+                                <button onclick="navigate('manual')" class="w-full p-4 rounded-2xl hover:bg-cyan-50 transition text-left group">
+                                    <div class="text-[15px] font-black text-black group-hover:text-cyan-600 transition">사용방법</div>
+                                    <div class="text-[12px] text-black/50 mt-0.5">제품 설치·유지보수 비주얼 가이드</div>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 고객센터 (Customer Center) -->
@@ -2175,6 +2189,92 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 프로세스 페이지 -->
+        <div id="page-process" class="page min-h-screen pt-24 pb-20">
+            <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
+                <div class="text-center mb-16">
+                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">OUR PROCESS</div>
+                    <h1 class="text-5xl md:text-7xl font-black tracking-[-0.03em] leading-[0.95] mb-6">
+                        현장실측부터 사후관리까지,<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">4단계 원스톱 시스템.</span>
+                    </h1>
+                    <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">20년 노하우의 전문가가 직접 방문하여 매장에 최적화된 솔루션을 설계·제작·시공합니다.</p>
+                </div>
+
+                <!-- STEP 1 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 reveal">
+                    <div class="relative bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/20 rounded-3xl p-8 md:p-10 overflow-hidden group hover:border-blue-400/40 transition-all duration-500">
+                        <div class="absolute top-6 right-6 text-[80px] font-black text-blue-400/10 leading-none">01</div>
+                        <div class="relative z-10">
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-3">STEP 01</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">현장 실측 / 상담</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]">20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다. 현장 환경에 맞는 최적의 후드 시스템을 제안합니다.</p>
+                            <div class="mt-6 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">📏</div>
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">📐</div>
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">📋</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div class="relative bg-gradient-to-br from-indigo-600/20 to-indigo-900/10 border border-indigo-500/20 rounded-3xl p-8 md:p-10 overflow-hidden group hover:border-indigo-400/40 transition-all duration-500">
+                        <div class="absolute top-6 right-6 text-[80px] font-black text-indigo-400/10 leading-none">02</div>
+                        <div class="relative z-10">
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-indigo-400 mb-3">STEP 02</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">맞춤 설계·견적</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]">갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다. 천정고, 화로 배치, 동선을 모두 고려한 맞춤 설계입니다.</p>
+                            <div class="mt-6 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">📄</div>
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">💰</div>
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">🏗️</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+                    <!-- STEP 3 -->
+                    <div class="relative bg-gradient-to-br from-cyan-600/20 to-cyan-900/10 border border-cyan-500/20 rounded-3xl p-8 md:p-10 overflow-hidden group hover:border-cyan-400/40 transition-all duration-500">
+                        <div class="absolute top-6 right-6 text-[80px] font-black text-cyan-400/10 leading-none">03</div>
+                        <div class="relative z-10">
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-cyan-400 mb-3">STEP 03</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">자체 공장 제작</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]">유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다. 나사 하나까지 100% 국내 자체 생산, 품질에 대한 자부심입니다.</p>
+                            <div class="mt-6 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">🏭</div>
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">🔧</div>
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">🚛</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4 -->
+                    <div class="relative bg-gradient-to-br from-emerald-600/20 to-emerald-900/10 border border-emerald-500/20 rounded-3xl p-8 md:p-10 overflow-hidden group hover:border-emerald-400/40 transition-all duration-500">
+                        <div class="absolute top-6 right-6 text-[80px] font-black text-emerald-400/10 leading-none">04</div>
+                        <div class="relative z-10">
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-emerald-400 mb-3">STEP 04</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">시공 및 사후관리</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]">전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원. 시공 후에도 유지보수까지 책임지는 원스톱 서비스입니다.</p>
+                            <div class="mt-6 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">👷</div>
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">🔥</div>
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">🛡️</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="mt-16 text-center reveal">
+                    <div class="inline-flex items-center gap-4 bg-white/[0.04] border border-white/10 rounded-full px-8 py-4">
+                        <span class="text-white/70 text-[14px] font-medium">지금 바로 상담받으세요</span>
+                        <button onclick="navigate('about','inquiry-section')" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-[13px] font-bold rounded-full transition">견적 상담 →</button>
+                    </div>
+                </div>
+            </section>
         </div>
 
         <!-- 7. TECHNOLOGY DEEP DIVE 페이지 -->
