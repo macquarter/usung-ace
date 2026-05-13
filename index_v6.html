@@ -5508,12 +5508,21 @@
             const dd = document.getElementById('lang-dropdown');
             if(sel && dd && !sel.contains(e.target)) dd.classList.add('hidden');
         });
-        // 초기 언어 라벨 설정
+        // 초기 언어 라벨 설정 (localStorage 직접 읽기 — i18n.js 로드 전에도 동작)
         (function(){
-            var lang = (window.getLang && window.getLang()) || 'ko';
+            var lang;
+            try { lang = localStorage.getItem('usung-lang') } catch(e) {}
+            lang = lang || 'ko';
             var cur = document.getElementById('lang-current');
             if(cur) cur.textContent = LANG_LABELS[lang]||'KO';
         })();
+        // i18n.js 로드 후 langchange 이벤트로 라벨 동기화
+        document.addEventListener('langchange', function(e) {
+            var code = e.detail && e.detail.lang;
+            if (!code) return;
+            var cur = document.getElementById('lang-current');
+            if(cur) cur.textContent = LANG_LABELS[code]||code.toUpperCase();
+        });
 
         // Reveal-on-scroll observer (reveal + diverse r-* variants)
         const revealIO = new IntersectionObserver((entries) => {
