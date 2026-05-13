@@ -270,6 +270,34 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
   .db-grid{grid-template-columns:1fr}
   .pg-list{grid-template-columns:1fr}
 }
+/* ============ IMAGE MANAGER ============ */
+.img-mgr{margin-top:18px}
+.img-mgr-hd{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.img-mgr-hd .ti{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.img-mgr-hd .cnt{font-size:12px;color:var(--tx3);font-weight:600}
+.img-filter{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.img-filter button{padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid var(--bd);color:var(--tx3);transition:all .12s}
+.img-filter button:hover{border-color:var(--ac);color:var(--ac)}
+.img-filter button.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+.img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.img-card{position:relative;background:var(--cd);border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:all .15s}
+.img-card:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:0 8px 24px -8px rgba(59,130,246,.2)}
+.img-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#0a0a0a}
+.img-card .info{padding:8px 10px}
+.img-card .nm{font-size:11px;font-weight:700;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.img-card .cat{font-size:9px;color:var(--tx4);margin-top:2px}
+.img-card .overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);opacity:0;transition:opacity .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.img-card:hover .overlay{opacity:1}
+.img-card .overlay button{padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer}
+.img-card .overlay .rep{background:var(--ac);color:#fff;border:none}
+.img-card .overlay .del{background:transparent;color:var(--rd);border:1px solid rgba(239,68,68,.3)}
+.img-add-card{border:2px dashed var(--bd);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;cursor:pointer;transition:all .15s;color:var(--tx4)}
+.img-add-card:hover{border-color:var(--ac);color:var(--ac)}
+.img-add-card .plus{font-size:28px;margin-bottom:4px}
+.img-add-card .lb{font-size:11px;font-weight:700}
+@media(max-width:768px){
+  .img-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body data-no-bot>
@@ -347,6 +375,8 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 
 <!-- 챗봇 엔진 (데이터/KB 공유) -->
 <script src="chatbot.js"></script>
+<!-- 제품 카탈로그 데이터 -->
+<script src="products/catalog.js"></script>
 
 <script>
 // ============== FIREBASE CONFIG ==============
@@ -441,9 +471,9 @@ const PAGES = {
     icon: '💬',
     sections: []
   },
-  archive: {
-    name: '자료실',
-    icon: '📁',
+  certification: {
+    name: '인증현황',
+    icon: '🏅',
     sections: []
   }
 };
@@ -600,12 +630,12 @@ const BOARDS = {
       { id:'body',   label:'내용',    type:'textarea', req:true }
     ]
   },
-  archive: {
-    name:'자료실', ic:'📁',
-    categories:['전체','카탈로그','도면','매뉴얼','영상'],
+  certification: {
+    name:'인증현황', ic:'🏅',
+    categories:['전체','특허','디자인등록','인증서'],
     fields:[
       { id:'title', label:'자료명',  type:'text',     req:true },
-      { id:'cat',   label:'카테고리', type:'select',  opts:['카탈로그','도면','매뉴얼','영상'] },
+      { id:'cat',   label:'카테고리', type:'select',  opts:['특허','디자인등록','인증서'] },
       { id:'desc',  label:'설명',   type:'textarea' },
       { id:'ftype', label:'파일유형', type:'select',  opts:['PDF','DWG','MP4','ZIP','XLSX'] },
       { id:'size',  label:'용량',   type:'text',     ph:'예: 2.4MB' },
@@ -638,15 +668,15 @@ let S = {
       { id:'b1', title:'강남 시공 정말 만족합니다', cat:'시공후기', author:'김○○', body:'깔끔하고 빠른 시공 감사합니다', views:87, createdAt: Date.now()-86400000*2 },
       { id:'b2', title:'견적 재문의드립니다',       cat:'문의',   author:'이○○', body:'추가 견적 가능한지 궁금합니다',  views:34, createdAt: Date.now()-86400000*4 }
     ],
-    archive: [
+    certification: [
       { id:'a1', title:'2026 제품 카탈로그',    cat:'카탈로그', desc:'전 제품 라인업 카탈로그',     ftype:'PDF',  size:'12.4MB', url:'#', createdAt: Date.now()-86400000*30 },
       { id:'a2', title:'표준 후드 설계 도면',    cat:'도면',   desc:'HD-1000 시리즈 도면',     ftype:'DWG',  size:'3.2MB',  url:'#', createdAt: Date.now()-86400000*60 },
       { id:'a3', title:'설치 가이드 영상',      cat:'영상',   desc:'전문 기사 설치 영상',        ftype:'MP4',  size:'340MB', url:'#', createdAt: Date.now()-86400000*90 }
     ]
   },
   theme: 'dark',
-  sortBy: { notice:'latest', board:'latest', archive:'latest' },
-  filterCat: { notice:'전체', board:'전체', archive:'전체' }
+  sortBy: { notice:'latest', board:'latest', certification:'latest' },
+  filterCat: { notice:'전체', board:'전체', certification:'전체' }
 };
 
 // ============== AUTH ==============
@@ -724,6 +754,10 @@ function loadLocal(){
       S.images  = s.images || {};
       S.inquiries = s.inquiries || S.inquiries;
       S.boards = s.boards || S.boards;
+      // migration: archive → certification
+      if(S.boards.archive && !S.boards.certification){ S.boards.certification = S.boards.archive; delete S.boards.archive; }
+      if(S.sortBy && S.sortBy.archive){ S.sortBy.certification = S.sortBy.archive; delete S.sortBy.archive; }
+      if(S.filterCat && S.filterCat.archive){ S.filterCat.certification = S.filterCat.archive; delete S.filterCat.archive; }
       S.theme = s.theme || 'dark';
     }
     if(S.theme === 'light') document.body.classList.add('light');
@@ -832,6 +866,14 @@ function rDashboard(){
 
 // ============== 페이지 편집 ==============
 function rPageList(){
+  const NAV_GROUPS = [
+    { label:'메인', icon:'🏠', color:'#3b82f6', pages:['home'] },
+    { label:'회사소개', icon:'🏢', color:'#8b5cf6', pages:['about'] },
+    { label:'제품', icon:'📦', color:'#f59e0b', pages:['products','parts'] },
+    { label:'시공', icon:'📸', color:'#22c55e', pages:['gallery'] },
+    { label:'기술 / 서비스', icon:'⚙️', color:'#06b6d4', pages:['tech','process','manual'] },
+    { label:'고객센터', icon:'📢', color:'#ef4444', pages:['notice','board','certification'] }
+  ];
   let h = `<div class="vw-hd">
     <div>
       <div class="vw-ti">페이지 편집</div>
@@ -848,17 +890,25 @@ function rPageList(){
     <b>라이브 모드</b>는 실제 홈페이지 화면 위에서 텍스트를 직접 클릭해 블로그처럼 수정할 수 있습니다.
     위에서 원하는 모드를 먼저 고른 뒤, 아래 페이지를 선택하세요.
   </div>`;
-  h += `<div class="pg-list">`;
-  for(const k in PAGES){
-    const p = PAGES[k];
-    const secCount = p.sections.length + (p.arrays ? p.arrays.length : 0);
-    h += `<div class="pg-tile" onclick="editPage('${k}')">
-      <div class="ic">${p.icon}</div>
-      <div class="nm">${p.name}</div>
-      <div class="mt">${secCount}개 섹션</div>
-    </div>`;
-  }
-  h += `</div>`;
+  NAV_GROUPS.forEach(g=>{
+    h += `<div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid ${g.color}33">
+        <span style="font-size:18px">${g.icon}</span>
+        <span style="font-size:14px;font-weight:800;color:${g.color};letter-spacing:-.02em">${g.label}</span>
+        <span style="font-size:11px;color:var(--tx4);font-weight:600">${g.pages.length}개 페이지</span>
+      </div>
+      <div class="pg-list" style="margin-bottom:0">`;
+    g.pages.forEach(k=>{
+      const p = PAGES[k]; if(!p) return;
+      const secCount = p.sections.length + (p.arrays ? p.arrays.length : 0);
+      h += `<div class="pg-tile" onclick="editPage('${k}')" style="border-left:3px solid ${g.color}">
+        <div class="ic">${p.icon}</div>
+        <div class="nm">${p.name}</div>
+        <div class="mt">${secCount}개 섹션</div>
+      </div>`;
+    });
+    h += `</div></div>`;
+  });
   return h;
 }
 function editPage(k){ S.edit = k; R(); }
@@ -940,6 +990,13 @@ function rPageEdit(k){
         ${arr.length===0 ? '<div style="padding:24px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">항목이 없습니다. + 버튼을 눌러 추가하세요</div>' : ''}
       </div>`;
     });
+    // 필드 모드에서도 이미지 관리 표시 (제품/부품/갤러리)
+    if(k === 'products'){
+      const catCatalog = [...new Set(CATALOG.map(p=>p.cat))];
+      h += rImgGrid('products', CATALOG, catCatalog);
+    }
+    if(k === 'parts') h += rImgGrid('parts', PARTS_IMGS, ['부품']);
+    if(k === 'gallery') h += rImgGrid('gallery', GALLERY_IMGS, ['시공갤러리']);
   }
   return h;
 }
@@ -975,6 +1032,166 @@ function sImgUp(iid, inp){
   r.onload = e => { S.images[iid] = e.target.result; R(); };
   r.readAsDataURL(f);
 }
+
+// ============== 이미지 관리 시스템 ==============
+// 제품 카탈로그 (catalog.js에서 로드)
+const CATALOG = typeof productCatalog !== 'undefined' ? productCatalog : [];
+// 부품 이미지 목록
+const PARTS_IMGS = Array.from({length:50},(_,i)=>({
+  img: `parts/p${String(i+1).padStart(2,'0')}.png`,
+  name: `부품 ${String(i+1).padStart(2,'0')}`,
+  cat: '부품'
+}));
+// 갤러리 이미지 목록
+const GALLERY_IMGS = Array.from({length:50},(_,i)=>({
+  img: `gallery/g${String(i+1).padStart(2,'0')}.jpg`,
+  name: `시공사례 ${String(i+1).padStart(2,'0')}`,
+  cat: '시공갤러리'
+}));
+
+// 이미지 필터 상태
+let imgFilter = { products:'전체', parts:'전체', gallery:'전체' };
+let imgSearch = { products:'', parts:'', gallery:'' };
+
+function setImgFilter(type, cat){
+  imgFilter[type] = cat;
+  R();
+}
+function setImgSearch(type, val){
+  imgSearch[type] = val;
+  R();
+}
+
+// 이미지 교체 (오버레이 버튼 → 파일선택)
+function replaceImg(type, idx){
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.onchange = e => {
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      S.images[`${type}_${idx}`] = ev.target.result;
+      saveLocal();
+      R();
+      toast('이미지가 교체되었습니다');
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+// 새 이미지 추가
+function addNewImg(type){
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.multiple = true;
+  inp.onchange = e => {
+    const files = Array.from(e.target.files);
+    let loaded = 0;
+    if(!S.images._added) S.images._added = {};
+    if(!S.images._added[type]) S.images._added[type] = [];
+    files.forEach(f => {
+      const r = new FileReader();
+      r.onload = ev => {
+        S.images._added[type].push({
+          data: ev.target.result,
+          name: f.name.replace(/\.[^.]+$/,''),
+          cat: '새 이미지',
+          addedAt: Date.now()
+        });
+        loaded++;
+        if(loaded === files.length){
+          saveLocal();
+          R();
+          toast(`${files.length}개 이미지가 추가되었습니다`);
+        }
+      };
+      r.readAsDataURL(f);
+    });
+  };
+  inp.click();
+}
+
+function delAddedImg(type, idx){
+  if(!confirm('추가된 이미지를 삭제하시겠습니까?')) return;
+  S.images._added[type].splice(idx,1);
+  saveLocal(); R(); toast('삭제되었습니다');
+}
+
+// 이미지 소스 가져오기 (교체된 이미지 우선, 없으면 원본)
+function getImgSrc(type, idx, origPath){
+  return S.images[`${type}_${idx}`] || origPath;
+}
+
+// 이미지 그리드 렌더 (공통)
+function rImgGrid(type, items, filterCats){
+  const cat = imgFilter[type];
+  const search = (imgSearch[type]||'').toLowerCase();
+  let filtered = items;
+  if(cat !== '전체') filtered = filtered.filter(p=>p.cat === cat);
+  if(search) filtered = filtered.filter(p=>(p.name||'').toLowerCase().includes(search) || (p.cat||'').toLowerCase().includes(search));
+  const added = (S.images._added && S.images._added[type]) || [];
+
+  let h = `<div class="img-mgr">
+    <div class="img-mgr-hd">
+      <div class="ti">📷 이미지 관리</div>
+      <div class="cnt">총 ${items.length + added.length}개 (표시: ${filtered.length + added.length}개)</div>
+      <div style="flex:1"></div>
+      <input type="text" placeholder="🔍 검색..." value="${escHtml(search)}" oninput="setImgSearch('${type}',this.value)" style="padding:6px 12px;background:var(--cd);border:1px solid var(--bd);border-radius:8px;font-size:12px;width:180px;color:var(--tx)"/>
+    </div>
+    <div class="img-filter">
+      <button class="${cat==='전체'?'act':''}" onclick="setImgFilter('${type}','전체')">전체 (${items.length})</button>
+      ${filterCats.map(c=>{
+        const cnt = items.filter(p=>p.cat===c).length;
+        return `<button class="${cat===c?'act':''}" onclick="setImgFilter('${type}','${escHtml(c)}')">${escHtml(c)} (${cnt})</button>`;
+      }).join('')}
+    </div>
+    <div class="img-grid">`;
+
+  // 기존 이미지
+  filtered.forEach((p,origIdx) => {
+    const realIdx = items.indexOf(p);
+    const src = getImgSrc(type, realIdx, p.img);
+    const isReplaced = !!S.images[`${type}_${realIdx}`];
+    h += `<div class="img-card">
+      <img src="${escHtml(src)}" alt="${escHtml(p.name)}" loading="lazy" onerror="this.style.background='#1a1a2e';this.alt='이미지 없음'"/>
+      <div class="info">
+        <div class="nm" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
+        <div class="cat">${escHtml(p.cat||'')}${isReplaced?' · <span style=color:var(--gn)>교체됨</span>':''}</div>
+      </div>
+      <div class="overlay">
+        <button class="rep" onclick="replaceImg('${type}',${realIdx})">📷 이미지 교체</button>
+        ${isReplaced?`<button class="del" onclick="delete S.images['${type}_${realIdx}'];saveLocal();R();toast('원본 복원')">↩ 원본 복원</button>`:''}
+      </div>
+    </div>`;
+  });
+
+  // 추가된 이미지
+  added.forEach((a,i)=>{
+    h += `<div class="img-card" style="border-color:var(--gn)">
+      <img src="${a.data}" alt="${escHtml(a.name)}" loading="lazy"/>
+      <div class="info">
+        <div class="nm" style="color:var(--gn)">${escHtml(a.name)}</div>
+        <div class="cat">새로 추가됨</div>
+      </div>
+      <div class="overlay">
+        <button class="del" onclick="delAddedImg('${type}',${i})">× 삭제</button>
+      </div>
+    </div>`;
+  });
+
+  // 추가 버튼
+  h += `<div class="img-add-card" onclick="addNewImg('${type}')">
+    <div class="plus">+</div>
+    <div class="lb">이미지 추가</div>
+  </div>`;
+
+  h += `</div></div>`;
+  return h;
+}
+
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ============== Live Preview ==============
@@ -1188,37 +1405,39 @@ function rLive(k){
   if(k === 'products'){
     const prods = S.arrays.products||[];
     const cats = ['전체', ...new Set(prods.map(p=>p.cat))];
+    const catCatalog = [...new Set(CATALOG.map(p=>p.cat))];
     return hint + `
       <div class="live-stage">
         <!-- 히어로 -->
         <div style="margin-bottom:24px">
-          <div class="lp-tag">${e('p_tag')} · ${prods.length} MODELS</div>
+          <div class="lp-tag">${e('p_tag')} · ${CATALOG.length} MODELS</div>
           <h1 class="lp-h1" style="font-size:38px">${e('p_title1')}<br/><span class="grad">${e('p_title2')}</span></h1>
           <p class="lp-sub">${e('p_sub')}</p>
           <div style="display:flex;gap:14px;margin-top:12px">
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#60a5fa"></span>${cats.length-1}개 카테고리</span>
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#22d3ee"></span>${prods.length}종 등록</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#60a5fa"></span>${catCatalog.length}개 카테고리</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#22d3ee"></span>${CATALOG.length}종 제품사진</span>
             <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#fbbf24"></span>20년 기술 노하우</span>
           </div>
         </div>
 
-        <!-- 카테고리 필터 -->
-        <div style="margin-bottom:18px;display:flex;flex-wrap:wrap;gap:6px">
-          ${cats.map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${escHtml(c)}</span>`).join('')}
-        </div>
+        <!-- ★ 제품 이미지 관리 (핵심 기능) -->
+        ${rImgGrid('products', CATALOG, catCatalog)}
 
-        <!-- 제품 그리드 -->
-        <div class="lp-pgrid">
-          ${(S.arrays.products||[]).map((p,i)=>`
-            <div class="lp-card arr-wrap">
-              ${ac('products',i)}
-              <div class="no">No.${ae('products',i,'no')}</div>
-              <div class="cat">${ae('products',i,'cat')}</div>
-              <div class="nm">${ae('products',i,'n')}</div>
-              <div class="sp">${ae('products',i,'sp')}</div>
-            </div>`).join('')}
-        </div>
-        ${addBtn('products','새 제품 추가')}
+        <!-- 텍스트 데이터 편집 (접이식) -->
+        <details style="margin-top:20px">
+          <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--ac);padding:10px 0">📋 제품 텍스트 데이터 편집 (${prods.length}개 항목) ▾</summary>
+          <div class="lp-pgrid" style="margin-top:10px">
+            ${prods.map((p,i)=>`
+              <div class="lp-card arr-wrap">
+                ${ac('products',i)}
+                <div class="no">No.${ae('products',i,'no')}</div>
+                <div class="cat">${ae('products',i,'cat')}</div>
+                <div class="nm">${ae('products',i,'n')}</div>
+                <div class="sp">${ae('products',i,'sp')}</div>
+              </div>`).join('')}
+          </div>
+          ${addBtn('products','새 제품 추가')}
+        </details>
 
         <!-- CTA -->
         <div style="margin-top:28px;padding:28px;border-radius:22px;background:linear-gradient(135deg,rgba(30,58,138,.4),#000 60%,#000);border:1px solid rgba(255,255,255,.1);text-align:center">
@@ -1235,29 +1454,16 @@ function rLive(k){
 
   /* ━━━━━━━━━━ PARTS (부품소개) ━━━━━━━━━━ */
   if(k === 'parts'){
-    const prods = S.arrays.products||[];
-    const partCats = ['전체', ...new Set(prods.map(p=>p.cat))];
     return hint + `
       <div class="live-stage">
         <div style="text-align:center;margin-bottom:26px">
-          <div class="lp-tag" style="text-align:center">PARTS CATALOG · ${prods.length} ITEMS</div>
+          <div class="lp-tag" style="text-align:center">PARTS CATALOG · ${PARTS_IMGS.length} ITEMS</div>
           <h1 class="lp-h1" style="text-align:center;font-size:42px">${e('pt_title')}</h1>
           <p class="lp-sub" style="margin:14px auto 0;text-align:center;font-size:16px">${e('pt_desc')}</p>
         </div>
-        <!-- 카테고리 필터 (동적) -->
-        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:18px">
-          ${partCats.map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${escHtml(c)}</span>`).join('')}
-        </div>
-        <!-- 부품 그리드 (실제 제품 데이터) -->
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
-          ${prods.slice(0,15).map((p,i)=>`<div style="background:#111;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;text-align:center">
-            <div style="width:100%;aspect-ratio:1;background:#0a0a0a;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px">🔩</div>
-            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7)">${escHtml(p.n||'')}</div>
-            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:2px">${escHtml(p.cat||'')}</div>
-          </div>`).join('')}
-        </div>
-        ${prods.length>15?`<div style="text-align:center;margin-top:10px;font-size:11px;color:rgba(255,255,255,.4)">외 ${prods.length-15}개 제품 · 전체 목록은 제품소개 페이지에서 관리</div>`:''}
-        <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.25)">부품 이미지·상세는 index_v6.html에서 직접 관리됩니다</div>
+
+        <!-- ★ 부품 이미지 관리 (핵심 기능) -->
+        ${rImgGrid('parts', PARTS_IMGS, ['부품'])}
       </div>`;
   }
 
@@ -1314,16 +1520,23 @@ function rLive(k){
           <h1 class="lp-h1" style="font-size:42px">${e('g_title')}<br/><span class="grad">${e('g_title2')}</span></h1>
           <p class="lp-sub" style="font-size:16px">${e('g_desc')}</p>
         </div>
-        <div class="lp-pgrid" style="grid-template-columns:repeat(2,1fr)">
-          ${(S.arrays.gallery||[]).map((g,i)=>`
-            <div class="lp-card arr-wrap">
-              ${ac('gallery',i)}
-              <div style="width:100%;height:120px;border-radius:12px;background:linear-gradient(135deg,#1e293b,#0a0f1c);margin-bottom:12px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:11px;border:1px solid rgba(255,255,255,.05)">📷 시공 사진</div>
-              <div class="cat">${ae('gallery',i,'c')}</div>
-              <div class="nm">${ae('gallery',i,'t')}</div>
-            </div>`).join('')}
-        </div>
-        ${addBtn('gallery','새 사진 추가')}
+
+        <!-- ★ 갤러리 이미지 관리 (핵심 기능) -->
+        ${rImgGrid('gallery', GALLERY_IMGS, ['시공갤러리'])}
+
+        <!-- 텍스트 데이터 편집 (접이식) -->
+        <details style="margin-top:20px">
+          <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--ac);padding:10px 0">📋 갤러리 캡션 편집 (${(S.arrays.gallery||[]).length}개 항목) ▾</summary>
+          <div class="lp-pgrid" style="grid-template-columns:repeat(2,1fr);margin-top:10px">
+            ${(S.arrays.gallery||[]).map((g,i)=>`
+              <div class="lp-card arr-wrap">
+                ${ac('gallery',i)}
+                <div class="cat">${ae('gallery',i,'c')}</div>
+                <div class="nm">${ae('gallery',i,'t')}</div>
+              </div>`).join('')}
+          </div>
+          ${addBtn('gallery','새 캡션 추가')}
+        </details>
       </div>`;
   }
 
@@ -1413,19 +1626,19 @@ function rLive(k){
       </div>`;
   }
 
-  /* ━━━━━━━━━━ ARCHIVE (자료실) ━━━━━━━━━━ */
-  if(k === 'archive'){
-    const items = S.boards.archive||[];
+  /* ━━━━━━━━━━ CERTIFICATION (인증현황) ━━━━━━━━━━ */
+  if(k === 'certification'){
+    const items = S.boards.certification||[];
     const typeIcons = {PDF:'📕',DWG:'📐',MP4:'🎬',ZIP:'📦',XLSX:'📊'};
     return hint + `
       <div class="live-stage">
         <div style="margin-bottom:24px">
-          <div class="lp-tag">DOWNLOAD CENTER</div>
-          <h1 class="lp-h1" style="font-size:36px">자료실</h1>
-          <p class="lp-sub">카탈로그, 도면, 매뉴얼 등 유성에이스 자료를 다운로드하세요.</p>
+          <div class="lp-tag">CERTIFICATIONS</div>
+          <h1 class="lp-h1" style="font-size:36px">인증현황</h1>
+          <p class="lp-sub">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
         </div>
         <div style="display:flex;gap:6px;margin-bottom:18px">
-          ${['전체','카탈로그','도면','매뉴얼','영상'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
+          ${['전체','특허','디자인등록','인증서'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           ${items.length ? items.map(a=>`<div style="padding:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px">
@@ -1440,7 +1653,7 @@ function rLive(k){
             <div style="margin-top:10px"><span style="font-size:10px;padding:5px 12px;background:rgba(96,165,250,.15);color:#60a5fa;border-radius:8px;font-weight:700">다운로드 ↓</span></div>
           </div>`).join('') : '<div style="grid-column:1/-1;padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 자료가 없습니다</div>'}
         </div>
-        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">자료는 사이드바 「📁 자료실」 메뉴에서 관리합니다</div>
+        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">인증자료는 사이드바 「🏅 인증현황」 메뉴에서 관리합니다</div>
       </div>`;
   }
 
