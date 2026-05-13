@@ -568,7 +568,7 @@
                             <div class="grid grid-cols-12">
                                 <!-- 좌: CATEGORIES -->
                                 <div class="col-span-4 bg-[#fafafa] p-8 border-r border-black/5">
-                                    <div class="text-[10px] tracking-[0.24em] font-bold text-black/40 mb-6">CATEGORIES</div>
+                                    <div class="text-[10px] tracking-[0.24em] font-bold text-black/40 mb-6" data-i18n="mega_categories">CATEGORIES</div>
                                     <div class="space-y-4" id="mega-cat-list">
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('갤럭시 A타입'),100)" onmouseenter="megaHoverCat(['갤럭시 A타입','갤럭시 B타입','갤럭시 C타입','갤럭시 D타입','갤럭시 C타입 원통필터'])" class="block text-left group w-full">
                                             <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat1">갤럭시 A~D타입</div>
@@ -595,7 +595,7 @@
                                 <!-- 우: FULL PRODUCT LIST -->
                                 <div class="col-span-8 p-8">
                                     <div class="flex items-center justify-between mb-5">
-                                        <div class="text-[10px] tracking-[0.24em] font-bold text-black/40" id="mega-list-title">FULL PRODUCT LIST (148)</div>
+                                        <div class="text-[10px] tracking-[0.24em] font-bold text-black/40" id="mega-list-title" data-i18n="mega_full_list">FULL PRODUCT LIST (148)</div>
                                         <button onclick="navigate('products')" class="text-[12px] font-semibold text-blue-600 hover:text-blue-700" data-i18n="mega_view_all">모두 보기 →</button>
                                     </div>
                                     <div class="grid grid-cols-2 gap-x-6 gap-y-1 max-h-[58vh] overflow-y-auto custom-scrollbar pr-2" id="mega-menu-list">
@@ -3912,7 +3912,11 @@
                 ? ACE_DATA.product_lineup.filter(p => filterCats.includes(p.cat))
                 : ACE_DATA.product_lineup;
             const titleEl = document.getElementById('mega-list-title');
-            if (titleEl) titleEl.textContent = filterCats ? `FILTERED (${list.length})` : `FULL PRODUCT LIST (${list.length})`;
+            if (titleEl) {
+                var lang = typeof getLang === 'function' ? getLang() : 'ko';
+                var T = window.I18N && window.I18N[lang] || {};
+                titleEl.textContent = filterCats ? (T.mega_filtered || 'FILTERED') + ` (${list.length})` : (T.mega_full_list || 'FULL PRODUCT LIST') + ` (${list.length})`;
+            }
             document.getElementById('mega-menu-list').innerHTML = list.map((p, i) => {
                 return `<button onclick="navigate('products');setTimeout(()=>filterProducts('${p.cat.replace(/'/g,"\\'")}'),100)" class="text-left text-[13px] text-black/80 hover:text-blue-600 py-1.5 transition-colors truncate font-bold">${p.name}</button>`;
             }).join('');

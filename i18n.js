@@ -35,7 +35,8 @@ tech_hero_desc2:"20년 동안 한길만 걸어온 유성에이스가 직접 설�
 notice_tag:"NOTICE · 공지사항",notice_title:"유성에이스 소식",notice_desc:"중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.",
 board_tag:"BOARD · 게시판",board_title:"게시판",board_desc:"유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.",board_sort_latest:"최신순",board_sort_views:"조회순",board_sort_num:"번호순",board_col_no:"번호",board_col_cat:"분류",board_col_title:"제목",board_col_author:"작성자",board_col_date:"등록일",board_col_views:"조회",
 archive_tag:"ARCHIVE · 자료실",archive_title:"자료실",archive_desc:"유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.",archive_all:"전체 자료",archive_filter_patent:"특허",archive_filter_design:"디자인등록",archive_filter_cert:"인증서",archive_stat_patent:"특허 보유",archive_stat_design:"디자인등록",archive_stat_cert:"인증서",archive_stat_knowhow:"기술 노하우",
-footer_copyright:"© 2026 USUNG ACE / 유성에이스. All rights reserved."
+footer_copyright:"© 2026 USUNG ACE / 유성에이스. All rights reserved.",
+mega_categories:"카테고리",mega_full_list:"전체 제품",mega_filtered:"필터 결과"
 },
 
 en:{
@@ -72,7 +73,8 @@ tech_hero_desc2:"USUNG ACE, walking a single path for 20 years, unveils all core
 notice_tag:"NOTICE",notice_title:"USUNG ACE News",notice_desc:"Check important notices, A/S schedules, and event news in one place.",
 board_tag:"BOARD",board_title:"Board",board_desc:"Tech info, project cases, and product news blog-style.",board_sort_latest:"Latest",board_sort_views:"Most Viewed",board_sort_num:"By Number",board_col_no:"No.",board_col_cat:"Category",board_col_title:"Title",board_col_author:"Author",board_col_date:"Date",board_col_views:"Views",
 archive_tag:"ARCHIVE",archive_title:"Archive",archive_desc:"Check patents, design registrations, and certifications held by USUNG ACE.",archive_all:"All Documents",archive_filter_patent:"Patents",archive_filter_design:"Design Reg.",archive_filter_cert:"Certificates",archive_stat_patent:"Patents",archive_stat_design:"Design Reg.",archive_stat_cert:"Certificates",archive_stat_knowhow:"Technical Know-how",
-footer_copyright:"© 2026 USUNG ACE. All rights reserved."
+footer_copyright:"© 2026 USUNG ACE. All rights reserved.",
+mega_categories:"CATEGORIES",mega_full_list:"FULL PRODUCT LIST",mega_filtered:"FILTERED"
 },
 
 ja:{
@@ -109,7 +111,8 @@ tech_hero_desc2:"20年間ひとつの道を歩んできたユソンエースが�
 notice_tag:"NOTICE · お知らせ",notice_title:"ユソンエースニュース",notice_desc:"重要なお知らせ、A/Sスケジュール、イベント情報を一箇所で確認。",
 board_tag:"BOARD · 掲示板",board_title:"掲示板",board_desc:"ユソンエースの技術情報、施工事例、製品ニュースをブログ形式で。",board_sort_latest:"最新順",board_sort_views:"閲覧順",board_sort_num:"番号順",board_col_no:"番号",board_col_cat:"分類",board_col_title:"タイトル",board_col_author:"作成者",board_col_date:"登録日",board_col_views:"閲覧",
 archive_tag:"ARCHIVE · 資料室",archive_title:"資料室",archive_desc:"ユソンエースが保有する特許、デザイン登録、認証書を確認。",archive_all:"全資料",archive_filter_patent:"特許",archive_filter_design:"デザイン登録",archive_filter_cert:"認証書",archive_stat_patent:"特許保有",archive_stat_design:"デザイン登録",archive_stat_cert:"認証書",archive_stat_knowhow:"技術ノウハウ",
-footer_copyright:"© 2026 USUNG ACE / ユソンエース. All rights reserved."
+footer_copyright:"© 2026 USUNG ACE / ユソンエース. All rights reserved.",
+mega_categories:"カテゴリ",mega_full_list:"全製品リスト",mega_filtered:"フィルター結果"
 },
 
 vi:{
@@ -146,7 +149,8 @@ tech_hero_desc2:"USUNG ACE, 20 năm kiên trì một con đường, công khai t
 notice_tag:"NOTICE · Thông báo",notice_title:"Tin USUNG ACE",notice_desc:"Xem thông báo quan trọng, lịch A/S và sự kiện tại đây.",
 board_tag:"BOARD · Diễn đàn",board_title:"Diễn đàn",board_desc:"Thông tin kỹ thuật, công trình và tin sản phẩm USUNG ACE.",board_sort_latest:"Mới nhất",board_sort_views:"Xem nhiều",board_sort_num:"Theo số",board_col_no:"STT",board_col_cat:"Phân loại",board_col_title:"Tiêu đề",board_col_author:"Tác giả",board_col_date:"Ngày",board_col_views:"Lượt xem",
 archive_tag:"ARCHIVE · Tài liệu",archive_title:"Tài liệu",archive_desc:"Xem bằng sáng chế, đăng ký thiết kế và chứng nhận của USUNG ACE.",archive_all:"Tất cả tài liệu",archive_filter_patent:"Bằng sáng chế",archive_filter_design:"Đăng ký TK",archive_filter_cert:"Chứng nhận",archive_stat_patent:"Bằng sáng chế",archive_stat_design:"Đăng ký TK",archive_stat_cert:"Chứng nhận",archive_stat_knowhow:"Know-how kỹ thuật",
-footer_copyright:"© 2026 USUNG ACE. All rights reserved."
+footer_copyright:"© 2026 USUNG ACE. All rights reserved.",
+mega_categories:"DANH MỤC",mega_full_list:"DANH SÁCH SẢN PHẨM",mega_filtered:"KẾT QUẢ LỌC"
 },
 
 zh:{
@@ -183,7 +187,8 @@ tech_hero_desc2:"友盛ACE，20年如一日，自主设计并在现场验证的�
 notice_tag:"NOTICE · 公告",notice_title:"友盛ACE动态",notice_desc:"在此查看重要公告、售后日程和活动信息。",
 board_tag:"BOARD · 论坛",board_title:"论坛",board_desc:"以博客形式查看友盛ACE的技术资料、施工案例和产品动态。",board_sort_latest:"最新",board_sort_views:"最多浏览",board_sort_num:"按编号",board_col_no:"编号",board_col_cat:"分类",board_col_title:"标题",board_col_author:"作者",board_col_date:"日期",board_col_views:"浏览",
 archive_tag:"ARCHIVE · 资料室",archive_title:"资料室",archive_desc:"查看友盛ACE持有的专利、设计注册和认证证书。",archive_all:"全部资料",archive_filter_patent:"专利",archive_filter_design:"设计注册",archive_filter_cert:"认证证书",archive_stat_patent:"专利",archive_stat_design:"设计注册",archive_stat_cert:"认证证书",archive_stat_knowhow:"技术经验",
-footer_copyright:"© 2026 USUNG ACE / 友盛ACE. All rights reserved."
+footer_copyright:"© 2026 USUNG ACE / 友盛ACE. All rights reserved.",
+mega_categories:"类别",mega_full_list:"全部产品",mega_filtered:"筛选结果"
 }
 };
 
