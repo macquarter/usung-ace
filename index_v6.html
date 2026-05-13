@@ -847,8 +847,8 @@
         <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
         <section class="relative bg-white text-black py-10 md:py-14">
             <!-- 상단 임팩트 카피 -->
-            <div class="text-center pt-4 pb-10 r-anim r-mask-up">
-                <p class="text-2xl md:text-4xl font-black tracking-tight text-black/80 leading-snug">불 앞에서 20년,<br class="md:hidden"/> <span class="text-blue-600">현장이 증명한 기술력.</span></p>
+            <div class="text-center pt-6 pb-12 r-anim r-mask-up">
+                <p class="text-2xl md:text-4xl font-black tracking-tight text-black/80 leading-snug">나사 하나, 부품 하나까지<br/> <span class="text-blue-600">모두 자체 설계·자체 생산.</span></p>
             </div>
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-8 r-anim r-mask-up">
@@ -4877,16 +4877,15 @@
                     const greenR = 60, greenG = 200, greenB = 110;
 
                     if (step === 0) {
-                        // STEP 1: 6개 하나씩 끼우기
+                        // STEP 1: 6개 하나씩 끼우기 — 위에서 봉으로 떨어짐
                         for (let i = 0; i < 6; i++) {
                             const dropT = Math.max(0, Math.min(1, (t - i*0.12) / 0.35));
                             if (dropT <= 0) continue;
                             const targetX = rodX + 30 + i*38;
-                            const startY = rodCY - 80;
                             const curAlpha = Math.min(1, dropT * 2);
                             ctx.save();
                             if (dropT < 1) {
-                                const offsetY = startY + (0 - startY) * easeOutBounce(dropT);
+                                const offsetY = -80 * (1 - easeOutBounce(dropT));
                                 ctx.translate(0, offsetY);
                             }
                             drawBearingRing(targetX, goldR, goldG, goldB, curAlpha);
@@ -5111,10 +5110,6 @@
                     if (animProgress < 1) animFrame = requestAnimationFrame(tick);
                 }
                 animFrame = requestAnimationFrame(tick);
-                // Update buttons
-                container.querySelectorAll('.mnl3d-btn').forEach((b, i) => {
-                    b.classList.toggle('mnl3d-active', i === step);
-                });
             }
 
             // Build UI
@@ -5128,7 +5123,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'mnl3d-btn flex-1 px-2 py-2 rounded-lg text-[11px] font-bold border border-white/10 bg-white/[0.03] text-white/50 hover:bg-white/[0.07] transition-all text-center';
                 btn.textContent = `${si+1}`;
-                btn.onclick = () => animateTo(si);
+                btn.onclick = () => { animateTo(si); highlightStep(si); };
                 ctrlBar.appendChild(btn);
             });
             const autoBtn = document.createElement('button');
