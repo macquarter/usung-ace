@@ -535,7 +535,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 cursor-pointer" onclick="navigate('home')">
-                    <img id="nav-logo" src="logo-white.png" alt="유성에이스" style="height:40px;transition:opacity .3s;">
+                    <img id="nav-logo" src="logo-usung-white.svg" alt="유성에이스" style="height:44px;transition:opacity .3s;">
                 </div>
 
                 <nav class="hidden md:flex items-center gap-1 lg:gap-2 relative" id="primary-nav">
@@ -2567,7 +2567,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
                 <div class="lg:col-span-5">
-                    <img src="logo-white.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
+                    <img src="logo-usung-white.svg" alt="유성에이스" style="height:64px;margin-bottom:16px;">
                     <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
                         대한민국 덕트 No.1 — 2007년부터 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
                     </p>
@@ -2597,7 +2597,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-white.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
+                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-usung-white.svg" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
                 <div class="flex space-x-6 text-xs text-white/35">
                     <span>SINCE 2007</span>
                     <span>·</span>
@@ -4841,50 +4841,107 @@
                     }
                 },
                 bearing(step, t) {
-                    draw3DPipe(80, 120, 360, 18, 140, 160, 180);
-                    const colors = [[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[200,160,50],[60,200,110],[60,200,110]];
+                    // 봉(rod) — 수평 중앙에 긴 파이프
+                    const rodX = 100, rodY = 130, rodW = 360, rodH = 22;
+                    const rodCY = rodY + rodH/2; // 봉 중심 Y
+                    draw3DPipe(rodX, rodY, rodW, rodH, 140, 160, 180);
+
+                    // 빠찌링 그리기 헬퍼 — 봉 위에 끼운 링(와셔) 형태
+                    function drawBearingRing(x, ringR, ringG, ringB, alpha) {
+                        alpha = alpha === undefined ? 1 : alpha;
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+                        // 외곽 타원 (링 외경)
+                        const outerRx = 18, outerRy = 26;
+                        ctx.beginPath();
+                        ctx.ellipse(x, rodCY, outerRx, outerRy, 0, 0, Math.PI*2);
+                        const ringGrad = ctx.createLinearGradient(x-outerRx, rodCY-outerRy, x+outerRx, rodCY+outerRy);
+                        ringGrad.addColorStop(0, `rgba(${ringR+60},${ringG+60},${ringB+60},1)`);
+                        ringGrad.addColorStop(0.35, `rgba(${ringR+20},${ringG+20},${ringB+20},1)`);
+                        ringGrad.addColorStop(0.6, `rgba(${ringR},${ringG},${ringB},1)`);
+                        ringGrad.addColorStop(1, `rgba(${Math.max(0,ringR-40)},${Math.max(0,ringG-40)},${Math.max(0,ringB-40)},1)`);
+                        ctx.fillStyle = ringGrad; ctx.fill();
+                        // 내경 (봉이 보이는 구멍) — 봉 색상으로 채우기
+                        ctx.beginPath();
+                        ctx.ellipse(x, rodCY, 10, 13, 0, 0, Math.PI*2);
+                        ctx.fillStyle = metalGrad(x-10, rodCY-13, 20, 26, 140, 160, 180);
+                        ctx.fill();
+                        // 하이라이트 (상단 반사광)
+                        ctx.beginPath();
+                        ctx.ellipse(x - 3, rodCY - outerRy*0.35, outerRx*0.5, outerRy*0.25, -0.2, 0, Math.PI*2);
+                        ctx.fillStyle = 'rgba(255,255,255,0.18)';
+                        ctx.fill();
+                        ctx.restore();
+                    }
+
+                    const goldR = 200, goldG = 160, goldB = 50;
+                    const greenR = 60, greenG = 200, greenB = 110;
+
                     if (step === 0) {
+                        // STEP 1: 6개 하나씩 끼우기
                         for (let i = 0; i < 6; i++) {
-                            const dropT = Math.max(0, Math.min(1, (t - i*0.1) / 0.4));
-                            const by = 40 + (129-40) * easeOutBounce(dropT);
-                            draw3DCircle(120 + i*44, by, 16, ...colors[i], true);
-                            ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
-                            ctx.fillText(String(i+1), 120+i*44, by+3);
+                            const dropT = Math.max(0, Math.min(1, (t - i*0.12) / 0.35));
+                            if (dropT <= 0) continue;
+                            const targetX = rodX + 30 + i*38;
+                            const startY = rodCY - 80;
+                            const curAlpha = Math.min(1, dropT * 2);
+                            ctx.save();
+                            if (dropT < 1) {
+                                const offsetY = startY + (0 - startY) * easeOutBounce(dropT);
+                                ctx.translate(0, offsetY);
+                            }
+                            drawBearingRing(targetX, goldR, goldG, goldB, curAlpha);
+                            ctx.restore();
+                            // 번호
+                            ctx.fillStyle = '#fff'; ctx.font = 'bold 10px Pretendard'; ctx.textAlign = 'center';
+                            ctx.fillText(String(i+1), targetX, rodCY + 38);
                         }
                     } else if (step === 1) {
-                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
+                        // STEP 2: 기존 6개 + 추가 1~2개
+                        for (let i = 0; i < 6; i++) drawBearingRing(rodX + 30 + i*38, goldR, goldG, goldB);
                         for (let i = 0; i < 2; i++) {
-                            const dropT = Math.max(0, Math.min(1, (t - 0.2 - i*0.3) / 0.5));
-                            const by = 40 + 89 * easeOutBounce(dropT);
-                            draw3DCircle(384 + i*44, by, 16, ...colors[6+i], true);
-                            ctx.fillStyle='#fff'; ctx.font='bold 10px Pretendard'; ctx.textAlign='center';
-                            ctx.fillText('+' + (i+1), 384+i*44, by+3);
+                            const dropT = Math.max(0, Math.min(1, (t - 0.2 - i*0.3) / 0.4));
+                            if (dropT <= 0) continue;
+                            const targetX = rodX + 30 + (6+i)*38;
+                            ctx.save();
+                            if (dropT < 1) {
+                                const offsetY = -80 * (1 - easeOutBounce(dropT));
+                                ctx.translate(0, offsetY);
+                            }
+                            drawBearingRing(targetX, greenR, greenG, greenB, Math.min(1, dropT*2));
+                            ctx.restore();
+                            ctx.fillStyle = '#4ade80'; ctx.font = 'bold 10px Pretendard'; ctx.textAlign = 'center';
+                            ctx.fillText('+' + (i+1), targetX, rodCY + 38);
                         }
                     } else if (step === 2) {
-                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
+                        // STEP 3: 펜치로 제거
+                        for (let i = 0; i < 6; i++) drawBearingRing(rodX + 30 + i*38, goldR, goldG, goldB);
                         for (let i = 1; i >= 0; i--) {
                             const upT = Math.max(0, Math.min(1, (t - (1-i)*0.3) / 0.5));
-                            const by = 129 - upT * 89;
-                            if (upT < 1) draw3DCircle(384+i*44, by, 16, ...colors[6+i], true);
+                            if (upT >= 1) continue;
+                            const targetX = rodX + 30 + (6+i)*38;
+                            ctx.save();
+                            ctx.translate(0, -upT * 80);
+                            ctx.globalAlpha = 1 - upT;
+                            drawBearingRing(targetX, greenR, greenG, greenB);
+                            ctx.restore();
                         }
                         // 펜치 아이콘
                         if (t > 0.1) {
                             ctx.save();
-                            ctx.strokeStyle = '#f87171';
-                            ctx.lineWidth = 4;
-                            ctx.lineCap = 'round';
-                            ctx.shadowColor = 'rgba(248,113,113,0.3)';
-                            ctx.shadowBlur = 8;
-                            ctx.beginPath(); ctx.moveTo(440, 120); ctx.lineTo(410, 160); ctx.stroke();
-                            ctx.beginPath(); ctx.moveTo(455, 120); ctx.lineTo(420, 160); ctx.stroke();
-                            ctx.fillStyle = '#f87171';
-                            ctx.font = 'bold 11px Pretendard'; ctx.textAlign = 'center';
-                            ctx.fillText('펜치 사용!', 448, 112);
+                            ctx.strokeStyle = '#f87171'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+                            ctx.shadowColor = 'rgba(248,113,113,0.3)'; ctx.shadowBlur = 8;
+                            const px = rodX + 30 + 7*38;
+                            ctx.beginPath(); ctx.moveTo(px, rodCY-30); ctx.lineTo(px-15, rodCY+10); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(px+15, rodCY-30); ctx.lineTo(px-5, rodCY+10); ctx.stroke();
+                            ctx.fillStyle = '#f87171'; ctx.font = 'bold 11px Pretendard'; ctx.textAlign = 'center';
+                            ctx.fillText('펜치 사용!', px+5, rodCY - 40);
                             ctx.restore();
                         }
                     } else {
-                        for (let i = 0; i < 6; i++) draw3DCircle(120+i*44, 170, 14, ...colors[i], true);
-                        drawCheckmark(320, 170, 22, t);
+                        // STEP 4: 완료 상태 — 6개 기본
+                        for (let i = 0; i < 6; i++) drawBearingRing(rodX + 30 + i*38, goldR, goldG, goldB);
+                        drawCheckmark(rodX + rodW/2, rodCY + 50, 22, t);
                     }
                 },
                 drop(step, t) {
@@ -5094,8 +5151,9 @@
             // 전체 STEP 텍스트 — 한번에 모두 표시
             const allStepsDiv = document.createElement('div');
             allStepsDiv.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4';
+            allStepsDiv.style.gridAutoRows = '1fr';
             allStepsDiv.innerHTML = steps.map((s, si) => `
-                <div class="mnl3d-card group bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition-all cursor-pointer" data-step="${si}">
+                <div class="mnl3d-card group bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition-all cursor-pointer flex flex-col" data-step="${si}">
                     <div class="flex items-start gap-3 mb-2">
                         <span class="shrink-0 w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-400/25 text-[12px] font-black text-blue-300 flex items-center justify-center mt-0.5">${si+1}</span>
                         <h3 class="text-[13px] font-black text-white leading-snug">${s.title.split('—')[1]?.trim() || s.title}</h3>
@@ -5355,11 +5413,11 @@
             if (window.scrollY > 50 || isLightPage) {
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.remove('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-white.png';
+                if(navLogo) navLogo.src = 'logo-usung-white.svg';
             } else {
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.add('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-white.png';
+                if(navLogo) navLogo.src = 'logo-usung-white.svg';
             }
 
             // Home 페이지 스크롤 애니메이션 (간이 구현)

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140" width="320" height="140">
+  <defs>
+    <linearGradient id="ovalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b5eaf"/>
+      <stop offset="50%" stop-color="#1d4ea0"/>
+      <stop offset="100%" stop-color="#163d85"/>
+    </linearGradient>
+  </defs>
+  <!-- Main blue oval -->
+  <ellipse cx="145" cy="55" rx="140" ry="52" fill="url(#ovalGrad)"/>
+  <!-- Top decorative arc (thinner ellipse above main) -->
+  <ellipse cx="145" cy="42" rx="130" ry="40" fill="none" stroke="#4a8ad4" stroke-width="2.5" stroke-dasharray="0" opacity="0.6"/>
+  <ellipse cx="145" cy="36" rx="120" ry="35" fill="none" stroke="#6ba3e0" stroke-width="1.5" opacity="0.35"/>
+  <!-- Text: 유성에이스 -->
+  <text x="145" y="68" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="38" font-weight="800" fill="white" text-anchor="middle" letter-spacing="2">유성에이스</text>
+  <!-- Subtext: 신개념신기술 -->
+  <text x="235" y="120" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" font-weight="700" fill="#2b5eaf" text-anchor="middle" letter-spacing="1">신개념신기술</text>
+</svg>
