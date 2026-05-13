@@ -992,49 +992,71 @@ function rLive(k){
 
   /* ━━━━━━━━━━ HOME ━━━━━━━━━━ */
   if(k === 'home'){
+    const ta = S.arrays.tech_adv||[];
+    const featColors = ['#60a5fa','#fb923c','#34d399','#c084fc'];
+    const featLabels = ['TECH 01','TECH 02','TECH 03','TECH 04'];
     return hint + `
-      <div class="live-stage">
-        <!-- 히어로 -->
-        <div class="lp-hero">
-          <div class="lp-tag" style="text-align:center">${e('h_tag')}</div>
-          <h1 class="lp-h1" style="text-align:center;font-size:54px">${e('h_title1','span')}<br/><span class="grad">${e('h_title2','span')}</span></h1>
-          <p class="lp-sub" style="text-align:center;margin:0 auto;font-size:20px">${e('h_sub')}</p>
+      <div class="live-stage" style="padding:0;overflow:hidden">
+
+        <!-- ★ 히어로 영역 — 실제 사이트 동일 레이아웃 -->
+        <div style="position:relative;min-height:420px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#05070f,#0a0f1c,#05070f);overflow:hidden">
+          <!-- 비디오 자리 표시 -->
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(59,130,246,.08),transparent 70%)"></div>
+          <!-- 다크 오버레이 (80%) -->
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,.8)"></div>
+          <!-- 텍스트 -->
+          <div style="position:relative;z-index:1;text-align:center;padding:48px 24px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.32em;color:#60a5fa;margin-bottom:20px">${e('h_tag')}</div>
+            <h1 style="font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:.95;color:#fff;margin-bottom:24px">${e('h_title1','span')}<br/><span style="background:linear-gradient(90deg,#60a5fa,#67e8f9,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_title2','span')}</span></h1>
+            <p style="font-size:20px;color:rgba(255,255,255,.55);font-weight:500;letter-spacing:-.01em">${e('h_sub')}</p>
+          </div>
+          <!-- 스크롤 인디케이터 -->
+          <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);text-align:center">
+            <div style="width:22px;height:34px;border:2px solid rgba(255,255,255,.25);border-radius:11px;margin:0 auto 6px;position:relative"><div style="width:3px;height:8px;background:rgba(255,255,255,.5);border-radius:2px;position:absolute;top:6px;left:50%;transform:translateX(-50%)"></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.25em;color:rgba(255,255,255,.35)">SCROLL</div>
+          </div>
         </div>
 
-        <!-- 스크롤 카피 1 -->
-        <div style="margin-top:28px;text-align:center;padding:24px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);margin-bottom:10px">SCROLL COPY 1</div>
-          <h2 class="lp-h2" style="text-align:center;font-size:26px;margin:0">${e('h_sub2_a')}<br/><span class="grad">${e('h_sub2_b')}</span></h2>
+        <!-- ★ 스크롤 카피 1 -->
+        <div style="min-height:260px;display:flex;align-items:center;justify-content:center;background:#030408;padding:40px 24px">
+          <h2 style="font-size:38px;font-weight:900;text-align:center;line-height:1.15;letter-spacing:-.02em">${e('h_sub2_a')}<br/><span class="grad">${e('h_sub2_b')}</span></h2>
         </div>
 
-        <!-- 스크롤 카피 2 -->
-        <div style="margin-top:14px;text-align:center;padding:24px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);margin-bottom:10px">SCROLL COPY 2</div>
-          <h2 class="lp-h2" style="text-align:center;font-size:26px;margin:0">${e('h_sub3_a')}<br/><span style="background:linear-gradient(90deg,#fbbf24,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_sub3_b')}</span></h2>
+        <!-- ★ 스크롤 카피 2 -->
+        <div style="min-height:260px;display:flex;align-items:center;justify-content:center;background:#030408;padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
+          <h2 style="font-size:38px;font-weight:900;text-align:center;line-height:1.15;letter-spacing:-.02em">${e('h_sub3_a')}<br/><span style="background:linear-gradient(90deg,#fbbf24,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_sub3_b')}</span></h2>
         </div>
 
-        <!-- 스크롤 피처 (tech_adv 배열 연동) -->
-        <div style="margin-top:14px;padding:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center">SCROLL FEATURES (${(S.arrays.tech_adv||[]).length}개)</div>
-          <div style="display:grid;grid-template-columns:repeat(${Math.min((S.arrays.tech_adv||[]).length,4)},1fr);gap:8px;text-align:center">
-            ${(S.arrays.tech_adv||[]).map((a,i)=>{
-              const fc = ['rgba(96,165,250','rgba(251,146,60','rgba(52,211,153','rgba(192,132,252'];
-              return `<div style="padding:12px 6px;background:${fc[i%4]},.06);border:1px solid ${fc[i%4]},.12);border-radius:12px"><div style="font-size:10px;color:${fc[i%4]},1);font-weight:700;letter-spacing:.15em">TECH ${escHtml(a.num||'')}</div><div style="font-size:13px;font-weight:800;margin-top:4px">${escHtml(a.tt||'')}</div></div>`;
+        <!-- ★ 스크롤 피처 4개 -->
+        <div style="background:#030408;padding:24px;border-top:1px solid rgba(255,255,255,.04)">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.25);text-align:center;margin-bottom:16px">FEATURES IN MOTION (${ta.length})</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:640px;margin:0 auto">
+            ${ta.map((a,i)=>{
+              const c = featColors[i%4];
+              return `<div style="text-align:center;padding:20px 14px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid ${c}33">
+                <div style="width:64px;height:64px;margin:0 auto 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid ${c}33;display:flex;align-items:center;justify-content:center;font-size:24px;color:${c}">⚙️</div>
+                <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:${c};margin-bottom:6px">${featLabels[i]||'TECH '+(i+1)}</div>
+                <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:6px">${escHtml(a.tt||'')}</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.5">${escHtml(a.dd||'')}</div>
+              </div>`;
             }).join('')}
           </div>
-          <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.3)">코어 기술 페이지의 장점 배열과 연동됩니다</div>
+          <div style="text-align:center;margin-top:10px;font-size:11px;color:rgba(255,255,255,.2)">피처 아이콘/애니메이션은 실제 사이트에서 렌더링 · 텍스트는 코어 기술 페이지 장점 배열과 연동</div>
         </div>
 
-        <!-- CTA -->
-        <div style="margin-top:28px;padding:32px 24px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);border-radius:20px;text-align:center">
-          <div class="lp-tag" style="text-align:center">${e('h_cta_tag')}</div>
-          <h2 class="lp-h1" style="text-align:center;font-size:36px">${e('h_cta_title1')}<br/><span class="grad">${e('h_cta_title2')}</span></h2>
-          <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('h_cta_desc')}</p>
-          <div style="margin-top:18px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
-            <span style="padding:12px 24px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px">${e('h_cta_btn1')}</span>
-            <span style="padding:12px 24px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-weight:700;font-size:13px">${e('h_cta_btn2')}</span>
+        <!-- ★ CTA -->
+        <div style="min-height:320px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
+          <div style="text-align:center;max-width:640px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#60a5fa;margin-bottom:18px">${e('h_cta_tag')}</div>
+            <h2 style="font-size:48px;font-weight:900;letter-spacing:-.03em;line-height:.95">${e('h_cta_title1')}<br/><span class="grad">${e('h_cta_title2')}</span></h2>
+            <p style="margin-top:20px;font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto">${e('h_cta_desc')}</p>
+            <div style="margin-top:24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+              <span style="padding:14px 28px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:14px">${e('h_cta_btn1')}</span>
+              <span style="padding:14px 28px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-weight:700;font-size:14px;color:#fff">${e('h_cta_btn2')}</span>
+            </div>
           </div>
         </div>
+
       </div>`;
   }
 
