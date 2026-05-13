@@ -164,7 +164,7 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 [contenteditable="true"]:hover{background:rgba(59,130,246,.1)}
 [contenteditable="true"]:focus{background:rgba(59,130,246,.18);box-shadow:inset 0 0 0 1px var(--ac)}
 
-/* =============== LIVE PREVIEW 홈페이지 미러링 =============== */
+/* =============== LIVE PREVIEW =============== */
 .live-stage{background:#000;border-radius:18px;overflow:hidden;border:1px solid #222;color:#fff;font-family:'Pretendard','Inter',sans-serif;padding:40px 28px;min-height:500px;position:relative}
 .live-stage *{color:inherit}
 .live-stage .lp-tag{font-size:11px;font-weight:700;letter-spacing:.32em;color:#60a5fa;margin-bottom:20px;display:block}
@@ -278,7 +278,7 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 <div class="login" id="loginView">
   <div class="login-card">
     <div class="login-brand">
-      <div class="login-logo"><img src="logo-light.jpg" alt="유성에이스" style="height:56px;margin-bottom:8px;"></div>
+      <div class="login-logo"><img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:56px;margin-bottom:8px;"></div>
       <div class="login-sub">관리자 로그인 · CMS Admin Panel</div>
     </div>
     <div class="login-field">
@@ -300,10 +300,10 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
   <!-- SIDEBAR -->
   <aside class="sb" id="sidebar">
     <div class="sb-brand">
-      <img src="logo-dark.png" alt="유성에이스" style="height:36px;flex-shrink:0;">
+      <img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:36px;flex-shrink:0;">
       <div>
         <div class="nm">USUNG ACE</div>
-        <div class="tg">ADMIN · v1.0</div>
+        <div class="tg">ADMIN · v2.0</div>
       </div>
     </div>
     <nav class="sb-nav" id="sbNav"></nav>
@@ -349,144 +349,135 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 <script src="chatbot.js"></script>
 
 <script>
-// ============== FIREBASE CONFIG (플레이스홀더 : 실제 프로젝트로 교체하세요) ==============
+// ============== FIREBASE CONFIG ==============
 const FB = {
-  project: 'usung-ace-cms',       // Firebase 프로젝트 ID
-  db: '(default)',                 // Firestore database
-  key: 'YOUR_WEB_API_KEY'          // Firebase Web API Key
+  project: 'usung-ace-cms',
+  db: '(default)',
+  key: 'YOUR_WEB_API_KEY'
 };
-const USE_FIREBASE = false; // true 로 바꾸면 Firestore 동기화 활성화
+const USE_FIREBASE = false;
 const ADMIN = { id: 'admin', pw: 'admin' };
 
-// ============== PAGES 메타데이터 (유성에이스 메인 사이트 기준) ==============
+// ============== PAGES 메타데이터 (44 data-cms fields) ==============
 const PAGES = {
-  home:    { name:'홈(메인)',   ic:'🏠', secs:[
-    { n:'히어로 — 대한민국 덕트 No.1', f:['h_tag','h_title1','h_title2','h_sub'] },
-    { n:'갤럭시 D-TYPE 뱃지',          f:['h_badge'] },
-    { n:'서브 카피',                f:['h_sub2_a','h_sub2_b','h_sub3_a','h_sub3_b'] },
-    { n:'CTA — 한 번 쓰면 다시 못',     f:['h_cta_tag','h_cta_title1','h_cta_title2','h_cta_desc','h_cta_btn1','h_cta_btn2'] }
-  ]},
-  about:   { name:'회사소개',   ic:'🏢', secs:[
-    { n:'히어로',         f:['a_tag','a_title1','a_title2','a_desc'] },
-    { n:'CEO 메시지',      f:['a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
-    { n:'회사 정보',       f:['c_name','c_name_en','c_ceo','c_tel','c_fax','c_biz','c_addr','c_addr_sub'] },
-    { n:'OUR PROMISE',   f:['a_promise1','a_promise2','a_promise_desc'] },
-    { n:'연혁 (HISTORY)',  a:'history' }
-  ]},
-  products:{ name:'제품',      ic:'📦', secs:[
-    { n:'히어로',    f:['p_tag','p_title1','p_title2','p_desc'] },
-    { n:'CTA',     f:['p_cta_title','p_cta_desc'] },
-    { n:'제품 리스트', a:'products' }
-  ]},
-  parts:   { name:'부품',      ic:'🔧', secs:[
-    { n:'히어로',    f:['pt_title','pt_desc'] },
-    { n:'집진기 스펙', f:['pt_d1_size','pt_d1_w','pt_d2_size','pt_d2_w'] }
-  ]},
-  manual:  { name:'사용방법',    ic:'📘', secs:[
-    { n:'히어로',  f:['m_title','m_desc'] },
-    { n:'단계별',  a:'steps' }
-  ]},
-  gallery: { name:'갤러리',     ic:'🖼️', secs:[
-    { n:'히어로',   f:['g_title','g_desc'] },
-    { n:'시공 사진 목록', a:'gallery' }
-  ]},
-  tech:    { name:'핵심 기술 (4가지 장점)', ic:'⭐', secs:[
-    { n:'섹션 헤더', f:['t_tag','t_title','t_desc'] },
-    { n:'장점 1', f:['t1_t','t1_d'] },
-    { n:'장점 2', f:['t2_t','t2_d'] },
-    { n:'장점 3', f:['t3_t','t3_d'] },
-    { n:'장점 4', f:['t4_t','t4_d'] }
-  ]}
+  home: {
+    name: '홈 · 히어로',
+    icon: '🏠',
+    sections: [
+      { title: '히어로 메인', fields: ['h_tag','h_title1','h_title2','h_sub'] },
+      { title: '스크롤 카피 1', fields: ['h_sub2_a','h_sub2_b'] },
+      { title: '스크롤 카피 2', fields: ['h_sub3_a','h_sub3_b'] },
+      { title: 'CTA 섹션', fields: ['h_cta_tag','h_cta_title1','h_cta_title2','h_cta_desc'] }
+    ]
+  },
+  tech: {
+    name: '코어 기술',
+    icon: '⚙️',
+    sections: [
+      { title: '기술 소개', fields: ['t_tag','t_title','t_desc'] }
+    ]
+  },
+  about: {
+    name: '회사소개',
+    icon: '🏢',
+    sections: [
+      { title: '소개 헤더', fields: ['a_tag','a_title1','a_title2','a_desc'] },
+      { title: 'CEO 메시지', fields: ['a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
+      { title: '회사 정보', fields: ['c_name','c_name_en','c_ceo','c_tel','c_fax','c_biz','c_addr','c_addr_sub'] },
+      { title: '약속', fields: ['a_promise1','a_promise2','a_promise_desc'] }
+    ],
+    arrays: ['history']
+  },
+  products: {
+    name: '제품소개',
+    icon: '📦',
+    sections: [
+      { title: '제품 CTA', fields: ['p_cta_title','p_cta_desc'] }
+    ],
+    arrays: ['products']
+  },
+  parts: {
+    name: '부품소개',
+    icon: '🔩',
+    sections: [
+      { title: '부품 헤더', fields: ['pt_title','pt_desc'] }
+    ]
+  },
+  manual: {
+    name: '사용방법',
+    icon: '📖',
+    sections: [
+      { title: '사용방법 헤더', fields: ['m_title','m_desc'] }
+    ],
+    arrays: ['steps']
+  },
+  gallery: {
+    name: '시공갤러리',
+    icon: '📸',
+    sections: [
+      { title: '갤러리 헤더', fields: ['g_tag','g_title','g_desc'] }
+    ],
+    arrays: ['gallery']
+  }
 };
 
-// ============== 기본 콘텐츠 D (실제 홈페이지 텍스트) ==============
+// ============== 기본 콘텐츠 D (실제 홈페이지 텍스트 — 44 fields) ==============
 const D = {
-  // ── 홈 히어로
-  h_tag:'SINCE 2012 · USUNG ACE',
-  h_title1:'대한민국 덕트',
-  h_title2:'No.1',
-  h_sub:'오늘을 이끄는 원동력.',
-  h_badge:'갤럭시 D-TYPE · Swing Tension',
-  h_sub2_a:'새로운 환경, 새로운 기술로',
-  h_sub2_b:'한걸음 앞서갑니다.',
-  h_sub3_a:'신뢰와 나눔 속에',
-  h_sub3_b:'사랑받는 기업으로.',
-  h_cta_tag:'14 YEARS · 28 PRODUCTS',
-  h_cta_title1:'한 번 쓰면,',
-  h_cta_title2:'다시 못 돌아갑니다.',
-  h_cta_desc:'ACE 후드를 쓰시는 업소와 손님 모두 대만족. 그 차이는 직접 써보시면 알게 됩니다.',
-  h_cta_btn1:'제품 라인업 보기',
-  h_cta_btn2:'견적 문의',
-
-  // ── 핵심 기술 (4가지 장점)
-  t_tag:'CORE TECHNOLOGY',
-  t_title:'유성에이스 후드의 장점.',
-  t_desc:'직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.',
-  t1_t:'360° 자유로운 스윙',
-  t1_d:'파이프가 고정되어 있지 않고 시계추 모양으로 360° 스윙되어 부러지거나 휠 염려가 없어 편리합니다.',
-  t2_t:'간편한 내부 청소',
-  t2_d:'상하부를 연결하는 파이프링이 간단히 분리되어 누구나 손쉽게 내부 청소가 가능합니다.',
-  t3_t:'화재로부터 안전',
-  t3_d:'화로와 80~150mm 떨어져 시공되어 화재로부터 안전하며, F.V.D 방화담파가 즉각 대응합니다.',
-  t4_t:'스톱바 브레이크 시스템',
-  t4_d:'텐션이 흘러내리거나 와이어줄이 끊어져도 스톱바가 브레이크 역할을 하여 후드가 갑자기 떨어지지 않아 안전합니다.',
-
-  // ── 회사소개
-  a_tag:'SINCE 2012 · ABOUT US',
-  a_title1:'신뢰와 나눔 속에',
-  a_title2:'사랑받는 기업으로.',
-  a_desc:'새로운 환경, 새로운 기술로 한걸음 앞서가는 유성에이스. 친환경 도시개발에 앞장서며, 최고의 기술과 품질로 SERVICE를 통한 고객만족을 실현합니다.',
-  a_ceo_name:'박진선',
-  a_ceo_p1:'직화기 닥트(DUCT)시설의 흐름이 변해가는 시대에 심혈을 기울여 완성된 저희 유성에이스는 그간 사용중 불편함을 개선하고, 가능성·편리성·시각화에 정성을 쏟았습니다.',
-  a_ceo_p2:'특히 기름이 새거나 흐르는 것을 방지하는 위생적인 제품 개발에 초점을 두었으며, 후드 시공 시 누구나 편리하도록 개선했습니다.',
-  a_ceo_p3:'그 결과 이미 저희 ACE후드를 사용하시는 업소와 손님 모두 대만족해 하십니다. 유성에이스는 여기에 만족하지 않고 직화기후드 부분 특허와 함께 신제품 개발, 수출에도 역점을 두고 있습니다.',
-  a_ceo_p4:'늘 저희 제품을 애용해 주시는 모든 분들께 감사드리며, 사장님의 사업 번창을 진심으로 기원합니다.',
-  a_promise1:'최고의 기술과 품질로',
-  a_promise2:'SERVICE를 통한 고객만족 실현.',
-  a_promise_desc:'친환경 도시개발에 앞장서가는 기업, 유성에이스는 14년간 한길만 걸어온 대한민국 덕트 No.1입니다.',
-
-  // ── 회사 정보
-  c_name:'유성에이스',
-  c_name_en:'USUNG ACE',
-  c_ceo:'박진선',
-  c_tel:'1588-9123',
-  c_fax:'031-952-1706',
-  c_biz:'166-86-01583',
-  c_addr:'경기 파주시 파주읍 센트럴산단1로 103',
-  c_addr_sub:'(봉암리 1371-9)',
-
-  // ── 제품
-  p_tag:'PRODUCT LINEUP · 28 MODELS',
-  p_title1:'28가지 제품,',
-  p_title2:'하나의 장인정신.',
-  p_desc:'갤럭시 시리즈부터 등제품, 스텐파이프, 스파이얼, 모터, 갓제품, 코브라, 후레쉬볼까지. 유성에이스의 전 제품 라인업을 한눈에 살펴보세요.',
-  p_cta_title:'매장에 맞는 제품, 직접 상담드립니다.',
-  p_cta_desc:'14년 노하우로 매장 규모·화로 종류·천정고에 맞춘 최적의 제품을 추천해드립니다.',
-
-  // ── 부품
-  pt_title:'부품 및 집진기',
-  pt_desc:'유성에이스의 다양한 부품과 고성능 집진기를 소개합니다.',
-  pt_d1_size:'660 × 1450 × 530 = 300Ø',
-  pt_d1_w:'80kg',
-  pt_d2_size:'1120 × 1450 × 530 = 400Ø',
-  pt_d2_w:'131kg',
-
-  // ── 사용방법 / 갤러리
-  m_title:'사용방법',
-  m_desc:'유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.',
-  g_title:'시공 갤러리',
-  g_desc:'유성에이스가 시공한 직화기 후드 라인업. 갤럭시 시리즈, 아크릴등, 우주선 후드, 외부태엽 등 다양한 현장 사진을 만나보세요.'
+  h_tag: 'SINCE 2007 · USUNG ACE',
+  h_title1: '대한민국 덕트',
+  h_title2: 'No.1',
+  h_sub: '오늘을 이끄는 원동력.',
+  h_sub2_a: '새로운 환경, 새로운 기술로',
+  h_sub2_b: '한걸음 앞서갑니다.',
+  h_sub3_a: '신뢰와 나눔 속에',
+  h_sub3_b: '사랑받는 기업으로.',
+  h_cta_tag: 'SINCE 2007 · PROVEN QUALITY',
+  h_cta_title1: '한 번 쓰면,',
+  h_cta_title2: '다시 못 돌아갑니다.',
+  h_cta_desc: '마케팅 없이 입소문만으로 성장한 품질의 차이, 직접 경험해 보세요.',
+  t_tag: 'CORE TECHNOLOGY',
+  t_title: '유성에이스 후드의 장점.',
+  t_desc: '직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.',
+  a_tag: 'SINCE 2007 · ABOUT US',
+  a_title1: '신뢰와 나눔 속에',
+  a_title2: '사랑받는 기업으로.',
+  a_desc: '업계가 뒤따라오는 혁신의 시작점, 그 중심에는 언제나 유성에이스가 있습니다.',
+  a_ceo_name: '박진선',
+  a_ceo_p1: '현장의 가치를 기술로 실현하는 환기 솔루션의 리더,',
+  a_ceo_p2: '설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다.',
+  a_ceo_p3: '유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다.',
+  a_ceo_p4: '앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다.',
+  c_name: '유성에이스',
+  c_name_en: 'USUNG ACE',
+  c_ceo: '박진선',
+  c_tel: '1588-9123',
+  c_fax: 'FAX (031) 952-1706',
+  c_biz: '166-86-01583',
+  c_addr: '경기 파주시 파주읍 센트럴산단1로 103',
+  c_addr_sub: '(봉암리 1371-9)',
+  a_promise1: '최고의 기술과 품질로',
+  a_promise2: 'SERVICE를 통한 고객만족 실현.',
+  a_promise_desc: '친환경 도시개발에 앞장서가는 기업, 유성에이스는 2007년부터 한길만 걸어온 대한민국 덕트 No.1입니다.',
+  p_cta_title: '매장에 맞는 제품,',
+  p_cta_desc: '20년 노하우로 매장 규모·화로 종류·천정고에 맞춤 최적의 제품을 추천해드립니다.',
+  pt_title: '부품소개',
+  pt_desc: '유성에이스 후드를 구성하는 모든 부품을 한눈에.',
+  m_title: '사용방법',
+  m_desc: '유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.',
+  g_tag: 'CONSTRUCTION GALLERY',
+  g_title: '20년의 시공,',
+  g_desc: '유성에이스가 시공한 직화기 후드 라인업.'
 };
 
-// ============== 기본 배열 데이터 D2 (실제 28개 제품) ==============
+// ============== 기본 배열 데이터 D2 ==============
 const D2 = {
   history: [
-    { y:'2012', t:'유성에이스 창업 · 직화기 후드 사업 시작' },
-    { y:'2015', t:'갤럭시 A·B·C 시리즈 첫 출시' },
-    { y:'2018', t:'F.V.D 방화담파 특허 획득' },
-    { y:'2021', t:'갤럭시 D-Type 스윙텐션 출시' },
-    { y:'2024', t:'누적 28개 제품 라인업 완성' },
-    { y:'2026', t:'대한민국 덕트 No.1 14주년' }
+    { y:'2007', t:'유성에이스 창업 · 직화기 후드 사업 시작' },
+    { y:'2010', t:'갤럭시 A·B·C 시리즈 첫 출시' },
+    { y:'2015', t:'F.V.D 방화담파 특허 획득' },
+    { y:'2018', t:'갤럭시 D-Type 스윙텐션 출시' },
+    { y:'2022', t:'누적 28개 제품 라인업 완성' },
+    { y:'2026', t:'대한민국 덕트 No.1 20주년' }
   ],
   products: [
     { no:1,  n:'갤럭시 A 타입',           sp:'스윙태엽 / FVD / 유지망 / 520갓등', cat:'갤럭시' },
@@ -506,7 +497,7 @@ const D2 = {
     { no:15, n:'150 스윙텐션 스파이얼',     sp:'FVD / 150Ø',                  cat:'스파이얼' }
   ],
   steps: [
-    { num:'STEP 01', tt:'현장 실측 / 상담', dd:'14년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다' },
+    { num:'STEP 01', tt:'현장 실측 / 상담', dd:'20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다' },
     { num:'STEP 02', tt:'맞춤 설계·견적',   dd:'갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다' },
     { num:'STEP 03', tt:'자체 공장 제작',   dd:'유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다' },
     { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화담파 점검 + 부분 특허 부품 A/S 지원' }
@@ -559,7 +550,7 @@ const BOARDS = {
 let S = {
   view: 'dashboard',
   edit: null,
-  mode: 'list', // 'list' | 'live'
+  mode: 'list',
   content: {...D},
   arrays: JSON.parse(JSON.stringify(D2)),
   images: {},
@@ -612,8 +603,7 @@ function showApp(){
   R();
 }
 
-// ============== FIRESTORE REST (옵션) ==============
-// 실제 연동 시 USE_FIREBASE = true 로 변경
+// ============== FIRESTORE REST ==============
 const FS_URL = `https://firestore.googleapis.com/v1/projects/${FB.project}/databases/${FB.db}/documents`;
 async function fsGet(path){
   const r = await fetch(`${FS_URL}/${path}?key=${FB.key}`);
@@ -673,7 +663,7 @@ function loadLocal(){
 }
 function saveAll(){
   saveLocal();
-  toast('✓ 저장되었습니다');
+  toast('저장되었습니다');
   if(USE_FIREBASE){
     // fsPatch(`cms/content`, S.content);
   }
@@ -786,18 +776,18 @@ function rPageList(){
     </div>
   </div>`;
   h += `<div class="live-hint" style="margin-bottom:14px">
-    💡 <b>필드 모드</b>는 스프레드시트처럼 항목별로 빠르게 편집합니다.
+    <b>필드 모드</b>는 스프레드시트처럼 항목별로 빠르게 편집합니다.
     <b>라이브 모드</b>는 실제 홈페이지 화면 위에서 텍스트를 직접 클릭해 블로그처럼 수정할 수 있습니다.
     위에서 원하는 모드를 먼저 고른 뒤, 아래 페이지를 선택하세요.
   </div>`;
   h += `<div class="pg-list">`;
   for(const k in PAGES){
     const p = PAGES[k];
+    const secCount = p.sections.length + (p.arrays ? p.arrays.length : 0);
     h += `<div class="pg-tile" onclick="editPage('${k}')">
-      ${p.hide?'<div class="hd">숨김</div>':''}
-      <div class="ic">${p.ic}</div>
+      <div class="ic">${p.icon}</div>
       <div class="nm">${p.name}</div>
-      <div class="mt">${p.secs.length}개 섹션</div>
+      <div class="mt">${secCount}개 섹션</div>
     </div>`;
   }
   h += `</div>`;
@@ -809,7 +799,7 @@ function rPageEdit(k){
   const p = PAGES[k];
   let h = `<div class="vw-hd">
     <button class="tb-btn" onclick="S.edit=null;R()">← 뒤로</button>
-    <div><div class="vw-ti">${p.ic} ${p.name}</div><div class="vw-sub">필드를 클릭하여 편집하세요</div></div>
+    <div><div class="vw-ti">${p.icon} ${p.name}</div><div class="vw-sub">필드를 클릭하여 편집하세요</div></div>
     <div class="tb-sp"></div>
     <div class="mode-sw">
       <button class="${S.mode==='list'?'active':''}" onclick="setMode('list')">📋 필드</button>
@@ -819,13 +809,14 @@ function rPageEdit(k){
   if(S.mode === 'live'){
     h += `<div class="live-wrap">${rLive(k)}</div>`;
   } else {
-    p.secs.forEach(sc=>{
+    // Field mode sections
+    p.sections.forEach(sc=>{
       h += `<div class="ed-sec">
-        <div class="ed-sec-hd"><div class="ed-sec-ti">${sc.n}</div></div>
+        <div class="ed-sec-hd"><div class="ed-sec-ti">${sc.title}</div></div>
         <div class="ed-fl">`;
-      (sc.f||[]).forEach(fid=>{
+      (sc.fields||[]).forEach(fid=>{
         const v = S.content[fid]||'';
-        const isLong = v.length > 50 || v.includes('\\n');
+        const isLong = v.length > 50 || v.includes('\n');
         h += `<div class="ed-ln">
           <div class="ed-lb">${fid}</div>
           ${isLong
@@ -833,66 +824,53 @@ function rPageEdit(k){
             : `<div class="ed-in" contenteditable="true" oninput="sEd('${fid}',this.innerText)">${escHtml(v)}</div>`}
         </div>`;
       });
-      (sc.i||[]).forEach(iid=>{
-        const src = S.images[iid] || '';
-        h += `<div class="ed-ln">
-          <div class="ed-lb">${iid} (이미지)</div>
-          <div class="img-up">
-            <img src="${src||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2268%22 height=%2268%22%3E%3C/svg%3E'}" />
-            <div style="flex:1">
-              <div style="font-size:12px;color:var(--tx2);margin-bottom:5px">${src?'업로드됨':'이미지 없음'}</div>
-              <input type="file" accept="image/*" onchange="sImgUp('${iid}',this)" style="font-size:11px;color:var(--tx3)" />
-            </div>
-          </div>
-        </div>`;
-      });
-      if(sc.a){
-        const arrKey = sc.a;
-        const arr = S.arrays[arrKey] || [];
-        // 필드 레이블 맵
-        const labelMap = {
-          no:'번호', n:'이름', sp:'규격/사양', cat:'카테고리',
-          y:'연도', t:'내용/제목',
-          num:'단계', tt:'제목', dd:'설명',
-          c:'분류'
-        };
-        h += `<div style="grid-column:1/-1;padding:4px 0">
-          <div style="display:flex;align-items:center;margin-bottom:12px">
-            <div style="font-size:12px;font-weight:700;color:var(--tx2)">📑 ${arrKey} · 총 ${arr.length}개 항목</div>
-            <div style="flex:1"></div>
-            <button class="tb-btn pri" style="padding:6px 12px" onclick="arrAdd('${arrKey}')">＋ 항목 추가</button>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-          ${arr.map((it,ix)=>{
-            const fields = Object.keys(it);
-            return `<div style="padding:14px;background:var(--cd);border:1px solid var(--bd);border-radius:12px">
-              <div style="display:flex;align-items:center;margin-bottom:10px">
-                <div style="font-size:11px;font-weight:700;color:var(--ac);letter-spacing:.05em">#${ix+1}</div>
-                <div style="flex:1"></div>
-                <button class="tb-btn" style="padding:4px 8px;font-size:10px" onclick="arrMove('${arrKey}',${ix},-1)">↑</button>
-                <button class="tb-btn" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="arrMove('${arrKey}',${ix},1)">↓</button>
-                <button class="tb-btn" style="padding:4px 8px;font-size:10px;margin-left:4px;color:var(--rd);border-color:rgba(239,68,68,.3)" onclick="arrDel('${arrKey}',${ix})">× 삭제</button>
-              </div>
-              <div style="display:grid;grid-template-columns:repeat(${fields.length<=2?fields.length:2},1fr);gap:10px">
-              ${fields.map(f=>{
-                const v = String(it[f]??'');
-                const isLong = v.length > 40;
-                const lbl = labelMap[f] || f;
-                return `<div style="${isLong?'grid-column:1/-1':''}">
-                  <div style="font-size:10px;color:var(--tx4);margin-bottom:4px;font-weight:600;text-transform:uppercase">${lbl} <span style="opacity:.5">(${f})</span></div>
-                  ${isLong
-                    ? `<textarea style="width:100%;padding:8px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;font-size:12px;min-height:60px;resize:vertical" oninput="sArrEd('${arrKey}',${ix},'${f}',this.value)">${escHtml(v)}</textarea>`
-                    : `<input type="text" style="width:100%;padding:8px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;font-size:12px" value="${escHtml(v)}" oninput="sArrEd('${arrKey}',${ix},'${f}',this.value)" />`}
-                </div>`;
-              }).join('')}
-              </div>
-            </div>`;
-          }).join('')}
-          </div>
-          ${arr.length===0 ? '<div style="padding:24px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">항목이 없습니다. ＋ 버튼을 눌러 추가하세요</div>' : ''}
-        </div>`;
-      }
       h += `</div></div>`;
+    });
+    // Array sections
+    (p.arrays||[]).forEach(arrKey=>{
+      const arr = S.arrays[arrKey] || [];
+      const labelMap = {
+        no:'번호', n:'이름', sp:'규격/사양', cat:'카테고리',
+        y:'연도', t:'내용/제목',
+        num:'단계', tt:'제목', dd:'설명',
+        c:'분류'
+      };
+      h += `<div class="ed-sec">
+        <div class="ed-sec-hd"><div class="ed-sec-ti">${arrKey}</div></div>
+        <div style="display:flex;align-items:center;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--tx2)">총 ${arr.length}개 항목</div>
+          <div style="flex:1"></div>
+          <button class="tb-btn pri" style="padding:6px 12px" onclick="arrAdd('${arrKey}')">+ 항목 추가</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+        ${arr.map((it,ix)=>{
+          const fields = Object.keys(it);
+          return `<div style="padding:14px;background:var(--cd);border:1px solid var(--bd);border-radius:12px">
+            <div style="display:flex;align-items:center;margin-bottom:10px">
+              <div style="font-size:11px;font-weight:700;color:var(--ac);letter-spacing:.05em">#${ix+1}</div>
+              <div style="flex:1"></div>
+              <button class="tb-btn" style="padding:4px 8px;font-size:10px" onclick="arrMove('${arrKey}',${ix},-1)">↑</button>
+              <button class="tb-btn" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="arrMove('${arrKey}',${ix},1)">↓</button>
+              <button class="tb-btn" style="padding:4px 8px;font-size:10px;margin-left:4px;color:var(--rd);border-color:rgba(239,68,68,.3)" onclick="arrDel('${arrKey}',${ix})">× 삭제</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(${fields.length<=2?fields.length:2},1fr);gap:10px">
+            ${fields.map(f=>{
+              const v = String(it[f]??'');
+              const isLong = v.length > 40;
+              const lbl = labelMap[f] || f;
+              return `<div style="${isLong?'grid-column:1/-1':''}">
+                <div style="font-size:10px;color:var(--tx4);margin-bottom:4px;font-weight:600;text-transform:uppercase">${lbl} <span style="opacity:.5">(${f})</span></div>
+                ${isLong
+                  ? `<textarea style="width:100%;padding:8px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;font-size:12px;min-height:60px;resize:vertical" oninput="sArrEd('${arrKey}',${ix},'${f}',this.value)">${escHtml(v)}</textarea>`
+                  : `<input type="text" style="width:100%;padding:8px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;font-size:12px" value="${escHtml(v)}" oninput="sArrEd('${arrKey}',${ix},'${f}',this.value)" />`}
+              </div>`;
+            }).join('')}
+            </div>
+          </div>`;
+        }).join('')}
+        </div>
+        ${arr.length===0 ? '<div style="padding:24px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">항목이 없습니다. + 버튼을 눌러 추가하세요</div>' : ''}
+      </div>`;
     });
   }
   return h;
@@ -931,23 +909,18 @@ function sImgUp(iid, inp){
 }
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ============== Live Preview : 실제 홈페이지 모양 그대로 미러링 ==============
-// 텍스트를 직접 클릭하면 인라인 편집됩니다 (초등학생도 한눈에 알아볼 수 있도록 동일 디자인)
+// ============== Live Preview ==============
 function rLive(k){
   const C = S.content;
-  // 단일 필드 에디터블
   const e = (fid,tag='span') => `<${tag} contenteditable="true" data-fid="${fid}" oninput="sEd('${fid}',this.innerText)">${escHtml(C[fid]||'')}</${tag}>`;
-  // 배열 항목 필드 에디터블
   const ae = (arr,idx,field,tag='span') => `<${tag} contenteditable="true" oninput="sArrEd('${arr}',${idx},'${field}',this.innerText)">${escHtml(String((S.arrays[arr][idx]||{})[field]??''))}</${tag}>`;
-  // 배열 항목 컨트롤(↑↓×)
   const ac = (arr,idx) => `<div class="arr-ctrl">
     <button onclick="arrMove('${arr}',${idx},-1)" title="위로">↑</button>
     <button onclick="arrMove('${arr}',${idx},1)" title="아래로">↓</button>
     <button class="del" onclick="arrDel('${arr}',${idx})" title="삭제">×</button>
   </div>`;
-  // 배열 추가 버튼
-  const addBtn = (arr,label) => `<button class="arr-add" onclick="arrAdd('${arr}')">＋ ${label}</button>`;
-  const hint = `<div class="live-hint">💡 <b>블로그처럼 모든 내용을 직접 수정하세요.</b> · 텍스트를 클릭하면 편집, 항목 위로 마우스를 올리면 이동/삭제 버튼이 나타납니다. 하단 "＋" 버튼으로 새 항목을 추가할 수 있습니다.</div>`;
+  const addBtn = (arr,label) => `<button class="arr-add" onclick="arrAdd('${arr}')">+ ${label}</button>`;
+  const hint = `<div class="live-hint"><b>블로그처럼 모든 내용을 직접 수정하세요.</b> · 텍스트를 클릭하면 편집, 항목 위로 마우스를 올리면 이동/삭제 버튼이 나타납니다. 하단 "+" 버튼으로 새 항목을 추가할 수 있습니다.</div>`;
 
   if(k === 'home'){
     return hint + `
@@ -957,7 +930,6 @@ function rLive(k){
           <div class="lp-tag">${e('h_tag')}</div>
           <h1 class="lp-h1">${e('h_title1','span')}<br/><span class="grad">${e('h_title2','span')}</span></h1>
           <p class="lp-sub">${e('h_sub')}</p>
-          <div style="margin-top:24px"><span class="lp-pill">${e('h_badge')}</span></div>
         </div>
 
         <!-- Sub copy 1 -->
@@ -966,36 +938,25 @@ function rLive(k){
         <!-- Sub copy 2 -->
         <h2 class="lp-h2" style="text-align:center;margin-top:24px">${e('h_sub3_a')}<br/><span class="grad">${e('h_sub3_b')}</span></h2>
 
-        <!-- CTA — 한 번 쓰면 다시 못 -->
+        <!-- CTA -->
         <div style="margin-top:36px;padding:32px 24px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.08);border-radius:20px;text-align:center">
           <div class="lp-tag" style="text-align:center">${e('h_cta_tag')}</div>
           <h2 class="lp-h1" style="text-align:center;font-size:36px">${e('h_cta_title1')}<br/><span class="grad">${e('h_cta_title2')}</span></h2>
-          <p class="lp-sub" style="margin:14px auto 22px;text-align:center">${e('h_cta_desc')}</p>
-          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button style="padding:12px 22px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px;cursor:default">${e('h_cta_btn1')}</button>
-            <button style="padding:12px 22px;background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:999px;font-weight:800;font-size:13px;cursor:default">${e('h_cta_btn2')}</button>
-          </div>
+          <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('h_cta_desc')}</p>
         </div>
       </div>`;
   }
 
   if(k === 'tech'){
     return hint + `
-      <div class="live-stage" style="background:#fff;color:#1d1d1f">
+      <div class="live-stage light-sec" style="background:#fff;color:#1d1d1f">
         <div style="text-align:center;margin-bottom:24px">
           <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#2563eb;margin-bottom:14px">${e('t_tag')}</div>
           <h2 style="font-size:38px;font-weight:900;letter-spacing:-0.02em;color:#000;line-height:1.05">${e('t_title')}</h2>
           <p style="margin-top:14px;font-size:14px;color:rgba(0,0,0,.55);max-width:620px;margin-left:auto;margin-right:auto;line-height:1.6">${e('t_desc')}</p>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px">
-          ${[1,2,3,4].map(i=>`
-            <div style="display:flex;gap:14px;padding:18px;border-radius:18px;background:#f5f5f7;border:1px solid rgba(0,0,0,.04)">
-              <div style="width:48px;height:48px;flex-shrink:0;border-radius:14px;background:#dbeafe;color:#2563eb;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900">0${i}</div>
-              <div>
-                <h4 style="font-size:17px;font-weight:900;color:#000;margin-bottom:5px;letter-spacing:-0.01em">${e('t'+i+'_t')}</h4>
-                <p style="font-size:12px;color:rgba(0,0,0,.55);line-height:1.6">${e('t'+i+'_d')}</p>
-              </div>
-            </div>`).join('')}
+        <div style="margin-top:20px;padding:18px;background:#f5f5f7;border-radius:14px;border:1px solid rgba(0,0,0,.04);text-align:center;color:rgba(0,0,0,.4);font-size:12px">
+          기술 장점 카드는 index_v6.html에서 직접 관리됩니다 (data-cms 비관리 영역)
         </div>
       </div>`;
   }
@@ -1027,7 +988,7 @@ function rLive(k){
           <div class="lp-info" style="margin-top:18px">
             <div class="ib"><div class="lb2">COMPANY</div><div class="vl2">${e('c_name')}</div><div class="sm2">${e('c_name_en')}</div></div>
             <div class="ib"><div class="lb2">CEO</div><div class="vl2">${e('c_ceo')}</div><div class="sm2">대표이사</div></div>
-            <div class="ib"><div class="lb2">TEL</div><div class="vl2">${e('c_tel')}</div><div class="sm2">FAX ${e('c_fax')}</div></div>
+            <div class="ib"><div class="lb2">TEL</div><div class="vl2">${e('c_tel')}</div><div class="sm2">${e('c_fax')}</div></div>
             <div class="ib"><div class="lb2">BUSINESS NO.</div><div class="vl2">${e('c_biz')}</div><div class="sm2">사업자등록번호</div></div>
             <div class="ib full"><div class="lb2">ADDRESS</div><div class="vl2">${e('c_addr')}</div><div class="sm2">${e('c_addr_sub')}</div></div>
           </div>
@@ -1040,12 +1001,12 @@ function rLive(k){
           <p class="lp-sub" style="margin-top:14px">${e('a_promise_desc')}</p>
         </div>
 
-        <!-- 연혁 (인라인 편집 가능) -->
+        <!-- History -->
         <div style="margin-top:36px;padding-top:30px;border-top:1px solid rgba(255,255,255,.1)">
           <div class="lp-tag">HISTORY</div>
-          <h2 class="lp-h2">14년의 발자취</h2>
+          <h2 class="lp-h2">20년의 발자취</h2>
           <div class="lp-timeline">
-            ${S.arrays.history.map((h,i)=>`<div class="it arr-wrap" style="padding-right:76px">
+            ${(S.arrays.history||[]).map((h,i)=>`<div class="it arr-wrap" style="padding-right:76px">
               ${ac('history',i)}
               <div class="yr">${ae('history',i,'y')}</div>
               <div class="tx">${ae('history',i,'t')}</div>
@@ -1057,21 +1018,27 @@ function rLive(k){
   }
 
   if(k === 'products'){
-    const cats = ['전체', ...new Set(S.arrays.products.map(p=>p.cat))];
+    const cats = ['전체', ...new Set((S.arrays.products||[]).map(p=>p.cat))];
     return hint + `
       <div class="live-stage">
-        <div class="lp-tag">${e('p_tag')}</div>
-        <h1 class="lp-h1">${e('p_title1')}<br/><span class="grad">${e('p_title2')}</span></h1>
-        <p class="lp-sub">${e('p_desc')}</p>
+        <!-- CTA -->
+        <div style="margin-bottom:28px;padding:28px;border-radius:22px;background:linear-gradient(135deg,rgba(30,58,138,.4),#000 60%,#000);border:1px solid rgba(255,255,255,.1);text-align:center">
+          <div class="lp-tag" style="text-align:center">NEED HELP CHOOSING?</div>
+          <h3 class="lp-h2" style="text-align:center;font-size:24px">${e('p_cta_title')}</h3>
+          <p class="lp-sub" style="text-align:center;margin:12px auto 0">${e('p_cta_desc')}</p>
+          <div style="margin-top:20px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+            <span style="padding:12px 22px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px">📞 ${escHtml(C.c_tel)}</span>
+          </div>
+        </div>
 
-        <!-- 카테고리 필터 (자동 생성, 제품 카테고리를 바꾸면 자동 반영) -->
-        <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:6px">
+        <!-- Category filter -->
+        <div style="margin-bottom:18px;display:flex;flex-wrap:wrap;gap:6px">
           ${cats.map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${escHtml(c)}</span>`).join('')}
         </div>
 
-        <!-- 제품 그리드 (각 카드 인라인 편집 가능) -->
+        <!-- Products grid -->
         <div class="lp-pgrid">
-          ${S.arrays.products.map((p,i)=>`
+          ${(S.arrays.products||[]).map((p,i)=>`
             <div class="lp-card arr-wrap">
               ${ac('products',i)}
               <div class="no">No.${ae('products',i,'no')}</div>
@@ -1081,17 +1048,6 @@ function rLive(k){
             </div>`).join('')}
         </div>
         ${addBtn('products','새 제품 추가')}
-
-        <!-- CTA -->
-        <div style="margin-top:32px;padding:28px;border-radius:22px;background:linear-gradient(135deg,rgba(30,58,138,.4),#000 60%,#000);border:1px solid rgba(255,255,255,.1);text-align:center">
-          <div class="lp-tag" style="text-align:center">NEED HELP CHOOSING?</div>
-          <h3 class="lp-h2" style="text-align:center;font-size:24px">${e('p_cta_title')}</h3>
-          <p class="lp-sub" style="text-align:center;margin:12px auto 0">${e('p_cta_desc')}</p>
-          <div style="margin-top:20px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
-            <span style="padding:12px 22px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px">📞 ${escHtml(C.c_tel)}</span>
-            <span style="padding:12px 22px;border:1px solid rgba(255,255,255,.25);border-radius:999px;font-weight:800;font-size:13px">시공 갤러리 보기 →</span>
-          </div>
-        </div>
       </div>`;
   }
 
@@ -1102,33 +1058,8 @@ function rLive(k){
           <h1 class="lp-h1" style="text-align:center;font-size:38px">${e('pt_title')}</h1>
           <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('pt_desc')}</p>
         </div>
-        <h2 style="font-size:22px;font-weight:800;color:#fff;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:14px;margin-bottom:18px">집진기 & 참바</h2>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px">
-          <div style="background:#111;border-radius:22px;padding:22px;border:1px solid rgba(255,255,255,.05)">
-            <h3 style="font-size:16px;font-weight:700;color:#60a5fa;margin-bottom:14px">01. 집진기</h3>
-            <table style="width:100%;font-size:12px;color:rgba(255,255,255,.85);border-collapse:collapse">
-              <thead><tr style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:10px;text-transform:uppercase">
-                <th style="padding:10px;text-align:left">규격</th><th style="padding:10px;text-align:left">사이즈</th><th style="padding:10px;text-align:left">무게</th>
-              </tr></thead>
-              <tbody>
-                <tr style="border-top:1px solid rgba(255,255,255,.05)"><td style="padding:12px">25 루베</td><td style="padding:12px">${e('pt_d1_size')}</td><td style="padding:12px">${e('pt_d1_w')}</td></tr>
-                <tr style="border-top:1px solid rgba(255,255,255,.05)"><td style="padding:12px">50 루베</td><td style="padding:12px">${e('pt_d2_size')}</td><td style="padding:12px">${e('pt_d2_w')}</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="background:#111;border-radius:22px;padding:22px;border:1px solid rgba(255,255,255,.05)">
-            <h3 style="font-size:16px;font-weight:700;color:#60a5fa;margin-bottom:14px">02. 참 바</h3>
-            <table style="width:100%;font-size:12px;color:rgba(255,255,255,.85);border-collapse:collapse">
-              <thead><tr style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:10px;text-transform:uppercase">
-                <th style="padding:10px;text-align:left">규격</th><th style="padding:10px;text-align:left">사이즈</th>
-              </tr></thead>
-              <tbody>
-                <tr style="border-top:1px solid rgba(255,255,255,.05)"><td style="padding:12px">600 × 600 × 600</td><td style="padding:12px">300Ø</td></tr>
-                <tr style="border-top:1px solid rgba(255,255,255,.05)"><td style="padding:12px">800 × 800 × 600</td><td style="padding:12px">350Ø</td></tr>
-                <tr style="border-top:1px solid rgba(255,255,255,.05)"><td style="padding:12px">900 × 900 × 800</td><td style="padding:12px">400Ø</td></tr>
-              </tbody>
-            </table>
-          </div>
+        <div style="padding:18px;background:#111;border-radius:14px;border:1px solid rgba(255,255,255,.05);text-align:center;color:rgba(255,255,255,.4);font-size:12px">
+          부품 상세 내용은 index_v6.html에서 직접 관리됩니다
         </div>
       </div>`;
   }
@@ -1141,7 +1072,7 @@ function rLive(k){
           <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('m_desc')}</p>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
-          ${S.arrays.steps.map((s,i)=>`
+          ${(S.arrays.steps||[]).map((s,i)=>`
             <div class="lp-step arr-wrap">
               ${ac('steps',i)}
               <div class="num">${ae('steps',i,'num')}</div>
@@ -1157,11 +1088,12 @@ function rLive(k){
     return hint + `
       <div class="live-stage">
         <div style="text-align:center;margin-bottom:30px">
+          <div class="lp-tag" style="text-align:center">${e('g_tag')}</div>
           <h1 class="lp-h1" style="text-align:center;font-size:38px">${e('g_title')}</h1>
           <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('g_desc')}</p>
         </div>
         <div class="lp-pgrid" style="grid-template-columns:repeat(2,1fr)">
-          ${S.arrays.gallery.map((g,i)=>`
+          ${(S.arrays.gallery||[]).map((g,i)=>`
             <div class="lp-card arr-wrap">
               ${ac('gallery',i)}
               <div style="width:100%;height:140px;border-radius:12px;background:linear-gradient(135deg,#1e293b,#0a0f1c);margin-bottom:12px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:11px;border:1px solid rgba(255,255,255,.05)">📷 시공 사진</div>
@@ -1237,7 +1169,6 @@ function delInq(id){
   S.inquiries = S.inquiries.filter(x=>x.id!==id);
   saveLocal(); R(); toast('삭제되었습니다');
 }
-// 챗봇이 localStorage에 직접 쓴 신규 문의를 불러와 병합
 function refreshInq(){
   try {
     const raw = JSON.parse(localStorage.getItem('usung-cms-state-v2') || 'null');
@@ -1250,7 +1181,6 @@ function refreshInq(){
   } catch(e){}
   toast('저장된 데이터가 없습니다', true);
 }
-// 페이지 포커스 복귀시 자동으로 새 문의 감지
 window.addEventListener('focus', ()=>{
   try {
     const raw = JSON.parse(localStorage.getItem('usung-cms-state-v2') || 'null');
@@ -1357,7 +1287,6 @@ function bdDel(k, id){
   saveLocal(); R(); toast('삭제되었습니다');
 }
 
-// ============== 설정 ==============
 // ============== 챗봇 관리 ==============
 function bot(){ return window.UsungBot; }
 function rBotKB(){
@@ -1368,16 +1297,16 @@ function rBotKB(){
     <div><div class="vw-ti">챗봇 지식베이스</div><div class="vw-sub">키워드 매칭 Q&amp;A · 총 ${kb.length}개 항목 · 블로그 글 ${arts.length}편 자동 연동</div></div>
     <div class="tb-sp"></div>
     <button class="tb-btn" onclick="botKBReset()">초기값 복원</button>
-    <button class="tb-btn pri" onclick="botKBAdd()">＋ Q&amp;A 추가</button>
+    <button class="tb-btn pri" onclick="botKBAdd()">+ Q&amp;A 추가</button>
   </div>`;
 
-  h += `<div class="cd" style="margin-bottom:14px"><div class="cd-ti">💡 사용 팁<div class="ln"></div></div>
+  h += `<div class="cd" style="margin-bottom:14px"><div class="cd-ti">사용 팁<div class="ln"></div></div>
     <div style="font-size:12px;line-height:1.7;color:var(--tx3)">
     • <b>키워드</b>에 들어있는 단어가 사용자 질문에 포함되면 해당 <b>답변</b>이 자동으로 전송됩니다.<br/>
     • 여러 키워드는 쉼표(,)로 구분하세요. 예: <code style="background:var(--cd);padding:2px 6px;border-radius:4px">가격,견적,얼마,비용</code><br/>
     • 답변 안의 줄바꿈은 그대로 챗봇에 표시됩니다.<br/>
     • CTA 가 <b>tel</b> 이면 답변 아래에 전화 버튼이 자동 추가됩니다.<br/>
-    • 매칭되는 Q&amp;A가 없어도 블로그 50편 중 관련 글을 자동으로 추천합니다.
+    • 매칭되는 Q&amp;A가 없어도 블로그 글 중 관련 글을 자동으로 추천합니다.
     </div>
   </div>`;
 
@@ -1394,20 +1323,20 @@ function rBotKB(){
       </div>
       <div style="display:grid;grid-template-columns:1fr;gap:10px">
         <div>
-          <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">🔑 키워드 (쉼표로 구분)</div>
+          <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">키워드 (쉼표로 구분)</div>
           <input type="text" value="${escHtml(qs)}" oninput="botKBEdit(${ix},'q',this.value.split(',').map(s=>s.trim()).filter(Boolean))"/>
         </div>
         <div>
-          <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">💬 답변</div>
+          <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">답변</div>
           <textarea style="min-height:100px" oninput="botKBEdit(${ix},'a',this.value)">${escHtml(it.a||'')}</textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
-            <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">🔗 링크 (선택)</div>
+            <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">링크 (선택)</div>
             <input type="text" placeholder="products.html 등" value="${escHtml(it.link||'')}" oninput="botKBEdit(${ix},'link',this.value)"/>
           </div>
           <div>
-            <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">📞 CTA (tel / 빈칸)</div>
+            <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">CTA (tel / 빈칸)</div>
             <input type="text" placeholder="tel" value="${escHtml(it.cta||'')}" oninput="botKBEdit(${ix},'cta',this.value)"/>
           </div>
         </div>
@@ -1416,8 +1345,7 @@ function rBotKB(){
   });
   h += `</div>`;
 
-  // Article list (read-only, blog-synced)
-  h += `<div class="cd" style="margin-top:20px"><div class="cd-ti">📚 자동 연동된 블로그 글 (${arts.length}편)<div class="ln"></div></div>
+  h += `<div class="cd" style="margin-top:20px"><div class="cd-ti">자동 연동된 블로그 글 (${arts.length}편)<div class="ln"></div></div>
     <div style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:6px">
     ${arts.map((a,i)=>`<a href="${escHtml(a.l)}" target="_blank" style="padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;text-decoration:none;color:var(--tx);font-size:12px">
       <b style="color:var(--ac)">#${i+1}</b> ${escHtml(a.t)}
@@ -1467,11 +1395,11 @@ function rBotLogs(){
   let h = `<div class="vw-hd">
     <div><div class="vw-ti">챗봇 대화 로그</div><div class="vw-sub">총 ${keys.length}개 세션 · ${logs.length}개 메시지</div></div>
     <div class="tb-sp"></div>
-    <button class="tb-btn" style="color:var(--rd)" onclick="botLogsClear()">🗑 전체 삭제</button>
+    <button class="tb-btn" style="color:var(--rd)" onclick="botLogsClear()">전체 삭제</button>
   </div>`;
 
   if(!keys.length){
-    h += '<div class="cd"><div style="text-align:center;padding:40px;color:var(--tx4)">아직 대화 기록이 없습니다.<br/><br/>홈페이지의 💬 챗봇 버튼을 눌러 대화를 시작하면 여기에 기록됩니다.</div></div>';
+    h += '<div class="cd"><div style="text-align:center;padding:40px;color:var(--tx4)">아직 대화 기록이 없습니다.<br/><br/>홈페이지의 챗봇 버튼을 눌러 대화를 시작하면 여기에 기록됩니다.</div></div>';
     return h;
   }
   h += `<div style="display:flex;flex-direction:column;gap:14px">`;
@@ -1479,7 +1407,7 @@ function rBotLogs(){
     const msgs = sessions[sk];
     const first = msgs[0];
     const when = new Date(first.t).toLocaleString('ko-KR');
-    h += `<div class="cd"><div class="cd-ti">🗨 세션 ${escHtml(sk)} · ${when}<div class="ln"></div></div>
+    h += `<div class="cd"><div class="cd-ti">세션 ${escHtml(sk)} · ${when}<div class="ln"></div></div>
       <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">
       ${msgs.map(m=>{
         const isUser = m.role === 'user';
@@ -1488,7 +1416,7 @@ function rBotLogs(){
             ${isUser
               ? 'background:var(--ac);color:#fff;border-bottom-right-radius:4px'
               : 'background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-bottom-left-radius:4px'}">
-            <div style="font-size:9px;opacity:.7;margin-bottom:2px">${isUser?'👤 사용자':'🤖 봇'} · ${new Date(m.t).toLocaleTimeString('ko-KR')}</div>
+            <div style="font-size:9px;opacity:.7;margin-bottom:2px">${isUser?'사용자':'봇'} · ${new Date(m.t).toLocaleTimeString('ko-KR')}</div>
             ${escHtml(m.text)}
           </div>
         </div>`;
@@ -1513,7 +1441,7 @@ function rBotCfg(){
     <button class="tb-btn" onclick="botCfgReset()">초기값 복원</button>
   </div>
 
-  <div class="cd"><div class="cd-ti">🤖 기본 정보<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">기본 정보<div class="ln"></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div><div style="font-size:10px;color:var(--tx4);margin-bottom:4px">챗봇 이름</div>
         <input type="text" value="${escHtml(s.name)}" oninput="botCfgSet('name',this.value)"/></div>
@@ -1530,7 +1458,7 @@ function rBotCfg(){
     </div>
   </div>
 
-  <div class="cd"><div class="cd-ti">🎨 색상<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">색상<div class="ln"></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div><div style="font-size:10px;color:var(--tx4);margin-bottom:4px">메인 색상 (그라데이션 시작)</div>
         <input type="color" value="${escHtml(s.color)}" oninput="botCfgSet('color',this.value)" style="width:100%;height:44px"/></div>
@@ -1542,7 +1470,7 @@ function rBotCfg(){
     </div>
   </div>
 
-  <div class="cd"><div class="cd-ti">📞 연락처<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">연락처<div class="ln"></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div><div style="font-size:10px;color:var(--tx4);margin-bottom:4px">대표 전화</div>
         <input type="text" value="${escHtml(s.tel)}" oninput="botCfgSet('tel',this.value)"/></div>
@@ -1551,16 +1479,16 @@ function rBotCfg(){
     </div>
   </div>
 
-  <div class="cd"><div class="cd-ti">⚡ 빠른 답변 버튼 (사용자가 클릭해서 바로 질문)<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">빠른 답변 버튼 (사용자가 클릭해서 바로 질문)<div class="ln"></div></div>
     <div style="font-size:10px;color:var(--tx4);margin-bottom:4px">쉼표로 구분 · 홈페이지 챗봇 하단에 표시됩니다</div>
     <textarea oninput="botCfgSet('quickReplies',this.value.split(',').map(s=>s.trim()).filter(Boolean))">${escHtml((s.quickReplies||[]).join(', '))}</textarea>
   </div>
 
-  <div class="cd"><div class="cd-ti">❓ 폴백 메시지 (매칭 실패시)<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">폴백 메시지 (매칭 실패시)<div class="ln"></div></div>
     <textarea style="min-height:90px" oninput="botCfgSet('fallback',this.value)">${escHtml(s.fallback)}</textarea>
   </div>
 
-  <div class="cd"><div class="cd-ti">🧪 테스트<div class="ln"></div></div>
+  <div class="cd"><div class="cd-ti">테스트<div class="ln"></div></div>
     <div style="display:flex;gap:8px">
       <input type="text" id="botTestQ" placeholder="질문을 입력하고 테스트해 보세요" style="flex:1"/>
       <button class="tb-btn pri" onclick="botTestRun()">테스트 실행</button>
@@ -1584,10 +1512,10 @@ function botTestRun(){
   if(!q) return;
   const res = bot().respond(q);
   let h = `<div style="padding:14px;background:var(--bg);border:1px solid var(--bd);border-radius:12px">
-    <div style="font-size:10px;color:var(--tx4);margin-bottom:6px">🤖 봇 응답 ${res.matched?`· 매칭: <b style="color:var(--ac)">${res.matched}</b>`:'· <span style="color:var(--rd)">매칭 실패 (폴백)</span>'}</div>
+    <div style="font-size:10px;color:var(--tx4);margin-bottom:6px">봇 응답 ${res.matched?`· 매칭: <b style="color:var(--ac)">${res.matched}</b>`:'· <span style="color:var(--rd)">매칭 실패 (폴백)</span>'}</div>
     <div style="font-size:13px;color:var(--tx);white-space:pre-wrap;line-height:1.6">${escHtml(res.text)}</div>`;
   if(res.articles && res.articles.length){
-    h += `<div style="margin-top:10px;font-size:10px;color:var(--tx4)">📚 추천 블로그 글:</div>`;
+    h += `<div style="margin-top:10px;font-size:10px;color:var(--tx4)">추천 블로그 글:</div>`;
     res.articles.forEach(a=>{
       h += `<div style="font-size:11px;color:var(--ac);margin-top:4px">• ${escHtml(a.t)}</div>`;
     });
@@ -1596,20 +1524,21 @@ function botTestRun(){
   document.getElementById('botTestOut').innerHTML = h;
 }
 
+// ============== 설정 ==============
 function rSettings(){
   return `
     <div class="vw-hd"><div><div class="vw-ti">설정</div><div class="vw-sub">시스템 환경 설정</div></div></div>
     <div class="cd"><div class="cd-ti">테마 <div class="ln"></div></div>
       <div style="display:flex;gap:10px">
-        <button class="tb-btn ${S.theme==='dark'?'pri':''}" onclick="setTheme('dark')">🌙 다크 모드</button>
-        <button class="tb-btn ${S.theme==='light'?'pri':''}" onclick="setTheme('light')">☀️ 라이트 모드</button>
+        <button class="tb-btn ${S.theme==='dark'?'pri':''}" onclick="setTheme('dark')">다크 모드</button>
+        <button class="tb-btn ${S.theme==='light'?'pri':''}" onclick="setTheme('light')">라이트 모드</button>
       </div>
     </div>
     <div class="cd"><div class="cd-ti">데이터 백업 <div class="ln"></div></div>
       <p style="font-size:12px;color:var(--tx3);margin-bottom:12px">전체 콘텐츠와 게시물을 JSON 파일로 내려받거나 업로드할 수 있습니다</p>
       <div style="display:flex;gap:8px">
-        <button class="tb-btn" onclick="exportJSON()">⬇ JSON 내보내기</button>
-        <button class="tb-btn" onclick="document.getElementById('impFile').click()">⬆ JSON 불러오기</button>
+        <button class="tb-btn" onclick="exportJSON()">JSON 내보내기</button>
+        <button class="tb-btn" onclick="document.getElementById('impFile').click()">JSON 불러오기</button>
         <input type="file" id="impFile" accept=".json" style="display:none" onchange="importJSON(this)" />
       </div>
     </div>
