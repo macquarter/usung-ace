@@ -837,8 +837,29 @@
         <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
         <section class="relative bg-white text-black py-10 md:py-14">
             <!-- 상단 임팩트 카피 -->
-            <div class="text-center pt-6 pb-12 r-anim r-mask-up">
-                <p class="text-2xl md:text-4xl font-black tracking-tight text-black/80 leading-snug">나사 하나, 부품 하나까지<br/> <span class="text-blue-600">모두 자체 설계·자체 생산.</span></p>
+            <div class="text-center pt-6 pb-4 r-anim r-mask-up">
+                <p class="text-2xl md:text-4xl font-black tracking-tight text-black/80 leading-snug">대한민국의 기술 유성에이스<br/> <span class="text-blue-600">세계로 나아갑니다.</span></p>
+            </div>
+            <!-- 스탯 스트립 (카피 바로 아래) -->
+            <div class="max-w-7xl mx-auto px-6 mb-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-black/5 rounded-3xl overflow-hidden border border-black/8 r-anim r-zoom">
+                    <div class="bg-white p-6 text-center">
+                        <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="28">0</span><span class="text-blue-600">+</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">제품 라인업</div>
+                    </div>
+                    <div class="bg-white p-6 text-center">
+                        <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">엔지니어링</div>
+                    </div>
+                    <div class="bg-white p-6 text-center">
+                        <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="360">0</span><span class="text-blue-600">°</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
+                    </div>
+                    <div class="bg-white p-6 text-center">
+                        <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="100">0</span><span class="text-blue-600">%</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">국내 제조</div>
+                    </div>
+                </div>
             </div>
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-8 r-anim r-mask-up">
@@ -851,7 +872,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-black/10 mt-4 shadow-xl">
                     <!-- Left: 3D Canvas Hood Animation (다크 배경 + 골드 파이프 스타일) -->
-                    <div class="relative min-h-[520px]" id="hood-3d-wrap" style="background:linear-gradient(135deg,#0e1117,#0a0c12)">
+                    <div class="relative min-h-[380px]" id="hood-3d-wrap" style="background:linear-gradient(135deg,#0e1117,#0a0c12)">
                         <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
                         <!-- Floating labels -->
                         <div class="absolute top-[5%] left-[4%] z-[2] bg-white/[0.06] backdrop-blur-md rounded-xl px-3.5 py-2 border border-white/10" style="animation:floatLabel 3s ease-in-out infinite">
@@ -880,23 +901,23 @@
                         </div>
                     </div>
                     <!-- Right: Feature Detail Text -->
-                    <div class="bg-[#0a0c18] p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-                        <div class="space-y-7">
+                    <div class="bg-[#0a0c18] p-6 md:p-8 lg:p-10 flex flex-col justify-center">
+                        <div class="space-y-5">
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">01 테이블 기준 360° 스윙</h3>
+                                <h3 class="text-[15px] font-black text-white mb-1.5">01 테이블 기준 360° 스윙</h3>
                                 <p class="text-[13px] text-white/55 leading-[1.85]">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전 되어 부러질 염려가 없어 편리합니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">02 간편한 내부청소</h3>
+                                <h3 class="text-[15px] font-black text-white mb-1.5">02 간편한 내부청소</h3>
                                 <p class="text-[13px] text-white/55 leading-[1.85]">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">03 안전 · 유지관리 옵션</h3>
+                                <h3 class="text-[15px] font-black text-white mb-1.5">03 안전 · 유지관리 옵션</h3>
                                 <p class="text-[13px] text-white/55 leading-[1.85]"><span class="text-blue-400 font-bold">FVD방화댐퍼:</span> 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방할 수 있습니다. (이미 화재가 난 경우는 해당하지 않음)</p>
                                 <p class="text-[13px] text-white/55 leading-[1.85] mt-2"><span class="text-blue-400 font-bold">터치분리:</span> 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능합니다. 후드 관리 뿐만 아니라 모터 수명 연장에도 긍정적 효과가 있습니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">04 맞춤형 제작</h3>
+                                <h3 class="text-[15px] font-black text-white mb-1.5">04 맞춤형 제작</h3>
                                 <p class="text-[13px] text-white/55 leading-[1.85]">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
                             </div>
                         </div>
@@ -1392,25 +1413,7 @@
                 });
                 </script>
 
-                <!-- 스탯 스트립 (스크롤 시 카운터 애니메이션) -->
-                <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-px bg-black/5 rounded-3xl overflow-hidden border border-black/8 r-anim r-zoom">
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="28">0</span><span class="text-blue-600">+</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">제품 라인업</div>
-                    </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">엔지니어링</div>
-                    </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="360">0</span><span class="text-blue-600">°</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
-                    </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="100">0</span><span class="text-blue-600">%</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">국내 제조</div>
-                    </div>
-                </div>
+                <!-- 스탯 스트립은 상단 임팩트 카피 아래로 이동됨 -->
             </div>
         </section>
 
