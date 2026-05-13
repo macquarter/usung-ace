@@ -548,12 +548,12 @@
                         </button>
                         <div class="dropdown absolute top-full left-1/2 mt-3 w-72 bg-white/95 backdrop-blur-2xl border border-black/5 rounded-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,.25)] p-3 z-50">
                             <button onclick="navigate('about')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
-                                <div class="font-bold text-sm text-black">CEO 인사말</div>
-                                <div class="text-[11px] text-black/45 mt-0.5">신개념 유성에이스의 약속</div>
+                                <div class="font-bold text-sm text-black" data-i18n="nav_about_ceo">CEO 인사말</div>
+                                <div class="text-[11px] text-black/45 mt-0.5" data-i18n="nav_about_ceo_sub">신개념 유성에이스의 약속</div>
                             </button>
                             <button onclick="navigate('about','map-section')" class="block w-full text-left p-3 rounded-2xl hover:bg-black/5">
-                                <div class="font-bold text-sm text-black">찾아오시는 길</div>
-                                <div class="text-[11px] text-black/45 mt-0.5">본사 및 공장 위치</div>
+                                <div class="font-bold text-sm text-black" data-i18n="nav_about_map">찾아오시는 길</div>
+                                <div class="text-[11px] text-black/45 mt-0.5" data-i18n="nav_about_map_sub">본사 및 공장 위치</div>
                             </button>
                         </div>
                     </div>
@@ -571,24 +571,24 @@
                                     <div class="text-[10px] tracking-[0.24em] font-bold text-black/40 mb-6">CATEGORIES</div>
                                     <div class="space-y-4" id="mega-cat-list">
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('갤럭시 A타입'),100)" onmouseenter="megaHoverCat(['갤럭시 A타입','갤럭시 B타입','갤럭시 C타입','갤럭시 D타입','갤럭시 C타입 원통필터'])" class="block text-left group w-full">
-                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">갤럭시 A~D타입</div>
-                                            <div class="text-[11px] text-black/45 mt-0.5">스윙태엽/FVD/유지망 통합</div>
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat1">갤럭시 A~D타입</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5" data-i18n="mega_cat1_sub">스윙태엽/FVD/유지망 통합</div>
                                         </button>
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('양옆태엽[BEST]'),100)" onmouseenter="megaHoverCat(['양옆태엽[BEST]'])" class="block text-left group w-full">
-                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">양옆태엽 <span class="text-[10px] px-1.5 py-0.5 bg-red-500 text-white rounded-full ml-1">BEST</span></div>
-                                            <div class="text-[11px] text-black/45 mt-0.5">양옆태엽 스윙 시리즈</div>
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat2">양옆태엽 <span class="text-[10px] px-1.5 py-0.5 bg-red-500 text-white rounded-full ml-1">BEST</span></div>
+                                            <div class="text-[11px] text-black/45 mt-0.5" data-i18n="mega_cat2_sub">양옆태엽 스윙 시리즈</div>
                                         </button>
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('LED조명'),100)" onmouseenter="megaHoverCat(['LED조명','LED우주선'])" class="block text-left group w-full">
-                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">LED 조명 / 우주선</div>
-                                            <div class="text-[11px] text-black/45 mt-0.5">LED/할로겐 등제품 및 아크릴등</div>
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat3">LED 조명 / 우주선</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5" data-i18n="mega_cat3_sub">LED/할로겐 등제품 및 아크릴등</div>
                                         </button>
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('파이프'),100)" onmouseenter="megaHoverCat(['파이프','스파이얼'])" class="block text-left group w-full">
-                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">파이프 / 스파이얼</div>
-                                            <div class="text-[11px] text-black/45 mt-0.5">스텐파이프(도금/도장) · 스파이럴</div>
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat4">파이프 / 스파이얼</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5" data-i18n="mega_cat4_sub">스텐파이프(도금/도장) · 스파이럴</div>
                                         </button>
                                         <button onclick="navigate('products');setTimeout(()=>filterProducts('후레쉬볼/주름관'),100)" onmouseenter="megaHoverCat(['후레쉬볼/주름관'])" class="block text-left group w-full">
-                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition">후레쉬볼 / 주름관</div>
-                                            <div class="text-[11px] text-black/45 mt-0.5">플렉시블 연결관</div>
+                                            <div class="text-[15px] font-black text-black tracking-tight group-hover:text-blue-600 transition" data-i18n="mega_cat5">후레쉬볼 / 주름관</div>
+                                            <div class="text-[11px] text-black/45 mt-0.5" data-i18n="mega_cat5_sub">플렉시블 연결관</div>
                                         </button>
                                     </div>
                                 </div>
@@ -596,7 +596,7 @@
                                 <div class="col-span-8 p-8">
                                     <div class="flex items-center justify-between mb-5">
                                         <div class="text-[10px] tracking-[0.24em] font-bold text-black/40" id="mega-list-title">FULL PRODUCT LIST (148)</div>
-                                        <button onclick="navigate('products')" class="text-[12px] font-semibold text-blue-600 hover:text-blue-700">모두 보기 →</button>
+                                        <button onclick="navigate('products')" class="text-[12px] font-semibold text-blue-600 hover:text-blue-700" data-i18n="mega_view_all">모두 보기 →</button>
                                     </div>
                                     <div class="grid grid-cols-2 gap-x-6 gap-y-1 max-h-[58vh] overflow-y-auto custom-scrollbar pr-2" id="mega-menu-list">
                                         <!-- JS로 채워짐 -->
@@ -737,7 +737,14 @@
         <div id="page-home" class="page active">
         <div class="relative h-[400vh]">
             <div class="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-                
+
+                <!-- Hero Background Video -->
+                <video id="hero-bg-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0" poster="">
+                    <source src="hero-bg.mp4" type="video/mp4">
+                </video>
+                <!-- Dark Overlay for readability -->
+                <div class="absolute inset-0 bg-black/60 z-[1]"></div>
+
                 <!-- Hero Text -->
                 <div id="anim-hero" class="scroll-element z-10 text-center px-6">
                     <div data-cms="h_tag" class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6" data-i18n="hero_tag">SINCE 2007 · USUNG ACE</div>
@@ -849,17 +856,17 @@
 
                 <!-- Final CTA — 한 번 쓰면 다시 못 돌아갑니다 -->
                 <div id="anim-cta" class="scroll-element z-20 bg-black/80 backdrop-blur-sm opacity-0 scale-90 pointer-events-none px-6">
-                    <div data-cms="h_cta_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">SINCE 2007 · PROVEN QUALITY</div>
+                    <div data-cms="h_cta_tag" data-i18n="cta_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-5">SINCE 2007 · PROVEN QUALITY</div>
                     <h2 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] text-center max-w-5xl">
-                        <span data-cms="h_cta_title1">한 번 쓰면,</span> <br/>
-                        <span data-cms="h_cta_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">다시 못 돌아갑니다.</span>
+                        <span data-cms="h_cta_title1" data-i18n="cta_title1">한 번 쓰면,</span> <br/>
+                        <span data-cms="h_cta_title2" data-i18n="cta_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">다시 못 돌아갑니다.</span>
                     </h2>
-                    <p data-cms="h_cta_desc" class="mt-7 text-base md:text-lg text-white/55 max-w-xl text-center leading-relaxed">
+                    <p data-cms="h_cta_desc" class="mt-7 text-base md:text-lg text-white/55 max-w-xl text-center leading-relaxed" data-i18n="cta_desc">
                         마케팅 없이 입소문만으로 성장한 품질의 차이, 직접 경험해 보세요.
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center mt-8">
-                        <button onclick="navigate('products')" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform">제품 라인업 보기</button>
-                        <button onclick="navigate('about','inquiry-section')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">견적 문의</button>
+                        <button onclick="navigate('products')" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform" data-i18n="cta_btn_products">제품 라인업 보기</button>
+                        <button onclick="navigate('about','inquiry-section')" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors" data-i18n="cta_btn_inquiry">견적 문의</button>
                     </div>
                 </div>
 
@@ -878,8 +885,8 @@
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-2 pt-4">
                     <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-2">CORE TECHNOLOGY</div>
-                    <h2 data-cms="t_title" class="text-4xl md:text-6xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
-                    <p data-cms="t_desc" class="mt-3 text-base text-black/50 max-w-2xl mx-auto leading-relaxed">
+                    <h2 data-cms="t_title" data-i18n="core_title" class="text-4xl md:text-6xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
+                    <p data-cms="t_desc" class="mt-3 text-base text-black/50 max-w-2xl mx-auto leading-relaxed" data-i18n="core_desc">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
                 </div>
@@ -891,26 +898,26 @@
                         <!-- Floating labels -->
                         <div class="absolute top-[5%] left-[4%] z-[2] bg-white/[0.06] backdrop-blur-md rounded-xl px-3.5 py-2 border border-white/10" style="animation:floatLabel 3s ease-in-out infinite">
                             <div class="text-[9px] font-bold text-blue-400 tracking-wider">150Ø</div>
-                            <div class="text-[13px] font-black text-white/90">상부 파이프</div>
+                            <div class="text-[13px] font-black text-white/90" data-i18n="core_label_upper">상부 파이프</div>
                         </div>
                         <div class="absolute top-[32%] right-[4%] z-[2] bg-white/[0.06] backdrop-blur-md rounded-xl px-3.5 py-2 border border-white/10" style="animation:floatLabel 3s ease-in-out 0.6s infinite">
                             <div class="text-[9px] font-bold text-orange-400 tracking-wider">F.V.D</div>
-                            <div class="text-[13px] font-black text-white/90">방화담퍼</div>
+                            <div class="text-[13px] font-black text-white/90" data-i18n="core_label_fvd">방화담퍼</div>
                         </div>
                         <div class="absolute bottom-[28%] right-[4%] z-[2] bg-white/[0.06] backdrop-blur-md rounded-xl px-3.5 py-2 border border-white/10" style="animation:floatLabel 3s ease-in-out 1s infinite">
                             <div class="text-[9px] font-bold text-blue-400 tracking-wider">125Ø</div>
-                            <div class="text-[13px] font-black text-white/90">하부 파이프</div>
+                            <div class="text-[13px] font-black text-white/90" data-i18n="core_label_lower">하부 파이프</div>
                         </div>
                         <div class="absolute bottom-[6%] left-[4%] z-[2] bg-white/[0.06] backdrop-blur-md rounded-xl px-3.5 py-2 border border-white/10" style="animation:floatLabel 3s ease-in-out 1.4s infinite">
                             <div class="text-[9px] font-bold text-blue-400 tracking-wider">520Ø</div>
-                            <div class="text-[13px] font-black text-white/90">나팔캡 기름받이</div>
+                            <div class="text-[13px] font-black text-white/90" data-i18n="core_label_cap">나팔캡 기름받이</div>
                         </div>
                         <!-- 한줄 카피 오버레이 -->
                         <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-[3]">
                             <div class="flex items-center gap-2 bg-white/[0.06] backdrop-blur-md rounded-full px-5 py-2 border border-white/10">
                                 <span class="text-[10px] font-bold tracking-[0.15em] text-blue-400">360° SWING</span>
                                 <span class="w-px h-3 bg-white/20"></span>
-                                <span class="text-[11px] font-medium text-white/70">흔들려도 꺾이지 않는 기술력</span>
+                                <span class="text-[11px] font-medium text-white/70" data-i18n="core_tagline">흔들려도 꺾이지 않는 기술력</span>
                             </div>
                         </div>
                     </div>
@@ -918,21 +925,21 @@
                     <div class="bg-[#0a0c18] p-8 md:p-10 lg:p-12 flex flex-col justify-center">
                         <div class="space-y-6">
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">01 테이블 기준 360° 스윙</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전 되어 부러질 염려가 없어 편리합니다.</p>
+                                <h3 class="text-[17px] font-black text-white mb-2" data-i18n="core_f1_title">01 테이블 기준 360° 스윙</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]" data-i18n="core_f1_desc">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전 되어 부러질 염려가 없어 편리합니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">02 간편한 내부청소</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
+                                <h3 class="text-[17px] font-black text-white mb-2" data-i18n="core_f2_title">02 간편한 내부청소</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]" data-i18n="core_f2_desc">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">03 안전 · 유지관리 옵션</h3>
+                                <h3 class="text-[17px] font-black text-white mb-2" data-i18n="core_f3_title">03 안전 · 유지관리 옵션</h3>
                                 <p class="text-[13px] text-white/55 leading-[1.85]"><span class="text-blue-400 font-bold">FVD방화댐퍼:</span> 200~220도가 되면 댐퍼가 닫혀 큰 화재로 번지는 것을 예방할 수 있습니다. (이미 화재가 난 경우는 해당하지 않음)</p>
                                 <p class="text-[13px] text-white/55 leading-[1.85] mt-2"><span class="text-blue-400 font-bold">터치분리:</span> 상부 파이프도 분리 가능하게 하여 후드 상부, 상부 파이프도 청소가 가능합니다. 후드 관리 뿐만 아니라 모터 수명 연장에도 긍정적 효과가 있습니다.</p>
                             </div>
                             <div>
-                                <h3 class="text-[17px] font-black text-white mb-2">04 맞춤형 제작</h3>
-                                <p class="text-[13px] text-white/55 leading-[1.85]">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
+                                <h3 class="text-[17px] font-black text-white mb-2" data-i18n="core_f4_title">04 맞춤형 제작</h3>
+                                <p class="text-[13px] text-white/55 leading-[1.85]" data-i18n="core_f4_desc">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단 혹은 연장이 가능하여 다양한 현장에 대응 가능합니다.</p>
                             </div>
                         </div>
                     </div>
@@ -1429,24 +1436,24 @@
 
                 <!-- 임팩트 카피 + 스탯 스트립 (애니메이션 섹션 아래) -->
                 <div class="text-center pt-10 pb-4">
-                    <p class="text-3xl md:text-5xl font-black tracking-tight text-black/80 leading-snug">대한민국의 기술 유성에이스<br/> <span class="text-blue-600">세계로 나아갑니다.</span></p>
+                    <p class="text-3xl md:text-5xl font-black tracking-tight text-black/80 leading-snug" data-i18n="impact_copy">대한민국의 기술 유성에이스<br/> <span class="text-blue-600">세계로 나아갑니다.</span></p>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-black/5 rounded-3xl overflow-hidden border border-black/8 mb-4">
                     <div class="bg-white p-6 text-center">
                         <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="28">0</span><span class="text-blue-600">+</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">제품 라인업</div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase" data-i18n="stat_products">제품 라인업</div>
                     </div>
                     <div class="bg-white p-6 text-center">
                         <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">엔지니어링</div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase" data-i18n="stat_engineering">엔지니어링</div>
                     </div>
                     <div class="bg-white p-6 text-center">
                         <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="360">0</span><span class="text-blue-600">°</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase" data-i18n="stat_swing">스윙 시스템</div>
                     </div>
                     <div class="bg-white p-6 text-center">
                         <div class="text-4xl md:text-5xl font-black tracking-tight text-black"><span class="count" data-target="100">0</span><span class="text-blue-600">%</span></div>
-                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">국내 제조</div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase" data-i18n="stat_domestic">국내 제조</div>
                     </div>
                 </div>
             </div>
@@ -1810,14 +1817,14 @@
                         <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4" data-i18n="about_ceo_tag">CEO MESSAGE</div>
                         <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
                             <span data-i18n="about_ceo_label">대표이사</span><br/>
-                            <span data-cms="a_ceo_name" class="text-blue-400">박진선</span>
+                            <span data-cms="a_ceo_name" data-i18n="about_ceo_name" class="text-blue-400">박진선</span>
                         </h2>
                     </div>
                     <div class="lg:col-span-8 space-y-6 text-lg text-white/70 leading-relaxed">
-                        <p data-cms="a_ceo_p1">현장의 가치를 기술로 실현하는 환기 솔루션의 리더, <strong class="text-white">유성에이스</strong>입니다. 저희는 창립 이래 '현장 중심의 기술력'과 '고객 최우선의 가치'를 바탕으로 주방 환기 시스템의 혁신을 이끌어왔습니다.</p>
-                        <p data-cms="a_ceo_p2">설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다. 국내에서 직접 생산하는 제조사이며, 고객과 사용자의 입장에서 현장에서 발생하는 수많은 변수와 고충을 해결하는 '파트너'로서 고객사와 함께 성장해왔습니다.</p>
-                        <p data-cms="a_ceo_p3">유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다. 실제 현장에서 기기를 다루는 분들의 목소리에 귀를 기울여, 더 안전하고 효율적인 환기 환경을 만드는 것이 우리의 사명입니다.</p>
-                        <p data-cms="a_ceo_p4" class="text-white">앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다. 변함없는 믿음과 성원을 보내주시는 고객 여러분께 진심으로 감사의 말씀을 올립니다.</p>
+                        <p data-cms="a_ceo_p1" data-i18n="about_ceo_p1">현장의 가치를 기술로 실현하는 환기 솔루션의 리더, <strong class="text-white">유성에이스</strong>입니다. 저희는 창립 이래 '현장 중심의 기술력'과 '고객 최우선의 가치'를 바탕으로 주방 환기 시스템의 혁신을 이끌어왔습니다.</p>
+                        <p data-cms="a_ceo_p2" data-i18n="about_ceo_p2">설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다. 국내에서 직접 생산하는 제조사이며, 고객과 사용자의 입장에서 현장에서 발생하는 수많은 변수와 고충을 해결하는 '파트너'로서 고객사와 함께 성장해왔습니다.</p>
+                        <p data-cms="a_ceo_p3" data-i18n="about_ceo_p3">유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다. 실제 현장에서 기기를 다루는 분들의 목소리에 귀를 기울여, 더 안전하고 효율적인 환기 환경을 만드는 것이 우리의 사명입니다.</p>
+                        <p data-cms="a_ceo_p4" data-i18n="about_ceo_p4" class="text-white">앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다. 변함없는 믿음과 성원을 보내주시는 고객 여러분께 진심으로 감사의 말씀을 올립니다.</p>
                     </div>
                 </div>
             </section>
@@ -1915,33 +1922,33 @@
 
                 <form id="inquiry-form" class="grid grid-cols-1 md:grid-cols-2 gap-5" onsubmit="return submitInquiry(event)">
                     <div>
-                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">이름 <span class="text-red-400">*</span></label>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2" <span data-i18n="form_name">이름</span> <span class="text-red-400">*</span></label>
                         <input type="text" id="inq-name" required placeholder="홍길동"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">연락처 <span class="text-red-400">*</span></label>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2" <span data-i18n="form_phone">연락처</span> <span class="text-red-400">*</span></label>
                         <input type="tel" id="inq-tel" required placeholder="010-0000-0000"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">업체 / 매장명</label>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2" data-i18n="form_company">업체 / 매장명</label>
                         <input type="text" id="inq-company" placeholder="매장명 또는 업체명"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">문의 유형</label>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2" data-i18n="form_type">문의 유형</label>
                         <select id="inq-type"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition appearance-none"
                             style="background-image:url('data:image/svg+xml;utf8,<svg fill=\"white\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z\" clip-rule=\"evenodd\"/></svg>');background-repeat:no-repeat;background-position:right 12px center;background-size:20px;">
-                            <option value="견적" style="background:#1a1a2e">견적 문의</option>
-                            <option value="설치" style="background:#1a1a2e">설치 문의</option>
-                            <option value="AS" style="background:#1a1a2e">A/S 문의</option>
-                            <option value="기타" style="background:#1a1a2e">기타 문의</option>
+                            <option value="견적" style="background:#1a1a2e" data-i18n="form_type_quote">견적 문의</option>
+                            <option value="설치" style="background:#1a1a2e" data-i18n="form_type_install">설치 문의</option>
+                            <option value="AS" style="background:#1a1a2e" data-i18n="form_type_as">A/S 문의</option>
+                            <option value="기타" style="background:#1a1a2e" data-i18n="form_type_other">기타 문의</option>
                         </select>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2">문의 내용 <span class="text-red-400">*</span></label>
+                        <label class="block text-xs font-bold tracking-widest text-blue-400 mb-2" <span data-i18n="form_content">문의 내용</span> <span class="text-red-400">*</span></label>
                         <textarea id="inq-msg" required rows="5" placeholder="문의하실 내용을 자세히 적어주세요."
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 transition resize-none"></textarea>
                     </div>
@@ -1950,7 +1957,7 @@
                             class="px-8 py-3.5 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 active:scale-95">
                             <span data-i18n="about_form_submit">문의 접수하기</span>
                         </button>
-                        <span class="text-sm text-white/40">또는 <a href="tel:1588-9123" class="text-blue-400 hover:text-blue-300 font-semibold transition">1588-9123</a> 으로 전화주세요</span>
+                        <span class="text-sm text-white/40" data-i18n="form_phone_alt">또는 <a href="tel:1588-9123" class="text-blue-400 hover:text-blue-300 font-semibold transition">1588-9123</a> 으로 전화주세요</span>
                     </div>
                 </form>
 
@@ -1959,7 +1966,7 @@
                     <div class="text-5xl mb-4">✅</div>
                     <h3 class="text-2xl font-bold mb-2" data-i18n="about_success_title">문의가 접수되었습니다!</h3>
                     <p class="text-white/60 mb-6" data-i18n="about_success_desc">빠른 시간 내에 담당자가 연락드리겠습니다.</p>
-                    <button onclick="resetInquiryForm()" class="px-6 py-2.5 border border-white/20 rounded-xl text-white/80 hover:bg-white/5 transition">새 문의 작성</button>
+                    <button onclick="resetInquiryForm()" class="px-6 py-2.5 border border-white/20 rounded-xl text-white/80 hover:bg-white/5 transition" data-i18n="form_new_inquiry">새 문의 작성</button>
                 </div>
             </section>
         </div>
@@ -1976,9 +1983,9 @@
                 <p class="text-base md:text-lg text-white/50 max-w-3xl leading-relaxed mb-3" data-i18n="prod_hero_desc">갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지 — 유성에이스의 전 제품 라인업을 실제 사진과 함께 살펴보세요.
                 </p>
                 <div class="flex flex-wrap items-center gap-4 text-[12px] text-white/30 font-medium mt-4">
-                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>11개 카테고리</span>
-                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>148종 실제 사진</span>
-                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>20년 기술 노하우</span>
+                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span><span data-i18n="prod_stat1">11개 카테고리</span></span>
+                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span><span data-i18n="prod_stat2">148종 실제 사진</span></span>
+                    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span data-i18n="prod_stat3">20년 기술 노하우</span></span>
                 </div>
             </section>
 
@@ -1992,7 +1999,7 @@
                 <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 r-stagger">
                     <!-- JS로 채워짐 -->
                 </div>
-                <p id="products-empty" class="hidden text-center text-white/40 mt-12">해당 카테고리 제품이 없습니다.</p>
+                <p id="products-empty" class="hidden text-center text-white/40 mt-12" data-i18n="prod_no_items">해당 카테고리 제품이 없습니다.</p>
             </section>
 
             <!-- CTA -->
@@ -2020,7 +2027,7 @@
                 </div>
                 <!-- Category Filter -->
                 <div class="flex flex-wrap justify-center gap-2 mb-10" id="parts-filter">
-                    <button onclick="filterParts('all')" class="parts-filter-btn active px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-white/10 text-white transition-all">전체</button>
+                    <button onclick="filterParts('all')" class="parts-filter-btn active px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-white/10 text-white transition-all" data-i18n="prod_filter_all">전체</button>
                 </div>
                 <div id="parts-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     <!-- JS로 채워짐 -->
@@ -2053,8 +2060,8 @@
                                 <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">01</div>
                             </div>
                             <div class="p-5">
-                                <h3 class="text-lg font-black text-white mb-1.5">기름유도장치 (기름받이속)</h3>
-                                <p class="text-[13px] text-white/50 leading-relaxed">사용 중에 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.</p>
+                                <h3 class="text-lg font-black text-white mb-1.5" data-i18n="manual_f1_title">기름유도장치 (기름받이속)</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed" data-i18n="manual_f1_desc">사용 중에 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.</p>
                                 <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
                                     기름 흘림 ZERO
@@ -2069,8 +2076,8 @@
                                 <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">02</div>
                             </div>
                             <div class="p-5">
-                                <h3 class="text-lg font-black text-white mb-1.5">무소음 흡입 설계</h3>
-                                <p class="text-[13px] text-white/50 leading-relaxed">흡입구 공기압이 강해도 휘파람 소리가 나지 않습니다. 정밀한 에어플로우 설계로 매장 내 쾌적한 환경을 유지합니다.</p>
+                                <h3 class="text-lg font-black text-white mb-1.5" data-i18n="manual_f2_title">무소음 흡입 설계</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed" data-i18n="manual_f2_desc">흡입구 공기압이 강해도 휘파람 소리가 나지 않습니다. 정밀한 에어플로우 설계로 매장 내 쾌적한 환경을 유지합니다.</p>
                                 <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
                                     소음 없는 강력 흡입
@@ -2085,8 +2092,8 @@
                                 <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">03</div>
                             </div>
                             <div class="p-5">
-                                <h3 class="text-lg font-black text-white mb-1.5">나사타입 간편 분리</h3>
-                                <p class="text-[13px] text-white/50 leading-relaxed">상하부를 연결하는 파이프링이 나사타입으로 조립되어 분리가 쉬우며, 누구나 손쉽게 내부청소가 가능합니다.</p>
+                                <h3 class="text-lg font-black text-white mb-1.5" data-i18n="manual_f3_title">나사타입 간편 분리</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed" data-i18n="manual_f3_desc">상하부를 연결하는 파이프링이 나사타입으로 조립되어 분리가 쉬우며, 누구나 손쉽게 내부청소가 가능합니다.</p>
                                 <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
                                     도구 없이 손쉬운 분리
@@ -2101,8 +2108,8 @@
                                 <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">04</div>
                             </div>
                             <div class="p-5">
-                                <h3 class="text-lg font-black text-white mb-1.5">유지망필터</h3>
-                                <p class="text-[13px] text-white/50 leading-relaxed">기름을 여과하여 모터 및 덕트 내부를 청결하게 합니다. 모터 수명을 오래 유지하고, 화재를 예방하는 이중 효과가 있습니다.</p>
+                                <h3 class="text-lg font-black text-white mb-1.5" data-i18n="manual_f4_title">유지망필터</h3>
+                                <p class="text-[13px] text-white/50 leading-relaxed" data-i18n="manual_f4_desc">기름을 여과하여 모터 및 덕트 내부를 청결하게 합니다. 모터 수명을 오래 유지하고, 화재를 예방하는 이중 효과가 있습니다.</p>
                                 <div class="mt-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
                                     모터수명 연장 + 화재예방
@@ -2118,8 +2125,8 @@
                                     <div class="absolute top-3 left-3 px-2.5 py-1 bg-blue-500/20 rounded-full text-[10px] font-bold text-blue-300 tracking-wider">05</div>
                                 </div>
                                 <div class="p-6 md:p-8 flex flex-col justify-center">
-                                    <h3 class="text-xl font-black text-white mb-2">360° 자유 스윙</h3>
-                                    <p class="text-[13px] text-white/50 leading-relaxed mb-4">파이프가 고정되어 있지 않고 자유롭게 스윙(swing)되어 편리합니다. 시계추처럼 부드럽게 회전하여 부러질 염려가 전혀 없으며, 테이블 기준으로 어느 방향이든 자유롭게 움직입니다.</p>
+                                    <h3 class="text-xl font-black text-white mb-2" data-i18n="manual_f5_title">360° 자유 스윙</h3>
+                                    <p class="text-[13px] text-white/50 leading-relaxed mb-4" data-i18n="manual_f5_desc">파이프가 고정되어 있지 않고 자유롭게 스윙(swing)되어 편리합니다. 시계추처럼 부드럽게 회전하여 부러질 염려가 전혀 없으며, 테이블 기준으로 어느 방향이든 자유롭게 움직입니다.</p>
                                     <div class="flex flex-wrap gap-3">
                                         <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-[11px] font-bold text-blue-300">파이프 파손 ZERO</div>
                                         <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-[11px] font-bold text-blue-300">360° 회전</div>
@@ -2160,8 +2167,8 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
                 <div data-cms="g_tag" class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6" data-i18n="gallery_hero_tag">CONSTRUCTION GALLERY</div>
                 <h1 data-cms="g_title" class="text-5xl md:text-7xl lg:text-[96px] font-black tracking-[-0.04em] leading-[0.95] mb-8">
-                    20년의 시공,<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">전국 곳곳에 있습니다.</span>
+                    <span data-i18n="gallery_hero_t1">20년의 시공,</span><br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500" data-i18n="gallery_hero_t2">전국 곳곳에 있습니다.</span>
                 </h1>
                 <p data-cms="g_desc" class="text-xl md:text-2xl text-white/60 max-w-3xl leading-relaxed" data-i18n="gallery_hero_desc">
                     유성에이스가 시공한 직화기 후드 라인업. 갤럭시 시리즈, 아크릴등, 우주선 후드, 외부태엽 등 다양한 현장 사진을 만나보세요.
@@ -2171,7 +2178,7 @@
                 <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                     <!-- JS로 채워짐 -->
                 </div>
-                <p class="text-center text-xs text-white/40 mt-12">사진 출처: usungace.com 공식 포트폴리오 · 사진 클릭 시 상세 정보</p>
+                <p class="text-center text-xs text-white/40 mt-12" data-i18n="gallery_source">사진 출처: usungace.com 공식 포트폴리오 · 사진 클릭 시 상세 정보</p>
             </section>
         </div>
 
@@ -2197,15 +2204,15 @@
                     <div class="gm-code" id="gm-code-el">CODE</div>
                     <p class="gm-desc" id="gm-desc-el">설명</p>
                     <div>
-                        <div class="gm-section-label">핵심 특징</div>
+                        <div class="gm-section-label" data-i18n="gallery_modal_features">핵심 특징</div>
                         <ul class="gm-features" id="gm-features-el"></ul>
                     </div>
                     <div>
-                        <div class="gm-section-label">제품 사양</div>
+                        <div class="gm-section-label" data-i18n="gallery_modal_spec">제품 사양</div>
                         <dl class="gm-specs" id="gm-specs-el"></dl>
                     </div>
                     <div>
-                        <div class="gm-section-label">태그</div>
+                        <div class="gm-section-label" data-i18n="gallery_modal_tags">태그</div>
                         <div class="gm-tags" id="gm-tags-el"></div>
                     </div>
                 </div>
@@ -2324,7 +2331,7 @@
                 <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">RECOMMENDED FOR YOUR STORE</div>
                 <h2 class="text-4xl md:text-6xl font-black tracking-[-0.04em] leading-[0.95] mb-12">
                     매장 유형별<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">맞춤 추천 라인업.</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500" data-i18n="prod_cta_t2">맞춤 추천 라인업.</span>
                 </h2>
                 <div id="usecase-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <!-- JS로 채워짐 -->
@@ -2335,8 +2342,8 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 reveal">
                 <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">FULL LINEUP</div>
                 <h2 class="text-4xl md:text-6xl font-black tracking-[-0.04em] leading-[0.95] mb-12">
-                    148가지 제품,<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">하나의 표준 부품.</span>
+                    <span data-i18n="prod_parts_t1">148가지 제품,</span><br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500" data-i18n="prod_parts_t2">하나의 표준 부품.</span>
                 </h2>
                 <div id="lineup-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     <!-- JS로 채워짐 -->
@@ -2349,9 +2356,9 @@
                     <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-5">READY TO INSTALL</div>
                     <h2 class="text-4xl md:text-6xl font-black tracking-tight leading-[1.05] mb-6">
                         매장에 어울리는 모델,<br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">함께 골라드립니다.</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500" data-i18n="prod_consult_t2">함께 골라드립니다.</span>
                     </h2>
-                    <p class="text-lg text-white/55 max-w-2xl mx-auto mb-8">20년 노하우로 매장 규모, 메뉴, 인테리어에 맞는 최적 라인을 추천해 드립니다.</p>
+                    <p class="text-lg text-white/55 max-w-2xl mx-auto mb-8" data-i18n="prod_consult_desc">20년 노하우로 매장 규모, 메뉴, 인테리어에 맞는 최적 라인을 추천해 드립니다.</p>
                     <div class="flex flex-wrap items-center justify-center gap-4">
                         <a href="tel:1588-9123" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black font-bold hover:bg-blue-500 hover:text-white transition">
                             1588-9123 전화 상담
@@ -2373,10 +2380,10 @@
                 <div class="text-center mb-12 reveal">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-400/20 text-red-400 text-[11px] font-bold tracking-[0.18em] mb-5">
                         <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                        NOTICE · 공지사항
+                        <span data-i18n="notice_tag">NOTICE · 공지사항</span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">유성에이스 소식</h1>
-                    <p class="text-white/55 text-base max-w-xl mx-auto">중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.</p>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-4" data-i18n="notice_title">유성에이스 소식</h1>
+                    <p class="text-white/55 text-base max-w-xl mx-auto" data-i18n="notice_desc">중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.</p>
                 </div>
 
                 <!-- Pinned cards -->
@@ -2448,9 +2455,9 @@
                 <div class="mb-10 reveal">
                     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <div>
-                            <div class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-2">BOARD · 게시판</div>
+                            <div class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-2" data-i18n="board_tag">BOARD · 게시판</div>
                             <h1 class="text-3xl md:text-5xl font-black tracking-tight text-white">게시판</h1>
-                            <p class="text-white/55 text-sm md:text-base mt-3">유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.</p>
+                            <p class="text-white/55 text-sm md:text-base mt-3" data-i18n="board_desc">유성에이스의 기술정보, 시공사례, 제품소식을 블로그처럼 확인하세요.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="relative">
@@ -2466,9 +2473,9 @@
                 <div class="flex flex-wrap items-center justify-between gap-3 mb-5 reveal">
                     <div id="board-cat-tabs" class="flex flex-wrap gap-2"></div>
                     <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded-full p-1">
-                        <button onclick="setBoardSort('latest')" id="sort-latest" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">최신순</button>
-                        <button onclick="setBoardSort('views')" id="sort-views" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">조회순</button>
-                        <button onclick="setBoardSort('num')" id="sort-num" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition">번호순</button>
+                        <button onclick="setBoardSort('latest')" id="sort-latest" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition" data-i18n="board_sort_latest">최신순</button>
+                        <button onclick="setBoardSort('views')" id="sort-views" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition" data-i18n="board_sort_views">조회순</button>
+                        <button onclick="setBoardSort('num')" id="sort-num" class="px-3.5 py-1.5 rounded-full text-[11px] font-bold transition" data-i18n="board_sort_num">번호순</button>
                     </div>
                 </div>
 
@@ -2507,18 +2514,18 @@
                 <div class="text-center mb-14 reveal">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-[11px] font-bold tracking-[0.18em] mb-5">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        ARCHIVE · 자료실
+                        <span data-i18n="archive_tag">ARCHIVE · 자료실</span>
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-4">자료실</h1>
-                    <p class="text-white/55 text-base max-w-2xl mx-auto">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-4" data-i18n="archive_title">자료실</h1>
+                    <p class="text-white/55 text-base max-w-2xl mx-auto" data-i18n="archive_desc">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
                 </div>
 
                 <!-- Filter chips -->
                 <div class="flex flex-wrap justify-center gap-2 mb-10 reveal">
-                    <button class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold shadow-lg shadow-emerald-500/20">전체 자료</button>
-                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">특허</button>
-                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">디자인등록</button>
-                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10">인증서</button>
+                    <button class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[12px] font-bold shadow-lg shadow-emerald-500/20" data-i18n="archive_all">전체 자료</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10" data-i18n="archive_filter_patent">특허</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10" data-i18n="archive_filter_design">디자인등록</button>
+                    <button class="px-5 py-2 rounded-full border border-emerald-400/20 text-emerald-400 text-[12px] font-bold hover:bg-emerald-500/10" data-i18n="archive_filter_cert">인증서</button>
                 </div>
 
                 <!-- Grid -->
@@ -2528,19 +2535,19 @@
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
                     <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
                         <div class="text-3xl font-black text-blue-400">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">특허 보유</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1" data-i18n="archive_stat_patent">특허 보유</div>
                     </div>
                     <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
                         <div class="text-3xl font-black text-purple-400">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">디자인등록</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1" data-i18n="archive_stat_design">디자인등록</div>
                     </div>
                     <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
                         <div class="text-3xl font-black text-emerald-400">3</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">인증서</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1" data-i18n="archive_stat_cert">인증서</div>
                     </div>
                     <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-5 text-center">
                         <div class="text-3xl font-black text-green-400">20y</div>
-                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1">기술 노하우</div>
+                        <div class="text-[11px] tracking-[0.15em] font-bold text-white/40 mt-1" data-i18n="archive_stat_knowhow">기술 노하우</div>
                     </div>
                 </div>
             </div>
@@ -2583,7 +2590,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-white/35 text-xs flex items-center gap-2"><img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
+                <p class="text-white/35 text-xs flex items-center gap-2"><img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:22px;opacity:.6;"> <span data-i18n="footer_copyright">&copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</span></p>
                 <div class="flex space-x-6 text-xs text-white/35">
                     <span>SINCE 2007</span>
                     <span>·</span>
