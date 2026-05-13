@@ -367,15 +367,18 @@ const PAGES = {
       { title: '히어로 메인', fields: ['h_tag','h_title1','h_title2','h_sub'] },
       { title: '스크롤 카피 1', fields: ['h_sub2_a','h_sub2_b'] },
       { title: '스크롤 카피 2', fields: ['h_sub3_a','h_sub3_b'] },
-      { title: 'CTA 섹션', fields: ['h_cta_tag','h_cta_title1','h_cta_title2','h_cta_desc'] }
+      { title: 'CTA 섹션', fields: ['h_cta_tag','h_cta_title1','h_cta_title2','h_cta_desc','h_cta_btn1','h_cta_btn2'] }
     ]
   },
   tech: {
     name: '코어 기술',
     icon: '⚙️',
     sections: [
-      { title: '기술 소개', fields: ['t_tag','t_title','t_desc'] }
-    ]
+      { title: '기술 소개', fields: ['t_tag','t_title','t_desc'] },
+      { title: '임팩트 카피', fields: ['t_impact1','t_impact2'] },
+      { title: '통계', fields: ['t_stat1_v','t_stat1_l','t_stat2_v','t_stat2_l','t_stat3_v','t_stat3_l','t_stat4_v','t_stat4_l'] }
+    ],
+    arrays: ['tech_adv']
   },
   about: {
     name: '회사소개',
@@ -392,6 +395,7 @@ const PAGES = {
     name: '제품소개',
     icon: '📦',
     sections: [
+      { title: '제품 히어로', fields: ['p_tag','p_title1','p_title2','p_sub'] },
       { title: '제품 CTA', fields: ['p_cta_title','p_cta_desc'] }
     ],
     arrays: ['products']
@@ -409,13 +413,13 @@ const PAGES = {
     sections: [
       { title: '사용방법 헤더', fields: ['m_title','m_desc'] }
     ],
-    arrays: ['steps']
+    arrays: ['manual_feat','steps']
   },
   gallery: {
     name: '시공갤러리',
     icon: '📸',
     sections: [
-      { title: '갤러리 헤더', fields: ['g_tag','g_title','g_desc'] }
+      { title: '갤러리 헤더', fields: ['g_tag','g_title','g_title2','g_desc'] }
     ],
     arrays: ['gallery']
   },
@@ -423,8 +427,24 @@ const PAGES = {
     name: '프로세스',
     icon: '🔄',
     sections: [
-      { title: '프로세스 안내', fields: [] }
-    ]
+      { title: '프로세스 헤더', fields: ['pr_tag','pr_title1','pr_title2','pr_desc'] }
+    ],
+    arrays: ['proc']
+  },
+  notice: {
+    name: '공지사항',
+    icon: '📢',
+    sections: []
+  },
+  board: {
+    name: '고객 게시판',
+    icon: '💬',
+    sections: []
+  },
+  archive: {
+    name: '자료실',
+    icon: '📁',
+    sections: []
   }
 };
 
@@ -473,7 +493,29 @@ const D = {
   m_desc: '유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.',
   g_tag: 'CONSTRUCTION GALLERY',
   g_title: '20년의 시공,',
-  g_desc: '유성에이스가 시공한 직화기 후드 라인업.'
+  g_desc: '유성에이스가 시공한 직화기 후드 라인업.',
+  // Tech 임팩트 & 스탯
+  t_impact1: '대한민국의 기술 유성에이스',
+  t_impact2: '세계로 나아갑니다.',
+  t_stat1_v:'28+', t_stat1_l:'제품 라인업',
+  t_stat2_v:'20y', t_stat2_l:'업력',
+  t_stat3_v:'360°', t_stat3_l:'스윙 시스템',
+  t_stat4_v:'100%', t_stat4_l:'국내 자체 생산',
+  // Products 히어로
+  p_tag:'PRODUCT LINEUP',
+  p_title1:'148가지 제품,',
+  p_title2:'하나의 장인정신.',
+  p_sub:'갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지 — 유성에이스의 전 제품 라인업.',
+  // Process 헤더
+  pr_tag:'OUR PROCESS',
+  pr_title1:'현장실측부터 사후관리까지,',
+  pr_title2:'4단계 원스톱 시스템.',
+  pr_desc:'20년 노하우의 전문가가 직접 방문하여 매장에 최적화된 솔루션을 설계·제작·시공합니다.',
+  // Gallery 부제목
+  g_title2:'전국 곳곳에 있습니다.',
+  // Home CTA 버튼
+  h_cta_btn1:'제품 라인업 보기',
+  h_cta_btn2:'견적 문의'
 };
 
 // ============== 기본 배열 데이터 D2 ==============
@@ -514,6 +556,25 @@ const D2 = {
     { t:'홍대 곱창 매장',     c:'갤럭시 A-TYPE' },
     { t:'부산 한우집',       c:'스텐파이프 + 집진기' },
     { t:'호텔 대형 주방',     c:'갤럭시 시리즈 일괄' }
+  ],
+  tech_adv: [
+    { num:'01', tt:'360° 스윙',  dd:'시계추 모양으로 360° 자유 회전' },
+    { num:'02', tt:'간편 청소',   dd:'터치 분리 → 세척 → 재조립' },
+    { num:'03', tt:'F.V.D 방화', dd:'200~220°C 자동 차단' },
+    { num:'04', tt:'맞춤 제작',   dd:'매장별 사이즈 주문제작' }
+  ],
+  proc: [
+    { num:'STEP 01', tt:'현장 실측 / 상담', dd:'20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다.' },
+    { num:'STEP 02', tt:'맞춤 설계·견적',   dd:'갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다.' },
+    { num:'STEP 03', tt:'자체 공장 제작',   dd:'유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다.' },
+    { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원.' }
+  ],
+  manual_feat: [
+    { num:'01', tt:'기름유도장치', dd:'기름 흘림 ZERO' },
+    { num:'02', tt:'무소음 설계',  dd:'소음 없는 강력 흡입' },
+    { num:'03', tt:'나사타입 분리', dd:'손쉬운 분리' },
+    { num:'04', tt:'유지망필터',   dd:'모터수명 연장' },
+    { num:'05', tt:'360° 자유 스윙', dd:'파이프 파손 ZERO · 시계추 원리' }
   ]
 };
 
@@ -952,16 +1013,16 @@ function rLive(k){
           <h2 class="lp-h2" style="text-align:center;font-size:26px;margin:0">${e('h_sub3_a')}<br/><span style="background:linear-gradient(90deg,#fbbf24,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_sub3_b')}</span></h2>
         </div>
 
-        <!-- 스크롤 피처 4개 (읽기전용 안내) -->
+        <!-- 스크롤 피처 (tech_adv 배열 연동) -->
         <div style="margin-top:14px;padding:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center">SCROLL FEATURES (4개)</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
-            <div style="padding:12px 6px;background:rgba(96,165,250,.06);border:1px solid rgba(96,165,250,.12);border-radius:12px"><div style="font-size:10px;color:#60a5fa;font-weight:700;letter-spacing:.15em">TECH 01</div><div style="font-size:13px;font-weight:800;margin-top:4px">360° 스윙</div></div>
-            <div style="padding:12px 6px;background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.12);border-radius:12px"><div style="font-size:10px;color:#fb923c;font-weight:700;letter-spacing:.15em">TECH 02</div><div style="font-size:13px;font-weight:800;margin-top:4px">F.V.D</div></div>
-            <div style="padding:12px 6px;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.12);border-radius:12px"><div style="font-size:10px;color:#34d399;font-weight:700;letter-spacing:.15em">TECH 03</div><div style="font-size:13px;font-weight:800;margin-top:4px">분리청소</div></div>
-            <div style="padding:12px 6px;background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.12);border-radius:12px"><div style="font-size:10px;color:#c084fc;font-weight:700;letter-spacing:.15em">TECH 04</div><div style="font-size:13px;font-weight:800;margin-top:4px">상하텐션</div></div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center">SCROLL FEATURES (${(S.arrays.tech_adv||[]).length}개)</div>
+          <div style="display:grid;grid-template-columns:repeat(${Math.min((S.arrays.tech_adv||[]).length,4)},1fr);gap:8px;text-align:center">
+            ${(S.arrays.tech_adv||[]).map((a,i)=>{
+              const fc = ['rgba(96,165,250','rgba(251,146,60','rgba(52,211,153','rgba(192,132,252'];
+              return `<div style="padding:12px 6px;background:${fc[i%4]},.06);border:1px solid ${fc[i%4]},.12);border-radius:12px"><div style="font-size:10px;color:${fc[i%4]},1);font-weight:700;letter-spacing:.15em">TECH ${escHtml(a.num||'')}</div><div style="font-size:13px;font-weight:800;margin-top:4px">${escHtml(a.tt||'')}</div></div>`;
+            }).join('')}
           </div>
-          <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.3)">피처 카드는 index_v6.html에서 직접 관리</div>
+          <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.3)">코어 기술 페이지의 장점 배열과 연동됩니다</div>
         </div>
 
         <!-- CTA -->
@@ -970,8 +1031,8 @@ function rLive(k){
           <h2 class="lp-h1" style="text-align:center;font-size:36px">${e('h_cta_title1')}<br/><span class="grad">${e('h_cta_title2')}</span></h2>
           <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('h_cta_desc')}</p>
           <div style="margin-top:18px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
-            <span style="padding:12px 24px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px">제품 라인업 보기</span>
-            <span style="padding:12px 24px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-weight:700;font-size:13px">견적 문의</span>
+            <span style="padding:12px 24px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:13px">${e('h_cta_btn1')}</span>
+            <span style="padding:12px 24px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-weight:700;font-size:13px">${e('h_cta_btn2')}</span>
           </div>
         </div>
       </div>`;
@@ -979,6 +1040,7 @@ function rLive(k){
 
   /* ━━━━━━━━━━ TECH (코어 기술 — 흰배경) ━━━━━━━━━━ */
   if(k === 'tech'){
+    const advColors = ['rgba(96,165,250','rgba(251,146,60','rgba(52,211,153','rgba(192,132,252'];
     return hint + `
       <div class="live-stage light-sec" style="background:#fff;color:#1d1d1f">
         <!-- CORE TECHNOLOGY 헤더 -->
@@ -988,7 +1050,7 @@ function rLive(k){
           <p style="margin-top:12px;font-size:14px;color:rgba(0,0,0,.55);max-width:620px;margin-left:auto;margin-right:auto;line-height:1.6">${e('t_desc')}</p>
         </div>
 
-        <!-- 3D 후드 + 4 장점 카드 미리보기 -->
+        <!-- 3D 후드 + 장점 카드 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08)">
           <div style="background:#0a0c18;padding:30px;display:flex;align-items:center;justify-content:center;min-height:240px">
             <div style="text-align:center;color:rgba(255,255,255,.4)">
@@ -998,22 +1060,25 @@ function rLive(k){
             </div>
           </div>
           <div style="background:#0a0c18;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div style="padding:14px;border-radius:12px;border:1px solid rgba(96,165,250,.15);background:rgba(96,165,250,.05)"><div style="font-size:10px;color:#60a5fa;font-weight:700;letter-spacing:.12em">01</div><div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">360° 스윙</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">시계추 모양으로 360° 자유 회전</div></div>
-            <div style="padding:14px;border-radius:12px;border:1px solid rgba(96,165,250,.15);background:rgba(96,165,250,.05)"><div style="font-size:10px;color:#60a5fa;font-weight:700;letter-spacing:.12em">02</div><div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">간편 청소</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">터치 분리 → 세척 → 재조립</div></div>
-            <div style="padding:14px;border-radius:12px;border:1px solid rgba(96,165,250,.15);background:rgba(96,165,250,.05)"><div style="font-size:10px;color:#60a5fa;font-weight:700;letter-spacing:.12em">03</div><div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">F.V.D 방화</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">200~220°C 자동 차단</div></div>
-            <div style="padding:14px;border-radius:12px;border:1px solid rgba(96,165,250,.15);background:rgba(96,165,250,.05)"><div style="font-size:10px;color:#60a5fa;font-weight:700;letter-spacing:.12em">04</div><div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">맞춤 제작</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">매장별 사이즈 주문제작</div></div>
+            ${(S.arrays.tech_adv||[]).map((a,i)=>`<div class="arr-wrap" style="padding:14px;border-radius:12px;border:1px solid ${advColors[i%4]},.15);background:${advColors[i%4]},.05)">
+              ${ac('tech_adv',i)}
+              <div style="font-size:10px;color:${advColors[i%4]},1);font-weight:700;letter-spacing:.12em">${ae('tech_adv',i,'num')}</div>
+              <div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">${ae('tech_adv',i,'tt')}</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">${ae('tech_adv',i,'dd')}</div>
+            </div>`).join('')}
           </div>
         </div>
+        ${addBtn('tech_adv','새 장점 추가')}
 
         <!-- 임팩트 카피 + 스탯바 -->
         <div style="text-align:center;margin-top:28px">
-          <p style="font-size:26px;font-weight:900;color:#000;line-height:1.2">대한민국의 기술 유성에이스<br/><span style="color:#2563eb">세계로 나아갑니다.</span></p>
+          <p style="font-size:26px;font-weight:900;color:#000;line-height:1.2">${e('t_impact1')}<br/><span style="color:#2563eb">${e('t_impact2')}</span></p>
         </div>
         <div style="margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">28+</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">제품 라인업</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">20y</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">업력</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">360°</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">스윙 시스템</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">100%</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">국내 자체 생산</div></div>
+          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat1_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat1_l')}</div></div>
+          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat2_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat2_l')}</div></div>
+          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat3_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat3_l')}</div></div>
+          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat4_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat4_l')}</div></div>
         </div>
       </div>`;
   }
@@ -1099,17 +1164,18 @@ function rLive(k){
 
   /* ━━━━━━━━━━ PRODUCTS (제품소개) ━━━━━━━━━━ */
   if(k === 'products'){
-    const cats = ['전체', ...new Set((S.arrays.products||[]).map(p=>p.cat))];
+    const prods = S.arrays.products||[];
+    const cats = ['전체', ...new Set(prods.map(p=>p.cat))];
     return hint + `
       <div class="live-stage">
         <!-- 히어로 -->
         <div style="margin-bottom:24px">
-          <div class="lp-tag">PRODUCT LINEUP · 148 MODELS</div>
-          <h1 class="lp-h1" style="font-size:38px">148가지 제품,<br/><span class="grad">하나의 장인정신.</span></h1>
-          <p class="lp-sub">갤럭시 A·B·C·D 타입, 양옆태엽, LED조명, LED우주선, 스파이얼, 파이프, 후레쉬볼까지 — 유성에이스의 전 제품 라인업.</p>
+          <div class="lp-tag">${e('p_tag')} · ${prods.length} MODELS</div>
+          <h1 class="lp-h1" style="font-size:38px">${e('p_title1')}<br/><span class="grad">${e('p_title2')}</span></h1>
+          <p class="lp-sub">${e('p_sub')}</p>
           <div style="display:flex;gap:14px;margin-top:12px">
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#60a5fa"></span>11개 카테고리</span>
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#22d3ee"></span>148종 실제 사진</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#60a5fa"></span>${cats.length-1}개 카테고리</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#22d3ee"></span>${prods.length}종 등록</span>
             <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#fbbf24"></span>20년 기술 노하우</span>
           </div>
         </div>
@@ -1147,31 +1213,35 @@ function rLive(k){
 
   /* ━━━━━━━━━━ PARTS (부품소개) ━━━━━━━━━━ */
   if(k === 'parts'){
+    const prods = S.arrays.products||[];
+    const partCats = ['전체', ...new Set(prods.map(p=>p.cat))];
     return hint + `
       <div class="live-stage">
         <div style="text-align:center;margin-bottom:26px">
-          <div class="lp-tag" style="text-align:center">PARTS CATALOG · 50 ITEMS</div>
+          <div class="lp-tag" style="text-align:center">PARTS CATALOG · ${prods.length} ITEMS</div>
           <h1 class="lp-h1" style="text-align:center;font-size:42px">${e('pt_title')}</h1>
           <p class="lp-sub" style="margin:14px auto 0;text-align:center;font-size:16px">${e('pt_desc')}</p>
         </div>
-        <!-- 카테고리 필터 (읽기전용) -->
+        <!-- 카테고리 필터 (동적) -->
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:18px">
-          <span class="lp-pill" style="background:#fff;color:#000">전체</span>
-          <span class="lp-pill">상부파이프</span>
-          <span class="lp-pill">하부파이프</span>
-          <span class="lp-pill">후드</span>
-          <span class="lp-pill">기타부속</span>
+          ${partCats.map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${escHtml(c)}</span>`).join('')}
         </div>
-        <!-- 부품 그리드 (미리보기) -->
+        <!-- 부품 그리드 (실제 제품 데이터) -->
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
-          ${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div style="background:#111;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;text-align:center"><div style="width:100%;aspect-ratio:1;background:#0a0a0a;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px">🔩</div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7)">부품 ${n}</div></div>`).join('')}
+          ${prods.slice(0,15).map((p,i)=>`<div style="background:#111;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;text-align:center">
+            <div style="width:100%;aspect-ratio:1;background:#0a0a0a;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px">🔩</div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7)">${escHtml(p.n||'')}</div>
+            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:2px">${escHtml(p.cat||'')}</div>
+          </div>`).join('')}
         </div>
-        <div style="text-align:center;margin-top:12px;font-size:11px;color:rgba(255,255,255,.3)">부품 상세 데이터는 index_v6.html에서 직접 관리됩니다</div>
+        ${prods.length>15?`<div style="text-align:center;margin-top:10px;font-size:11px;color:rgba(255,255,255,.4)">외 ${prods.length-15}개 제품 · 전체 목록은 제품소개 페이지에서 관리</div>`:''}
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.25)">부품 이미지·상세는 index_v6.html에서 직접 관리됩니다</div>
       </div>`;
   }
 
   /* ━━━━━━━━━━ MANUAL (사용방법) ━━━━━━━━━━ */
   if(k === 'manual'){
+    const mf = S.arrays.manual_feat||[];
     return hint + `
       <div class="live-stage">
         <div style="text-align:center;margin-bottom:28px">
@@ -1179,17 +1249,19 @@ function rLive(k){
           <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('m_desc')}</p>
         </div>
 
-        <!-- 제품 사용 특징 비주얼 가이드 (읽기전용 미리보기) -->
+        <!-- 제품 사용 특징 비주얼 가이드 -->
         <div style="margin-bottom:24px">
           <div class="lp-tag">PRODUCT FEATURES · VIDEO GUIDE</div>
-          <h2 class="lp-h2" style="font-size:22px">유성에이스 후드, <span class="grad">5가지 핵심 특징.</span></h2>
+          <h2 class="lp-h2" style="font-size:22px">유성에이스 후드, <span class="grad">${mf.length}가지 핵심 특징.</span></h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
-            <div style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px"><div style="font-size:10px;color:#60a5fa;font-weight:700">01</div><div style="font-size:14px;font-weight:800;margin-top:4px">기름유도장치</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">기름 흘림 ZERO</div></div>
-            <div style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px"><div style="font-size:10px;color:#60a5fa;font-weight:700">02</div><div style="font-size:14px;font-weight:800;margin-top:4px">무소음 설계</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">소음 없는 강력 흡입</div></div>
-            <div style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px"><div style="font-size:10px;color:#60a5fa;font-weight:700">03</div><div style="font-size:14px;font-weight:800;margin-top:4px">나사타입 분리</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">손쉬운 분리</div></div>
-            <div style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px"><div style="font-size:10px;color:#60a5fa;font-weight:700">04</div><div style="font-size:14px;font-weight:800;margin-top:4px">유지망필터</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">모터수명 연장</div></div>
+            ${mf.map((f,i)=>`<div class="arr-wrap" style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px${i===mf.length-1 && mf.length%2===1?';grid-column:1/-1':''}">
+              ${ac('manual_feat',i)}
+              <div style="font-size:10px;color:#60a5fa;font-weight:700">${ae('manual_feat',i,'num')}</div>
+              <div style="font-size:14px;font-weight:800;margin-top:4px">${ae('manual_feat',i,'tt')}</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">${ae('manual_feat',i,'dd')}</div>
+            </div>`).join('')}
           </div>
-          <div style="margin-top:10px;background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px"><div style="font-size:10px;color:#60a5fa;font-weight:700">05</div><div style="font-size:14px;font-weight:800;margin-top:4px">360° 자유 스윙</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">파이프 파손 ZERO · 시계추 원리</div></div>
+          ${addBtn('manual_feat','새 특징 추가')}
         </div>
 
         <!-- 구분선 -->
@@ -1217,7 +1289,7 @@ function rLive(k){
       <div class="live-stage">
         <div style="margin-bottom:26px">
           <div class="lp-tag">${e('g_tag')}</div>
-          <h1 class="lp-h1" style="font-size:42px">${e('g_title')}<br/><span class="grad">전국 곳곳에 있습니다.</span></h1>
+          <h1 class="lp-h1" style="font-size:42px">${e('g_title')}<br/><span class="grad">${e('g_title2')}</span></h1>
           <p class="lp-sub" style="font-size:16px">${e('g_desc')}</p>
         </div>
         <div class="lp-pgrid" style="grid-template-columns:repeat(2,1fr)">
@@ -1235,47 +1307,30 @@ function rLive(k){
 
   /* ━━━━━━━━━━ PROCESS (프로세스) ━━━━━━━━━━ */
   if(k === 'process'){
+    const procColors = ['#60a5fa','#818cf8','#22d3ee','#34d399','#f59e0b','#f472b6'];
     return hint + `
       <div class="live-stage">
         <div style="text-align:center;margin-bottom:28px">
-          <div class="lp-tag" style="text-align:center">OUR PROCESS</div>
-          <h1 class="lp-h1" style="text-align:center;font-size:36px">현장실측부터 사후관리까지,<br/><span class="grad">4단계 원스톱 시스템.</span></h1>
-          <p class="lp-sub" style="text-align:center;margin:12px auto 0">20년 노하우의 전문가가 직접 방문하여 매장에 최적화된 솔루션을 설계·제작·시공합니다.</p>
+          <div class="lp-tag" style="text-align:center">${e('pr_tag')}</div>
+          <h1 class="lp-h1" style="text-align:center;font-size:36px">${e('pr_title1')}<br/><span class="grad">${e('pr_title2')}</span></h1>
+          <p class="lp-sub" style="text-align:center;margin:12px auto 0">${e('pr_desc')}</p>
         </div>
 
-        <!-- 4단계 카드 (2x2 그리드) -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div style="position:relative;background:linear-gradient(135deg,rgba(37,99,235,.2),rgba(30,58,138,.1));border:1px solid rgba(96,165,250,.2);border-radius:18px;padding:20px;overflow:hidden">
-            <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:rgba(96,165,250,.1)">01</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#60a5fa;margin-bottom:6px">STEP 01</div>
-            <div style="font-size:18px;font-weight:900;margin-bottom:6px">현장 실측 / 상담</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다.</div>
-            <div style="margin-top:10px;display:flex;gap:6px"><span style="width:28px;height:28px;border-radius:8px;background:rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;font-size:13px">📏</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;font-size:13px">📐</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;font-size:13px">📋</span></div>
-          </div>
-          <div style="position:relative;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(67,56,202,.1));border:1px solid rgba(129,140,248,.2);border-radius:18px;padding:20px;overflow:hidden">
-            <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:rgba(129,140,248,.1)">02</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#818cf8;margin-bottom:6px">STEP 02</div>
-            <div style="font-size:18px;font-weight:900;margin-bottom:6px">맞춤 설계·견적</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다.</div>
-            <div style="margin-top:10px;display:flex;gap:6px"><span style="width:28px;height:28px;border-radius:8px;background:rgba(129,140,248,.15);display:flex;align-items:center;justify-content:center;font-size:13px">📄</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(129,140,248,.15);display:flex;align-items:center;justify-content:center;font-size:13px">💰</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(129,140,248,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🏗️</span></div>
-          </div>
-        </div>
+        <!-- 프로세스 단계 카드 (2열 그리드) -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div style="position:relative;background:linear-gradient(135deg,rgba(34,211,238,.2),rgba(8,145,178,.1));border:1px solid rgba(34,211,238,.2);border-radius:18px;padding:20px;overflow:hidden">
-            <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:rgba(34,211,238,.1)">03</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#22d3ee;margin-bottom:6px">STEP 03</div>
-            <div style="font-size:18px;font-weight:900;margin-bottom:6px">자체 공장 제작</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다.</div>
-            <div style="margin-top:10px;display:flex;gap:6px"><span style="width:28px;height:28px;border-radius:8px;background:rgba(34,211,238,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🏭</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(34,211,238,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🔧</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(34,211,238,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🚛</span></div>
-          </div>
-          <div style="position:relative;background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(16,185,129,.1));border:1px solid rgba(52,211,153,.2);border-radius:18px;padding:20px;overflow:hidden">
-            <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:rgba(52,211,153,.1)">04</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#34d399;margin-bottom:6px">STEP 04</div>
-            <div style="font-size:18px;font-weight:900;margin-bottom:6px">시공 및 사후관리</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원.</div>
-            <div style="margin-top:10px;display:flex;gap:6px"><span style="width:28px;height:28px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:13px">👷</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🔥</span><span style="width:28px;height:28px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:13px">🛡️</span></div>
-          </div>
+          ${(S.arrays.proc||[]).map((p,i)=>{
+            const c = procColors[i%procColors.length];
+            const n = String(i+1).padStart(2,'0');
+            return `<div class="arr-wrap" style="position:relative;background:linear-gradient(135deg,${c}33,${c}11);border:1px solid ${c}44;border-radius:18px;padding:20px;overflow:hidden">
+              ${ac('proc',i)}
+              <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:${c}22">${n}</div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:${c};margin-bottom:6px">${ae('proc',i,'num')}</div>
+              <div style="font-size:18px;font-weight:900;margin-bottom:6px">${ae('proc',i,'tt')}</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">${ae('proc',i,'dd')}</div>
+            </div>`;
+          }).join('')}
         </div>
+        ${addBtn('proc','새 단계 추가')}
 
         <!-- CTA -->
         <div style="margin-top:24px;text-align:center">
@@ -1284,6 +1339,86 @@ function rLive(k){
             <span style="padding:8px 18px;background:#2563eb;border-radius:999px;font-weight:700;font-size:12px">견적 상담 →</span>
           </div>
         </div>
+      </div>`;
+  }
+
+  /* ━━━━━━━━━━ NOTICE (공지사항) ━━━━━━━━━━ */
+  if(k === 'notice'){
+    const items = S.boards.notice||[];
+    return hint + `
+      <div class="live-stage">
+        <div style="margin-bottom:24px">
+          <div class="lp-tag">NOTICE</div>
+          <h1 class="lp-h1" style="font-size:36px">공지사항</h1>
+          <p class="lp-sub">유성에이스의 최신 소식과 공지를 확인하세요.</p>
+        </div>
+        <!-- 카테고리 필터 -->
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+          ${['전체','공지','이벤트','업데이트'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
+        </div>
+        <!-- 게시글 목록 -->
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${items.length ? items.map(n=>`<div style="padding:16px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;display:flex;align-items:center;gap:14px">
+            ${n.pin?'<span style="font-size:10px;padding:3px 8px;background:#f59e0b;color:#000;border-radius:6px;font-weight:800">📌 고정</span>':''}
+            <span style="font-size:10px;padding:3px 8px;background:rgba(96,165,250,.15);color:#60a5fa;border-radius:6px;font-weight:700">${escHtml(n.cat||'공지')}</span>
+            <div style="flex:1"><div style="font-size:14px;font-weight:700">${escHtml(n.title)}</div><div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px">${new Date(n.createdAt).toLocaleDateString('ko')} · 조회 ${n.views||0}</div></div>
+          </div>`).join('') : '<div style="padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 공지가 없습니다</div>'}
+        </div>
+        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">게시글은 사이드바 「📢 공지사항」 메뉴에서 관리합니다</div>
+      </div>`;
+  }
+
+  /* ━━━━━━━━━━ BOARD (고객 게시판) ━━━━━━━━━━ */
+  if(k === 'board'){
+    const items = S.boards.board||[];
+    return hint + `
+      <div class="live-stage">
+        <div style="margin-bottom:24px">
+          <div class="lp-tag">CUSTOMER BOARD</div>
+          <h1 class="lp-h1" style="font-size:36px">고객 게시판</h1>
+          <p class="lp-sub">시공후기, 문의, 칭찬 등 고객의 소리를 확인하세요.</p>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+          ${['전체','시공후기','문의','칭찬','일반'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${items.length ? items.map(b=>`<div style="padding:16px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;display:flex;align-items:center;gap:14px">
+            <span style="font-size:10px;padding:3px 8px;background:rgba(52,211,153,.15);color:#34d399;border-radius:6px;font-weight:700">${escHtml(b.cat||'일반')}</span>
+            <div style="flex:1"><div style="font-size:14px;font-weight:700">${escHtml(b.title)}</div><div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px">${escHtml(b.author||'익명')} · ${new Date(b.createdAt).toLocaleDateString('ko')} · 조회 ${b.views||0}</div></div>
+          </div>`).join('') : '<div style="padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 게시글이 없습니다</div>'}
+        </div>
+        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">게시글은 사이드바 「💬 고객 게시판」 메뉴에서 관리합니다</div>
+      </div>`;
+  }
+
+  /* ━━━━━━━━━━ ARCHIVE (자료실) ━━━━━━━━━━ */
+  if(k === 'archive'){
+    const items = S.boards.archive||[];
+    const typeIcons = {PDF:'📕',DWG:'📐',MP4:'🎬',ZIP:'📦',XLSX:'📊'};
+    return hint + `
+      <div class="live-stage">
+        <div style="margin-bottom:24px">
+          <div class="lp-tag">DOWNLOAD CENTER</div>
+          <h1 class="lp-h1" style="font-size:36px">자료실</h1>
+          <p class="lp-sub">카탈로그, 도면, 매뉴얼 등 유성에이스 자료를 다운로드하세요.</p>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+          ${['전체','카탈로그','도면','매뉴얼','영상'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          ${items.length ? items.map(a=>`<div style="padding:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:24px">${typeIcons[a.ftype]||'📄'}</span>
+              <div>
+                <div style="font-size:13px;font-weight:700">${escHtml(a.title)}</div>
+                <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">${escHtml(a.ftype||'')} · ${escHtml(a.size||'')}</div>
+              </div>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.5">${escHtml(a.desc||'')}</div>
+            <div style="margin-top:10px"><span style="font-size:10px;padding:5px 12px;background:rgba(96,165,250,.15);color:#60a5fa;border-radius:8px;font-weight:700">다운로드 ↓</span></div>
+          </div>`).join('') : '<div style="grid-column:1/-1;padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 자료가 없습니다</div>'}
+        </div>
+        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">자료는 사이드바 「📁 자료실」 메뉴에서 관리합니다</div>
       </div>`;
   }
 
