@@ -543,7 +543,7 @@
                     <!-- 회사소개 -->
                     <div class="nav-item relative">
                         <button onclick="navigate('about')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
-                            회사소개
+                            <span data-i18n="nav_about">회사소개</span>
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="dropdown absolute top-full left-1/2 mt-3 w-72 bg-white/95 backdrop-blur-2xl border border-black/5 rounded-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,.25)] p-3 z-50">
@@ -561,7 +561,7 @@
                     <!-- 제품소개 (메가메뉴 — CATEGORIES + FULL PRODUCT LIST) -->
                     <div class="nav-item relative">
                         <button onclick="navigate('products')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
-                            제품소개
+                            <span data-i18n="nav_products">제품소개</span>
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="dropdown absolute top-full left-1/2 mt-3 w-[1080px] max-w-[94vw] bg-white/95 backdrop-blur-2xl border border-black/5 rounded-[2rem] shadow-[0_40px_120px_-30px_rgba(0,0,0,.35)] overflow-hidden z-50">
@@ -608,33 +608,33 @@
 
                     <!-- 부품소개 (단일 버튼) -->
                     <div class="nav-item relative">
-                        <button onclick="navigate('parts')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">부품소개</button>
+                        <button onclick="navigate('parts')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors"><span data-i18n="nav_parts">부품소개</span></button>
                     </div>
 
                     <!-- 시공갤러리 -->
                     <div class="nav-item relative">
-                        <button onclick="navigate('gallery')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">시공갤러리</button>
+                        <button onclick="navigate('gallery')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors"><span data-i18n="nav_gallery">시공갤러리</span></button>
                     </div>
 
                     <!-- 기술 (드롭다운: 코어기술 + 프로세스 + 사용방법) -->
                     <div class="nav-item relative">
                         <button onclick="navigate('tech')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1">
-                            기술
+                            <span data-i18n="nav_tech">기술</span>
                             <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div class="dropdown absolute top-full left-1/2 mt-3 w-[360px] bg-white/95 backdrop-blur-2xl border border-black/5 rounded-[1.75rem] shadow-[0_40px_120px_-30px_rgba(0,0,0,.35)] overflow-hidden z-50">
                             <div class="p-3">
                                 <button onclick="navigate('tech')" class="w-full p-4 rounded-2xl hover:bg-blue-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition">코어 기술</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">360° 스윙, 간편청소, FVD 방화댐퍼, 맞춤제작</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition"><span data-i18n="nav_core_tech">코어 기술</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_core_desc">360° 스윙, 간편청소, FVD 방화댐퍼, 맞춤제작</div>
                                 </button>
                                 <button onclick="navigate('process')" class="w-full p-4 rounded-2xl hover:bg-indigo-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-indigo-600 transition">프로세스</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">현장실측부터 시공·사후관리까지 4단계</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-indigo-600 transition"><span data-i18n="nav_process">프로세스</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_process_desc">현장실측부터 시공·사후관리까지 4단계</div>
                                 </button>
                                 <button onclick="navigate('manual')" class="w-full p-4 rounded-2xl hover:bg-cyan-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-cyan-600 transition">사용방법</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">제품 설치·유지보수 비주얼 가이드</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-cyan-600 transition"><span data-i18n="nav_manual">사용방법</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_manual_desc">제품 설치·유지보수 비주얼 가이드</div>
                                 </button>
                             </div>
                         </div>
@@ -642,24 +642,24 @@
 
                     <!-- 고객센터 (Customer Center) -->
                     <div class="nav-item relative">
-                        <button onclick="navigate('notice')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors">고객센터</button>
+                        <button onclick="navigate('notice')" class="nav-link px-4 py-2 rounded-full text-[13px] font-semibold text-white/85 hover:text-white hover:bg-white/10 transition-colors"><span data-i18n="nav_customer">고객센터</span></button>
                         <div class="dropdown dropdown-right absolute top-full right-0 mt-3 w-[360px] bg-white/95 backdrop-blur-2xl border border-black/5 rounded-[1.75rem] shadow-[0_40px_120px_-30px_rgba(0,0,0,.35)] overflow-hidden z-50">
                             <div class="p-3">
                                 <button onclick="navigate('notice')" class="w-full p-4 rounded-2xl hover:bg-red-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-red-600 transition">공지사항</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">중요공지, 이벤트 확인하세요.</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-red-600 transition"><span data-i18n="nav_notice">공지사항</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_notice_desc">중요공지, 이벤트 확인하세요.</div>
                                 </button>
                                 <button onclick="navigate('board')" class="w-full p-4 rounded-2xl hover:bg-blue-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition">게시판</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">기술정보, 시공사례, 제품소식</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-blue-600 transition"><span data-i18n="nav_board">게시판</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_board_desc">기술정보, 시공사례, 제품소식</div>
                                 </button>
                                 <button onclick="navigate('archive')" class="w-full p-4 rounded-2xl hover:bg-emerald-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-emerald-600 transition">자료실</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">특허, 인증서 등</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-emerald-600 transition"><span data-i18n="nav_archive">자료실</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_archive_desc">특허, 인증서 등</div>
                                 </button>
                                 <button onclick="navigate('about','inquiry-section')" class="w-full p-4 rounded-2xl hover:bg-amber-50 transition text-left group">
-                                    <div class="text-[15px] font-black text-black group-hover:text-amber-600 transition">시공 사례 / 견적 상담</div>
-                                    <div class="text-[12px] text-black/50 mt-0.5">매장 규모별 맞춤 설계</div>
+                                    <div class="text-[15px] font-black text-black group-hover:text-amber-600 transition"><span data-i18n="nav_inquiry">시공 사례 / 견적 상담</span></div>
+                                    <div class="text-[12px] text-black/50 mt-0.5" data-i18n="nav_inquiry_desc">매장 규모별 맞춤 설계</div>
                                 </button>
                             </div>
                             <div class="bg-[#fafafa] border-t border-black/5 px-5 py-4 flex items-center justify-between">
@@ -667,14 +667,30 @@
                                     <div class="text-[10px] tracking-[0.2em] font-bold text-black/40">TEL</div>
                                     <div class="text-[15px] font-black text-black">1588-9123</div>
                                 </div>
-                                <button onclick="navigate('about','inquiry-section')" class="px-4 py-2 rounded-full bg-black text-white text-[11px] font-bold hover:bg-blue-600 transition">문의하기</button>
+                                <button onclick="navigate('about','inquiry-section')" class="px-4 py-2 rounded-full bg-black text-white text-[11px] font-bold hover:bg-blue-600 transition" data-i18n="about_contact_title">문의하기</button>
                             </div>
                         </div>
                     </div>
                 </nav>
 
+                <!-- 언어 선택 -->
+                <div class="hidden lg:flex items-center relative" id="lang-selector">
+                    <button onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')" class="flex items-center gap-1.5 px-3 py-2 rounded-full text-[12px] font-semibold text-white/70 hover:text-white hover:bg-white/10 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-width="1.5" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg>
+                        <span id="lang-current">KO</span>
+                        <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="lang-dropdown" class="hidden absolute top-full right-0 mt-2 w-40 bg-white/95 backdrop-blur-2xl border border-black/5 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,.3)] overflow-hidden z-50">
+                        <button onclick="switchLang('ko')" class="lang-opt w-full px-4 py-2.5 text-left text-[13px] font-medium text-black hover:bg-blue-50 transition flex items-center gap-2"><span class="text-base">🇰🇷</span> 한국어</button>
+                        <button onclick="switchLang('en')" class="lang-opt w-full px-4 py-2.5 text-left text-[13px] font-medium text-black hover:bg-blue-50 transition flex items-center gap-2"><span class="text-base">🇺🇸</span> English</button>
+                        <button onclick="switchLang('ja')" class="lang-opt w-full px-4 py-2.5 text-left text-[13px] font-medium text-black hover:bg-blue-50 transition flex items-center gap-2"><span class="text-base">🇯🇵</span> 日本語</button>
+                        <button onclick="switchLang('vi')" class="lang-opt w-full px-4 py-2.5 text-left text-[13px] font-medium text-black hover:bg-blue-50 transition flex items-center gap-2"><span class="text-base">🇻🇳</span> Tiếng Việt</button>
+                        <button onclick="switchLang('zh')" class="lang-opt w-full px-4 py-2.5 text-left text-[13px] font-medium text-black hover:bg-blue-50 transition flex items-center gap-2"><span class="text-base">🇨🇳</span> 中文</button>
+                    </div>
+                </div>
+
                 <button id="cta-contact" onclick="navigate('about','inquiry-section')" class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-bold hover:bg-blue-500 hover:text-white transition">
-                    Contact Us
+                    <span data-i18n="nav_contact">Contact Us</span>
                 </button>
 
                 <!-- 모바일 햄버거 -->
@@ -687,20 +703,29 @@
         <!-- 모바일 드로어 -->
         <div id="mobile-menu" class="md:hidden hidden bg-black/95 backdrop-blur-xl border-t border-white/10">
             <div class="px-6 py-6 space-y-1">
-                <button onclick="navigate('home'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">홈</button>
-                <button onclick="navigate('about'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">회사소개</button>
-                <button onclick="navigate('products'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">제품소개</button>
-                <button onclick="navigate('parts'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">부품소개</button>
-                <button onclick="navigate('gallery'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">시공갤러리</button>
-                <button onclick="navigate('tech'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">기술</button>
-                <button onclick="navigate('manual'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">사용방법</button>
+                <button onclick="navigate('home'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5" data-i18n="nav_home">홈</button>
+                <button onclick="navigate('about'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_about">회사소개</span></button>
+                <button onclick="navigate('products'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_products">제품소개</span></button>
+                <button onclick="navigate('parts'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_parts">부품소개</span></button>
+                <button onclick="navigate('gallery'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_gallery">시공갤러리</span></button>
+                <button onclick="navigate('tech'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_tech">기술</span></button>
+                <button onclick="navigate('manual'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_manual">사용방법</span></button>
                 <div class="pt-3 mt-3 border-t border-white/10">
                     <div class="px-4 py-2 text-[10px] tracking-[0.24em] font-bold text-white/40">고객센터</div>
-                    <button onclick="navigate('notice'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">· 공지사항</button>
-                    <button onclick="navigate('board'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">· 게시판</button>
-                    <button onclick="navigate('archive'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5">· 자료실</button>
+                    <button onclick="navigate('notice'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_notice">· 공지사항</span></button>
+                    <button onclick="navigate('board'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_board">· 게시판</span></button>
+                    <button onclick="navigate('archive'); closeMobile()" class="block w-full text-left px-4 py-3 text-white font-semibold rounded-xl hover:bg-white/5"><span data-i18n="nav_archive">· 자료실</span></button>
                 </div>
-                <button onclick="navigate('about','inquiry-section'); closeMobile()" class="block w-full text-center mt-4 px-4 py-3 bg-black text-white font-bold rounded-full">Contact Us</button>
+                <button onclick="navigate('about','inquiry-section'); closeMobile()" class="block w-full text-center mt-4 px-4 py-3 bg-black text-white font-bold rounded-full" data-i18n="nav_contact">Contact Us</button>
+                <!-- 모바일 언어 선택 -->
+                <div class="flex items-center justify-center gap-2 mt-4 pt-4 border-t border-white/10">
+                    <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-width="1.5" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg>
+                    <button onclick="switchLang('ko');closeMobile()" class="px-2 py-1 text-[12px] font-bold text-white/60 hover:text-white rounded">KO</button>
+                    <button onclick="switchLang('en');closeMobile()" class="px-2 py-1 text-[12px] font-bold text-white/60 hover:text-white rounded">EN</button>
+                    <button onclick="switchLang('ja');closeMobile()" class="px-2 py-1 text-[12px] font-bold text-white/60 hover:text-white rounded">JA</button>
+                    <button onclick="switchLang('vi');closeMobile()" class="px-2 py-1 text-[12px] font-bold text-white/60 hover:text-white rounded">VI</button>
+                    <button onclick="switchLang('zh');closeMobile()" class="px-2 py-1 text-[12px] font-bold text-white/60 hover:text-white rounded">ZH</button>
+                </div>
             </div>
         </div>
     </header>
@@ -716,8 +741,8 @@
                 <!-- Hero Text -->
                 <div id="anim-hero" class="scroll-element z-10 text-center px-6">
                     <div data-cms="h_tag" class="text-[11px] md:text-[13px] font-bold tracking-[0.32em] text-blue-400 mb-6">SINCE 2007 · USUNG ACE</div>
-                    <h1 class="text-5xl md:text-7xl lg:text-[110px] font-black tracking-[-0.04em] mb-7 leading-[0.95] text-white"><span data-cms="h_title1">대한민국 덕트</span><br/><span data-cms="h_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">No.1</span></h1>
-                    <p data-cms="h_sub" class="text-xl md:text-3xl text-white/55 font-medium tracking-tight">오늘을 이끄는 원동력.</p>
+                    <h1 class="text-5xl md:text-7xl lg:text-[110px] font-black tracking-[-0.04em] mb-7 leading-[0.95] text-white"><span data-cms="h_title1" data-i18n="hero_title1">대한민국 덕트</span><br/><span data-cms="h_title2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">No.1</span></h1>
+                    <p data-cms="h_sub" class="text-xl md:text-3xl text-white/55 font-medium tracking-tight" data-i18n="hero_sub">오늘을 이끄는 원동력.</p>
                 </div>
 
                 <!-- Product Image 제거됨 -->
@@ -725,14 +750,14 @@
                 <!-- Text 1 -->
                 <div id="anim-text1" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
                     <h2 class="text-4xl md:text-6xl font-black text-center max-w-3xl px-6 leading-tight break-keep tracking-tight">
-                        <span data-cms="h_sub2_a">새로운 환경, 새로운 기술로</span> <br/><span data-cms="h_sub2_b" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">한걸음 앞서갑니다.</span>
+                        <span data-cms="h_sub2_a" data-i18n="hero_scroll1a">새로운 환경, 새로운 기술로</span> <br/><span data-cms="h_sub2_b" data-i18n="hero_scroll1b" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">한걸음 앞서갑니다.</span>
                     </h2>
                 </div>
 
                 <!-- Text 2 -->
                 <div id="anim-text2" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
                     <h2 class="text-4xl md:text-6xl font-black text-center max-w-3xl px-6 leading-tight break-keep tracking-tight">
-                        <span data-cms="h_sub3_a">신뢰와 나눔 속에</span> <br/><span data-cms="h_sub3_b" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">사랑받는 기업으로.</span>
+                        <span data-cms="h_sub3_a" data-i18n="hero_scroll2a">신뢰와 나눔 속에</span> <br/><span data-cms="h_sub3_b" data-i18n="hero_scroll2b" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">사랑받는 기업으로.</span>
                     </h2>
                 </div>
 
@@ -752,8 +777,8 @@
                             </div>
                         </div>
                         <div class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2">TECH 01</div>
-                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">360° 스윙</h3>
-                        <p class="text-white/50 leading-relaxed text-sm">시계추 모양으로 360° 자유 회전. 파이프가 고정되어 있지 않아 부러질 염려 없이 편리합니다.</p>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3" data-i18n="feat1_title">360° 스윙</h3>
+                        <p class="text-white/50 leading-relaxed text-sm" data-i18n="feat1_desc">시계추 모양으로 360° 자유 회전. 파이프가 고정되어 있지 않아 부러질 염려 없이 편리합니다.</p>
                     </div>
                 </div>
 
@@ -771,8 +796,8 @@
                             </div>
                         </div>
                         <div class="text-[10px] font-bold tracking-[0.22em] text-orange-400 mb-2">TECH 02</div>
-                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">F.V.D 방화담파</h3>
-                        <p class="text-white/50 leading-relaxed text-sm">풍속조절 겸용 방화담파로 화재 시 자동 차단. 200~220도에서 닫혀 화재 확산을 방지합니다.</p>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3" data-i18n="feat2_title">F.V.D 방화담파</h3>
+                        <p class="text-white/50 leading-relaxed text-sm" data-i18n="feat2_desc">풍속조절 겸용 방화담파로 화재 시 자동 차단. 200~220도에서 닫혀 화재 확산을 방지합니다.</p>
                     </div>
                 </div>
 
@@ -791,8 +816,8 @@
                             </div>
                         </div>
                         <div class="text-[10px] font-bold tracking-[0.22em] text-emerald-400 mb-2">TECH 03</div>
-                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">분리청소 가능</h3>
-                        <p class="text-white/50 leading-relaxed text-sm">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다. 터치분리로 상부 파이프도 청소 가능.</p>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3" data-i18n="feat3_title">분리청소 가능</h3>
+                        <p class="text-white/50 leading-relaxed text-sm" data-i18n="feat3_desc">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다. 터치분리로 상부 파이프도 청소 가능.</p>
                     </div>
                 </div>
 
@@ -817,8 +842,8 @@
                             </div>
                         </div>
                         <div class="text-[10px] font-bold tracking-[0.22em] text-purple-400 mb-2">TECH 04</div>
-                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">상하작동 텐션</h3>
-                        <p class="text-white/50 leading-relaxed text-sm">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절. 맞춤 기장 제작도 가능합니다.</p>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3" data-i18n="feat4_title">상하작동 텐션</h3>
+                        <p class="text-white/50 leading-relaxed text-sm" data-i18n="feat4_desc">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절. 맞춤 기장 제작도 가능합니다.</p>
                     </div>
                 </div>
 
@@ -1440,11 +1465,11 @@
 
             <div class="relative max-w-7xl mx-auto px-6">
                 <div class="text-center mb-14 r-anim r-blur">
-                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">FEATURES IN MOTION</div>
+                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4" data-i18n="fim_tag">FEATURES IN MOTION</div>
                     <h2 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">
-                        디테일을 <span class="shimmer-text">움직임으로</span> 확인하세요.
+                        <span data-i18n="fim_title_a">디테일을 </span><span class="shimmer-text" data-i18n="fim_title_b">움직임으로</span><span data-i18n="fim_title_c"> 확인하세요.</span>
                     </h2>
-                    <p class="mt-6 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
+                    <p class="mt-6 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed" data-i18n="fim_desc">
                         4가지 핵심 기술이 실제로 어떻게 작동하는지, 가만히 보고만 있어도 느껴집니다.
                     </p>
                 </div>
@@ -1471,9 +1496,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-blue-400">01 / SWING</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">테이블 기준 360° 스윙</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">파이프가 고정되어 있지 않고 수직에서 시계추 모양으로 360° 회전되어 부러질 염려가 없어 편리합니다.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-blue-400" data-i18n="fim_card1_tag">01 / SWING</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2" data-i18n="fim_card1_title">360° 자유 스윙</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed" data-i18n="fim_card1_desc">텐션 나사 방식으로 상·하·좌·우 360° 완전 자유 회전. 접시는 움직여도 파이프는 제자리를 유지합니다.</p>
                         </div>
                     </div>
 
@@ -1493,9 +1518,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-red-400">02 / CLEAN</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">간편한 내부청소</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">하부 파이프를 간단히 분리할 수 있어서 누구나 손쉽게 파이프 내부 청소가 가능합니다.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-red-400" data-i18n="fim_card2_tag">02 / CLEAN</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2" data-i18n="fim_card2_title">원터치 분리청소</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed" data-i18n="fim_card2_desc">나사 한 바퀴면 상부 파이프까지 통째 분리. 내부 기름때를 직접 확인하며 매일 세척 가능합니다.</p>
                         </div>
                     </div>
 
@@ -1518,9 +1543,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-cyan-300">03 / SAFETY</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">안전·유지관리 옵션</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">FVD방화댐퍼: 200~220도에서 댐퍼가 닫혀 화재 예방. 터치분리로 상부 파이프도 청소 가능.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-cyan-300" data-i18n="fim_card3_tag">03 / SAFETY</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2" data-i18n="fim_card3_title">안전·유지관리 옵션</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed" data-i18n="fim_card3_desc">FVD방화댐퍼: 200~220도에서 댐퍼가 닫혀 화재 예방. 터치분리로 상부 파이프도 청소 가능.</p>
                         </div>
                     </div>
 
@@ -1528,11 +1553,12 @@
                     <div class="fcard bg-[#0b0f1e] border border-white/10">
                         <div class="visual bg-[radial-gradient(600px_300px_at_50%_50%,rgba(167,139,250,.18),transparent)]">
                             <div class="relative w-56 h-56 md:w-64 md:h-64 grid place-items-center">
-                                <!-- 상단 고정점 -->
-                                <div class="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-2 rounded-full bg-white/40"></div>
-                                <!-- 스프링 -->
-                                <div class="absolute top-5 left-1/2 -translate-x-1/2 flex flex-col items-center anim-spring">
-                                    <div class="w-1 h-24 bg-gradient-to-b from-white/60 to-white/10 rounded-full"></div>
+                                <!-- 스프링 어셈블리 (중앙 정렬) -->
+                                <div class="flex flex-col items-center anim-spring">
+                                    <!-- 상단 고정점 -->
+                                    <div class="w-10 h-2 rounded-full bg-white/40 mb-1"></div>
+                                    <!-- 봉 -->
+                                    <div class="w-1 h-20 bg-gradient-to-b from-white/60 to-white/10 rounded-full"></div>
                                     <!-- 코일 -->
                                     <div class="-mt-2 flex flex-col gap-[3px]">
                                         <div class="w-8 h-1 rounded-full bg-purple-300/80"></div>
@@ -1548,9 +1574,9 @@
                             </div>
                         </div>
                         <div class="px-8 pb-10 pt-2">
-                            <div class="text-[11px] tracking-[0.22em] font-bold text-purple-300">04 / CUSTOM</div>
-                            <h3 class="text-3xl font-black tracking-tight mt-2">맞춤형 제작</h3>
-                            <p class="text-white/60 mt-3 leading-relaxed">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단·연장 가능.</p>
+                            <div class="text-[11px] tracking-[0.22em] font-bold text-purple-300" data-i18n="fim_card4_tag">04 / CUSTOM</div>
+                            <h3 class="text-3xl font-black tracking-tight mt-2" data-i18n="fim_card4_title">맞춤형 제작</h3>
+                            <p class="text-white/60 mt-3 leading-relaxed" data-i18n="fim_card4_desc">필요하신 기장으로 맞춤 제작이 가능합니다. 기본기장 L1800 기준으로 절단·연장 가능.</p>
                         </div>
                     </div>
                 </div>
@@ -1570,12 +1596,12 @@
             <div class="absolute inset-0 bg-[radial-gradient(900px_500px_at_50%_0%,rgba(59,130,246,.12),transparent)]"></div>
             <div class="relative max-w-7xl mx-auto px-6">
                 <div class="text-center mb-12 r-anim r-zoom">
-                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">WHERE WE WORK</div>
+                    <div class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4" data-i18n="www_tag">WHERE WE WORK</div>
                     <h2 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] text-white">
-                        대한민국의 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">불 앞에서</span>.
+                        <span data-i18n="www_title_a">대한민국의 </span><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300" data-i18n="www_title_b">불 앞에서</span><span data-i18n="www_title_c">.</span>
                     </h2>
                     <p class="mt-6 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-                        프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지. 유성에이스는 매일 수많은 전문가들의 작업 환경을 쾌적하게 지켜내고 있습니다.
+                        " data-i18n="www_desc">프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지. 유성에이스는 매일 수많은 전문가들의 작업 환경을 쾌적하게 지켜내고 있습니다." data-i18n="www_desc
                     </p>
                 </div>
 
@@ -1584,8 +1610,8 @@
                     <div class="group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#1a1a1c] to-[#0a0a0c] p-8 h-80 flex flex-col justify-between hover:border-blue-500/40 transition">
                         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-orange-500/10 blur-3xl group-hover:bg-orange-500/20 transition"></div>
                         <div class="relative">
-                            <div class="text-[10px] tracking-[0.22em] font-bold text-orange-400">USE CASE 01</div>
-                            <h3 class="text-3xl font-black tracking-tight text-white mt-2">직화 고깃집</h3>
+                            <div class="text-[10px] tracking-[0.22em] font-bold text-orange-400" data-i18n="www_case1_tag">USE CASE 01</div>
+                            <h3 class="text-3xl font-black tracking-tight text-white mt-2" data-i18n="www_case1_title">직화 고깃집</h3>
                         </div>
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">테이블마다 떨어지는 기름을 방지하며 360도 스윙으로 자유롭게 연기 흡입 가능.</p>
@@ -1600,7 +1626,7 @@
                     <div class="group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0c1226] to-[#050510] p-8 h-80 flex flex-col justify-between hover:border-blue-500/40 transition">
                         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl group-hover:bg-blue-500/20 transition"></div>
                         <div class="relative">
-                            <div class="text-[10px] tracking-[0.22em] font-bold text-blue-400">USE CASE 02</div>
+                            <div class="text-[10px] tracking-[0.22em] font-bold text-blue-400" data-i18n="www_case2_tag">USE CASE 02</div>
                             <h3 class="text-3xl font-black tracking-tight text-white mt-2">대형 프랜차이즈</h3>
                         </div>
                         <div class="relative">
@@ -1616,8 +1642,8 @@
                     <div class="group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a1626] to-[#050a14] p-8 h-80 flex flex-col justify-between hover:border-blue-500/40 transition">
                         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-cyan-500/10 blur-3xl group-hover:bg-cyan-500/20 transition"></div>
                         <div class="relative">
-                            <div class="text-[10px] tracking-[0.22em] font-bold text-cyan-300">USE CASE 03</div>
-                            <h3 class="text-3xl font-black tracking-tight text-white mt-2">공장 / 연구실</h3>
+                            <div class="text-[10px] tracking-[0.22em] font-bold text-cyan-300" data-i18n="www_case3_tag">USE CASE 03</div>
+                            <h3 class="text-3xl font-black tracking-tight text-white mt-2" data-i18n="www_case3_title">공장 / 연구실</h3>
                         </div>
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">연기가 가득한 현장에서도, 정밀한 환기가 필요한 연구실에서도 환기 솔루션을 제공합니다.</p>
@@ -2195,7 +2221,7 @@
         <div id="page-process" class="page min-h-screen pt-24 pb-20">
             <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 reveal">
                 <div class="text-center mb-16">
-                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6">OUR PROCESS</div>
+                    <div class="text-[11px] font-bold tracking-[0.32em] text-blue-400 mb-6" data-i18n="process_tag">OUR PROCESS</div>
                     <h1 class="text-5xl md:text-7xl font-black tracking-[-0.03em] leading-[0.95] mb-6">
                         현장실측부터 사후관리까지,<br/>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">4단계 원스톱 시스템.</span>
@@ -2209,8 +2235,8 @@
                         <div class="absolute top-6 right-6 text-[80px] font-black text-blue-400/10 leading-none">01</div>
                         <div class="relative z-10">
                             <div class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-3">STEP 01</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">현장 실측 / 상담</h3>
-                            <p class="text-[14px] text-white/55 leading-[1.85]">20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다. 현장 환경에 맞는 최적의 후드 시스템을 제안합니다.</p>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4" data-i18n="process_step1_title">현장 실측 / 상담</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]" data-i18n="process_step1_desc">20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다. 현장 환경에 맞는 최적의 후드 시스템을 제안합니다.</p>
                             <div class="mt-6 flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">📏</div>
                                 <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">📐</div>
@@ -2224,8 +2250,8 @@
                         <div class="absolute top-6 right-6 text-[80px] font-black text-indigo-400/10 leading-none">02</div>
                         <div class="relative z-10">
                             <div class="text-[11px] font-bold tracking-[0.2em] text-indigo-400 mb-3">STEP 02</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">맞춤 설계·견적</h3>
-                            <p class="text-[14px] text-white/55 leading-[1.85]">갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다. 천정고, 화로 배치, 동선을 모두 고려한 맞춤 설계입니다.</p>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4" data-i18n="process_step2_title">맞춤 설계·견적</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]" data-i18n="process_step2_desc">갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다. 천정고, 화로 배치, 동선을 모두 고려한 맞춤 설계입니다.</p>
                             <div class="mt-6 flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">📄</div>
                                 <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">💰</div>
@@ -2241,8 +2267,8 @@
                         <div class="absolute top-6 right-6 text-[80px] font-black text-cyan-400/10 leading-none">03</div>
                         <div class="relative z-10">
                             <div class="text-[11px] font-bold tracking-[0.2em] text-cyan-400 mb-3">STEP 03</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">자체 공장 제작</h3>
-                            <p class="text-[14px] text-white/55 leading-[1.85]">유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다. 나사 하나까지 100% 국내 자체 생산, 품질에 대한 자부심입니다.</p>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4" data-i18n="process_step3_title">자체 공장 제작</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]" data-i18n="process_step3_desc">유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다. 나사 하나까지 100% 국내 자체 생산, 품질에 대한 자부심입니다.</p>
                             <div class="mt-6 flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">🏭</div>
                                 <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">🔧</div>
@@ -2256,8 +2282,8 @@
                         <div class="absolute top-6 right-6 text-[80px] font-black text-emerald-400/10 leading-none">04</div>
                         <div class="relative z-10">
                             <div class="text-[11px] font-bold tracking-[0.2em] text-emerald-400 mb-3">STEP 04</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4">시공 및 사후관리</h3>
-                            <p class="text-[14px] text-white/55 leading-[1.85]">전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원. 시공 후에도 유지보수까지 책임지는 원스톱 서비스입니다.</p>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-4" data-i18n="process_step4_title">시공 및 사후관리</h3>
+                            <p class="text-[14px] text-white/55 leading-[1.85]" data-i18n="process_step4_desc">전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원. 시공 후에도 유지보수까지 책임지는 원스톱 서비스입니다.</p>
                             <div class="mt-6 flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">👷</div>
                                 <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">🔥</div>
@@ -5459,6 +5485,30 @@
         });
         function closeMobile() { mobileMenu.classList.add('hidden'); }
 
+        // === 언어 전환 ===
+        const LANG_LABELS = {ko:'KO',en:'EN',ja:'JA',vi:'VI',zh:'ZH'};
+        function switchLang(code) {
+            if(window.setLang) window.setLang(code);
+            const cur = document.getElementById('lang-current');
+            if(cur) cur.textContent = LANG_LABELS[code]||code.toUpperCase();
+            document.getElementById('lang-dropdown').classList.add('hidden');
+            // 모바일 언어 선택기도 업데이트
+            const mobileCur = document.getElementById('mobile-lang-current');
+            if(mobileCur) mobileCur.textContent = (window.I18N&&window.I18N[code])?window.I18N[code]['lang_'+code]:code;
+        }
+        // 클릭 외부시 드롭다운 닫기
+        document.addEventListener('click', function(e) {
+            const sel = document.getElementById('lang-selector');
+            const dd = document.getElementById('lang-dropdown');
+            if(sel && dd && !sel.contains(e.target)) dd.classList.add('hidden');
+        });
+        // 초기 언어 라벨 설정
+        (function(){
+            var lang = (window.getLang && window.getLang()) || 'ko';
+            var cur = document.getElementById('lang-current');
+            if(cur) cur.textContent = LANG_LABELS[lang]||'KO';
+        })();
+
         // Reveal-on-scroll observer (reveal + diverse r-* variants)
         const revealIO = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
@@ -5532,6 +5582,7 @@
     </script>
 
     <!-- 유성에이스 전문 CS 챗봇 "에이스봇" -->
+    <script src="i18n.js"></script>
     <script src="chatbot.js"></script>
 
     <!-- Parts Detail Modal -->
