@@ -696,7 +696,7 @@
         
         <!-- 1. HOME 페이지 (스크롤 애니메이션 + 코어 기술 섹션) -->
         <div id="page-home" class="page active">
-        <div class="relative h-[620vh]">
+        <div class="relative h-[520vh]">
             <div class="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
                 
                 <!-- Hero Text -->
@@ -5311,41 +5311,39 @@
                 const heroY = mapRange(progress, 0, 0.10, 0, -80);
                 setEl('anim-hero', heroOp, `scale(${heroSc}) translateY(${heroY}px)`);
 
-                // ── Product 제거됨 — 스크롤 구간 유지
-
-                // ── 0.18~0.32: Text 1
-                const t1Op = mapRange(progress, 0.18, 0.23, 0, 1) * mapRange(progress, 0.28, 0.32, 1, 0);
-                const t1Y = mapRange(progress, 0.18, 0.23, 30, 0);
+                // ── 0.08~0.22: Text 1
+                const t1Op = mapRange(progress, 0.08, 0.13, 0, 1) * mapRange(progress, 0.18, 0.22, 1, 0);
+                const t1Y = mapRange(progress, 0.08, 0.13, 30, 0);
                 setEl('anim-text1', t1Op, `translateY(${t1Y}px)`);
 
-                // ── 0.28~0.42: Text 2
-                const t2Op = mapRange(progress, 0.28, 0.33, 0, 1) * mapRange(progress, 0.38, 0.42, 1, 0);
-                const t2Y = mapRange(progress, 0.28, 0.33, 30, 0);
+                // ── 0.18~0.32: Text 2
+                const t2Op = mapRange(progress, 0.18, 0.23, 0, 1) * mapRange(progress, 0.28, 0.32, 1, 0);
+                const t2Y = mapRange(progress, 0.18, 0.23, 30, 0);
                 setEl('anim-text2', t2Op, `translateY(${t2Y}px)`);
 
-                // ── 0.38~0.52: Feature 1 — 360° 스윙
-                const f1Op = mapRange(progress, 0.38, 0.43, 0, 1) * mapRange(progress, 0.48, 0.52, 1, 0);
-                const f1Y = mapRange(progress, 0.38, 0.43, 40, 0);
+                // ── 0.28~0.42: Feature 1 — 360° 스윙
+                const f1Op = mapRange(progress, 0.28, 0.33, 0, 1) * mapRange(progress, 0.38, 0.42, 1, 0);
+                const f1Y = mapRange(progress, 0.28, 0.33, 40, 0);
                 setEl('anim-feat1', f1Op, `translateY(${f1Y}px)`);
 
-                // ── 0.48~0.62: Feature 2 — F.V.D
-                const f2Op = mapRange(progress, 0.48, 0.53, 0, 1) * mapRange(progress, 0.58, 0.62, 1, 0);
-                const f2Y = mapRange(progress, 0.48, 0.53, 40, 0);
+                // ── 0.38~0.52: Feature 2 — F.V.D
+                const f2Op = mapRange(progress, 0.38, 0.43, 0, 1) * mapRange(progress, 0.48, 0.52, 1, 0);
+                const f2Y = mapRange(progress, 0.38, 0.43, 40, 0);
                 setEl('anim-feat2', f2Op, `translateY(${f2Y}px)`);
 
-                // ── 0.58~0.72: Feature 3 — 분리청소
-                const f3Op = mapRange(progress, 0.58, 0.63, 0, 1) * mapRange(progress, 0.68, 0.72, 1, 0);
-                const f3Y = mapRange(progress, 0.58, 0.63, 40, 0);
+                // ── 0.48~0.62: Feature 3 — 분리청소
+                const f3Op = mapRange(progress, 0.48, 0.53, 0, 1) * mapRange(progress, 0.58, 0.62, 1, 0);
+                const f3Y = mapRange(progress, 0.48, 0.53, 40, 0);
                 setEl('anim-feat3', f3Op, `translateY(${f3Y}px)`);
 
-                // ── 0.68~0.82: Feature 4 — 상하 텐션
-                const f4Op = mapRange(progress, 0.68, 0.73, 0, 1) * mapRange(progress, 0.78, 0.82, 1, 0);
-                const f4Y = mapRange(progress, 0.68, 0.73, 40, 0);
+                // ── 0.58~0.72: Feature 4 — 상하 텐션
+                const f4Op = mapRange(progress, 0.58, 0.63, 0, 1) * mapRange(progress, 0.68, 0.72, 1, 0);
+                const f4Y = mapRange(progress, 0.58, 0.63, 40, 0);
                 setEl('anim-feat4', f4Op, `translateY(${f4Y}px)`);
 
-                // ── 0.82~1.0: CTA — 끝까지 유지
-                const ctaOpacity = mapRange(progress, 0.82, 0.90, 0, 1);
-                const ctaScale = mapRange(progress, 0.82, 0.90, 0.92, 1);
+                // ── 0.72~1.0: CTA — 끝까지 유지
+                const ctaOpacity = mapRange(progress, 0.72, 0.82, 0, 1);
+                const ctaScale = mapRange(progress, 0.72, 0.82, 0.92, 1);
                 setEl('anim-cta', ctaOpacity, `scale(${ctaScale})`);
                 const ctaEl = document.getElementById('anim-cta');
                 if(ctaEl) ctaEl.style.pointerEvents = ctaOpacity > 0.5 ? 'auto' : 'none';
