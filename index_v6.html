@@ -224,6 +224,12 @@
             100% { transform: translateY(-90px); opacity: 0;}
         }
 
+        @keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+        @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+        @keyframes split-l { 0%,100% { transform: translateX(-50%) translateX(-4px);} 50% { transform: translateX(-50%) translateX(-28px);} }
+        @keyframes split-r { 0%,100% { transform: translateX(-50%) translateX(4px);} 50% { transform: translateX(-50%) translateX(28px);} }
+        @keyframes spring { 0%,100% { transform: translateY(0);} 50% { transform: translateY(18px) scaleY(.85);} }
+
         .anim-spin-slow  { animation: spin-slow 18s linear infinite; }
         .anim-spin-rev   { animation: spin-rev 26s linear infinite; }
         .anim-float      { animation: float-y 5s ease-in-out infinite; }
@@ -685,7 +691,7 @@
         
         <!-- 1. HOME 페이지 (스크롤 애니메이션 + 코어 기술 섹션) -->
         <div id="page-home" class="page active">
-        <div class="relative h-[420vh]">
+        <div class="relative h-[620vh]">
             <div class="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
                 
                 <!-- Hero Text -->
@@ -741,28 +747,97 @@
                 </div>
 
                 <!-- Features Buttons -->
-                <div id="anim-features" class="scroll-element z-20 pointer-events-auto opacity-0 translate-y-[50px] w-full max-w-5xl px-6">
-                    <h2 class="text-3xl md:text-5xl font-bold text-center mb-10">디테일을 확인하세요.</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                            <div class="text-[10px] font-bold tracking-wider text-blue-400 mb-2">TECH 01</div>
-                            <h3 class="text-[15px] font-black text-white mb-2">360° 스윙</h3>
-                            <p class="text-[11px] text-white/50 leading-relaxed">시계추 모양으로 360° 자유 회전. 부러질 염려 없이 편리합니다.</p>
+                <!-- Feature 1: 360° 스윙 -->
+                <div id="anim-feat1" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
+                    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
+                            <div class="relative w-36 h-36">
+                                <div class="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/50" style="animation:spin 8s linear infinite"></div>
+                                <div class="absolute inset-4 rounded-full border border-blue-300/25" style="animation:spin 12s linear infinite reverse"></div>
+                                <div class="absolute inset-0 grid place-items-center">
+                                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 grid place-items-center shadow-[0_12px_40px_-8px_rgba(59,130,246,.6)]" style="animation:float 3s ease-in-out infinite">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
+                                    </div>
+                                </div>
+                                <div class="absolute inset-0" style="animation:spin 8s linear infinite">
+                                    <div class="absolute left-1/2 -top-1 w-2.5 h-2.5 -ml-1 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,.8)]"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                            <div class="text-[10px] font-bold tracking-wider text-orange-400 mb-2">TECH 02</div>
-                            <h3 class="text-[15px] font-black text-white mb-2">F.V.D 방화담파</h3>
-                            <p class="text-[11px] text-white/50 leading-relaxed">풍속조절 겸용 방화담파로 화재 시 자동 차단. 안전합니다.</p>
+                        <div class="text-center md:text-left">
+                            <div class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2">TECH 01</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">360° 스윙</h3>
+                            <p class="text-white/55 leading-relaxed text-sm max-w-md">시계추 모양으로 360° 자유 회전. 파이프가 고정되어 있지 않아 부러질 염려 없이 편리합니다.</p>
                         </div>
-                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                            <div class="text-[10px] font-bold tracking-wider text-emerald-400 mb-2">TECH 03</div>
-                            <h3 class="text-[15px] font-black text-white mb-2">분리청소 가능</h3>
-                            <p class="text-[11px] text-white/50 leading-relaxed">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2: F.V.D 방화담파 -->
+                <div id="anim-feat2" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
+                            <div class="relative w-36 h-36 grid place-items-center">
+                                <div class="w-20 h-14 rounded-xl bg-gradient-to-b from-orange-600 to-red-800 border border-orange-400/40 relative overflow-hidden shadow-[0_12px_40px_-8px_rgba(234,88,12,.5)]">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style="animation:shimmer 2s ease-in-out infinite"></div>
+                                    <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-[70%] h-0.5 bg-red-300/50 rounded-full"></div>
+                                </div>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-red-500/20 border border-red-400/40 text-[9px] font-bold text-red-300">F.V.D LOCK</div>
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-10 w-4 h-8 rounded-full bg-gradient-to-t from-orange-400 via-amber-300 to-yellow-100 blur-[2px] opacity-60" style="animation:flame-flicker 1.5s ease-in-out infinite"></div>
+                            </div>
                         </div>
-                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                            <div class="text-[10px] font-bold tracking-wider text-purple-400 mb-2">TECH 04</div>
-                            <h3 class="text-[15px] font-black text-white mb-2">상하작동 텐션</h3>
-                            <p class="text-[11px] text-white/50 leading-relaxed">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절.</p>
+                        <div class="text-center md:text-right">
+                            <div class="text-[10px] font-bold tracking-[0.22em] text-orange-400 mb-2">TECH 02</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">F.V.D 방화담파</h3>
+                            <p class="text-white/55 leading-relaxed text-sm max-w-md">풍속조절 겸용 방화담파로 화재 시 자동 차단. 200~220도에서 닫혀 화재 확산을 방지합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3: 분리청소 가능 -->
+                <div id="anim-feat3" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
+                    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
+                            <div class="relative w-36 h-36 grid place-items-center">
+                                <div class="absolute left-1/2 -translate-x-1/2" style="animation:split-l 2s ease-in-out infinite">
+                                    <div class="w-16 h-12 rounded-l-xl bg-gradient-to-r from-emerald-500/70 to-emerald-300/30 border border-emerald-300/40"></div>
+                                </div>
+                                <div class="absolute left-1/2 -translate-x-1/2" style="animation:split-r 2s ease-in-out infinite">
+                                    <div class="w-16 h-12 rounded-r-xl bg-gradient-to-l from-emerald-500/70 to-emerald-300/30 border border-emerald-300/40 ml-16"></div>
+                                </div>
+                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-16 bg-emerald-300/30"></div>
+                            </div>
+                        </div>
+                        <div class="text-center md:text-left">
+                            <div class="text-[10px] font-bold tracking-[0.22em] text-emerald-400 mb-2">TECH 03</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">분리청소 가능</h3>
+                            <p class="text-white/55 leading-relaxed text-sm max-w-md">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다. 터치분리로 상부 파이프도 청소 가능.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 4: 상하작동 텐션 -->
+                <div id="anim-feat4" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
+                            <div class="relative w-36 h-36 grid place-items-center">
+                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full bg-white/35"></div>
+                                <div class="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center" style="animation:spring 2s ease-in-out infinite">
+                                    <div class="w-0.5 h-14 bg-gradient-to-b from-white/50 to-white/10 rounded-full"></div>
+                                    <div class="-mt-1 flex flex-col gap-[2px]">
+                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/70"></div>
+                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/60"></div>
+                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/50"></div>
+                                    </div>
+                                    <div class="mt-1.5 w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-700 shadow-[0_10px_30px_-6px_rgba(167,139,250,.5)] grid place-items-center">
+                                        <div class="text-[8px] font-black tracking-widest text-white">STOP</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center md:text-right">
+                            <div class="text-[10px] font-bold tracking-[0.22em] text-purple-400 mb-2">TECH 04</div>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">상하작동 텐션</h3>
+                            <p class="text-white/55 leading-relaxed text-sm max-w-md">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절. 맞춤 기장 제작도 가능합니다.</p>
                         </div>
                     </div>
                 </div>
@@ -794,18 +869,18 @@
         </div>
 
         <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
-        <section class="relative bg-black text-white py-10 md:py-16 -mt-2">
+        <section class="relative bg-white text-black py-10 md:py-14">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-10 r-anim r-mask-up">
-                    <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">CORE TECHNOLOGY</div>
+                <div class="text-center mb-8 r-anim r-mask-up">
+                    <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-4">CORE TECHNOLOGY</div>
                     <h2 data-cms="t_title" class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
-                    <p data-cms="t_desc" class="mt-5 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
+                    <p data-cms="t_desc" class="mt-4 text-lg text-black/50 max-w-2xl mx-auto leading-relaxed">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
-                    <p class="mt-4 text-sm font-bold tracking-widest text-blue-400/70">"20년을 불 앞에서 쌓은 기술, 현장이 증명합니다."</p>
+                    <p class="mt-3 text-sm font-bold tracking-widest text-blue-600/60">"20년을 불 앞에서 쌓은 기술, 현장이 증명합니다."</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-white/10 mt-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-black/10 mt-4 shadow-xl">
                     <!-- Left: 3D Canvas Hood Animation (다크 배경 + 골드 파이프 스타일) -->
                     <div class="relative min-h-[520px]" id="hood-3d-wrap" style="background:linear-gradient(135deg,#0e1117,#0a0c12)">
                         <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
@@ -1347,22 +1422,22 @@
                 </script>
 
                 <!-- 스탯 스트립 (스크롤 시 카운터 애니메이션) -->
-                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-3xl overflow-hidden border border-white/10 r-anim r-zoom">
-                    <div class="bg-white/[0.04] p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="28">0</span><span class="text-blue-400">+</span></div>
-                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">제품 라인업</div>
+                <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-px bg-black/5 rounded-3xl overflow-hidden border border-black/8 r-anim r-zoom">
+                    <div class="bg-white p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="28">0</span><span class="text-blue-600">+</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">제품 라인업</div>
                     </div>
-                    <div class="bg-white/[0.04] p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="20">0</span><span class="text-blue-400">y</span></div>
-                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">엔지니어링</div>
+                    <div class="bg-white p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">엔지니어링</div>
                     </div>
-                    <div class="bg-white/[0.04] p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="360">0</span><span class="text-blue-400">°</span></div>
-                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
+                    <div class="bg-white p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="360">0</span><span class="text-blue-600">°</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
                     </div>
-                    <div class="bg-white/[0.04] p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="100">0</span><span class="text-blue-400">%</span></div>
-                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">국내 제조</div>
+                    <div class="bg-white p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-black"><span class="count" data-target="100">0</span><span class="text-blue-600">%</span></div>
+                        <div class="text-xs font-bold text-black/40 mt-2 tracking-widest uppercase">국내 제조</div>
                     </div>
                 </div>
             </div>
@@ -1443,14 +1518,14 @@
                     <!-- 3) 분리청소가능 -->
                     <div class="fcard bg-[#0a1626] border border-white/10">
                         <div class="visual bg-[radial-gradient(600px_300px_at_50%_50%,rgba(34,211,238,.18),transparent)]">
-                            <div class="relative w-72 h-56 md:h-64 grid place-items-center">
+                            <div class="relative w-72 h-56 md:h-64 flex items-center justify-center">
                                 <!-- 좌측 파트 -->
-                                <div class="absolute left-1/2 -translate-x-1/2 anim-split-l">
+                                <div class="anim-split-l">
                                     <div class="w-24 h-16 rounded-l-2xl bg-gradient-to-r from-cyan-500/80 to-cyan-300/30 border border-cyan-300/40"></div>
                                 </div>
                                 <!-- 우측 파트 -->
-                                <div class="absolute left-1/2 -translate-x-1/2 anim-split-r">
-                                    <div class="w-24 h-16 rounded-r-2xl bg-gradient-to-l from-cyan-500/80 to-cyan-300/30 border border-cyan-300/40 ml-24"></div>
+                                <div class="anim-split-r">
+                                    <div class="w-24 h-16 rounded-r-2xl bg-gradient-to-l from-cyan-500/80 to-cyan-300/30 border border-cyan-300/40"></div>
                                 </div>
                                 <!-- 중앙 가이드 라인 -->
                                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-24 bg-cyan-300/30"></div>
@@ -1530,10 +1605,10 @@
                         </div>
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">테이블마다 떨어지는 기름을 방지하며 360도 스윙으로 자유롭게 연기 흡입 가능.</p>
-                            <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
+                            <button onclick="navigate('products');setTimeout(()=>filterProducts('갤럭시 A타입'),100)" class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold hover:text-blue-300 transition cursor-pointer">
                                 <span>갤럭시 시리즈 추천</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -1546,14 +1621,14 @@
                         </div>
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">매장 전체 통일 규격 · 부품 교체 표준화. F.V.D 방화담파로 다점포 안전 일괄 관리.</p>
-                            <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
+                            <button onclick="navigate('products');setTimeout(()=>filterProducts('파이프'),100)" class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold hover:text-blue-300 transition cursor-pointer">
                                 <span>스파이럴 + 통합 패키지</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- 호텔/리조트 -->
+                    <!-- 공장/연구실 -->
                     <div class="group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a1626] to-[#050a14] p-8 h-80 flex flex-col justify-between hover:border-blue-500/40 transition">
                         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-cyan-500/10 blur-3xl group-hover:bg-cyan-500/20 transition"></div>
                         <div class="relative">
@@ -1562,10 +1637,10 @@
                         </div>
                         <div class="relative">
                             <p class="text-white/55 leading-relaxed text-sm">연기가 가득한 현장에서도, 정밀한 환기가 필요한 연구실에서도 환기 솔루션을 제공합니다.</p>
-                            <div class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold">
+                            <button onclick="navigate('products');setTimeout(()=>filterProducts('후레쉬볼/주름관'),100)" class="mt-5 flex items-center gap-2 text-blue-400 text-[12px] font-bold hover:text-blue-300 transition cursor-pointer">
                                 <span>맞춤형 환기 시스템</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -5186,7 +5261,7 @@
             const homePage = document.getElementById('page-home');
             if (homePage.classList.contains('active')) {
                 const scrollY = window.scrollY;
-                const maxScroll = window.innerHeight * 3.2; // 420vh - 100vh
+                const maxScroll = window.innerHeight * 5.2; // 620vh - 100vh
                 const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
 
                 // Helper function to map progress
@@ -5196,49 +5271,64 @@
                     return outMin + (outMax - outMin) * ((val - inMin) / (inMax - inMin));
                 };
 
+                // Helper: apply transform+opacity to element
+                const setEl = (id, opacity, transform) => {
+                    const el = document.getElementById(id);
+                    if(el){ el.style.opacity = opacity; el.style.transform = transform; }
+                };
+
                 // Scroll indicator — hide after scrolling
                 const scrollInd = document.getElementById('scroll-indicator');
                 if (scrollInd) scrollInd.style.opacity = scrollY > 80 ? '0' : '1';
 
-                // Hero — 처음에 보이다가 서서히 사라짐
-                const heroOpacity = mapRange(progress, 0, 0.15, 1, 0);
-                const heroScale = mapRange(progress, 0, 0.15, 1, 0.85);
-                const heroY = mapRange(progress, 0, 0.15, 0, -80);
-                document.getElementById('anim-hero').style.transform = `scale(${heroScale}) translateY(${heroY}px)`;
-                document.getElementById('anim-hero').style.opacity = heroOpacity;
+                // ── 0.00~0.10: Hero (처음에 보이다가 서서히 사라짐)
+                const heroOp = mapRange(progress, 0, 0.10, 1, 0);
+                const heroSc = mapRange(progress, 0, 0.10, 1, 0.85);
+                const heroY = mapRange(progress, 0, 0.10, 0, -80);
+                setEl('anim-hero', heroOp, `scale(${heroSc}) translateY(${heroY}px)`);
 
-                // Product — Hero가 사라지면서 나타나고, Text1 나올 때까지 유지
-                const prodOpacity = mapRange(progress, 0.1, 0.2, 0, 1) * mapRange(progress, 0.3, 0.38, 1, 0);
-                const prodScale = mapRange(progress, 0.1, 0.25, 0.6, 1);
-                const prodY = mapRange(progress, 0.1, 0.25, 150, 0);
-                document.getElementById('anim-product').style.transform = `scale(${prodScale}) translateY(${prodY}px)`;
-                document.getElementById('anim-product').style.opacity = prodOpacity;
+                // ── 0.07~0.22: Product (Hero 사라지면서 등장 → 사라짐)
+                const prodOp = mapRange(progress, 0.07, 0.13, 0, 1) * mapRange(progress, 0.18, 0.22, 1, 0);
+                const prodSc = mapRange(progress, 0.07, 0.15, 0.6, 1);
+                const prodY = mapRange(progress, 0.07, 0.15, 150, 0);
+                setEl('anim-product', prodOp, `scale(${prodSc}) translateY(${prodY}px)`);
 
-                // Text 1 — Product 사라지면서 나타나고, Text2 나올 때까지 유지
-                const t1Opacity = mapRange(progress, 0.3, 0.38, 0, 1) * mapRange(progress, 0.5, 0.56, 1, 0);
-                const t1Y = mapRange(progress, 0.3, 0.38, 30, 0);
-                document.getElementById('anim-text1').style.transform = `translateY(${t1Y}px)`;
-                document.getElementById('anim-text1').style.opacity = t1Opacity;
+                // ── 0.18~0.32: Text 1
+                const t1Op = mapRange(progress, 0.18, 0.23, 0, 1) * mapRange(progress, 0.28, 0.32, 1, 0);
+                const t1Y = mapRange(progress, 0.18, 0.23, 30, 0);
+                setEl('anim-text1', t1Op, `translateY(${t1Y}px)`);
 
-                // Text 2 — Text1 사라지면서 나타나고, Features 나올 때까지 유지
-                const t2Opacity = mapRange(progress, 0.5, 0.58, 0, 1) * mapRange(progress, 0.7, 0.76, 1, 0);
-                const t2Y = mapRange(progress, 0.5, 0.58, 30, 0);
-                document.getElementById('anim-text2').style.transform = `translateY(${t2Y}px)`;
-                document.getElementById('anim-text2').style.opacity = t2Opacity;
+                // ── 0.28~0.42: Text 2
+                const t2Op = mapRange(progress, 0.28, 0.33, 0, 1) * mapRange(progress, 0.38, 0.42, 1, 0);
+                const t2Y = mapRange(progress, 0.28, 0.33, 30, 0);
+                setEl('anim-text2', t2Op, `translateY(${t2Y}px)`);
 
-                // Features — Text2 사라지면서 나타나고, CTA 나올 때까지 유지
-                const fOpacity = mapRange(progress, 0.7, 0.78, 0, 1) * mapRange(progress, 0.88, 0.94, 1, 0);
-                const fY = mapRange(progress, 0.7, 0.78, 30, 0);
-                document.getElementById('anim-features').style.transform = `translateY(${fY}px)`;
-                document.getElementById('anim-features').style.opacity = fOpacity;
-                document.getElementById('anim-features').style.pointerEvents = fOpacity > 0.5 ? 'auto' : 'none';
+                // ── 0.38~0.52: Feature 1 — 360° 스윙
+                const f1Op = mapRange(progress, 0.38, 0.43, 0, 1) * mapRange(progress, 0.48, 0.52, 1, 0);
+                const f1Y = mapRange(progress, 0.38, 0.43, 40, 0);
+                setEl('anim-feat1', f1Op, `translateY(${f1Y}px)`);
 
-                // CTA — Features 사라지면서 나타나고, 끝까지 유지
-                const ctaOpacity = mapRange(progress, 0.88, 0.96, 0, 1);
-                const ctaScale = mapRange(progress, 0.88, 0.96, 0.92, 1);
-                document.getElementById('anim-cta').style.transform = `scale(${ctaScale})`;
-                document.getElementById('anim-cta').style.opacity = ctaOpacity;
-                document.getElementById('anim-cta').style.pointerEvents = ctaOpacity > 0.5 ? 'auto' : 'none';
+                // ── 0.48~0.62: Feature 2 — F.V.D
+                const f2Op = mapRange(progress, 0.48, 0.53, 0, 1) * mapRange(progress, 0.58, 0.62, 1, 0);
+                const f2Y = mapRange(progress, 0.48, 0.53, 40, 0);
+                setEl('anim-feat2', f2Op, `translateY(${f2Y}px)`);
+
+                // ── 0.58~0.72: Feature 3 — 분리청소
+                const f3Op = mapRange(progress, 0.58, 0.63, 0, 1) * mapRange(progress, 0.68, 0.72, 1, 0);
+                const f3Y = mapRange(progress, 0.58, 0.63, 40, 0);
+                setEl('anim-feat3', f3Op, `translateY(${f3Y}px)`);
+
+                // ── 0.68~0.82: Feature 4 — 상하 텐션
+                const f4Op = mapRange(progress, 0.68, 0.73, 0, 1) * mapRange(progress, 0.78, 0.82, 1, 0);
+                const f4Y = mapRange(progress, 0.68, 0.73, 40, 0);
+                setEl('anim-feat4', f4Op, `translateY(${f4Y}px)`);
+
+                // ── 0.82~1.0: CTA — 끝까지 유지
+                const ctaOpacity = mapRange(progress, 0.82, 0.90, 0, 1);
+                const ctaScale = mapRange(progress, 0.82, 0.90, 0.92, 1);
+                setEl('anim-cta', ctaOpacity, `scale(${ctaScale})`);
+                const ctaEl = document.getElementById('anim-cta');
+                if(ctaEl) ctaEl.style.pointerEvents = ctaOpacity > 0.5 ? 'auto' : 'none';
             }
         });
 
