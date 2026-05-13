@@ -741,10 +741,29 @@
                 </div>
 
                 <!-- Features Buttons -->
-                <div id="anim-features" class="scroll-element z-20 pointer-events-auto opacity-0 translate-y-[50px]">
-                    <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">디테일을 확인하세요.</h2>
-                    <div class="flex flex-wrap justify-center gap-4 px-4" id="feature-buttons">
-                        <!-- JS로 채워짐 -->
+                <div id="anim-features" class="scroll-element z-20 pointer-events-auto opacity-0 translate-y-[50px] w-full max-w-5xl px-6">
+                    <h2 class="text-3xl md:text-5xl font-bold text-center mb-10">디테일을 확인하세요.</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
+                            <div class="text-[10px] font-bold tracking-wider text-blue-400 mb-2">TECH 01</div>
+                            <h3 class="text-[15px] font-black text-white mb-2">360° 스윙</h3>
+                            <p class="text-[11px] text-white/50 leading-relaxed">시계추 모양으로 360° 자유 회전. 부러질 염려 없이 편리합니다.</p>
+                        </div>
+                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
+                            <div class="text-[10px] font-bold tracking-wider text-orange-400 mb-2">TECH 02</div>
+                            <h3 class="text-[15px] font-black text-white mb-2">F.V.D 방화담파</h3>
+                            <p class="text-[11px] text-white/50 leading-relaxed">풍속조절 겸용 방화담파로 화재 시 자동 차단. 안전합니다.</p>
+                        </div>
+                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
+                            <div class="text-[10px] font-bold tracking-wider text-emerald-400 mb-2">TECH 03</div>
+                            <h3 class="text-[15px] font-black text-white mb-2">분리청소 가능</h3>
+                            <p class="text-[11px] text-white/50 leading-relaxed">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다.</p>
+                        </div>
+                        <div class="bg-white/[0.06] backdrop-blur-md rounded-2xl p-5 border border-white/10">
+                            <div class="text-[10px] font-bold tracking-wider text-purple-400 mb-2">TECH 04</div>
+                            <h3 class="text-[15px] font-black text-white mb-2">상하작동 텐션</h3>
+                            <p class="text-[11px] text-white/50 leading-relaxed">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -774,19 +793,19 @@
             </div>
         </div>
 
-        <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology (galaxy zip 차용) ============== -->
-        <section class="relative bg-white text-[#1d1d1f] py-16 md:py-24">
+        <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
+        <section class="relative bg-black text-white py-10 md:py-16 -mt-2">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-12 r-anim r-mask-up">
-                    <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-4">CORE TECHNOLOGY</div>
+                <div class="text-center mb-10 r-anim r-mask-up">
+                    <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-400 mb-4">CORE TECHNOLOGY</div>
                     <h2 data-cms="t_title" class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">유성에이스 후드의 장점.</h2>
-                    <p data-cms="t_desc" class="mt-6 text-lg text-black/55 max-w-2xl mx-auto leading-relaxed">
+                    <p data-cms="t_desc" class="mt-5 text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
-                    <p class="mt-4 text-sm font-bold tracking-widest text-blue-500/80">"흔들려도 꺾이지 않는 기술력, 유성에이스"</p>
+                    <p class="mt-4 text-sm font-bold tracking-widest text-blue-400/70">"20년을 불 앞에서 쌓은 기술, 현장이 증명합니다."</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-white/5 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-white/10 mt-6">
                     <!-- Left: 3D Canvas Hood Animation (다크 배경 + 골드 파이프 스타일) -->
                     <div class="relative min-h-[520px]" id="hood-3d-wrap" style="background:linear-gradient(135deg,#0e1117,#0a0c12)">
                         <canvas id="hood3d-canvas" style="width:100%;height:100%;display:block;"></canvas>
@@ -1049,23 +1068,301 @@
                 })();
                 </script>
 
+                <!-- LIVE PREVIEW 덕트 흡입 캔버스 애니메이션 -->
+                <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                (function(){
+                    const wrap = document.getElementById('live-preview-wrap');
+                    const canvas = document.getElementById('live-preview-canvas');
+                    if(!wrap || !canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    const dpr = window.devicePixelRatio || 1;
+                    let W, H, running = false;
+
+                    function resize(){
+                        const rect = wrap.getBoundingClientRect();
+                        if(rect.width < 1) return;
+                        W = rect.width; H = rect.height;
+                        canvas.width = W * dpr; canvas.height = H * dpr;
+                        ctx.setTransform(dpr,0,0,dpr,0,0);
+                    }
+                    resize();
+                    window.addEventListener('resize', resize);
+
+                    // 연기 파티클
+                    const smokeParticles = [];
+                    for(let i = 0; i < 50; i++){
+                        smokeParticles.push({
+                            x: 0, y: 0, vx: 0, vy: 0,
+                            size: Math.random()*6+3,
+                            alpha: 0,
+                            phase: Math.random()*Math.PI*2,
+                            speed: Math.random()*0.5+0.3,
+                            life: 0, maxLife: 120+Math.random()*80,
+                            state: 'rising' // rising → sucked → gone
+                        });
+                    }
+
+                    function resetSmoke(p){
+                        // 화로 위치에서 출발
+                        const grillX = W*0.5;
+                        const grillY = H*0.78;
+                        p.x = grillX + (Math.random()-0.5)*W*0.18;
+                        p.y = grillY;
+                        p.vx = (Math.random()-0.5)*0.3;
+                        p.vy = -(Math.random()*0.8+0.4);
+                        p.alpha = 0.5+Math.random()*0.3;
+                        p.life = 0;
+                        p.maxLife = 100+Math.random()*60;
+                        p.state = 'rising';
+                        p.size = Math.random()*6+3;
+                    }
+                    smokeParticles.forEach(resetSmoke);
+                    // stagger init
+                    smokeParticles.forEach((p,i)=>{ p.life = Math.random()*p.maxLife; });
+
+                    function draw(){
+                        if(!W || !H){ if(running) requestAnimationFrame(draw); return; }
+                        ctx.clearRect(0,0,W,H);
+                        const time = performance.now()/1000;
+
+                        // Background
+                        const bg = ctx.createRadialGradient(W*0.5,H*0.25,0,W*0.5,H*0.5,W*0.7);
+                        bg.addColorStop(0,'#1a2235'); bg.addColorStop(0.6,'#0a0f1c'); bg.addColorStop(1,'#000');
+                        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+                        // 천장
+                        ctx.fillStyle = '#1a1e2e';
+                        ctx.fillRect(0,0,W,H*0.06);
+                        const ceilG = ctx.createLinearGradient(0,H*0.06,0,H*0.08);
+                        ceilG.addColorStop(0,'rgba(255,255,255,0.1)'); ceilG.addColorStop(1,'transparent');
+                        ctx.fillStyle=ceilG; ctx.fillRect(0,H*0.06,W,H*0.02);
+
+                        // ─── 덕트 파이프 (천장→후드) ───
+                        const ductCX = W*0.5;
+                        const ductTop = H*0.06;
+                        const ductBot = H*0.22;
+                        const pipeW = W*0.035;
+
+                        // 상부 파이프 (천장→FVD)
+                        const pg = ctx.createLinearGradient(ductCX-pipeW,0,ductCX+pipeW,0);
+                        pg.addColorStop(0,'#6B5210'); pg.addColorStop(0.3,'#C49B2A'); pg.addColorStop(0.5,'#e8d5a0');
+                        pg.addColorStop(0.7,'#C49B2A'); pg.addColorStop(1,'#6B5210');
+                        ctx.fillStyle = pg;
+                        ctx.fillRect(ductCX-pipeW, ductTop, pipeW*2, ductBot-ductTop);
+
+                        // FVD 담퍼 (주황)
+                        const fvdY = ductBot;
+                        const fvdH = H*0.025;
+                        const fvdG = ctx.createLinearGradient(ductCX-pipeW*1.4,0,ductCX+pipeW*1.4,0);
+                        fvdG.addColorStop(0,'#8B4513'); fvdG.addColorStop(0.3,'#e8782a'); fvdG.addColorStop(0.5,'#f4a460');
+                        fvdG.addColorStop(0.7,'#e8782a'); fvdG.addColorStop(1,'#8B4513');
+                        ctx.fillStyle = fvdG;
+                        ctx.beginPath(); ctx.roundRect(ductCX-pipeW*1.4, fvdY, pipeW*2.8, fvdH, 3); ctx.fill();
+
+                        // 하부 파이프 (FVD→후드)
+                        const lowerTop = fvdY+fvdH;
+                        const lowerBot = H*0.35;
+                        ctx.fillStyle = pg;
+                        ctx.fillRect(ductCX-pipeW, lowerTop, pipeW*2, lowerBot-lowerTop);
+
+                        // ─── 후드 (나팔형) ───
+                        const hoodTop = lowerBot;
+                        const hoodBot = H*0.48;
+                        const hoodTopW = pipeW*2;
+                        const hoodBotW = W*0.28;
+                        const hg = ctx.createLinearGradient(ductCX-hoodBotW,0,ductCX+hoodBotW,0);
+                        hg.addColorStop(0,'#4a4a4a'); hg.addColorStop(0.15,'#888');
+                        hg.addColorStop(0.3,'#bbb'); hg.addColorStop(0.5,'#d4d4d4');
+                        hg.addColorStop(0.7,'#bbb'); hg.addColorStop(0.85,'#888'); hg.addColorStop(1,'#4a4a4a');
+                        ctx.fillStyle = hg;
+                        ctx.beginPath();
+                        ctx.moveTo(ductCX-hoodTopW, hoodTop);
+                        ctx.lineTo(ductCX+hoodTopW, hoodTop);
+                        ctx.lineTo(ductCX+hoodBotW, hoodBot);
+                        ctx.lineTo(ductCX-hoodBotW, hoodBot);
+                        ctx.closePath(); ctx.fill();
+
+                        // 후드 하단 흡입구 (밝은 라인)
+                        ctx.save();
+                        ctx.shadowColor='rgba(96,165,250,0.6)'; ctx.shadowBlur=12;
+                        const slitG = ctx.createLinearGradient(ductCX-hoodBotW*0.7,0,ductCX+hoodBotW*0.7,0);
+                        slitG.addColorStop(0,'rgba(96,165,250,0)'); slitG.addColorStop(0.3,'rgba(96,165,250,0.5)');
+                        slitG.addColorStop(0.5,'rgba(147,197,253,0.8)'); slitG.addColorStop(0.7,'rgba(96,165,250,0.5)');
+                        slitG.addColorStop(1,'rgba(96,165,250,0)');
+                        ctx.fillStyle = slitG;
+                        ctx.fillRect(ductCX-hoodBotW*0.8, hoodBot-2, hoodBotW*1.6, 4);
+                        ctx.restore();
+
+                        // 흡입 영역 내 공기 흐름 라인 (후드 내부)
+                        ctx.save();
+                        ctx.globalAlpha = 0.15;
+                        ctx.strokeStyle = '#60a5fa';
+                        ctx.lineWidth = 1;
+                        for(let i=0; i<5; i++){
+                            const fx = ductCX + (i-2)*hoodBotW*0.35;
+                            const fy = hoodBot - 3;
+                            const ft = (time*1.5+i*0.7)%2;
+                            const fLen = ft * (hoodBot-hoodTop) * 0.8;
+                            ctx.beginPath();
+                            ctx.moveTo(fx, fy);
+                            // curve toward center pipe
+                            ctx.quadraticCurveTo(
+                                fx+(ductCX-fx)*0.5, fy-fLen*0.6,
+                                ductCX, fy-fLen
+                            );
+                            ctx.stroke();
+                        }
+                        ctx.restore();
+
+                        // 기름받이 볼
+                        ctx.fillStyle = '#333';
+                        ctx.beginPath();
+                        ctx.ellipse(ductCX, hoodBot+6, hoodBotW*0.3, 5, 0, 0, Math.PI*2);
+                        ctx.fill();
+
+                        // ─── 화로 / 불꽃 ───
+                        const grillY = H*0.78;
+                        const grillW = W*0.22;
+                        // 화로 테이블
+                        const tblG = ctx.createLinearGradient(0,grillY,0,grillY+8);
+                        tblG.addColorStop(0,'#5a3a1a'); tblG.addColorStop(1,'#2a1a08');
+                        ctx.fillStyle = tblG;
+                        ctx.beginPath(); ctx.roundRect(ductCX-grillW, grillY, grillW*2, 8, 3); ctx.fill();
+
+                        // 불꽃
+                        for(let i=0; i<7; i++){
+                            const fx = ductCX-grillW*0.6 + i*(grillW*1.2/6);
+                            const fh = 10+Math.sin(time*3+i*1.3)*5+Math.random()*3;
+                            const fw = 4+Math.sin(time*2+i)*1.5;
+                            const fg2 = ctx.createLinearGradient(0,grillY-fh,0,grillY);
+                            fg2.addColorStop(0,'rgba(254,240,138,0.8)');
+                            fg2.addColorStop(0.4,'rgba(251,191,36,0.7)');
+                            fg2.addColorStop(0.7,'rgba(249,115,22,0.5)');
+                            fg2.addColorStop(1,'rgba(220,38,38,0.2)');
+                            ctx.fillStyle=fg2;
+                            ctx.beginPath();
+                            ctx.ellipse(fx, grillY-fh*0.3, fw, fh*0.5, 0, 0, Math.PI*2);
+                            ctx.fill();
+                        }
+
+                        // ─── 연기 파티클 시뮬레이션 ───
+                        const suctionY = hoodBot; // 흡입구 위치
+                        const suctionStrength = 0.04;
+
+                        smokeParticles.forEach(p=>{
+                            p.life++;
+                            if(p.life > p.maxLife){ resetSmoke(p); return; }
+
+                            if(p.state === 'rising'){
+                                // 상승: 느리게 위로
+                                p.x += p.vx + Math.sin(time*2+p.phase)*0.3;
+                                p.y += p.vy;
+
+                                // 후드 흡입 범위에 들어오면 빨려감
+                                if(p.y < suctionY + H*0.15){
+                                    p.state = 'sucked';
+                                }
+                            }
+
+                            if(p.state === 'sucked'){
+                                // 후드 중심으로 가속
+                                const dx = ductCX - p.x;
+                                const dy = (suctionY-10) - p.y;
+                                const dist = Math.sqrt(dx*dx+dy*dy);
+                                if(dist > 5){
+                                    p.vx += dx/dist * suctionStrength * 2;
+                                    p.vy += dy/dist * suctionStrength * 3;
+                                    p.vx *= 0.97; p.vy *= 0.97;
+                                }
+                                p.x += p.vx;
+                                p.y += p.vy;
+                                p.alpha *= 0.985;
+                                p.size *= 0.997;
+
+                                // 후드 안으로 들어가면 사라짐
+                                if(p.y < suctionY - 10){
+                                    p.state = 'gone';
+                                    p.alpha = 0;
+                                }
+                            }
+
+                            if(p.state === 'gone') return;
+
+                            // 그리기
+                            ctx.save();
+                            ctx.globalAlpha = p.alpha * 0.6;
+                            const sg = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+                            sg.addColorStop(0,'rgba(200,200,220,0.5)');
+                            sg.addColorStop(0.5,'rgba(150,160,180,0.2)');
+                            sg.addColorStop(1,'rgba(100,120,140,0)');
+                            ctx.fillStyle = sg;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                            ctx.restore();
+                        });
+
+                        // 흡입 방향 표시 (가이드 화살표)
+                        ctx.save();
+                        ctx.globalAlpha = 0.12 + Math.sin(time*2)*0.05;
+                        ctx.strokeStyle = '#93c5fd';
+                        ctx.lineWidth = 1.5;
+                        for(let i=-2; i<=2; i++){
+                            const ax = ductCX + i*hoodBotW*0.35;
+                            const aBot = suctionY + H*0.22;
+                            const aTop = suctionY + 5;
+                            const prog = (time*0.8+i*0.3)%1;
+                            const ay = aBot - prog*(aBot-aTop);
+                            ctx.beginPath();
+                            ctx.moveTo(ax, ay+15);
+                            ctx.quadraticCurveTo(ax+(ductCX-ax)*0.3, ay+5, ax+(ductCX-ax)*0.5, ay);
+                            ctx.stroke();
+                            // 화살표 머리
+                            const endX = ax+(ductCX-ax)*0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(endX-3,ay+4); ctx.lineTo(endX,ay); ctx.lineTo(endX+3,ay+4);
+                            ctx.stroke();
+                        }
+                        ctx.restore();
+
+                        // 라벨
+                        ctx.font = 'bold 10px "Pretendard",system-ui,sans-serif';
+                        ctx.fillStyle = 'rgba(96,165,250,0.5)';
+                        ctx.textAlign = 'left';
+                        ctx.fillText('SUCTION', W*0.03, H*0.45);
+                        ctx.fillStyle = 'rgba(232,120,42,0.5)';
+                        ctx.fillText('F.V.D', W*0.03, H*0.24);
+                        ctx.fillStyle = 'rgba(196,155,42,0.5)';
+                        ctx.fillText('DUCT', W*0.03, H*0.14);
+
+                        if(running) requestAnimationFrame(draw);
+                    }
+
+                    const obs2 = new IntersectionObserver((e) => {
+                        if(e[0].isIntersecting && !running){ resize(); running=true; draw(); }
+                        if(!e[0].isIntersecting){ running=false; }
+                    }, { threshold: 0.05 });
+                    obs2.observe(wrap);
+                })();
+                });
+                </script>
+
                 <!-- 스탯 스트립 (스크롤 시 카운터 애니메이션) -->
-                <div class="mt-32 grid grid-cols-2 md:grid-cols-4 gap-px bg-black/10 rounded-3xl overflow-hidden border border-black/5 r-anim r-zoom">
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="28">0</span><span class="text-blue-600">+</span></div>
-                        <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">제품 라인업</div>
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-3xl overflow-hidden border border-white/10 r-anim r-zoom">
+                    <div class="bg-white/[0.04] p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="28">0</span><span class="text-blue-400">+</span></div>
+                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">제품 라인업</div>
                     </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="20">0</span><span class="text-blue-600">y</span></div>
-                        <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">엔지니어링</div>
+                    <div class="bg-white/[0.04] p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="20">0</span><span class="text-blue-400">y</span></div>
+                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">엔지니어링</div>
                     </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="360">0</span><span class="text-blue-600">°</span></div>
-                        <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">스윙 시스템</div>
+                    <div class="bg-white/[0.04] p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="360">0</span><span class="text-blue-400">°</span></div>
+                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">스윙 시스템</div>
                     </div>
-                    <div class="bg-white p-8 text-center">
-                        <div class="text-5xl font-black tracking-tight"><span class="count" data-target="100">0</span><span class="text-blue-600">%</span></div>
-                        <div class="text-xs font-bold text-black/50 mt-2 tracking-widest uppercase">국내 제조</div>
+                    <div class="bg-white/[0.04] p-8 text-center">
+                        <div class="text-5xl font-black tracking-tight text-white"><span class="count" data-target="100">0</span><span class="text-blue-400">%</span></div>
+                        <div class="text-xs font-bold text-white/40 mt-2 tracking-widest uppercase">국내 제조</div>
                     </div>
                 </div>
             </div>
@@ -1399,37 +1696,11 @@
                         </a>
                     </div>
                     <div class="lg:col-span-7 r-anim r-right">
-                        <div class="relative rounded-3xl overflow-hidden border border-white/10 aspect-video bg-[#0a0a0a] group">
-                            <!-- 후드 일러스트 + 모션 -->
-                            <div class="absolute inset-0" style="background:radial-gradient(900px 500px at 50% 25%,#1e293b 0%,#0a0f1c 60%,#000 100%);"></div>
-                            <!-- 천정 라인 -->
-                            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-white/20 to-transparent"></div>
-                            <!-- 빨려올라가는 입자 -->
-                            <div class="absolute inset-0 suction-particles">
-                                <span></span><span></span><span></span><span></span>
-                                <span></span><span></span><span></span><span></span>
-                                <span></span><span></span><span></span><span></span>
-                            </div>
-                            <!-- 후드 -->
-                            <div class="absolute left-1/2 top-[28%] -translate-x-1/2 w-[55%]">
-                                <div class="w-3 h-10 mx-auto bg-gradient-to-b from-white/40 to-white/15 rounded-full"></div>
-                                <div class="relative mt-1 w-full h-32"
-                                     style="background:linear-gradient(180deg,#cbd5e1 0%,#94a3b8 45%,#475569 100%); clip-path:polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%); box-shadow:0 30px 60px rgba(0,0,0,.6);">
-                                    <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-[70%] h-1 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 rounded-full opacity-80 animate-pulse"></div>
-                                </div>
-                            </div>
-                            <!-- 화로 + 불꽃 -->
-                            <div class="absolute left-1/2 bottom-[18%] -translate-x-1/2">
-                                <div class="w-32 h-3 bg-gradient-to-b from-[#7c2d12] to-[#1c1917] rounded-full"></div>
-                                <div class="absolute -top-8 left-1/2 -translate-x-1/2 flex gap-1">
-                                    <div class="w-3 h-8 rounded-full bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-200" style="animation: flame-flicker 1.6s ease-in-out infinite;"></div>
-                                    <div class="w-3 h-10 rounded-full bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-200" style="animation: flame-flicker 1.4s ease-in-out infinite .2s;"></div>
-                                    <div class="w-3 h-8 rounded-full bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-200" style="animation: flame-flicker 1.5s ease-in-out infinite .4s;"></div>
-                                </div>
-                            </div>
+                        <div class="relative rounded-3xl overflow-hidden border border-white/10 aspect-video bg-[#0a0a0a] group" id="live-preview-wrap">
+                            <canvas id="live-preview-canvas" style="width:100%;height:100%;display:block;"></canvas>
                             <!-- 라벨 -->
-                            <div class="absolute top-5 left-5 text-[10px] font-bold tracking-[0.22em] text-blue-400">LIVE PREVIEW</div>
-                            <div class="absolute bottom-5 right-5 text-[10px] font-bold tracking-widest text-white/55">USUNG ACE · 360° SWING</div>
+                            <div class="absolute top-5 left-5 text-[10px] font-bold tracking-[0.22em] text-blue-400 z-10">LIVE PREVIEW</div>
+                            <div class="absolute bottom-5 right-5 text-[10px] font-bold tracking-widest text-white/55 z-10">USUNG ACE · DUCT SYSTEM</div>
                         </div>
                     </div>
                 </div>
@@ -3735,7 +4006,7 @@
             // ─── 03: 나사타입 분리 ───
             setupCanvas('usage-canvas-screw', function(ctx,W,H,t){
                 drawBG(ctx,W,H);
-                const cx=W*0.38, cy=H*0.5;
+                const cx=W*0.5, cy=H*0.45;
                 const s=Math.min(W/300,H/220);
                 ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
 
@@ -3792,18 +4063,17 @@
                 ctx.restore();
 
                 ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
-                ctx.fillStyle='rgba(96,165,250,0.7)'; ctx.textAlign='left';
-                ctx.fillText('나사타입 조립',W*0.6,H*0.35);
+                ctx.fillStyle='rgba(96,165,250,0.7)'; ctx.textAlign='center';
+                ctx.fillText('나사타입 조립',W*0.5,H*0.82);
                 ctx.font='10px "Pretendard",system-ui,sans-serif';
                 ctx.fillStyle='rgba(255,255,255,0.3)';
-                ctx.fillText('반시계 회전 → 분리',W*0.6,H*0.48);
-                ctx.fillText('시계 회전 → 체결',W*0.6,H*0.6);
+                ctx.fillText('반시계 회전 → 분리  |  시계 회전 → 체결',W*0.5,H*0.9);
             });
 
             // ─── 04: 유지망필터 ───
             setupCanvas('usage-canvas-filter', function(ctx,W,H,t){
                 drawBG(ctx,W,H);
-                const cx=W*0.38, cy=H*0.48;
+                const cx=W*0.5, cy=H*0.42;
                 const s=Math.min(W/300,H/220);
                 ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
 
@@ -3865,14 +4135,14 @@
 
                 // 라벨
                 ctx.font='bold 11px "Pretendard",system-ui,sans-serif';
-                ctx.fillStyle='rgba(251,191,36,0.7)'; ctx.textAlign='left';
-                ctx.fillText('기름 여과',W*0.62,H*0.3);
+                ctx.fillStyle='rgba(251,191,36,0.7)'; ctx.textAlign='center';
+                ctx.fillText('기름 여과',W*0.5,H*0.82);
                 ctx.font='10px "Pretendard",system-ui,sans-serif';
                 ctx.fillStyle='rgba(255,255,255,0.3)';
-                ctx.fillText('모터 보호 + 화재예방',W*0.62,H*0.43);
+                ctx.fillText('모터 보호 + 화재예방',W*0.5,H*0.9);
                 // 아이콘: 화재예방
                 ctx.save();
-                ctx.translate(W*0.65,H*0.6);
+                ctx.translate(W*0.5+50,H*0.86);
                 ctx.fillStyle='rgba(239,68,68,0.4)';
                 ctx.beginPath();
                 ctx.moveTo(0,-8); ctx.quadraticCurveTo(6,-3,5,3);
