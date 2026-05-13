@@ -229,6 +229,11 @@
         @keyframes split-l { 0%,100% { transform: translateX(-50%) translateX(-4px);} 50% { transform: translateX(-50%) translateX(-28px);} }
         @keyframes split-r { 0%,100% { transform: translateX(-50%) translateX(4px);} 50% { transform: translateX(-50%) translateX(28px);} }
         @keyframes spring { 0%,100% { transform: translateY(0);} 50% { transform: translateY(18px) scaleY(.85);} }
+        @keyframes swing-pipe { 0%,100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+        @keyframes damper-close { 0%,40% { transform: scaleY(1); } 50%,70% { transform: scaleY(4); } 80%,100% { transform: scaleY(1); } }
+        @keyframes screw-apart-up { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        @keyframes screw-apart-dn { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+        @keyframes tension-updown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
         .anim-spin-slow  { animation: spin-slow 18s linear infinite; }
         .anim-spin-rev   { animation: spin-rev 26s linear infinite; }
@@ -701,30 +706,11 @@
                     <p data-cms="h_sub" class="text-xl md:text-3xl text-white/55 font-medium tracking-tight">오늘을 이끄는 원동력.</p>
                 </div>
 
-                <!-- Product Image (CSS-only 후드 일러스트) -->
+                <!-- Product Image (Canvas 덕트 일러스트) -->
                 <div id="anim-product" class="scroll-element z-0 opacity-0 scale-50 translate-y-[200px]">
                     <div class="relative w-full max-w-4xl aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex items-center justify-center"
                          style="background:radial-gradient(900px 500px at 50% 30%,#1e293b 0%,#0a0f1c 60%,#000 100%);">
-                        <!-- 천정 라인 -->
-                        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-white/15 to-transparent"></div>
-                        <!-- 후드 일러스트 -->
-                        <div class="relative w-[58%] h-[78%] flex flex-col items-center">
-                            <!-- 덕트 파이프 -->
-                            <div class="w-3 h-12 bg-gradient-to-b from-white/30 to-white/10 rounded-full"></div>
-                            <div class="w-12 h-3 -mt-1 bg-gradient-to-r from-white/20 via-white/35 to-white/20 rounded-full"></div>
-                            <!-- 후드 본체 (사다리꼴) -->
-                            <div class="relative mt-1 w-full h-[55%]"
-                                 style="background:linear-gradient(180deg,#cbd5e1 0%,#94a3b8 45%,#475569 100%); clip-path:polygon(18% 0%, 82% 0%, 100% 100%, 0% 100%); box-shadow:0 30px 80px -20px rgba(59,130,246,.45);">
-                                <!-- 림 강조 -->
-                                <div class="absolute inset-x-0 top-0 h-1 bg-white/40"></div>
-                                <div class="absolute inset-x-0 bottom-0 h-2 bg-black/40"></div>
-                                <!-- LED 라이트 -->
-                                <div class="absolute left-1/2 -translate-x-1/2 bottom-1 w-[55%] h-[3px] rounded-full bg-gradient-to-r from-yellow-200/0 via-yellow-200 to-yellow-200/0 blur-[1px]"></div>
-                            </div>
-                            <!-- 빛 퍼짐 -->
-                            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[80%] h-12 rounded-full"
-                                 style="background:radial-gradient(ellipse at center, rgba(255,230,150,.45) 0%, transparent 70%); filter:blur(8px);"></div>
-                        </div>
+                        <canvas id="scroll-duct-canvas" style="width:100%;height:100%;display:block;"></canvas>
                         <!-- 갤럭시 D-Type 뱃지 -->
                         <div data-cms="h_badge" class="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[11px] tracking-[0.22em] font-bold text-white/90 uppercase">
                             갤럭시 D-TYPE · Swing Tension
@@ -747,98 +733,88 @@
                 </div>
 
                 <!-- Features Buttons -->
-                <!-- Feature 1: 360° 스윙 -->
-                <div id="anim-feat1" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
-                    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
-                            <div class="relative w-36 h-36">
-                                <div class="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/50" style="animation:spin 8s linear infinite"></div>
-                                <div class="absolute inset-4 rounded-full border border-blue-300/25" style="animation:spin 12s linear infinite reverse"></div>
-                                <div class="absolute inset-0 grid place-items-center">
-                                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 grid place-items-center shadow-[0_12px_40px_-8px_rgba(59,130,246,.6)]" style="animation:float 3s ease-in-out infinite">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
-                                    </div>
-                                </div>
-                                <div class="absolute inset-0" style="animation:spin 8s linear infinite">
-                                    <div class="absolute left-1/2 -top-1 w-2.5 h-2.5 -ml-1 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,.8)]"></div>
+                <!-- Feature 1: 360° 스윙 — 파이프가 시계추처럼 흔들리는 모션 -->
+                <div id="anim-feat1" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
+                    <div class="text-center max-w-lg mx-auto px-6">
+                        <div class="w-28 h-28 mx-auto mb-6 rounded-2xl bg-white/[0.04] border border-blue-400/20 flex items-center justify-center">
+                            <div class="relative w-16 h-20">
+                                <!-- 천장 고정점 -->
+                                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-1 bg-white/30 rounded-full"></div>
+                                <!-- 흔들리는 파이프 -->
+                                <div class="absolute top-1 left-1/2 origin-top" style="animation:swing-pipe 3s ease-in-out infinite; transform-origin:top center">
+                                    <div class="w-1.5 h-10 -ml-[3px] rounded-b bg-gradient-to-b from-[#C49B2A] to-[#8B6914]"></div>
+                                    <div class="w-8 h-5 -ml-[13px] rounded-b-lg bg-gradient-to-b from-[#999] to-[#666]" style="clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%)"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center md:text-left">
-                            <div class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2">TECH 01</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">360° 스윙</h3>
-                            <p class="text-white/55 leading-relaxed text-sm max-w-md">시계추 모양으로 360° 자유 회전. 파이프가 고정되어 있지 않아 부러질 염려 없이 편리합니다.</p>
-                        </div>
+                        <div class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2">TECH 01</div>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">360° 스윙</h3>
+                        <p class="text-white/50 leading-relaxed text-sm">시계추 모양으로 360° 자유 회전. 파이프가 고정되어 있지 않아 부러질 염려 없이 편리합니다.</p>
                     </div>
                 </div>
 
-                <!-- Feature 2: F.V.D 방화담파 -->
-                <div id="anim-feat2" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
-                    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
-                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
-                            <div class="relative w-36 h-36 grid place-items-center">
-                                <div class="w-20 h-14 rounded-xl bg-gradient-to-b from-orange-600 to-red-800 border border-orange-400/40 relative overflow-hidden shadow-[0_12px_40px_-8px_rgba(234,88,12,.5)]">
-                                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style="animation:shimmer 2s ease-in-out infinite"></div>
-                                    <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-[70%] h-0.5 bg-red-300/50 rounded-full"></div>
-                                </div>
-                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-red-500/20 border border-red-400/40 text-[9px] font-bold text-red-300">F.V.D LOCK</div>
-                                <div class="absolute left-1/2 -translate-x-1/2 bottom-10 w-4 h-8 rounded-full bg-gradient-to-t from-orange-400 via-amber-300 to-yellow-100 blur-[2px] opacity-60" style="animation:flame-flicker 1.5s ease-in-out infinite"></div>
+                <!-- Feature 2: F.V.D 방화담파 — 댐퍼가 닫히는 모션 -->
+                <div id="anim-feat2" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
+                    <div class="text-center max-w-lg mx-auto px-6">
+                        <div class="w-28 h-28 mx-auto mb-6 rounded-2xl bg-white/[0.04] border border-orange-400/20 flex items-center justify-center">
+                            <div class="relative w-20 h-16">
+                                <!-- 파이프 단면 -->
+                                <div class="absolute inset-x-2 top-0 h-full rounded-lg border border-white/15 bg-gradient-to-b from-[#8B6914]/40 to-[#6B5210]/20"></div>
+                                <!-- 닫히는 댐퍼 날개 -->
+                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-0.5 bg-gradient-to-r from-orange-500 to-red-600 rounded-full shadow-[0_0_10px_rgba(234,88,12,.5)]" style="animation:damper-close 2.5s ease-in-out infinite"></div>
+                                <!-- 불꽃 아래 -->
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-4 rounded-full bg-gradient-to-t from-orange-500/50 to-yellow-200/30 blur-[2px]" style="animation:flame-flicker 1.5s ease-in-out infinite"></div>
                             </div>
                         </div>
-                        <div class="text-center md:text-right">
-                            <div class="text-[10px] font-bold tracking-[0.22em] text-orange-400 mb-2">TECH 02</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">F.V.D 방화담파</h3>
-                            <p class="text-white/55 leading-relaxed text-sm max-w-md">풍속조절 겸용 방화담파로 화재 시 자동 차단. 200~220도에서 닫혀 화재 확산을 방지합니다.</p>
-                        </div>
+                        <div class="text-[10px] font-bold tracking-[0.22em] text-orange-400 mb-2">TECH 02</div>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">F.V.D 방화담파</h3>
+                        <p class="text-white/50 leading-relaxed text-sm">풍속조절 겸용 방화담파로 화재 시 자동 차단. 200~220도에서 닫혀 화재 확산을 방지합니다.</p>
                     </div>
                 </div>
 
-                <!-- Feature 3: 분리청소 가능 -->
-                <div id="anim-feat3" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
-                    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
-                            <div class="relative w-36 h-36 grid place-items-center">
-                                <div class="absolute left-1/2 -translate-x-1/2" style="animation:split-l 2s ease-in-out infinite">
-                                    <div class="w-16 h-12 rounded-l-xl bg-gradient-to-r from-emerald-500/70 to-emerald-300/30 border border-emerald-300/40"></div>
-                                </div>
-                                <div class="absolute left-1/2 -translate-x-1/2" style="animation:split-r 2s ease-in-out infinite">
-                                    <div class="w-16 h-12 rounded-r-xl bg-gradient-to-l from-emerald-500/70 to-emerald-300/30 border border-emerald-300/40 ml-16"></div>
-                                </div>
-                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-16 bg-emerald-300/30"></div>
+                <!-- Feature 3: 분리청소 — 나사를 풀어서 분리하는 모션 -->
+                <div id="anim-feat3" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
+                    <div class="text-center max-w-lg mx-auto px-6">
+                        <div class="w-28 h-28 mx-auto mb-6 rounded-2xl bg-white/[0.04] border border-emerald-400/20 flex items-center justify-center">
+                            <div class="relative w-16 h-20 flex flex-col items-center">
+                                <!-- 상부 파이프 -->
+                                <div class="w-3 h-6 bg-gradient-to-b from-[#C49B2A] to-[#8B6914] rounded-b"></div>
+                                <!-- 나사 링 (분리 애니메이션) -->
+                                <div class="w-5 h-1.5 bg-gradient-to-r from-[#888] via-[#ddd] to-[#888] rounded-full" style="animation:screw-apart-up 2s ease-in-out infinite"></div>
+                                <div class="w-5 h-1.5 bg-gradient-to-r from-[#888] via-[#ddd] to-[#888] rounded-full" style="animation:screw-apart-dn 2s ease-in-out infinite"></div>
+                                <!-- 하부 파이프 -->
+                                <div class="w-3 h-6 bg-gradient-to-b from-[#8B6914] to-[#C49B2A] rounded-t"></div>
                             </div>
                         </div>
-                        <div class="text-center md:text-left">
-                            <div class="text-[10px] font-bold tracking-[0.22em] text-emerald-400 mb-2">TECH 03</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">분리청소 가능</h3>
-                            <p class="text-white/55 leading-relaxed text-sm max-w-md">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다. 터치분리로 상부 파이프도 청소 가능.</p>
-                        </div>
+                        <div class="text-[10px] font-bold tracking-[0.22em] text-emerald-400 mb-2">TECH 03</div>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">분리청소 가능</h3>
+                        <p class="text-white/50 leading-relaxed text-sm">도구 없이 손으로 분리. 매일 세척 가능한 위생 구조입니다. 터치분리로 상부 파이프도 청소 가능.</p>
                     </div>
                 </div>
 
-                <!-- Feature 4: 상하작동 텐션 -->
-                <div id="anim-feat4" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px] w-full max-w-4xl px-6">
-                    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
-                        <div class="flex-shrink-0 w-48 h-48 md:w-56 md:h-56 rounded-3xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden">
-                            <div class="relative w-36 h-36 grid place-items-center">
-                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1.5 rounded-full bg-white/35"></div>
-                                <div class="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center" style="animation:spring 2s ease-in-out infinite">
-                                    <div class="w-0.5 h-14 bg-gradient-to-b from-white/50 to-white/10 rounded-full"></div>
-                                    <div class="-mt-1 flex flex-col gap-[2px]">
-                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/70"></div>
-                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/60"></div>
-                                        <div class="w-6 h-0.5 rounded-full bg-purple-300/50"></div>
+                <!-- Feature 4: 상하작동 텐션 — 높이 조절 모션 -->
+                <div id="anim-feat4" class="scroll-element z-20 pointer-events-none opacity-0 translate-y-[50px]">
+                    <div class="text-center max-w-lg mx-auto px-6">
+                        <div class="w-28 h-28 mx-auto mb-6 rounded-2xl bg-white/[0.04] border border-purple-400/20 flex items-center justify-center">
+                            <div class="relative w-14 h-20 flex flex-col items-center">
+                                <!-- 천장 마운트 -->
+                                <div class="w-6 h-1 bg-white/30 rounded-full"></div>
+                                <!-- 텐션 파이프 (상하 이동) -->
+                                <div style="animation:tension-updown 2.5s ease-in-out infinite" class="flex flex-col items-center">
+                                    <div class="w-1 h-6 bg-gradient-to-b from-white/40 to-white/10 rounded-full"></div>
+                                    <div class="flex flex-col gap-[1px] -mt-0.5">
+                                        <div class="w-4 h-[2px] bg-purple-300/60 rounded-full"></div>
+                                        <div class="w-4 h-[2px] bg-purple-300/50 rounded-full"></div>
+                                        <div class="w-4 h-[2px] bg-purple-300/40 rounded-full"></div>
                                     </div>
-                                    <div class="mt-1.5 w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-700 shadow-[0_10px_30px_-6px_rgba(167,139,250,.5)] grid place-items-center">
-                                        <div class="text-[8px] font-black tracking-widest text-white">STOP</div>
-                                    </div>
+                                    <!-- 후드 하단 -->
+                                    <div class="w-10 h-4 mt-0.5 rounded-b-lg bg-gradient-to-b from-[#999] to-[#666]" style="clip-path:polygon(15% 0%,85% 0%,100% 100%,0% 100%)"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center md:text-right">
-                            <div class="text-[10px] font-bold tracking-[0.22em] text-purple-400 mb-2">TECH 04</div>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mb-3">상하작동 텐션</h3>
-                            <p class="text-white/55 leading-relaxed text-sm max-w-md">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절. 맞춤 기장 제작도 가능합니다.</p>
-                        </div>
+                        <div class="text-[10px] font-bold tracking-[0.22em] text-purple-400 mb-2">TECH 04</div>
+                        <h3 class="text-2xl md:text-4xl font-black text-white mb-3">상하작동 텐션</h3>
+                        <p class="text-white/50 leading-relaxed text-sm">베어링 장력 조절 + 스톱바 브레이크로 안전한 높이 조절. 맞춤 기장 제작도 가능합니다.</p>
                     </div>
                 </div>
 
@@ -870,6 +846,10 @@
 
         <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
         <section class="relative bg-white text-black py-10 md:py-14">
+            <!-- 상단 카피 한줄 -->
+            <div class="text-center pt-2 pb-8 r-anim r-mask-up">
+                <p class="text-base md:text-lg tracking-tight text-black/35 font-medium">기술은 현장에서 완성됩니다.</p>
+            </div>
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-8 r-anim r-mask-up">
                     <div data-cms="t_tag" class="text-[11px] font-bold tracking-[0.24em] text-blue-600 mb-4">CORE TECHNOLOGY</div>
@@ -1141,6 +1121,131 @@
                     }, { threshold: 0.1 });
                     obs.observe(wrap);
                 })();
+
+                // ── Scroll Section Duct Canvas — 골드 파이프 + 후드 일러스트 ──
+                document.addEventListener('DOMContentLoaded', function(){
+                    const canvas = document.getElementById('scroll-duct-canvas');
+                    if(!canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    const dpr = window.devicePixelRatio || 1;
+                    function resize(){
+                        const r = canvas.parentElement.getBoundingClientRect();
+                        canvas.width = r.width * dpr;
+                        canvas.height = r.height * dpr;
+                        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                        draw();
+                    }
+                    function draw(){
+                        const W = canvas.width / dpr, H = canvas.height / dpr;
+                        ctx.clearRect(0,0,W,H);
+                        const cx = W/2, topY = H*0.05;
+
+                        // 천장 라인
+                        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+                        ctx.fillRect(0, 0, W, 3);
+
+                        // 천장 마운트
+                        const mountW = 90, mountH = 14;
+                        const mountGrad = ctx.createLinearGradient(cx-mountW/2, topY, cx+mountW/2, topY);
+                        mountGrad.addColorStop(0, '#555'); mountGrad.addColorStop(0.5, '#999'); mountGrad.addColorStop(1, '#555');
+                        ctx.fillStyle = mountGrad;
+                        roundRect(ctx, cx-mountW/2, topY, mountW, mountH, 4);
+                        ctx.fill();
+
+                        // 상부 파이프 (골드)
+                        const pipeW = 22, pipeH = H * 0.18;
+                        const pipeTop = topY + mountH;
+                        const pipeGrad = ctx.createLinearGradient(cx-pipeW/2, pipeTop, cx+pipeW/2, pipeTop);
+                        pipeGrad.addColorStop(0, '#8B6914'); pipeGrad.addColorStop(0.3, '#C49B2A');
+                        pipeGrad.addColorStop(0.5, '#E8C84A'); pipeGrad.addColorStop(0.7, '#C49B2A'); pipeGrad.addColorStop(1, '#8B6914');
+                        ctx.fillStyle = pipeGrad;
+                        ctx.fillRect(cx-pipeW/2, pipeTop, pipeW, pipeH);
+                        // 파이프 하이라이트
+                        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                        ctx.fillRect(cx-2, pipeTop, 4, pipeH);
+
+                        // FVD 댐퍼 링 (주황)
+                        const fvdY = pipeTop + pipeH;
+                        const fvdW = 50, fvdH = 12;
+                        const fvdGrad = ctx.createLinearGradient(cx-fvdW/2, fvdY, cx+fvdW/2, fvdY);
+                        fvdGrad.addColorStop(0, '#B34700'); fvdGrad.addColorStop(0.5, '#E86F00'); fvdGrad.addColorStop(1, '#B34700');
+                        ctx.fillStyle = fvdGrad;
+                        roundRect(ctx, cx-fvdW/2, fvdY, fvdW, fvdH, 3);
+                        ctx.fill();
+
+                        // 하부 파이프 (골드 약간 어두움)
+                        const pipe2Top = fvdY + fvdH;
+                        const pipe2H = H * 0.12;
+                        const pipe2Grad = ctx.createLinearGradient(cx-pipeW/2, pipe2Top, cx+pipeW/2, pipe2Top);
+                        pipe2Grad.addColorStop(0, '#7A5C12'); pipe2Grad.addColorStop(0.3, '#A88520');
+                        pipe2Grad.addColorStop(0.5, '#C49B2A'); pipe2Grad.addColorStop(0.7, '#A88520'); pipe2Grad.addColorStop(1, '#7A5C12');
+                        ctx.fillStyle = pipe2Grad;
+                        ctx.fillRect(cx-pipeW/2, pipe2Top, pipeW, pipe2H);
+                        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                        ctx.fillRect(cx-2, pipe2Top, 4, pipe2H);
+
+                        // 나사 조인트
+                        const jointY = pipe2Top + pipe2H;
+                        const jointW = 34, jointH = 8;
+                        const jointGrad = ctx.createLinearGradient(cx-jointW/2, jointY, cx+jointW/2, jointY);
+                        jointGrad.addColorStop(0, '#666'); jointGrad.addColorStop(0.5, '#bbb'); jointGrad.addColorStop(1, '#666');
+                        ctx.fillStyle = jointGrad;
+                        roundRect(ctx, cx-jointW/2, jointY, jointW, jointH, 2);
+                        ctx.fill();
+
+                        // 후드 본체 (사다리꼴 — 메탈 그라데이션)
+                        const hoodTop = jointY + jointH + 4;
+                        const hoodH = H * 0.32;
+                        const hoodTopW = 70, hoodBotW = W * 0.45;
+                        const hoodGrad = ctx.createLinearGradient(0, hoodTop, 0, hoodTop + hoodH);
+                        hoodGrad.addColorStop(0, '#cbd5e1'); hoodGrad.addColorStop(0.4, '#94a3b8');
+                        hoodGrad.addColorStop(0.7, '#64748b'); hoodGrad.addColorStop(1, '#475569');
+                        ctx.fillStyle = hoodGrad;
+                        ctx.beginPath();
+                        ctx.moveTo(cx - hoodTopW/2, hoodTop);
+                        ctx.lineTo(cx + hoodTopW/2, hoodTop);
+                        ctx.lineTo(cx + hoodBotW/2, hoodTop + hoodH);
+                        ctx.lineTo(cx - hoodBotW/2, hoodTop + hoodH);
+                        ctx.closePath();
+                        ctx.fill();
+                        // 후드 상단 림
+                        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+                        ctx.fillRect(cx - hoodTopW/2, hoodTop, hoodTopW, 2);
+                        // 후드 하단 림
+                        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+                        ctx.fillRect(cx - hoodBotW/2, hoodTop + hoodH - 3, hoodBotW, 3);
+
+                        // LED 라이트
+                        const ledY = hoodTop + hoodH - 8;
+                        const ledGrad = ctx.createLinearGradient(cx - hoodBotW*0.3, ledY, cx + hoodBotW*0.3, ledY);
+                        ledGrad.addColorStop(0, 'rgba(255,230,150,0)'); ledGrad.addColorStop(0.5, 'rgba(255,230,150,0.7)'); ledGrad.addColorStop(1, 'rgba(255,230,150,0)');
+                        ctx.fillStyle = ledGrad;
+                        ctx.fillRect(cx - hoodBotW*0.3, ledY, hoodBotW*0.6, 3);
+
+                        // 빛 퍼짐
+                        const glowY = hoodTop + hoodH + 5;
+                        const glowGrad = ctx.createRadialGradient(cx, glowY, 0, cx, glowY, hoodBotW*0.5);
+                        glowGrad.addColorStop(0, 'rgba(255,230,150,0.35)'); glowGrad.addColorStop(1, 'rgba(255,230,150,0)');
+                        ctx.fillStyle = glowGrad;
+                        ctx.fillRect(cx - hoodBotW*0.5, glowY - 15, hoodBotW, 30);
+
+                        // 블루 글로우 (후드 주변)
+                        const blueGlow = ctx.createRadialGradient(cx, hoodTop + hoodH*0.6, 10, cx, hoodTop + hoodH*0.6, hoodBotW*0.7);
+                        blueGlow.addColorStop(0, 'rgba(59,130,246,0.08)'); blueGlow.addColorStop(1, 'rgba(59,130,246,0)');
+                        ctx.fillStyle = blueGlow;
+                        ctx.fillRect(0, hoodTop - 20, W, hoodH + 60);
+                    }
+                    function roundRect(c, x, y, w, h, r){
+                        c.beginPath();
+                        c.moveTo(x+r, y); c.lineTo(x+w-r, y); c.quadraticCurveTo(x+w, y, x+w, y+r);
+                        c.lineTo(x+w, y+h-r); c.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+                        c.lineTo(x+r, y+h); c.quadraticCurveTo(x, y+h, x, y+h-r);
+                        c.lineTo(x, y+r); c.quadraticCurveTo(x, y, x+r, y);
+                        c.closePath();
+                    }
+                    resize();
+                    window.addEventListener('resize', resize);
+                });
                 </script>
 
                 <!-- LIVE PREVIEW 덕트 흡입 캔버스 애니메이션 -->
@@ -5277,9 +5382,9 @@
                     if(el){ el.style.opacity = opacity; el.style.transform = transform; }
                 };
 
-                // Scroll indicator — hide after scrolling
+                // Scroll indicator — keep visible until CTA stage
                 const scrollInd = document.getElementById('scroll-indicator');
-                if (scrollInd) scrollInd.style.opacity = scrollY > 80 ? '0' : '1';
+                if (scrollInd) scrollInd.style.opacity = progress > 0.80 ? '0' : '1';
 
                 // ── 0.00~0.10: Hero (처음에 보이다가 서서히 사라짐)
                 const heroOp = mapRange(progress, 0, 0.10, 1, 0);
