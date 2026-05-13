@@ -535,7 +535,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 cursor-pointer" onclick="navigate('home')">
-                    <img id="nav-logo" src="logo-usung-white.svg" alt="유성에이스" style="height:44px;transition:opacity .3s;">
+                    <img id="nav-logo" src="logo-white.png" alt="유성에이스" style="height:40px;transition:opacity .3s;">
                 </div>
 
                 <nav class="hidden md:flex items-center gap-1 lg:gap-2 relative" id="primary-nav">
@@ -846,9 +846,9 @@
 
         <!-- ============== 2번째 섹션 — Galaxy D-Type Core Technology ============== -->
         <section class="relative bg-white text-black py-10 md:py-14">
-            <!-- 상단 카피 한줄 -->
-            <div class="text-center pt-2 pb-8 r-anim r-mask-up">
-                <p class="text-base md:text-lg tracking-tight text-black/35 font-medium">기술은 현장에서 완성됩니다.</p>
+            <!-- 상단 임팩트 카피 -->
+            <div class="text-center pt-4 pb-10 r-anim r-mask-up">
+                <p class="text-2xl md:text-4xl font-black tracking-tight text-black/80 leading-snug">불 앞에서 20년,<br class="md:hidden"/> <span class="text-blue-600">현장이 증명한 기술력.</span></p>
             </div>
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-8 r-anim r-mask-up">
@@ -857,7 +857,6 @@
                     <p data-cms="t_desc" class="mt-4 text-lg text-black/50 max-w-2xl mx-auto leading-relaxed">
                         직화기 닥트 시설의 새로운 흐름. 불편함을 개선하고 위생과 안전, 시각적 아름다움을 모두 잡았습니다.
                     </p>
-                    <p class="mt-3 text-sm font-bold tracking-widest text-blue-600/60">"20년을 불 앞에서 쌓은 기술, 현장이 증명합니다."</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch rounded-3xl overflow-hidden border border-black/10 mt-4 shadow-xl">
@@ -2567,7 +2566,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
                 <div class="lg:col-span-5">
-                    <img src="logo-usung-white.svg" alt="유성에이스" style="height:64px;margin-bottom:16px;">
+                    <img src="logo-white.png" alt="유성에이스" style="height:64px;margin-bottom:16px;">
                     <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
                         대한민국 덕트 No.1 — 2007년부터 한길만 걸어온 직화기 후드 전문 기업. 새로운 환경, 새로운 기술로 한걸음 앞서갑니다.
                     </p>
@@ -2597,7 +2596,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-usung-white.svg" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
+                <p class="text-white/35 text-xs flex items-center gap-2"><img src="logo-white.png" alt="유성에이스" style="height:22px;opacity:.6;"> &copy; 2026 USUNG ACE / 유성에이스. All rights reserved.</p>
                 <div class="flex space-x-6 text-xs text-white/35">
                     <span>SINCE 2007</span>
                     <span>·</span>
@@ -5413,11 +5412,11 @@
             if (window.scrollY > 50 || isLightPage) {
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.remove('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-usung-white.svg';
+                if(navLogo) navLogo.src = 'logo-white.png';
             } else {
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
                 navbar.classList.add('bg-transparent');
-                if(navLogo) navLogo.src = 'logo-usung-white.svg';
+                if(navLogo) navLogo.src = 'logo-white.png';
             }
 
             // Home 페이지 스크롤 애니메이션 (간이 구현)
@@ -5586,8 +5585,8 @@
             <button onclick="closePartModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/20 hover:text-white transition">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div class="bg-white/[0.03] flex items-center justify-center p-8 aspect-square max-h-[340px]">
-                <img id="pm-img" src="" alt="" class="max-w-full max-h-full object-contain" />
+            <div class="bg-white/[0.03] flex items-center justify-center p-8 min-h-[280px] max-h-[380px]">
+                <img id="pm-img" src="" alt="" class="max-w-full max-h-full object-contain mx-auto block" />
             </div>
             <div class="p-6">
                 <div id="pm-cat" class="text-[10px] font-bold tracking-[0.22em] text-blue-400 mb-2"></div>
