@@ -1,6 +1,7 @@
 {
   "version": 2,
   "routes": [
+    { "src": "/api/blog", "dest": "/api/blog.js" },
     { "src": "/", "dest": "/index_v6.html" },
     { "src": "/admin", "dest": "/admin.html" }
   ],
