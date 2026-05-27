@@ -2,7 +2,11 @@
   "version": 2,
   "routes": [
     { "src": "/api/blog", "dest": "/api/blog.js" },
-    { "src": "/", "dest": "/index_v6.html" },
+    { "src": "/api/inject", "dest": "/api/inject.js" },
+    { "src": "/", "dest": "/api/inject" },
+    { "src": "/index", "dest": "/api/inject" },
+    { "src": "/index.html", "dest": "/api/inject" },
+    { "src": "/index_v6.html", "dest": "/api/inject" },
     { "src": "/admin", "dest": "/admin.html" }
   ],
   "headers": [
