@@ -1,35 +1,38 @@
 // Vercel Serverless Function: HTML 인젝션 미들웨어
-// - theme-white.css 와 usung-overlay.js 를 모든 페이지 로드 시 자동 삽입
-// - 원본 index_v6.html 은 그대로 유지 (PPTX 디렉션 + 화이트 테마 + 제품 재정렬)
-import fs from 'fs';
-import path from 'path';
+// - theme-white.css 와 usung-overlay.js 를 페이지 로드 시 자동 삽입
+// - 원본 index_v6.html 은 raw GitHub URL 에서 fetch (번들링 안전)
+export const config = { runtime: 'nodejs' };
 
-export default function handler(req, res) {
+const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
+
+export default async function handler(req, res) {
   try {
-    // 정적 파일 경로 — Vercel 빌드 시 함수 옆에 복사된 파일을 직접 읽음
-    const htmlPath = path.join(process.cwd(), 'index_v6.html');
-    let html = fs.readFileSync(htmlPath, 'utf-8');
+    // 원본 HTML 가져오기 (Vercel Edge 캐시 활용)
+    const r = await fetch(RAW_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error('raw fetch ' + r.status);
+    let html = await r.text();
 
-    // 인젝션 마커 (한 번만 삽입되도록)
-    const cssInjection = '<link rel="stylesheet" href="/theme-white.css?v=2">\n  </head>';
-    const jsInjection = '<script src="/usung-overlay.js?v=2" defer></script>\n</body>';
-
-    // <head> 닫힘 직전에 CSS 링크 삽입
+    // <head> 닫힘 직전에 화이트 테마 CSS 링크 삽입
     if (!html.includes('theme-white.css')) {
-      html = html.replace('</head>', cssInjection);
+      html = html.replace('</head>',
+        '<link rel="stylesheet" href="/theme-white.css?v=3">\n  </head>');
     }
-    // </body> 직전에 JS 스크립트 삽입
+    // </body> 직전에 PPTX 오버레이 JS 삽입
     if (!html.includes('usung-overlay.js')) {
-      html = html.replace('</body>', jsInjection);
+      html = html.replace('</body>',
+        '<script src="/usung-overlay.js?v=3" defer></script>\n</body>');
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
     res.status(200).send(html);
   } catch (err) {
     console.error('[inject]', err);
-    // 실패 시 원본으로 폴백 (보안 — 빈 응답보다 원본이 안전)
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.status(500).send('<!doctype html><meta http-equiv="refresh" content="0;url=/index_v6.html">');
+    res.status(500).send(
+      '<!doctype html><html><head><meta charset="utf-8"><title>유성에이스</title></head>' +
+      '<body><p>잠시만 기다려주세요... 페이지 로딩 중입니다.</p>' +
+      '<script>setTimeout(()=>location.reload(),1500);</script></body></html>'
+    );
   }
 }
