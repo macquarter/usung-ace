@@ -1,0 +1,126 @@
+/* ============================================================
+   유성에이스 화이트 테마 오버라이드 (PPTX 디렉션 기반)
+   적용 대상: 홈 히어로(영상) 제외, 모든 페이지/카드/시각 요소
+   ============================================================ */
+
+:root {
+    --bg: #ffffff;
+    --bg-soft: #fafafa;
+    --bg-mute: #f1f5f9;
+    --fg: #0f172a;
+    --fg-soft: #334155;
+    --fg-mute: #64748b;
+    --border: rgba(15, 23, 42, 0.08);
+    --accent: #2563eb;
+    --accent-2: #0ea5e9;
+}
+html, body { background:#fff !important; color:#0f172a !important; }
+main, #main-content { background:#fff !important; }
+.page:not(#page-home) { background:#fff !important; color:#0f172a; }
+
+/* 다크 배경 → 화이트 변환 (홈 영상 영역 제외) */
+.page:not(#page-home) .bg-black,
+.page:not(#page-home) [class*="bg-[#0a0"],
+.page:not(#page-home) [class*="bg-[#070"],
+.page:not(#page-home) [class*="bg-[#050"],
+.page:not(#page-home) [class*="bg-[#080"],
+.page:not(#page-home) [class*="bg-[#0e1"],
+.page:not(#page-home) [class*="bg-[#0d"],
+.page:not(#page-home) [class*="bg-[#06"],
+.page:not(#page-home) [class*="bg-[#11"],
+.page:not(#page-home) [class*="bg-[#17"],
+.page:not(#page-home) .bg-zinc-900,
+.page:not(#page-home) .bg-neutral-900,
+.page:not(#page-home) .bg-gray-900,
+.page:not(#page-home) .bg-slate-900,
+.page:not(#page-home) .bg-gray-800,
+.page:not(#page-home) .bg-zinc-800 {
+    background-color:#ffffff !important;
+}
+/* 다크 그라데이션 → 라이트 */
+.page:not(#page-home) .bg-gradient-to-b.from-\[\#0d0d11\],
+.page:not(#page-home) .bg-gradient-to-b.from-\[\#07070a\],
+.page:not(#page-home) .bg-gradient-to-b.from-\[\#060609\],
+.page:not(#page-home) .bg-gradient-to-br.from-\[\#0e1117\],
+.page:not(#page-home) .bg-gradient-to-br.from-\[\#0a0c12\] {
+    background-image: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%) !important;
+    border-color: rgba(15,23,42,0.08) !important;
+}
+
+/* 흰색 텍스트 → 다크 텍스트 */
+.page:not(#page-home) .text-white,
+.page:not(#page-home) h1.text-white,
+.page:not(#page-home) h2.text-white,
+.page:not(#page-home) h3.text-white,
+.page:not(#page-home) p.text-white { color:#0f172a !important; }
+.page:not(#page-home) [class*="text-white/9"] { color:#1e293b !important; }
+.page:not(#page-home) [class*="text-white/8"] { color:#334155 !important; }
+.page:not(#page-home) [class*="text-white/7"] { color:#475569 !important; }
+.page:not(#page-home) [class*="text-white/6"] { color:#64748b !important; }
+.page:not(#page-home) [class*="text-white/5"],
+.page:not(#page-home) [class*="text-white/4"] { color:#94a3b8 !important; }
+.page:not(#page-home) [class*="text-white/3"],
+.page:not(#page-home) [class*="text-white/2"] { color:#cbd5e1 !important; }
+.page:not(#page-home) .text-gray-400,
+.page:not(#page-home) .text-gray-300,
+.page:not(#page-home) .text-gray-500 { color:#64748b !important; }
+.page:not(#page-home) .text-blue-400 { color:#2563eb !important; }
+.page:not(#page-home) .text-blue-300 { color:#3b82f6 !important; }
+.page:not(#page-home) .text-cyan-300 { color:#0891b2 !important; }
+.page:not(#page-home) .text-emerald-400 { color:#059669 !important; }
+.page:not(#page-home) .text-emerald-300 { color:#10b981 !important; }
+.page:not(#page-home) .text-amber-300 { color:#d97706 !important; }
+.page:not(#page-home) .text-rose-300 { color:#e11d48 !important; }
+
+/* 보더 라이트화 */
+.page:not(#page-home) [class*="border-white/"] { border-color: rgba(15,23,42,0.08) !important; }
+.page:not(#page-home) [class*="divide-white/"] > * + * { border-color: rgba(15,23,42,0.06) !important; }
+.page:not(#page-home) [class*="border-blue-400/"] { border-color: rgba(59,130,246,0.25) !important; }
+.page:not(#page-home) [class*="border-cyan-400/"] { border-color: rgba(34,211,238,0.25) !important; }
+
+/* 카드 컨테이너 */
+.page:not(#page-home) .bg-white\/5,
+.page:not(#page-home) .bg-white\/10,
+.page:not(#page-home) .bg-white\/\[0\.02\],
+.page:not(#page-home) .bg-white\/\[0\.03\],
+.page:not(#page-home) .bg-white\/\[0\.04\],
+.page:not(#page-home) .bg-white\/\[0\.05\] { background-color:#f8fafc !important; }
+.page:not(#page-home) .bg-blue-500\/10,
+.page:not(#page-home) .bg-blue-500\/20 { background-color:#dbeafe !important; }
+.page:not(#page-home) .bg-cyan-500\/10 { background-color:#cffafe !important; }
+.page:not(#page-home) .bg-emerald-500\/10 { background-color:#d1fae5 !important; }
+.page:not(#page-home) .bg-amber-500\/10 { background-color:#fef3c7 !important; }
+.page:not(#page-home) .bg-orange-500\/10 { background-color:#ffedd5 !important; }
+.page:not(#page-home) .bg-rose-500\/10 { background-color:#ffe4e6 !important; }
+.page:not(#page-home) .bg-red-500\/10,
+.page:not(#page-home) .bg-red-500\/20 { background-color:#fee2e2 !important; }
+
+/* hover 라이트 */
+.page:not(#page-home) [class*="hover:border-blue-400/"]:hover { border-color: rgba(37,99,235,0.4) !important; }
+.page:not(#page-home) [class*="hover:bg-white/1"]:hover { background-color: #f1f5f9 !important; }
+.page:not(#page-home) [class*="hover:bg-white/0"]:hover { background-color: #f8fafc !important; }
+
+/* CTA / 강조 박스 (notice/board의 어두운 박스 — 브랜드 컨트라스트 유지) */
+.page:not(#page-home) .bg-black.text-white,
+.page:not(#page-home) [class*="from-red-600"][class*="to-red-700"],
+.page:not(#page-home) [class*="from-amber-400"][class*="to-red-500"] { color:#fff !important; }
+
+/* 홈의 라이트 섹션 유지 */
+#page-home section.bg-white { background:#ffffff !important; color:#0f172a !important; }
+
+/* 푸터 (브랜드 컨트라스트) */
+footer.bg-black, footer.bg-\[\#000\], body > footer { background:#0f172a !important; color:#fff !important; }
+
+/* 캔버스 배경 투명 */
+.page:not(#page-home) canvas { background: transparent !important; }
+
+/* 카드 그림자 */
+.page:not(#page-home) .border.rounded-2xl,
+.page:not(#page-home) .border.rounded-3xl { box-shadow: 0 2px 12px rgba(15,23,42,0.04); }
+
+/* 그라데이션 텍스트 - 약간 진하게 */
+.page:not(#page-home) [class*="bg-gradient-to-r"][class*="from-blue-400"],
+.page:not(#page-home) [class*="bg-gradient-to-r"][class*="from-blue-500"] {
+    --tw-gradient-from: #2563eb !important;
+    --tw-gradient-to: #0ea5e9 !important;
+}
