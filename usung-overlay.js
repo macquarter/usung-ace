@@ -1,23 +1,57 @@
 /* ============================================================
-   유성에이스 PPTX 디렉션 오버레이 v5 (최종)
-   - 메가메뉴 hover 롤백 방지 (MutationObserver + megaHoverCat 오버라이드)
-   - 제품 카드 클릭 시 상세 모달 (대표 이미지 + 색상별 썸네일 그리드)
-   - 화이트 테마 전면 보완
+   유성에이스 PPTX 디렉션 오버레이 v6
+   - 메가메뉴: PPTX 슬라이드 5 트리 구조 그대로 (1차 → 2차 → 3차)
+   - 제품 페이지: 좌측 사이드바 트리 + 우측 제품 그룹 그리드
+   - 홈 하단 다크 섹션 화이트화 (USUNG ACE IN ACTION, LIVE PREVIEW 등)
    ============================================================ */
 (function() {
   'use strict';
-  console.log('[usung-overlay v5] loaded');
+  console.log('[usung-overlay v6] loaded');
 
-  const CAT_COLORS = {
-    '1. 갤럭시':         { hex:'#3b82f6', subs:['갤럭시A','갤럭시B','갤럭시C','갤럭시D'], desc:'A · B · C · D 타입 (스윙태엽/FVD/유지망)' },
-    '2. LED 조명타입':   { hex:'#f59e0b', subs:['LED 조명','우주선/갓등'], desc:'갓등 · 우주선 · 아크릴 · 사각등' },
-    '3. 스텐파이프':     { hex:'#06b6d4', subs:['도금/스윙 양옆태엽','도금/스윙 내부태엽','도금/스윙 텐션','도장/스윙 양옆태엽','도장/스윙 내부태엽','도장/스윙 텐션'], desc:'도금 · 도장 (양옆/내부/텐션)' },
-    '4. 스파이얼 도장':  { hex:'#10b981', subs:['스윙 양옆태엽','스윙 내부태엽','스윙 텐션'], desc:'양옆/내부/텐션 시리즈' },
-    '5. 파이프 기타옵션':{ hex:'#8b5cf6', subs:['고정텐션','모터'], desc:'고정텐션 · 사각측향 · 모터류' },
-    '6. 후레쉬볼':       { hex:'#f97316', subs:['자바라','신형 자바라','장축 자바라'], desc:'자바라 · 신형 · 장축' },
-    '7. 하향식 후드':    { hex:'#ef4444', subs:['코브라'], desc:'코브라 · 망대 · 주물 · 나팔' }
+  // 트리 구조 — PPTX slide 5 그대로
+  const TREE = [
+    { id:'1.갤럭시', label:'1. 갤럭시', hex:'#3b82f6', children:[
+      { id:'갤럭시A', label:'갤럭시A' },
+      { id:'갤럭시B', label:'갤럭시B' },
+      { id:'갤럭시C', label:'갤럭시C' },
+      { id:'갤럭시D', label:'갤럭시D' }
+    ]},
+    { id:'2.LED', label:'2. LED 조명', hex:'#f59e0b', children:[
+      { id:'LED 조명', label:'LED 조명' },
+      { id:'우주선/갓등', label:'우주선/갓등' }
+    ]},
+    { id:'3.스텐파이프', label:'3. 스텐파이프', hex:'#06b6d4', children:[
+      { id:'도금', label:'도금', children:[
+        { id:'도금/스윙 양옆태엽', label:'스윙 양옆태엽' },
+        { id:'도금/스윙 내부태엽', label:'스윙 내부태엽' },
+        { id:'도금/스윙 텐션', label:'스윙텐션' }
+      ]},
+      { id:'도장', label:'도장', children:[
+        { id:'도장/스윙 양옆태엽', label:'스윙 양옆태엽' },
+        { id:'도장/스윙 내부태엽', label:'스윙 내부태엽' },
+        { id:'도장/스윙 텐션', label:'스윙텐션' }
+      ]}
+    ]},
+    { id:'4.스파이얼', label:'4. 스파이얼 도장', hex:'#10b981', children:[
+      { id:'스윙 양옆태엽', label:'스윙 양옆태엽' },
+      { id:'스윙 내부태엽', label:'스윙 내부태엽' },
+      { id:'스윙 텐션', label:'스윙텐션' }
+    ]},
+    { id:'5.파이프 기타', label:'5. 파이프 기타옵션', hex:'#8b5cf6', children:[] },
+    { id:'6.후레쉬볼', label:'6. 후레쉬볼', hex:'#f97316', children:[] },
+    { id:'7.하향식 후드', label:'7. 하향식 후드', hex:'#ef4444', children:[] }
+  ];
+
+  const CAT_BY_ID = {
+    '1.갤럭시':'1. 갤럭시', '2.LED':'2. LED 조명타입', '3.스텐파이프':'3. 스텐파이프',
+    '4.스파이얼':'4. 스파이얼 도장', '5.파이프 기타':'5. 파이프 기타옵션',
+    '6.후레쉬볼':'6. 후레쉬볼', '7.하향식 후드':'7. 하향식 후드'
   };
-  const CAT_ORDER = Object.keys(CAT_COLORS);
+  const CAT_HEX = {
+    '1. 갤럭시':'#3b82f6','2. LED 조명타입':'#f59e0b','3. 스텐파이프':'#06b6d4',
+    '4. 스파이얼 도장':'#10b981','5. 파이프 기타옵션':'#8b5cf6',
+    '6. 후레쉬볼':'#f97316','7. 하향식 후드':'#ef4444'
+  };
 
   const COLOR_HEX = {
     '검정':'#0f172a','검정함마':'#1f2937','동':'#a16207','동함마':'#92400e','동도금':'#b45309',
@@ -73,47 +107,63 @@
     return n.replace(/\s+/g,' ').trim();
   }
 
+  // 카테고리 + 서브 필터링
+  function filterByNode(items, nodeId) {
+    if (!nodeId) return items;
+    // 대분류
+    if (CAT_BY_ID[nodeId]) {
+      return items.filter(p => p.cat === CAT_BY_ID[nodeId]);
+    }
+    // sub (중분류 또는 소분류)
+    return items.filter(p => p.sub === nodeId || (p.sub && p.sub.startsWith(nodeId + '/')));
+  }
+
   function killMegaHoverCat() {
     if (typeof window.megaHoverCat === 'function' && !window._megaHoverKilled) {
       window._origMegaHoverCat = window.megaHoverCat;
-      window.megaHoverCat = function() { /* no-op — v5 keeps 7-category view */ };
+      window.megaHoverCat = function() { /* no-op */ };
       window._megaHoverKilled = true;
     }
   }
 
+  // ==================== 메가메뉴 트리 구조 ====================
   let _megaObserver = null;
   function patchMegaMenu() {
     const list = document.getElementById('mega-cat-list');
     if (!list) return false;
 
-    if (list.dataset.patched !== 'v5') {
-      list.innerHTML = CAT_ORDER.map(c => {
-        const meta = CAT_COLORS[c];
-        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterProducts&&window.filterProducts(\''+c+'\'),120);" class="block text-left group w-full p-2.5 rounded-lg hover:bg-slate-50 transition">'+
-          '<div class="text-[14px] font-black tracking-tight" style="color:'+meta.hex+';">'+c+'</div>'+
-          '<div class="text-[11px] text-slate-500 mt-0.5">'+meta.desc+'</div>'+
+    // 좌측 1차 카테고리 (간단 목록)
+    if (list.dataset.patched !== 'v6') {
+      list.innerHTML = TREE.map(t => {
+        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+t.id+'\'),120);" class="block text-left group w-full p-2 rounded-lg hover:bg-slate-50 transition">'+
+          '<div class="text-[13px] font-black tracking-tight" style="color:'+t.hex+';">'+t.label+'</div>'+
         '</button>';
       }).join('');
-      list.dataset.patched = 'v5';
+      list.dataset.patched = 'v6';
     }
 
+    // 오른쪽 트리 구조 — PPTX slide 5 그대로
     const megaList = document.getElementById('mega-menu-list');
     if (megaList) {
-      if (megaList.dataset.patched !== 'v5') {
-        megaList.innerHTML = CAT_ORDER.map(c => {
-          const meta = CAT_COLORS[c];
-          return '<div class="py-1.5"><div class="text-[12px] font-black mb-1" style="color:'+meta.hex+';">'+c+'</div>'+
-            '<div class="space-y-0.5">' + (meta.subs.length ? meta.subs.map(s =>
-              '<button onclick="navigate(\'products\');setTimeout(()=>window.filterProducts&&window.filterProducts(\''+c+'\'),120);" class="block text-left w-full text-[12px] text-slate-700 hover:text-blue-600 py-0.5 px-1.5 rounded hover:bg-slate-50">'+s+'</button>'
-            ).join('') : '<div class="text-[11px] text-slate-400 px-1.5">전체 보기 →</div>') + '</div></div>';
-        }).join('');
-        megaList.dataset.patched = 'v5';
+      if (megaList.dataset.patched !== 'v6') {
+        function renderNode(node, depth) {
+          const indent = depth * 16;
+          let html = '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+node.id+'\'),120);" class="block text-left w-full text-[12.5px] font-bold py-1 px-2 rounded hover:bg-slate-50 transition" style="padding-left:'+(indent+8)+'px;'+(depth===0?'color:'+node.hex+';font-weight:900;font-size:13px;':'color:'+(depth===1?'#1e293b':'#475569')+';')+'">';
+          if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(depth===1?'#0f172a':'#94a3b8')+';"></span>';
+          html += node.label + '</button>';
+          if (node.children && node.children.length) {
+            html += node.children.map(c => renderNode(c, depth + 1)).join('');
+          }
+          return html;
+        }
+        megaList.innerHTML = '<div class="space-y-0.5">' + TREE.map(t => renderNode(t, 0)).join('<div class="h-2"></div>') + '</div>';
+        megaList.dataset.patched = 'v6';
         const t = document.getElementById('mega-list-title');
-        if (t) t.textContent = '7 CATEGORIES · ALL PRODUCTS';
+        if (t) t.textContent = '제품 분류 트리';
 
         if (!_megaObserver) {
           _megaObserver = new MutationObserver(function() {
-            if (megaList.dataset.patched !== 'v5' || megaList.children.length < CAT_ORDER.length) {
+            if (megaList.dataset.patched !== 'v6') {
               megaList.dataset.patched = '';
               patchMegaMenu();
             }
@@ -160,8 +210,7 @@
   function patchNavbar() {
     const nav = document.getElementById('navbar');
     if (!nav) return;
-    if (nav.dataset.patched === 'v5') return;
-
+    if (nav.dataset.patched === 'v6') return;
     function applyNavColors() {
       const isHome = document.getElementById('page-home') && document.getElementById('page-home').classList.contains('active');
       const scrolled = window.scrollY > 60;
@@ -188,9 +237,10 @@
     applyNavColors();
     window.addEventListener('scroll', applyNavColors, { passive: true });
     new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
-    nav.dataset.patched = 'v5';
+    nav.dataset.patched = 'v6';
   }
 
+  // ==================== 제품 상세 모달 ====================
   function ensureProductModal() {
     let modal = document.getElementById('ace-product-modal');
     if (modal) return modal;
@@ -212,12 +262,12 @@
     return modal;
   }
 
-  function openProductModal(group, opts) {
+  function openProductModal(group) {
     const modal = ensureProductModal();
     const body = document.getElementById('ace-product-modal-body');
-    const meta = CAT_COLORS[group.cat] || { hex:'#94a3b8' };
+    const hex = CAT_HEX[group.cat] || '#94a3b8';
     const variants = group.items;
-    let selectedIdx = (opts && opts.selectedIdx) || 0;
+    let selectedIdx = 0;
 
     function render() {
       const sel = variants[selectedIdx];
@@ -232,19 +282,19 @@
 
       body.innerHTML =
         '<div class="flex items-center gap-2 text-[13px] text-slate-500 mb-6">' +
-          '<span class="hover:text-slate-700 cursor-pointer">Home</span>' +
+          '<span>Home</span>' +
           '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
-          '<span class="hover:text-slate-700 cursor-pointer">제품소개</span>' +
+          '<span>제품소개</span>' +
           '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
-          '<span class="hover:text-slate-700 cursor-pointer" style="color:'+meta.hex+'">'+group.cat+'</span>' +
+          '<span style="color:'+hex+'">'+group.cat+'</span>' +
           (group.sub ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg><span class="font-bold text-slate-900">'+group.sub+'</span>' : '') +
         '</div>' +
         '<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">' +
           '<div class="relative aspect-square bg-slate-50 rounded-2xl overflow-hidden flex items-center justify-center">' +
-            '<img id="ace-modal-main-img" src="'+sel.img+'" alt="'+group.name+'" class="max-w-full max-h-full object-contain p-6" />' +
+            '<img src="'+sel.img+'" alt="'+group.name+'" class="max-w-full max-h-full object-contain p-6" />' +
           '</div>' +
           '<div class="flex flex-col">' +
-            '<div class="mb-2"><span class="text-[10px] font-bold tracking-[0.2em] text-white px-2 py-0.5 rounded" style="background:'+meta.hex+';">'+group.cat+'</span>' +
+            '<div class="mb-2"><span class="text-[10px] font-bold tracking-[0.2em] text-white px-2 py-0.5 rounded" style="background:'+hex+';">'+group.cat+'</span>' +
             (group.sub ? ' <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 ml-1">'+group.sub+'</span>' : '') + '</div>' +
             '<h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-3">'+group.name+'</h2>' +
             '<div class="text-xl font-bold text-slate-700 mb-4">가격문의 <span class="text-sm font-normal text-slate-500">(상세정보 참조)</span></div>' +
@@ -286,87 +336,74 @@
   }
   window.openProductModal = openProductModal;
 
+  // ==================== 제품 페이지 (사이드바 트리 + 우측 그리드) ====================
   function renderProductPage() {
     const ACE = getAceData();
     if (!ACE || !ACE.product_lineup) return false;
     const grid = document.getElementById('products-grid');
     const filter = document.getElementById('product-filter');
     if (!grid || !filter) return false;
-    if (grid.dataset.patched === 'v5') return true;
+    if (grid.dataset.patched === 'v6') return true;
 
-    if (!ACE._remapped_v5) {
+    if (!ACE._remapped_v6) {
       ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-      ACE._remapped_v5 = true;
-    }
-    let activeCat = '전체', activeSub = '', activeColor = '';
-
-    function categories() {
-      const cats = ['전체'];
-      CAT_ORDER.forEach(c => { if (ACE.product_lineup.some(p => p.cat === c)) cats.push(c); });
-      return cats;
-    }
-    function subsFor(cat) {
-      if (cat === '전체') return [];
-      const meta = CAT_COLORS[cat]; if (!meta) return [];
-      const inCat = ACE.product_lineup.filter(p => p.cat === cat);
-      return meta.subs.filter(s => inCat.some(p => p.sub === s));
-    }
-    function colorsFor(cat, sub) {
-      let items = ACE.product_lineup;
-      if (cat !== '전체') items = items.filter(p => p.cat === cat);
-      if (sub) items = items.filter(p => p.sub === sub);
-      return [...new Set(items.map(p => p.color).filter(Boolean))];
+      ACE._remapped_v6 = true;
     }
 
-    function renderFilters() {
-      const cats = categories();
-      let html = '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">대분류 · MAIN</div>';
-      html += '<div class="flex flex-wrap gap-2 mb-5">' + cats.map(c => {
-        const active = c === activeCat;
-        const meta = CAT_COLORS[c];
-        const bg = active ? (meta ? meta.hex : '#0f172a') : '#ffffff';
-        const fg = active ? '#ffffff' : '#475569';
-        return '<button data-cat="'+c+'" class="ace-cat-btn px-4 py-2 rounded-full text-[12px] font-bold border transition" style="background:'+bg+';color:'+fg+';border-color:'+(active?bg:'#e2e8f0')+';">'+c+' <span style="opacity:.7">'+(c==='전체'?ACE.product_lineup.length:ACE.product_lineup.filter(p=>p.cat===c).length)+'</span></button>';
+    let activeNode = '';   // '' = 전체, or node id
+    let activeColor = '';
+
+    // 사이드바 트리 영역
+    function renderSidebar() {
+      function nodeBtn(node, depth) {
+        const items = filterByNode(ACE.product_lineup, node.id);
+        const count = items.length;
+        if (count === 0 && (!node.children || !node.children.length)) return '';
+        const isActive = activeNode === node.id;
+        const indent = depth * 12 + 8;
+        let html = '<button data-node="'+node.id+'" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded transition text-[13px]" style="padding-left:'+indent+'px;'+
+          (isActive ? 'background:'+(node.hex||'#0f172a')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#0f172a'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
+        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#0f172a':'#94a3b8'))+';"></span>';
+        html += node.label + ' <span class="opacity-60 text-[10px]">('+count+')</span></button>';
+        if (node.children && node.children.length) {
+          html += '<div class="space-y-0.5">' + node.children.map(c => nodeBtn(c, depth + 1)).join('') + '</div>';
+        }
+        return html;
+      }
+
+      const allCount = ACE.product_lineup.length;
+      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto">' +
+        '<div class="text-[10px] font-bold tracking-[0.24em] text-slate-400 mb-3">제품 분류 트리</div>' +
+        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0f172a;color:#fff;font-weight:900;':'color:#0f172a;font-weight:900;')+'">' +
+          '🏠 전체 보기 <span class="opacity-60 text-[10px]">('+allCount+')</span>' +
+        '</button>' +
+        '<div class="space-y-0.5">' + TREE.map(t => nodeBtn(t, 0)).join('') + '</div>' +
+      '</aside>';
+    }
+
+    function renderColorFilter() {
+      let items = filterByNode(ACE.product_lineup, activeNode);
+      const colors = [...new Set(items.map(p => p.color).filter(Boolean))];
+      if (!colors.length) return '';
+      let html = '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">소분류 · 칼라별</div>';
+      html += '<div class="flex flex-wrap gap-2 mb-5">';
+      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0f172a':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#3b82f6,#ef4444,#22c55e);"></span>전체</button>';
+      html += colors.map(c => {
+        const active = c === activeColor;
+        const dot = COLOR_HEX[c] || '#94a3b8';
+        const ring = dot === '#ffffff' ? 'border:1px solid #cbd5e1;' : '';
+        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0f172a':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
       }).join('') + '</div>';
-
-      const subs = subsFor(activeCat);
-      if (subs.length) {
-        html += '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">중분류 · 제품별</div>';
-        html += '<div class="flex flex-wrap gap-2 mb-5">' +
-          '<button data-sub="" class="ace-sub-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition" style="background:'+(activeSub===''?'#0f172a':'#fff')+';color:'+(activeSub===''?'#fff':'#475569')+';border-color:'+(activeSub===''?'#0f172a':'#e2e8f0')+';">전체</button>' +
-          subs.map(s => {
-            const active = s === activeSub;
-            return '<button data-sub="'+s+'" class="ace-sub-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition" style="background:'+(active?'#0f172a':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0f172a':'#e2e8f0')+';">'+s+'</button>';
-          }).join('') + '</div>';
-      }
-
-      const colors = colorsFor(activeCat, activeSub);
-      if (colors.length) {
-        html += '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">소분류 · 칼라별</div>';
-        html += '<div class="flex flex-wrap gap-2 mb-5">' +
-          '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0f172a':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#3b82f6,#ef4444,#22c55e);"></span>전체</button>' +
-          colors.map(c => {
-            const active = c === activeColor;
-            const dot = COLOR_HEX[c] || '#94a3b8';
-            const ring = dot === '#ffffff' ? 'border:1px solid #cbd5e1;' : '';
-            return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0f172a':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
-          }).join('') + '</div>';
-      }
-
-      filter.innerHTML = html;
-      filter.querySelectorAll('.ace-cat-btn').forEach(b => b.onclick = () => { activeCat = b.dataset.cat; activeSub=''; activeColor=''; render(); });
-      filter.querySelectorAll('.ace-sub-btn').forEach(b => b.onclick = () => { activeSub = b.dataset.sub; activeColor=''; render(); });
-      filter.querySelectorAll('.ace-color-btn').forEach(b => b.onclick = () => { activeColor = b.dataset.color; render(); });
+      return html;
     }
 
     const groupsCache = {};
 
-    function renderGrid() {
-      let items = ACE.product_lineup;
-      if (activeCat !== '전체') items = items.filter(p => p.cat === activeCat);
-      if (activeSub) items = items.filter(p => p.sub === activeSub);
+    function renderMainContent() {
+      let items = filterByNode(ACE.product_lineup, activeNode);
       if (activeColor) items = items.filter(p => p.color === activeColor);
 
+      // 제품 그룹핑
       const groups = {};
       items.forEach(p => {
         const bn = baseName(p.name) || (p.cat + ' ' + (p.sub||''));
@@ -377,42 +414,94 @@
       Object.assign(groupsCache, groups);
       const gList = Object.values(groups);
 
-      const empty = document.getElementById('products-empty');
-      if (empty) empty.classList.toggle('hidden', gList.length > 0);
+      // 활성 노드 라벨 찾기
+      let breadcrumbLabel = '전체 제품';
+      let activeHex = '#0f172a';
+      function findNode(tree, id, parents) {
+        for (const t of tree) {
+          if (t.id === id) return { node: t, parents: parents };
+          if (t.children) {
+            const r = findNode(t.children, id, parents.concat(t));
+            if (r) return r;
+          }
+        }
+        return null;
+      }
+      if (activeNode) {
+        const f = findNode(TREE, activeNode, []);
+        if (f) {
+          breadcrumbLabel = [...f.parents, f.node].map(n => n.label).join(' › ');
+          activeHex = (f.parents[0] || f.node).hex || '#0f172a';
+        }
+      }
 
-      grid.innerHTML = gList.map(g => {
-        const meta = CAT_COLORS[g.cat] || {hex:'#94a3b8'};
-        const main = g.items[0];
-        const variants = g.items;
-        const variantPreview = variants.length > 1 ? (
-          '<div class="mb-2"><div class="text-[10px] font-bold text-slate-500 mb-1">색상 옵션 ('+variants.length+')</div>' +
-          '<div class="flex flex-wrap gap-1">' + variants.slice(0, 8).map(v => {
-            const label = v.color || v.finish || '기본';
-            const dot = COLOR_HEX[label.split(',')[0]] || '#94a3b8';
-            const ring = dot==='#ffffff'?'border:1px solid #cbd5e1;':'';
-            return '<span title="'+label+'" class="w-3 h-3 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>';
-          }).join('') + (variants.length>8 ? '<span class="text-[10px] text-slate-500 ml-1">+'+(variants.length-8)+'</span>' : '') + '</div></div>'
-        ) : (main.finish ? '<div class="flex flex-wrap gap-1 mb-2">'+main.finish.split(',').slice(0,3).map(t=>'<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600">'+t.trim()+'</span>').join('')+'</div>' : '');
+      let html = '<div class="flex items-center justify-between mb-4">' +
+        '<div><div class="text-[10px] font-bold tracking-[0.24em] text-slate-400">CURRENT</div>' +
+        '<h2 class="text-xl font-black text-slate-900" style="color:'+activeHex+';">'+breadcrumbLabel+'</h2></div>' +
+        '<div class="text-sm font-bold text-slate-600">'+gList.length+'개 제품 그룹 · '+items.length+'개 항목</div>' +
+        '</div>';
 
-        return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer">'+
-          '<div class="relative aspect-square overflow-hidden bg-slate-50">'+
-            '<img src="'+main.img+'" alt="'+g.name+'" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display=\'none\';this.parentElement.style.background=\'linear-gradient(135deg,#f8fafc,#e2e8f0)\';" />'+
-            '<div class="absolute top-2.5 left-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shadow" style="background:'+meta.hex+';">'+g.cat+'</span></div>'+
-            (g.sub ? '<div class="absolute top-2.5 right-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/90 border border-slate-200 text-slate-700">'+g.sub+'</span></div>' : '')+
-            (variants.length>1 ? '<div class="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-white shadow">'+variants.length+'색상</div>' : '')+
-            '<div class="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"><span class="px-3 py-1.5 rounded-full bg-white text-slate-900 text-xs font-bold shadow-lg">상세보기 →</span></div>'+
-          '</div>'+
-          '<div class="p-3 flex-1 flex flex-col">'+
-            '<h3 class="text-[13px] font-black tracking-tight text-slate-900 leading-snug mb-2 line-clamp-2">'+g.name+'</h3>'+
-            variantPreview +
-            '<div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">'+
-              '<span class="text-slate-400 font-semibold">USUNG ACE</span>'+
-              '<span class="font-bold text-blue-600 flex items-center gap-1">상세 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>'+
+      html += renderColorFilter();
+
+      if (gList.length === 0) {
+        html += '<div class="py-20 text-center text-slate-400">해당 분류에 제품이 없습니다.</div>';
+      } else {
+        html += '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">';
+        html += gList.map(g => {
+          const hex = CAT_HEX[g.cat] || '#94a3b8';
+          const main = g.items[0];
+          const variants = g.items;
+          const variantPreview = variants.length > 1 ? (
+            '<div class="mb-2"><div class="text-[10px] font-bold text-slate-500 mb-1">색상 옵션 ('+variants.length+')</div>' +
+            '<div class="flex flex-wrap gap-1">' + variants.slice(0, 8).map(v => {
+              const label = v.color || v.finish || '기본';
+              const dot = COLOR_HEX[label.split(',')[0]] || '#94a3b8';
+              const ring = dot==='#ffffff'?'border:1px solid #cbd5e1;':'';
+              return '<span title="'+label+'" class="w-3 h-3 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>';
+            }).join('') + (variants.length>8 ? '<span class="text-[10px] text-slate-500 ml-1">+'+(variants.length-8)+'</span>' : '') + '</div></div>'
+          ) : (main.finish ? '<div class="flex flex-wrap gap-1 mb-2">'+main.finish.split(',').slice(0,3).map(t=>'<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600">'+t.trim()+'</span>').join('')+'</div>' : '');
+
+          return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer">'+
+            '<div class="relative aspect-square overflow-hidden bg-slate-50">'+
+              '<img src="'+main.img+'" alt="'+g.name+'" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display=\'none\';this.parentElement.style.background=\'linear-gradient(135deg,#f8fafc,#e2e8f0)\';" />'+
+              '<div class="absolute top-2.5 left-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shadow" style="background:'+hex+';">'+g.cat+'</span></div>'+
+              (g.sub ? '<div class="absolute top-2.5 right-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/90 border border-slate-200 text-slate-700">'+g.sub+'</span></div>' : '')+
+              (variants.length>1 ? '<div class="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-white shadow">'+variants.length+'색상</div>' : '')+
+              '<div class="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"><span class="px-3 py-1.5 rounded-full bg-white text-slate-900 text-xs font-bold shadow-lg">상세보기 →</span></div>'+
             '</div>'+
-          '</div>'+
-        '</article>';
-      }).join('');
+            '<div class="p-3 flex-1 flex flex-col">'+
+              '<h3 class="text-[13px] font-black tracking-tight text-slate-900 leading-snug mb-2 line-clamp-2">'+g.name+'</h3>'+
+              variantPreview +
+              '<div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">'+
+                '<span class="text-slate-400 font-semibold">USUNG ACE</span>'+
+                '<span class="font-bold text-blue-600 flex items-center gap-1">상세 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>'+
+              '</div>'+
+            '</div>'+
+          '</article>';
+        }).join('') + '</div>';
+      }
 
+      return html;
+    }
+
+    function render() {
+      // 필터 영역(상단)을 사이드바 + 메인으로 재배치
+      filter.innerHTML = '';
+      filter.style.display = 'none';
+
+      // 그리드 컨테이너를 2열 레이아웃으로 변경
+      grid.className = 'grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6';
+      grid.innerHTML = renderSidebar() + '<div id="ace-main-content">' + renderMainContent() + '</div>';
+
+      // 트리 버튼 클릭 핸들러
+      grid.querySelectorAll('.ace-tree-btn').forEach(b => {
+        b.onclick = function() { activeNode = b.dataset.node; activeColor=''; render(); };
+      });
+      // 색상 버튼 핸들러
+      grid.querySelectorAll('.ace-color-btn').forEach(b => {
+        b.onclick = function() { activeColor = b.dataset.color; render(); };
+      });
+      // 제품 카드 클릭 핸들러
       grid.querySelectorAll('.ace-product-card').forEach(card => {
         card.onclick = function() {
           const key = card.dataset.groupKey;
@@ -422,10 +511,17 @@
       });
     }
 
-    function render() { renderFilters(); renderGrid(); }
-    window.filterProducts = function(c){ activeCat = (c && CAT_COLORS[c]) ? c : '전체'; activeSub=''; activeColor=''; render(); };
+    window.filterByNode = function(nodeId) { activeNode = nodeId || ''; activeColor=''; render(); };
+    window.filterProducts = function(catLabel) {
+      // legacy compat — catLabel은 "1. 갤럭시" 같은 라벨
+      const found = Object.entries(CAT_BY_ID).find(([id, label]) => label === catLabel);
+      activeNode = found ? found[0] : '';
+      activeColor = '';
+      render();
+    };
+
     render();
-    grid.dataset.patched = 'v5';
+    grid.dataset.patched = 'v6';
     return true;
   }
 
@@ -444,9 +540,7 @@
     document.querySelectorAll('h1, h2, h3, span, div, p').forEach(el => {
       if (el.children.length > 0) return;
       const t = el.textContent;
-      if (t && /11개 카테고리/.test(t)) {
-        el.textContent = t.replace('11개 카테고리', '7개 카테고리');
-      }
+      if (t && /11개 카테고리/.test(t)) el.textContent = t.replace('11개 카테고리', '7개 카테고리');
     });
   }
 
