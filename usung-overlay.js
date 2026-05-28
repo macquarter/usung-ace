@@ -1,14 +1,13 @@
 /* ============================================================
-   유성에이스 PPTX 디렉션 오버레이 v6
-   - 메가메뉴: PPTX 슬라이드 5 트리 구조 그대로 (1차 → 2차 → 3차)
-   - 제품 페이지: 좌측 사이드바 트리 + 우측 제품 그룹 그리드
-   - 홈 하단 다크 섹션 화이트화 (USUNG ACE IN ACTION, LIVE PREVIEW 등)
+   유성에이스 PPTX 디렉션 오버레이 v7
+   - 네비게이션 바: 항상 다크 텍스트 (영상 위에서도)
+   - 히어로 오버레이: 화이트로 + 텍스트 다크로 (가독성)
+   - 상단 네비 dropdown 도 트리 구조 일관 적용
    ============================================================ */
 (function() {
   'use strict';
-  console.log('[usung-overlay v6] loaded');
+  console.log('[usung-overlay v7] loaded');
 
-  // 트리 구조 — PPTX slide 5 그대로
   const TREE = [
     { id:'1.갤럭시', label:'1. 갤럭시', hex:'#3b82f6', children:[
       { id:'갤럭시A', label:'갤럭시A' },
@@ -107,63 +106,69 @@
     return n.replace(/\s+/g,' ').trim();
   }
 
-  // 카테고리 + 서브 필터링
   function filterByNode(items, nodeId) {
     if (!nodeId) return items;
-    // 대분류
-    if (CAT_BY_ID[nodeId]) {
-      return items.filter(p => p.cat === CAT_BY_ID[nodeId]);
-    }
-    // sub (중분류 또는 소분류)
+    if (CAT_BY_ID[nodeId]) return items.filter(p => p.cat === CAT_BY_ID[nodeId]);
     return items.filter(p => p.sub === nodeId || (p.sub && p.sub.startsWith(nodeId + '/')));
   }
 
   function killMegaHoverCat() {
     if (typeof window.megaHoverCat === 'function' && !window._megaHoverKilled) {
       window._origMegaHoverCat = window.megaHoverCat;
-      window.megaHoverCat = function() { /* no-op */ };
+      window.megaHoverCat = function() {};
       window._megaHoverKilled = true;
     }
   }
 
-  // ==================== 메가메뉴 트리 구조 ====================
+  // ==================== 메가메뉴 트리 ====================
   let _megaObserver = null;
   function patchMegaMenu() {
     const list = document.getElementById('mega-cat-list');
     if (!list) return false;
 
-    // 좌측 1차 카테고리 (간단 목록)
-    if (list.dataset.patched !== 'v6') {
+    // 좌측: 카테고리만 (1차) — 간단명료
+    if (list.dataset.patched !== 'v7') {
       list.innerHTML = TREE.map(t => {
         return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+t.id+'\'),120);" class="block text-left group w-full p-2 rounded-lg hover:bg-slate-50 transition">'+
           '<div class="text-[13px] font-black tracking-tight" style="color:'+t.hex+';">'+t.label+'</div>'+
         '</button>';
       }).join('');
-      list.dataset.patched = 'v6';
+      list.dataset.patched = 'v7';
     }
 
-    // 오른쪽 트리 구조 — PPTX slide 5 그대로
+    // 우측: PPTX slide 5 트리 구조 + 카운트
     const megaList = document.getElementById('mega-menu-list');
     if (megaList) {
-      if (megaList.dataset.patched !== 'v6') {
+      if (megaList.dataset.patched !== 'v7') {
+        const ACE = getAceData();
+        const items = (ACE && ACE.product_lineup) ? ACE.product_lineup : [];
+        if (ACE && !ACE._remapped_v7) {
+          ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
+          ACE._remapped_v7 = true;
+        }
+
         function renderNode(node, depth) {
-          const indent = depth * 16;
-          let html = '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+node.id+'\'),120);" class="block text-left w-full text-[12.5px] font-bold py-1 px-2 rounded hover:bg-slate-50 transition" style="padding-left:'+(indent+8)+'px;'+(depth===0?'color:'+node.hex+';font-weight:900;font-size:13px;':'color:'+(depth===1?'#1e293b':'#475569')+';')+'">';
+          const count = items.length ? filterByNode(items, node.id).length : 0;
+          const indent = depth * 14;
+          let html = '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+node.id+'\'),120);" class="block text-left w-full font-bold py-1 px-2 rounded hover:bg-slate-50 transition" style="padding-left:'+(indent+8)+'px;'+
+            (depth===0?'color:'+node.hex+';font-weight:900;font-size:13px;':'color:'+(depth===1?'#1e293b':'#475569')+';font-size:12px;font-weight:'+(depth===1?'700':'600')+';')+'">';
           if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(depth===1?'#0f172a':'#94a3b8')+';"></span>';
-          html += node.label + '</button>';
+          html += node.label;
+          if (count > 0) html += ' <span class="text-[10px] opacity-60 ml-1">('+count+')</span>';
+          html += '</button>';
           if (node.children && node.children.length) {
             html += node.children.map(c => renderNode(c, depth + 1)).join('');
           }
           return html;
         }
-        megaList.innerHTML = '<div class="space-y-0.5">' + TREE.map(t => renderNode(t, 0)).join('<div class="h-2"></div>') + '</div>';
-        megaList.dataset.patched = 'v6';
+        megaList.innerHTML = '<div class="space-y-0.5">' + TREE.map(t => renderNode(t, 0)).join('<div class="h-1.5"></div>') + '</div>';
+        megaList.dataset.patched = 'v7';
         const t = document.getElementById('mega-list-title');
         if (t) t.textContent = '제품 분류 트리';
 
         if (!_megaObserver) {
           _megaObserver = new MutationObserver(function() {
-            if (megaList.dataset.patched !== 'v6') {
+            if (megaList.dataset.patched !== 'v7') {
               megaList.dataset.patched = '';
               patchMegaMenu();
             }
@@ -207,28 +212,30 @@
     }
   }
 
+  // ==================== 네비게이션 바: 항상 화이트 (영상 위에서도) ====================
   function patchNavbar() {
     const nav = document.getElementById('navbar');
     if (!nav) return;
-    if (nav.dataset.patched === 'v6') return;
+    if (nav.dataset.patched === 'v7') return;
+
     function applyNavColors() {
-      const isHome = document.getElementById('page-home') && document.getElementById('page-home').classList.contains('active');
-      const scrolled = window.scrollY > 60;
-      const dark = isHome && !scrolled;
-      if (dark) { nav.style.background = 'transparent'; nav.style.borderBottom = ''; }
-      else {
-        nav.style.background = 'rgba(255,255,255,0.96)';
-        nav.style.backdropFilter = 'blur(20px)';
-        nav.style.borderBottom = '1px solid rgba(15,23,42,0.06)';
-      }
-      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => { el.style.color = dark ? '#ffffff' : '#0f172a'; });
+      // 항상 화이트 배경 + 다크 텍스트 (가독성 최우선)
+      nav.style.background = 'rgba(255,255,255,0.96)';
+      nav.style.backdropFilter = 'blur(20px)';
+      nav.style.webkitBackdropFilter = 'blur(20px)';
+      nav.style.borderBottom = '1px solid rgba(15,23,42,0.06)';
+      nav.style.boxShadow = '0 1px 8px rgba(15,23,42,0.04)';
+
+      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => {
+        el.style.color = '#0f172a';
+      });
       nav.querySelectorAll('button').forEach(btn => {
         if (btn.closest('#mobile-menu')) return;
         if (btn.classList.contains('bg-black')) {
-          btn.style.background = dark ? '#ffffff' : '#0f172a';
-          btn.style.color = dark ? '#0f172a' : '#ffffff';
+          btn.style.background = '#0f172a';
+          btn.style.color = '#ffffff';
         } else if (!btn.classList.contains('nav-link')) {
-          btn.style.color = dark ? '#ffffff' : '#0f172a';
+          btn.style.color = '#0f172a';
         }
       });
       const navLogo = document.getElementById('nav-logo');
@@ -237,7 +244,41 @@
     applyNavColors();
     window.addEventListener('scroll', applyNavColors, { passive: true });
     new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
-    nav.dataset.patched = 'v6';
+    nav.dataset.patched = 'v7';
+  }
+
+  // ==================== 히어로 영상 오버레이 화이트로 변경 ====================
+  function patchHeroOverlay() {
+    const home = document.getElementById('page-home');
+    if (!home || home.dataset.heroPatched === 'v7') return;
+    const sticky = home.querySelector('.sticky');
+    if (!sticky) return;
+
+    // 기존 다크 오버레이를 화이트 그라데이션으로 교체
+    sticky.querySelectorAll('.bg-black\\/80, .bg-black\\/70, .bg-black\\/60, [class*="bg-black/"]').forEach(el => {
+      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.70) 50%, rgba(255,255,255,0.92) 100%)';
+      el.style.backdropFilter = 'blur(1px)';
+    });
+
+    // 히어로 텍스트 강제 다크 톤
+    sticky.querySelectorAll('h1, h2, h3, p, span, div').forEach(el => {
+      if (el.tagName === 'VIDEO' || el.closest('video')) return;
+      const cls = el.className || '';
+      if (cls.includes('text-blue-400')) { el.style.color = '#2563eb'; }
+      else if (cls.includes('text-white')) { el.style.color = '#0f172a'; }
+      else if (cls.includes('text-white/')) { el.style.color = '#334155'; }
+    });
+    // gradient text (No.1)
+    sticky.querySelectorAll('.text-transparent.bg-clip-text').forEach(el => {
+      el.style.backgroundImage = 'linear-gradient(90deg, #2563eb, #0ea5e9, #2563eb)';
+    });
+    // SCROLL indicator
+    sticky.querySelectorAll('svg').forEach(s => {
+      s.style.stroke = '#0f172a';
+      s.style.color = '#0f172a';
+    });
+
+    home.dataset.heroPatched = 'v7';
   }
 
   // ==================== 제품 상세 모달 ====================
@@ -282,10 +323,8 @@
 
       body.innerHTML =
         '<div class="flex items-center gap-2 text-[13px] text-slate-500 mb-6">' +
-          '<span>Home</span>' +
-          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
-          '<span>제품소개</span>' +
-          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
+          '<span>Home</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
+          '<span>제품소개</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
           '<span style="color:'+hex+'">'+group.cat+'</span>' +
           (group.sub ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg><span class="font-bold text-slate-900">'+group.sub+'</span>' : '') +
         '</div>' +
@@ -343,17 +382,14 @@
     const grid = document.getElementById('products-grid');
     const filter = document.getElementById('product-filter');
     if (!grid || !filter) return false;
-    if (grid.dataset.patched === 'v6') return true;
+    if (grid.dataset.patched === 'v7') return true;
 
-    if (!ACE._remapped_v6) {
+    if (!ACE._remapped_v7) {
       ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-      ACE._remapped_v6 = true;
+      ACE._remapped_v7 = true;
     }
+    let activeNode = '', activeColor = '';
 
-    let activeNode = '';   // '' = 전체, or node id
-    let activeColor = '';
-
-    // 사이드바 트리 영역
     function renderSidebar() {
       function nodeBtn(node, depth) {
         const items = filterByNode(ACE.product_lineup, node.id);
@@ -370,9 +406,8 @@
         }
         return html;
       }
-
       const allCount = ACE.product_lineup.length;
-      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto">' +
+      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto shadow-sm">' +
         '<div class="text-[10px] font-bold tracking-[0.24em] text-slate-400 mb-3">제품 분류 트리</div>' +
         '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0f172a;color:#fff;font-weight:900;':'color:#0f172a;font-weight:900;')+'">' +
           '🏠 전체 보기 <span class="opacity-60 text-[10px]">('+allCount+')</span>' +
@@ -403,7 +438,6 @@
       let items = filterByNode(ACE.product_lineup, activeNode);
       if (activeColor) items = items.filter(p => p.color === activeColor);
 
-      // 제품 그룹핑
       const groups = {};
       items.forEach(p => {
         const bn = baseName(p.name) || (p.cat + ' ' + (p.sub||''));
@@ -414,7 +448,6 @@
       Object.assign(groupsCache, groups);
       const gList = Object.values(groups);
 
-      // 활성 노드 라벨 찾기
       let breadcrumbLabel = '전체 제품';
       let activeHex = '#0f172a';
       function findNode(tree, id, parents) {
@@ -480,28 +513,20 @@
           '</article>';
         }).join('') + '</div>';
       }
-
       return html;
     }
 
     function render() {
-      // 필터 영역(상단)을 사이드바 + 메인으로 재배치
       filter.innerHTML = '';
       filter.style.display = 'none';
-
-      // 그리드 컨테이너를 2열 레이아웃으로 변경
       grid.className = 'grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6';
       grid.innerHTML = renderSidebar() + '<div id="ace-main-content">' + renderMainContent() + '</div>';
-
-      // 트리 버튼 클릭 핸들러
       grid.querySelectorAll('.ace-tree-btn').forEach(b => {
         b.onclick = function() { activeNode = b.dataset.node; activeColor=''; render(); };
       });
-      // 색상 버튼 핸들러
       grid.querySelectorAll('.ace-color-btn').forEach(b => {
         b.onclick = function() { activeColor = b.dataset.color; render(); };
       });
-      // 제품 카드 클릭 핸들러
       grid.querySelectorAll('.ace-product-card').forEach(card => {
         card.onclick = function() {
           const key = card.dataset.groupKey;
@@ -513,7 +538,6 @@
 
     window.filterByNode = function(nodeId) { activeNode = nodeId || ''; activeColor=''; render(); };
     window.filterProducts = function(catLabel) {
-      // legacy compat — catLabel은 "1. 갤럭시" 같은 라벨
       const found = Object.entries(CAT_BY_ID).find(([id, label]) => label === catLabel);
       activeNode = found ? found[0] : '';
       activeColor = '';
@@ -521,7 +545,7 @@
     };
 
     render();
-    grid.dataset.patched = 'v6';
+    grid.dataset.patched = 'v7';
     return true;
   }
 
@@ -548,6 +572,7 @@
     killMegaHoverCat();
     patchMegaMenu();
     patchNavbar();
+    patchHeroOverlay();
     patchFeaturesSection();
     patchYouTubeSlots();
     patchExtraText();
