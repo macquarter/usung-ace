@@ -1,35 +1,94 @@
 /* ============================================================
-   유성에이스 화이트 테마 오버라이드 v2
-   - 홈 히어로(영상)와 푸터만 다크 유지
-   - 그 외 모든 페이지/섹션/카드/시각 요소를 라이트 톤으로
+   유성에이스 화이트 테마 오버라이드 v3 — 전면 보강
+   - 네비게이션 바: 항상 화이트 + 다크 텍스트 (가독성 최우선)
+   - 히어로 영상: 화이트 오버레이 + 다크 텍스트
+   - 모든 페이지/섹션 다크 잔재 제거
    ============================================================ */
 
 :root {
-    --bg: #ffffff;
-    --bg-soft: #fafafa;
-    --bg-mute: #f1f5f9;
-    --fg: #0f172a;
-    --fg-soft: #334155;
-    --fg-mute: #64748b;
+    --bg: #ffffff; --bg-soft: #fafafa; --bg-mute: #f1f5f9;
+    --fg: #0f172a; --fg-soft: #334155; --fg-mute: #64748b;
     --border: rgba(15, 23, 42, 0.08);
-    --accent: #2563eb;
-    --accent-2: #0ea5e9;
+    --accent: #2563eb; --accent-2: #0ea5e9;
 }
 html, body { background:#fff !important; color:#0f172a !important; }
 main, #main-content { background:#fff !important; }
 
 /* ============================================================
-   1) 홈 페이지 - 영상 sticky 영역만 다크, 그 외 섹션 전부 화이트
+   1) 네비게이션 바 — 항상 화이트 배경 + 다크 텍스트 (강제!)
    ============================================================ */
-/* 홈의 첫번째 div (스크롤 애니메이션 영역)은 다크 유지 */
-#page-home > div.relative { background:#000; }
+#navbar {
+    background: rgba(255,255,255,0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(15,23,42,0.06) !important;
+    box-shadow: 0 1px 8px rgba(15,23,42,0.04);
+}
+#navbar.bg-transparent { background: rgba(255,255,255,0.96) !important; }
+#navbar .nav-link,
+#navbar .nav-link span,
+#navbar .nav-link svg,
+#navbar button:not(.bg-black):not(.bg-white):not([class*="bg-blue"]):not([class*="bg-red"]) {
+    color: #0f172a !important;
+}
+#navbar .nav-link:hover { color: #2563eb !important; background-color: rgba(37,99,235,0.06) !important; }
+#navbar button.bg-black { background:#0f172a !important; color:#fff !important; }
+#navbar button.bg-black:hover { background:#1e293b !important; }
+/* Contact Us 같은 어두운 버튼은 그대로 */
 
-/* 홈의 나머지 모든 section/div는 화이트로 — Core Technology, Where We Work, Gallery, Video Showcase, Statement 등 */
+/* 모바일 메뉴는 다크 톤 유지 (오버레이) */
+#mobile-menu { background: rgba(15,23,42,0.96) !important; }
+#mobile-menu * { color: #fff !important; }
+
+/* 네비 드롭다운/메가메뉴 - 라이트 카드 */
+#navbar .dropdown {
+    background: #ffffff !important;
+    border: 1px solid rgba(15,23,42,0.08) !important;
+    box-shadow: 0 20px 60px -10px rgba(15,23,42,0.25) !important;
+}
+
+/* ============================================================
+   2) 히어로 영상 영역 — 화이트 오버레이 + 다크 텍스트
+   ============================================================ */
+#page-home > div:first-child { background:#000; }
+#page-home > div:first-child .sticky { background: transparent !important; }
+
+/* 검은 오버레이를 화이트 오버레이로 (텍스트 영역 가독성) */
+#page-home > div:first-child .sticky > .bg-black\/80,
+#page-home > div:first-child .sticky > [class*="bg-black/"] {
+    background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.75) 60%, rgba(255,255,255,0.92) 100%) !important;
+    backdrop-filter: blur(2px);
+}
+
+/* 히어로 영상 위 텍스트 — 다크로 (가독성) */
+#page-home > div:first-child .sticky h1,
+#page-home > div:first-child .sticky h2,
+#page-home > div:first-child .sticky p,
+#page-home > div:first-child .sticky .scroll-element h1,
+#page-home > div:first-child .sticky .scroll-element h2,
+#page-home > div:first-child .sticky .scroll-element p,
+#page-home > div:first-child .sticky .scroll-element div { color: #0f172a !important; }
+#page-home > div:first-child .sticky .text-blue-400 { color: #2563eb !important; }
+#page-home > div:first-child .sticky [class*="text-white/"] { color: #334155 !important; }
+#page-home > div:first-child .sticky [class*="text-white"] { color: #0f172a !important; }
+
+/* 히어로 안의 SCROLL 인디케이터 */
+#page-home > div:first-child .sticky svg { color: #0f172a !important; stroke: #0f172a !important; }
+
+/* gradient text도 진한 톤 */
+#page-home > div:first-child .sticky .text-transparent.bg-clip-text {
+    background-image: linear-gradient(90deg, #2563eb, #0ea5e9, #2563eb) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
+
+/* ============================================================
+   3) 홈 페이지 하단 다크 섹션 모두 화이트화
+   ============================================================ */
 #page-home section,
 #page-home > section,
 #page-home > div > section { background:#ffffff !important; }
 
-/* 홈의 다크 그라데이션/배경 다양한 변형 전부 잡기 */
 #page-home [class*="bg-[#0"],
 #page-home [class*="bg-[#1"],
 #page-home .bg-black,
@@ -38,13 +97,13 @@ main, #main-content { background:#fff !important; }
 #page-home .bg-gray-900,
 #page-home .bg-slate-900 { background-color:#ffffff !important; }
 
-/* 홈의 sticky 영상 컨테이너 안은 다크 유지 (예외 처리) */
-#page-home > div.relative.h-\[400vh\] > div.sticky,
-#page-home > div.relative.h-\[420vh\] > div.sticky,
+/* 단, 히어로 영상 영역의 다크 배경만 제외 */
+#page-home > div:first-child,
+#page-home > div:first-child * { background-color: transparent; }
+#page-home > div:first-child { background:#000 !important; }
 #page-home > div:first-child > div.sticky { background:transparent !important; }
-#page-home > div:first-child > div.sticky video { background:transparent !important; }
+#page-home > div:first-child > div.sticky > video { background:transparent !important; }
 
-/* 다크 그라데이션 → 라이트 (홈 페이지) */
 #page-home [class*="from-black"],
 #page-home [class*="to-black"],
 #page-home [class*="via-black"],
@@ -56,7 +115,6 @@ main, #main-content { background:#fff !important; }
     --tw-gradient-to: #ffffff !important;
 }
 
-/* 홈 페이지 텍스트 — 다크 변환 (단, sticky 영상 영역 안의 텍스트는 제외) */
 #page-home section .text-white,
 #page-home section h1.text-white,
 #page-home section h2.text-white,
@@ -70,11 +128,8 @@ main, #main-content { background:#fff !important; }
 #page-home section [class*="text-white/4"] { color:#94a3b8 !important; }
 #page-home section [class*="text-white/3"],
 #page-home section [class*="text-white/2"] { color:#cbd5e1 !important; }
-
-/* 홈 페이지 보더 라이트화 */
 #page-home section [class*="border-white/"] { border-color: rgba(15,23,42,0.08) !important; }
 
-/* 홈 페이지 카드 컨테이너 (Gallery Preview, USUNG ACE IN ACTION 등) */
 #page-home section .bg-white\/5,
 #page-home section .bg-white\/10,
 #page-home section .bg-white\/\[0\.02\],
@@ -82,16 +137,15 @@ main, #main-content { background:#fff !important; }
 #page-home section .bg-white\/\[0\.04\],
 #page-home section .bg-white\/\[0\.05\] { background-color:#f8fafc !important; }
 
-/* 갤러리 카드 / 시공 케이스 카드 - 다크 → 라이트 */
 #page-home button.bg-\[\#0a0a0a\],
 #page-home button[class*="bg-[#0"],
-#page-home a.bg-\[\#0a0a0a\] { background-color:#f8fafc !important; border-color: rgba(15,23,42,0.08) !important; }
+#page-home a.bg-\[\#0a0a0a\],
+#page-home a[class*="bg-[#0"] { background-color:#f8fafc !important; border-color: rgba(15,23,42,0.08) !important; }
 
-/* USUNG ACE IN ACTION 섹션의 LIVE PREVIEW 카드는 진한 네이비로 (브랜드 컨트라스트) */
-#page-home [id*="preview"][class*="bg-"] { background: #0f172a !important; }
+#page-home [id*="preview"] { background: #f1f5f9 !important; }
 
 /* ============================================================
-   2) 그 외 페이지 - 전체 다크 → 라이트
+   4) 그 외 모든 페이지 - 다크 잔재 완전 제거
    ============================================================ */
 .page:not(#page-home) { background:#fff !important; color:#0f172a; }
 
@@ -105,20 +159,23 @@ main, #main-content { background:#fff !important; }
 .page:not(#page-home) [class*="bg-[#06"],
 .page:not(#page-home) [class*="bg-[#11"],
 .page:not(#page-home) [class*="bg-[#17"],
+.page:not(#page-home) [class*="bg-[#000"],
 .page:not(#page-home) .bg-zinc-900,
+.page:not(#page-home) .bg-zinc-800,
 .page:not(#page-home) .bg-neutral-900,
+.page:not(#page-home) .bg-neutral-800,
 .page:not(#page-home) .bg-gray-900,
-.page:not(#page-home) .bg-slate-900,
 .page:not(#page-home) .bg-gray-800,
-.page:not(#page-home) .bg-zinc-800 {
+.page:not(#page-home) .bg-slate-900,
+.page:not(#page-home) .bg-slate-800 {
     background-color:#ffffff !important;
 }
 
-.page:not(#page-home) .bg-gradient-to-b.from-\[\#0d0d11\],
-.page:not(#page-home) .bg-gradient-to-b.from-\[\#07070a\],
-.page:not(#page-home) .bg-gradient-to-b.from-\[\#060609\],
-.page:not(#page-home) .bg-gradient-to-br.from-\[\#0e1117\],
-.page:not(#page-home) .bg-gradient-to-br.from-\[\#0a0c12\] {
+.page:not(#page-home) [class*="bg-gradient-to"][class*="from-[#0"],
+.page:not(#page-home) [class*="bg-gradient-to"][class*="from-black"],
+.page:not(#page-home) [class*="bg-gradient-to"][class*="to-black"],
+.page:not(#page-home) [class*="bg-gradient-to"][class*="from-zinc-9"],
+.page:not(#page-home) [class*="bg-gradient-to"][class*="from-slate-9"] {
     background-image: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%) !important;
     border-color: rgba(15,23,42,0.08) !important;
 }
@@ -127,7 +184,9 @@ main, #main-content { background:#fff !important; }
 .page:not(#page-home) h1.text-white,
 .page:not(#page-home) h2.text-white,
 .page:not(#page-home) h3.text-white,
-.page:not(#page-home) p.text-white { color:#0f172a !important; }
+.page:not(#page-home) p.text-white,
+.page:not(#page-home) span.text-white,
+.page:not(#page-home) div.text-white { color:#0f172a !important; }
 .page:not(#page-home) [class*="text-white/9"] { color:#1e293b !important; }
 .page:not(#page-home) [class*="text-white/8"] { color:#334155 !important; }
 .page:not(#page-home) [class*="text-white/7"] { color:#475569 !important; }
@@ -191,18 +250,26 @@ footer.bg-black, footer.bg-\[\#000\], body > footer { background:#0f172a !import
 #page-home section .border.rounded-2xl,
 #page-home section .border.rounded-3xl { box-shadow: 0 2px 12px rgba(15,23,42,0.04); }
 
-/* 그라데이션 텍스트 */
 .page:not(#page-home) [class*="bg-gradient-to-r"][class*="from-blue-400"],
 .page:not(#page-home) [class*="bg-gradient-to-r"][class*="from-blue-500"] {
     --tw-gradient-from: #2563eb !important;
     --tw-gradient-to: #0ea5e9 !important;
 }
 
-/* ============================================================
-   3) 모달 / 백드롭은 다크 유지
-   ============================================================ */
+/* 모달 */
 #ace-product-modal,
 #gallery-modal,
 #feature-modal { background: transparent !important; }
 #ace-product-modal .bg-white,
 #gallery-modal .gm-content { background:#ffffff !important; color:#0f172a !important; }
+
+/* ============================================================
+   5) 시공갤러리 / 공지사항 pinned 카드 / 인증현황 등 그대로 유지
+   (red/amber gradient 의도된 강조 색상)
+   ============================================================ */
+.page:not(#page-home) [class*="from-red-600"][class*="via-rose"],
+.page:not(#page-home) [class*="from-amber-400"][class*="via-orange"] {
+    /* keep gradient as designed for emphasis */
+}
+.page:not(#page-home) [class*="from-red-600"][class*="via-rose"] *,
+.page:not(#page-home) [class*="from-amber-400"][class*="via-orange"] * { color:#fff !important; }
