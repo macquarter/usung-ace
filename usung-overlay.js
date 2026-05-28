@@ -1,21 +1,21 @@
 /* ============================================================
-   유성에이스 PPTX 디렉션 오버레이 v8 — Clean & Premium
-   - 메가메뉴: 7개 카테고리만 깔끔 (트리 제거)
-   - 메가메뉴 hover 롤백 완전 차단 (DOM replaceWith + Object.defineProperty)
-   - 히어로 영상 위 텍스트 임팩트 강화
+   유성에이스 PPTX 디렉션 오버레이 v9 — Bulletproof + Bold Impact
+   - 메가메뉴 절대 잠금 (Object.defineProperty + 100ms 자가복원)
+   - 히어로 텍스트 임팩트 극대화
+   - 모든 섹션 헤드라인 굵게 + 그라데이션
    ============================================================ */
 (function() {
   'use strict';
-  console.log('[usung-overlay v8] loaded');
+  console.log('[usung-overlay v9] loaded');
 
   const CATEGORIES = [
-    { id:'1.갤럭시',      label:'1. 갤럭시',         hex:'#1e40af', desc:'갤럭시 A · B · C · D 타입' },
-    { id:'2.LED',         label:'2. LED 조명',       hex:'#1e40af', desc:'갓등 · 우주선 · 아크릴' },
-    { id:'3.스텐파이프',   label:'3. 스텐파이프',     hex:'#1e40af', desc:'도금 · 도장 · 양옆/내부/텐션' },
-    { id:'4.스파이얼',    label:'4. 스파이얼 도장',  hex:'#1e40af', desc:'양옆/내부/텐션 시리즈' },
-    { id:'5.파이프 기타', label:'5. 파이프 기타옵션',hex:'#1e40af', desc:'고정텐션 · 사각측향 · 모터' },
-    { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       hex:'#1e40af', desc:'자바라 · 신형 · 장축' },
-    { id:'7.하향식 후드', label:'7. 하향식 후드',    hex:'#1e40af', desc:'코브라 · 망대 · 주물 · 나팔' }
+    { id:'1.갤럭시',      label:'1. 갤럭시',         desc:'갤럭시 A · B · C · D 타입' },
+    { id:'2.LED',         label:'2. LED 조명',       desc:'갓등 · 우주선 · 아크릴' },
+    { id:'3.스텐파이프',   label:'3. 스텐파이프',     desc:'도금 · 도장 · 양옆/내부/텐션' },
+    { id:'4.스파이얼',    label:'4. 스파이얼 도장',  desc:'양옆/내부/텐션 시리즈' },
+    { id:'5.파이프 기타', label:'5. 파이프 기타옵션',desc:'고정텐션 · 사각측향 · 모터' },
+    { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       desc:'자바라 · 신형 · 장축' },
+    { id:'7.하향식 후드', label:'7. 하향식 후드',    desc:'코브라 · 망대 · 주물 · 나팔' }
   ];
 
   const CAT_BY_ID = {
@@ -29,7 +29,6 @@
     '6. 후레쉬볼':'#f97316','7. 하향식 후드':'#ef4444'
   };
 
-  // 사이드바 트리용 (제품 페이지에서 사용)
   const TREE = [
     { id:'1.갤럭시', label:'1. 갤럭시', hex:'#3b82f6', children:[
       { id:'갤럭시A', label:'갤럭시A' }, { id:'갤럭시B', label:'갤럭시B' },
@@ -124,88 +123,70 @@
   function killMegaHoverCat() {
     try {
       Object.defineProperty(window, 'megaHoverCat', {
-        configurable: true,
-        enumerable: true,
-        get: function() { return function() {}; },
-        set: function() {}
+        configurable:false, enumerable:true,
+        get:function() { return function() {}; },
+        set:function() {}
       });
     } catch(e) {
-      window.megaHoverCat = function() {};
+      try { window.megaHoverCat = function() {}; } catch(e2) {}
     }
   }
+  killMegaHoverCat();
 
-  // ==================== 메가메뉴 — 7개 카테고리만 깔끔 ====================
-  let _megaInstalled = false;
-  function installCleanMegaMenu() {
-    const list = document.getElementById('mega-cat-list');
-    const megaList = document.getElementById('mega-menu-list');
-    if (!list || !megaList) return false;
-    if (_megaInstalled && list.dataset.aceClean === '1' && megaList.dataset.aceClean === '1') return true;
-
-    // mega-cat-list 좌측 패널: 카테고리 7개 (깔끔, 컬러 강조 없이 다크 톤만)
-    list.innerHTML = CATEGORIES.map(c => {
-      return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">' +
+  // ==================== 메가메뉴 - 7개 카테고리 (잠금) ====================
+  function buildCatListHTML() {
+    return CATEGORIES.map(c => {
+      return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200" data-ace-locked="1">' +
         '<div class="text-[14px] font-black tracking-tight text-slate-900">'+c.label+'</div>' +
         '<div class="text-[11px] text-slate-500 mt-1">'+c.desc+'</div>' +
       '</button>';
     }).join('');
-    list.dataset.aceClean = '1';
+  }
 
-    // mega-menu-list 우측 패널: 깔끔하게 카테고리 카드 그리드만
-    megaList.innerHTML =
-      '<div class="grid grid-cols-2 gap-3">' +
+  function buildMegaListHTML() {
+    return '<div class="grid grid-cols-2 gap-3" data-ace-locked="1">' +
       CATEGORIES.map(c => {
-        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="text-left p-4 rounded-2xl bg-white border border-slate-200 hover:border-slate-900 hover:shadow-lg transition group">' +
+        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="text-left p-4 rounded-2xl bg-white border border-slate-200 hover:border-slate-900 hover:shadow-lg transition group" data-ace-locked="1">' +
           '<div class="text-[13px] font-black tracking-tight text-slate-900 group-hover:text-blue-700 transition">'+c.label+'</div>' +
           '<div class="text-[11px] text-slate-500 mt-1 leading-snug">'+c.desc+'</div>' +
         '</button>';
       }).join('') +
       '</div>';
-    megaList.dataset.aceClean = '1';
+  }
 
-    const title = document.getElementById('mega-list-title');
-    if (title) title.textContent = '7 CATEGORIES';
+  let _megaInstalled = false;
+  function installCleanMegaMenu() {
+    const list = document.getElementById('mega-cat-list');
+    const megaList = document.getElementById('mega-menu-list');
+    if (!list || !megaList) return false;
 
-    // mega-menu-list 잠금 — innerHTML setter override
-    try {
-      const desc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-      ['mega-menu-list', 'mega-cat-list'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el || el._aceLocked) return;
-        let lockedHtml = el.innerHTML;
-        Object.defineProperty(el, 'innerHTML', {
-          configurable: true,
-          get: function() { return lockedHtml; },
-          set: function(v) {
-            // 외부에서 변경 시도하면 잠금 무시 (단, 우리가 lockedHtml 직접 갱신 가능)
-            // ACE 마커가 포함된 v만 허용
-            if (typeof v === 'string' && (v.includes('aceClean') || v.includes('filterByNode'))) {
-              lockedHtml = v;
-              desc.set.call(el, v);
-            }
-          }
-        });
-        el._aceLocked = true;
-      });
-    } catch(e) {
-      console.warn('[overlay] innerHTML lock failed, using observer fallback', e);
+    // ★ 매번 강제 교체 (외부에서 변경된 경우 즉시 복원)
+    const wantedListHTML = buildCatListHTML();
+    const wantedMegaHTML = buildMegaListHTML();
+
+    if (!list.innerHTML.includes('data-ace-locked')) {
+      list.innerHTML = wantedListHTML;
+    }
+    if (!megaList.innerHTML.includes('data-ace-locked')) {
+      megaList.innerHTML = wantedMegaHTML;
     }
 
-    // MutationObserver 백업
-    const obs = new MutationObserver(function(muts) {
-      muts.forEach(m => {
-        if (m.target === megaList || m.target === list) {
-          if (m.target.dataset.aceClean !== '1') {
-            _megaInstalled = false;
-            installCleanMegaMenu();
-          }
-        }
-      });
-    });
-    obs.observe(megaList, { childList: true, characterData: true });
-    obs.observe(list, { childList: true, characterData: true });
+    const title = document.getElementById('mega-list-title');
+    if (title && title.textContent !== '7 CATEGORIES') title.textContent = '7 CATEGORIES';
 
-    _megaInstalled = true;
+    // 100ms마다 강제 복원 체크 (가장 확실한 방법)
+    if (!_megaInstalled) {
+      setInterval(() => {
+        const l = document.getElementById('mega-cat-list');
+        const m = document.getElementById('mega-menu-list');
+        if (l && !l.innerHTML.includes('data-ace-locked')) l.innerHTML = buildCatListHTML();
+        if (m && !m.innerHTML.includes('data-ace-locked')) m.innerHTML = buildMegaListHTML();
+        const t = document.getElementById('mega-list-title');
+        if (t && t.textContent !== '7 CATEGORIES') t.textContent = '7 CATEGORIES';
+      }, 200);
+      _megaInstalled = true;
+    }
+
     return true;
   }
 
@@ -244,50 +225,58 @@
   function patchNavbar() {
     const nav = document.getElementById('navbar');
     if (!nav) return;
-    if (nav.dataset.patched === 'v8') return;
     function applyNavColors() {
-      nav.style.background = 'rgba(255,255,255,0.92)';
+      nav.style.background = 'rgba(255,255,255,0.95)';
       nav.style.backdropFilter = 'blur(24px) saturate(180%)';
       nav.style.webkitBackdropFilter = 'blur(24px) saturate(180%)';
-      nav.style.borderBottom = '1px solid rgba(10,14,39,0.08)';
-      nav.style.boxShadow = '0 2px 8px rgba(10,14,39,0.04)';
-      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => { el.style.color = '#0a0e27'; });
+      nav.style.borderBottom = '1px solid rgba(2,6,23,0.08)';
+      nav.style.boxShadow = '0 2px 12px rgba(2,6,23,0.06)';
+      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => {
+        el.style.color = '#020617';
+        el.style.fontWeight = '800';
+      });
       nav.querySelectorAll('button').forEach(btn => {
         if (btn.closest('#mobile-menu')) return;
         if (btn.classList.contains('bg-black')) {
-          btn.style.background = 'linear-gradient(135deg, #0a0e27 0%, #1e293b 100%)';
+          btn.style.background = 'linear-gradient(135deg, #020617 0%, #1e293b 100%)';
           btn.style.color = '#ffffff';
         } else if (!btn.classList.contains('nav-link')) {
-          btn.style.color = '#0a0e27';
+          btn.style.color = '#020617';
         }
       });
       const navLogo = document.getElementById('nav-logo');
       if (navLogo) navLogo.style.opacity = '1';
     }
-    applyNavColors();
-    window.addEventListener('scroll', applyNavColors, { passive: true });
-    new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
-    nav.dataset.patched = 'v8';
+    if (!nav.dataset.patched) {
+      applyNavColors();
+      window.addEventListener('scroll', applyNavColors, { passive: true });
+      new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
+      nav.dataset.patched = 'v9';
+    } else {
+      applyNavColors();
+    }
   }
 
   function patchHeroOverlay() {
     const home = document.getElementById('page-home');
-    if (!home || home.dataset.heroPatched === 'v8') return;
+    if (!home) return;
     const sticky = home.querySelector('.sticky');
     if (!sticky) return;
 
     sticky.querySelectorAll('[class*="bg-black/"]').forEach(el => {
-      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.85) 100%)';
+      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.88) 100%)';
       el.style.backdropFilter = 'blur(1px)';
     });
     sticky.querySelectorAll('h1, h2').forEach(el => {
-      el.style.color = '#0a0e27';
-      el.style.textShadow = '0 4px 24px rgba(255,255,255,0.95), 0 2px 8px rgba(255,255,255,0.8)';
-      el.style.letterSpacing = '-0.04em';
+      el.style.color = '#020617';
+      el.style.textShadow = '0 4px 32px rgba(255,255,255,0.95), 0 2px 12px rgba(255,255,255,0.85)';
+      el.style.letterSpacing = '-0.05em';
+      el.style.fontWeight = '900';
     });
     sticky.querySelectorAll('p').forEach(el => {
       el.style.color = '#1e293b';
-      el.style.fontWeight = '600';
+      el.style.fontWeight = '700';
+      el.style.textShadow = '0 2px 12px rgba(255,255,255,0.7)';
     });
     sticky.querySelectorAll('div').forEach(el => {
       const cls = el.className || '';
@@ -295,16 +284,33 @@
         el.style.color = '#1e40af';
         el.style.textShadow = '0 2px 12px rgba(255,255,255,0.9)';
         el.style.letterSpacing = '0.32em';
-        el.style.fontWeight = '800';
+        el.style.fontWeight = '900';
       }
     });
     sticky.querySelectorAll('.text-transparent.bg-clip-text').forEach(el => {
-      el.style.backgroundImage = 'linear-gradient(90deg, #1e40af 0%, #0ea5e9 50%, #1e40af 100%)';
-      el.style.filter = 'drop-shadow(0 4px 20px rgba(30,64,175,0.35))';
+      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 35%, #0ea5e9 65%, #1e40af 100%)';
+      el.style.filter = 'drop-shadow(0 8px 32px rgba(30,64,175,0.40)) drop-shadow(0 2px 8px rgba(30,64,175,0.25))';
+      el.style.fontWeight = '900';
     });
-    sticky.querySelectorAll('svg').forEach(s => { s.style.stroke = '#0a0e27'; s.style.color = '#0a0e27'; });
+    sticky.querySelectorAll('svg').forEach(s => {
+      if (s.closest('button.bg-black')) return;
+      s.style.stroke = '#020617';
+      s.style.color = '#020617';
+    });
+  }
 
-    home.dataset.heroPatched = 'v8';
+  // 통계 카드 (CORE TECHNOLOGY 등의 큰 숫자) 강조
+  function patchStats() {
+    document.querySelectorAll('#page-home section [class*="text-5xl"][class*="font-black"], #page-home section [class*="text-6xl"][class*="font-black"], #page-home section [class*="text-7xl"][class*="font-black"]').forEach(el => {
+      if (el.dataset.aceStat) return;
+      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 50%, #0ea5e9 100%)';
+      el.style.webkitBackgroundClip = 'text';
+      el.style.backgroundClip = 'text';
+      el.style.color = 'transparent';
+      el.style.filter = 'drop-shadow(0 8px 24px rgba(30,64,175,0.25))';
+      el.style.letterSpacing = '-0.05em';
+      el.dataset.aceStat = '1';
+    });
   }
 
   // ==================== 제품 상세 모달 ====================
@@ -319,7 +325,7 @@
       '<div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">' +
         '<div class="relative bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">' +
           '<button onclick="window.closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0e27" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#020617" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
           '</button>' +
           '<div id="ace-product-modal-body" class="p-8 md:p-10"></div>' +
         '</div>' +
@@ -376,7 +382,7 @@
               '</div>' +
             '</div>' +
             '<div class="flex gap-2 mt-auto">' +
-              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full text-white text-sm font-bold transition text-center" style="background:linear-gradient(135deg,#1e40af 0%,#0ea5e9 100%);box-shadow:0 8px 24px rgba(30,64,175,0.25);">📞 상담 문의 (1588-9123)</a>' +
+              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full text-white text-sm font-bold transition text-center" style="background:linear-gradient(135deg,#1e40af 0%,#0ea5e9 100%);box-shadow:0 12px 32px rgba(30,64,175,0.25);">📞 상담 문의 (1588-9123)</a>' +
               '<button onclick="window.closeProductModal()" class="px-5 py-3 rounded-full border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 transition">닫기</button>' +
             '</div>' +
           '</div>' +
@@ -407,11 +413,11 @@
     const grid = document.getElementById('products-grid');
     const filter = document.getElementById('product-filter');
     if (!grid || !filter) return false;
-    if (grid.dataset.patched === 'v8') return true;
+    if (grid.dataset.patched === 'v9') return true;
 
-    if (!ACE._remapped_v8) {
+    if (!ACE._remapped_v9) {
       ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-      ACE._remapped_v8 = true;
+      ACE._remapped_v9 = true;
     }
     let activeNode = '', activeColor = '';
 
@@ -423,8 +429,8 @@
         const isActive = activeNode === node.id;
         const indent = depth * 12 + 8;
         let html = '<button data-node="'+node.id+'" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded transition text-[13px]" style="padding-left:'+indent+'px;'+
-          (isActive ? 'background:'+(node.hex||'#0a0e27')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#0a0e27'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
-        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#0a0e27':'#94a3b8'))+';"></span>';
+          (isActive ? 'background:'+(node.hex||'#020617')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#020617'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
+        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#020617':'#94a3b8'))+';"></span>';
         html += node.label + ' <span class="opacity-60 text-[10px]">('+count+')</span></button>';
         if (node.children && node.children.length) {
           html += '<div class="space-y-0.5">' + node.children.map(c => nodeBtn(c, depth + 1)).join('') + '</div>';
@@ -432,9 +438,9 @@
         return html;
       }
       const allCount = ACE.product_lineup.length;
-      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto" style="box-shadow:0 8px 24px rgba(10,14,39,0.06);">' +
+      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto" style="box-shadow:0 12px 32px rgba(2,6,23,0.06);">' +
         '<div class="text-[10px] font-bold tracking-[0.24em] text-slate-400 mb-3">제품 분류 트리</div>' +
-        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0a0e27;color:#fff;font-weight:900;':'color:#0a0e27;font-weight:900;')+'">' +
+        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#020617;color:#fff;font-weight:900;':'color:#020617;font-weight:900;')+'">' +
           '🏠 전체 보기 <span class="opacity-60 text-[10px]">('+allCount+')</span>' +
         '</button>' +
         '<div class="space-y-0.5">' + TREE.map(t => nodeBtn(t, 0)).join('') + '</div>' +
@@ -447,12 +453,12 @@
       if (!colors.length) return '';
       let html = '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">소분류 · 칼라별</div>';
       html += '<div class="flex flex-wrap gap-2 mb-5">';
-      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0a0e27':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0a0e27':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#1e40af,#ef4444,#22c55e);"></span>전체</button>';
+      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#020617':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#020617':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#1e40af,#ef4444,#22c55e);"></span>전체</button>';
       html += colors.map(c => {
         const active = c === activeColor;
         const dot = COLOR_HEX[c] || '#94a3b8';
         const ring = dot === '#ffffff' ? 'border:1px solid #cbd5e1;' : '';
-        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0a0e27':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0a0e27':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
+        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#020617':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#020617':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
       }).join('') + '</div>';
       return html;
     }
@@ -474,7 +480,7 @@
       const gList = Object.values(groups);
 
       let breadcrumbLabel = '전체 제품';
-      let activeHex = '#0a0e27';
+      let activeHex = '#020617';
       function findNode(tree, id, parents) {
         for (const t of tree) {
           if (t.id === id) return { node: t, parents: parents };
@@ -489,7 +495,7 @@
         const f = findNode(TREE, activeNode, []);
         if (f) {
           breadcrumbLabel = [...f.parents, f.node].map(n => n.label).join(' › ');
-          activeHex = (f.parents[0] || f.node).hex || '#0a0e27';
+          activeHex = (f.parents[0] || f.node).hex || '#020617';
         }
       }
 
@@ -519,7 +525,7 @@
             }).join('') + (variants.length>8 ? '<span class="text-[10px] text-slate-500 ml-1">+'+(variants.length-8)+'</span>' : '') + '</div></div>'
           ) : (main.finish ? '<div class="flex flex-wrap gap-1 mb-2">'+main.finish.split(',').slice(0,3).map(t=>'<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600">'+t.trim()+'</span>').join('')+'</div>' : '');
 
-          return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 flex flex-col cursor-pointer" style="box-shadow:0 8px 24px rgba(10,14,39,0.06);">'+
+          return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 flex flex-col cursor-pointer" style="box-shadow:0 8px 24px rgba(2,6,23,0.06);">'+
             '<div class="relative aspect-square overflow-hidden bg-slate-50">'+
               '<img src="'+main.img+'" alt="'+g.name+'" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display=\'none\';this.parentElement.style.background=\'linear-gradient(135deg,#f8fafc,#e2e8f0)\';" />'+
               '<div class="absolute top-2.5 left-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shadow" style="background:'+hex+';">'+g.cat+'</span></div>'+
@@ -570,7 +576,7 @@
     };
 
     render();
-    grid.dataset.patched = 'v8';
+    grid.dataset.patched = 'v9';
     return true;
   }
 
@@ -598,6 +604,7 @@
     installCleanMegaMenu();
     patchNavbar();
     patchHeroOverlay();
+    patchStats();
     patchFeaturesSection();
     patchYouTubeSlots();
     patchExtraText();
@@ -616,9 +623,6 @@
       childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'id']
     });
   }
-
-  // 즉시 실행 (killMegaHoverCat을 가능한 빨리)
-  killMegaHoverCat();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
