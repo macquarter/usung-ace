@@ -1,12 +1,14 @@
 /* ============================================================
-   유성에이스 PPTX 디렉션 오버레이 v9 — Bulletproof + Bold Impact
-   - 메가메뉴 절대 잠금 (Object.defineProperty + 100ms 자가복원)
-   - 히어로 텍스트 임팩트 극대화
-   - 모든 섹션 헤드라인 굵게 + 그라데이션
+   유성에이스 PPTX 디렉션 오버레이 v10
+   - 메가메뉴: 좌측 7카테고리만 (우측 hide)
+   - 히어로: 차분한 신뢰감 톤
+   - 갤러리: 사진 선명하게
+   - 사용방법 캔버스: 라이트 톤 강제
+   - 하향식후드 제품 10개 추가
    ============================================================ */
 (function() {
   'use strict';
-  console.log('[usung-overlay v9] loaded');
+  console.log('[usung-overlay v10] loaded');
 
   const CATEGORIES = [
     { id:'1.갤럭시',      label:'1. 갤럭시',         desc:'갤럭시 A · B · C · D 타입' },
@@ -57,6 +59,21 @@
     { id:'5.파이프 기타', label:'5. 파이프 기타옵션', hex:'#8b5cf6', children:[] },
     { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       hex:'#f97316', children:[] },
     { id:'7.하향식 후드', label:'7. 하향식 후드',    hex:'#ef4444', children:[] }
+  ];
+
+  // 하향식후드 (코브라) 제품 - Google Drive 폴더에서 확인된 10종
+  // 기존 후레쉬볼/주름관 카테고리의 이미지를 placeholder로 사용 (실제 이미지 추후 업로드 가능)
+  const COBRA_PRODUCTS = [
+    { name:'90Ø롱망코브라220',            sub:'코브라' },
+    { name:'75Ø망대코브라200',            sub:'코브라' },
+    { name:'사각코브라160',                sub:'코브라' },
+    { name:'75Ø주물코브라200Ø갓160',     sub:'코브라' },
+    { name:'75Ø주물나팔코브라100',        sub:'코브라' },
+    { name:'75Ø코브라170',                 sub:'코브라' },
+    { name:'75Ø코브라270',                 sub:'코브라' },
+    { name:'75Ø코브라170(2단캡)',          sub:'코브라' },
+    { name:'코브라신형(각)',              sub:'코브라' },
+    { name:'코브라사각파이프원형나팔',   sub:'코브라' }
   ];
 
   const COLOR_HEX = {
@@ -119,7 +136,27 @@
     return items.filter(p => p.sub === nodeId || (p.sub && p.sub.startsWith(nodeId + '/')));
   }
 
-  // ==================== 원본 megaHoverCat 완전 무력화 ====================
+  // 코브라 제품 ACE_DATA에 주입
+  function ensureCobraProducts(ACE) {
+    if (!ACE || !ACE.product_lineup || ACE._cobraInjected) return;
+    // 기존 product_lineup에서 placeholder 이미지 (후레쉬볼 카테고리 이미지) 한 장 가져와서 사용
+    const placeholder = ACE.product_lineup.find(p => p.cat === '후레쉬볼/주름관' || p.cat === '6. 후레쉬볼');
+    const placeholderImg = placeholder ? placeholder.img : 'products/p148_측향동자바라.jpg';
+    COBRA_PRODUCTS.forEach((cb, i) => {
+      ACE.product_lineup.push({
+        no: 1000 + i,
+        img: placeholderImg,
+        name: cb.name,
+        cat: '7. 하향식 후드',
+        sub: cb.sub,
+        color: '',
+        finish: '',
+        pipe: ''
+      });
+    });
+    ACE._cobraInjected = true;
+  }
+
   function killMegaHoverCat() {
     try {
       Object.defineProperty(window, 'megaHoverCat', {
@@ -133,7 +170,7 @@
   }
   killMegaHoverCat();
 
-  // ==================== 메가메뉴 - 7개 카테고리 (잠금) ====================
+  // ==================== 메가메뉴 — 좌측만 (우측 hide) ====================
   function buildCatListHTML() {
     return CATEGORIES.map(c => {
       return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200" data-ace-locked="1">' +
@@ -143,50 +180,43 @@
     }).join('');
   }
 
-  function buildMegaListHTML() {
-    return '<div class="grid grid-cols-2 gap-3" data-ace-locked="1">' +
-      CATEGORIES.map(c => {
-        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="text-left p-4 rounded-2xl bg-white border border-slate-200 hover:border-slate-900 hover:shadow-lg transition group" data-ace-locked="1">' +
-          '<div class="text-[13px] font-black tracking-tight text-slate-900 group-hover:text-blue-700 transition">'+c.label+'</div>' +
-          '<div class="text-[11px] text-slate-500 mt-1 leading-snug">'+c.desc+'</div>' +
-        '</button>';
-      }).join('') +
-      '</div>';
+  function hideMegaRightPanel() {
+    document.querySelectorAll('#navbar .dropdown').forEach(dd => {
+      // grid-cols-12 안의 col-span-8 (우측 패널) 숨기기
+      const rightPanel = dd.querySelector('.col-span-8');
+      if (rightPanel) rightPanel.style.display = 'none';
+      // 좌측 col-span-4를 전체로 확장
+      const leftPanel = dd.querySelector('.col-span-4');
+      if (leftPanel) {
+        leftPanel.style.gridColumn = 'span 12 / span 12';
+        leftPanel.style.borderRight = 'none';
+      }
+      // dropdown 폭을 좁게
+      if (dd.classList.contains('w-[1080px]') || (dd.className || '').includes('w-[')) {
+        dd.style.width = '340px';
+        dd.style.maxWidth = '90vw';
+      }
+    });
   }
 
   let _megaInstalled = false;
   function installCleanMegaMenu() {
     const list = document.getElementById('mega-cat-list');
-    const megaList = document.getElementById('mega-menu-list');
-    if (!list || !megaList) return false;
-
-    // ★ 매번 강제 교체 (외부에서 변경된 경우 즉시 복원)
-    const wantedListHTML = buildCatListHTML();
-    const wantedMegaHTML = buildMegaListHTML();
+    if (!list) return false;
 
     if (!list.innerHTML.includes('data-ace-locked')) {
-      list.innerHTML = wantedListHTML;
+      list.innerHTML = buildCatListHTML();
     }
-    if (!megaList.innerHTML.includes('data-ace-locked')) {
-      megaList.innerHTML = wantedMegaHTML;
-    }
+    hideMegaRightPanel();
 
-    const title = document.getElementById('mega-list-title');
-    if (title && title.textContent !== '7 CATEGORIES') title.textContent = '7 CATEGORIES';
-
-    // 100ms마다 강제 복원 체크 (가장 확실한 방법)
     if (!_megaInstalled) {
       setInterval(() => {
         const l = document.getElementById('mega-cat-list');
-        const m = document.getElementById('mega-menu-list');
         if (l && !l.innerHTML.includes('data-ace-locked')) l.innerHTML = buildCatListHTML();
-        if (m && !m.innerHTML.includes('data-ace-locked')) m.innerHTML = buildMegaListHTML();
-        const t = document.getElementById('mega-list-title');
-        if (t && t.textContent !== '7 CATEGORIES') t.textContent = '7 CATEGORIES';
+        hideMegaRightPanel();
       }, 200);
       _megaInstalled = true;
     }
-
     return true;
   }
 
@@ -251,10 +281,8 @@
       applyNavColors();
       window.addEventListener('scroll', applyNavColors, { passive: true });
       new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
-      nav.dataset.patched = 'v9';
-    } else {
-      applyNavColors();
-    }
+      nav.dataset.patched = 'v10';
+    } else { applyNavColors(); }
   }
 
   function patchHeroOverlay() {
@@ -264,33 +292,41 @@
     if (!sticky) return;
 
     sticky.querySelectorAll('[class*="bg-black/"]').forEach(el => {
-      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.88) 100%)';
+      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.85) 100%)';
       el.style.backdropFilter = 'blur(1px)';
     });
     sticky.querySelectorAll('h1, h2').forEach(el => {
       el.style.color = '#020617';
-      el.style.textShadow = '0 4px 32px rgba(255,255,255,0.95), 0 2px 12px rgba(255,255,255,0.85)';
-      el.style.letterSpacing = '-0.05em';
+      el.style.textShadow = '0 2px 16px rgba(255,255,255,0.95), 0 1px 4px rgba(255,255,255,0.7)';
+      el.style.letterSpacing = '-0.045em';
       el.style.fontWeight = '900';
     });
     sticky.querySelectorAll('p').forEach(el => {
       el.style.color = '#1e293b';
-      el.style.fontWeight = '700';
-      el.style.textShadow = '0 2px 12px rgba(255,255,255,0.7)';
+      el.style.fontWeight = '600';
+      el.style.textShadow = '0 1px 8px rgba(255,255,255,0.65)';
     });
     sticky.querySelectorAll('div').forEach(el => {
       const cls = el.className || '';
       if (cls.includes('text-blue-400')) {
         el.style.color = '#1e40af';
-        el.style.textShadow = '0 2px 12px rgba(255,255,255,0.9)';
+        el.style.textShadow = '0 1px 8px rgba(255,255,255,0.85)';
         el.style.letterSpacing = '0.32em';
-        el.style.fontWeight = '900';
+        el.style.fontWeight = '800';
       }
     });
+    // "No.1" - 차분한 단색 진한 블루 (그라데이션/glow 완전 제거)
     sticky.querySelectorAll('.text-transparent.bg-clip-text').forEach(el => {
-      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 35%, #0ea5e9 65%, #1e40af 100%)';
-      el.style.filter = 'drop-shadow(0 8px 32px rgba(30,64,175,0.40)) drop-shadow(0 2px 8px rgba(30,64,175,0.25))';
+      el.style.backgroundImage = 'none';
+      el.style.background = 'none';
+      el.style.webkitBackgroundClip = 'initial';
+      el.style.backgroundClip = 'initial';
+      el.style.color = '#0c1e5a';
+      el.style.webkitTextFillColor = '#0c1e5a';
+      el.style.filter = 'none';
+      el.style.textShadow = '0 2px 8px rgba(255,255,255,0.7)';
       el.style.fontWeight = '900';
+      el.style.animation = 'none';
     });
     sticky.querySelectorAll('svg').forEach(s => {
       if (s.closest('button.bg-black')) return;
@@ -299,18 +335,77 @@
     });
   }
 
-  // 통계 카드 (CORE TECHNOLOGY 등의 큰 숫자) 강조
   function patchStats() {
     document.querySelectorAll('#page-home section [class*="text-5xl"][class*="font-black"], #page-home section [class*="text-6xl"][class*="font-black"], #page-home section [class*="text-7xl"][class*="font-black"]').forEach(el => {
       if (el.dataset.aceStat) return;
-      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 50%, #0ea5e9 100%)';
+      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 100%)';
       el.style.webkitBackgroundClip = 'text';
       el.style.backgroundClip = 'text';
       el.style.color = 'transparent';
-      el.style.filter = 'drop-shadow(0 8px 24px rgba(30,64,175,0.25))';
-      el.style.letterSpacing = '-0.05em';
+      el.style.letterSpacing = '-0.04em';
       el.dataset.aceStat = '1';
     });
+  }
+
+  // 갤러리 카드 선명화
+  function patchGalleryCards() {
+    document.querySelectorAll('#page-home button[class*="aspect-"], #page-home a[class*="aspect-"]').forEach(card => {
+      if (card.dataset.galleryPatched) return;
+      // 다크 배경 제거
+      card.style.background = '#ffffff';
+      card.style.border = '1px solid rgba(2,6,23,0.08)';
+      card.style.boxShadow = '0 8px 24px rgba(2,6,23,0.08)';
+      // 이미지 필터 제거
+      const img = card.querySelector('img');
+      if (img) {
+        img.style.opacity = '1';
+        img.style.filter = 'none';
+      }
+      // 다크 그라데이션 약하게
+      card.querySelectorAll('.bg-gradient-to-t').forEach(g => {
+        g.style.background = 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 30%, transparent 55%)';
+      });
+      card.dataset.galleryPatched = '1';
+    });
+  }
+
+  // 사용방법 캔버스 라이트화 + 5가지 핵심특징 카드 라이트
+  function patchManualLightTheme() {
+    const manual = document.getElementById('page-manual');
+    if (!manual || manual.dataset.lightPatched === 'v10') return;
+
+    // 5가지 핵심특징 카드 라이트
+    manual.querySelectorAll('.group.bg-gradient-to-br').forEach(card => {
+      card.style.background = 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)';
+      card.style.border = '1px solid rgba(2,6,23,0.08)';
+      card.style.boxShadow = '0 8px 24px rgba(2,6,23,0.06)';
+      card.querySelectorAll('h3').forEach(h => h.style.color = '#020617');
+      card.querySelectorAll('p').forEach(p => p.style.color = '#475569');
+      card.querySelectorAll('.text-blue-300').forEach(t => t.style.color = '#1e40af');
+      card.querySelectorAll('.bg-blue-500\\/20').forEach(b => b.style.background = 'rgba(30,64,175,0.10)');
+    });
+
+    // 사용방법 GUIDE 카드 라이트
+    document.querySelectorAll('#manual-list .reveal').forEach(card => {
+      card.style.background = 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)';
+      card.style.border = '1px solid rgba(2,6,23,0.08)';
+      card.style.boxShadow = '0 8px 24px rgba(2,6,23,0.06)';
+      card.querySelectorAll('h2').forEach(h => h.style.color = '#020617');
+      card.querySelectorAll('p, li').forEach(p => p.style.color = '#475569');
+      card.querySelectorAll('.text-blue-400').forEach(t => t.style.color = '#1e40af');
+      card.querySelectorAll('.text-cyan-300').forEach(t => t.style.color = '#0ea5e9');
+      card.querySelectorAll('.bg-blue-500\\/10').forEach(b => b.style.background = 'rgba(30,64,175,0.10)');
+      card.querySelectorAll('.bg-white\\/\\[0\\.04\\]').forEach(b => b.style.background = '#f1f5f9');
+    });
+
+    // 사용방법 캔버스 - 라이트 배경 + 다크 라인
+    document.querySelectorAll('canvas[id^="usage-canvas"], #page-manual canvas').forEach(cvs => {
+      cvs.style.background = '#f8fafc';
+      cvs.style.borderRadius = '16px';
+      cvs.style.boxShadow = 'inset 0 1px 3px rgba(2,6,23,0.04)';
+    });
+
+    manual.dataset.lightPatched = 'v10';
   }
 
   // ==================== 제품 상세 모달 ====================
@@ -413,12 +508,14 @@
     const grid = document.getElementById('products-grid');
     const filter = document.getElementById('product-filter');
     if (!grid || !filter) return false;
-    if (grid.dataset.patched === 'v9') return true;
+    if (grid.dataset.patched === 'v10') return true;
 
-    if (!ACE._remapped_v9) {
+    if (!ACE._remapped_v10) {
       ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-      ACE._remapped_v9 = true;
+      ACE._remapped_v10 = true;
     }
+    ensureCobraProducts(ACE);
+
     let activeNode = '', activeColor = '';
 
     function renderSidebar() {
@@ -576,7 +673,7 @@
     };
 
     render();
-    grid.dataset.patched = 'v9';
+    grid.dataset.patched = 'v10';
     return true;
   }
 
@@ -591,23 +688,16 @@
     });
   }
 
-  function patchExtraText() {
-    document.querySelectorAll('h1, h2, h3, span, div, p').forEach(el => {
-      if (el.children.length > 0) return;
-      const t = el.textContent;
-      if (t && /11개 카테고리/.test(t)) el.textContent = t.replace('11개 카테고리', '7개 카테고리');
-    });
-  }
-
   function applyAll() {
     killMegaHoverCat();
     installCleanMegaMenu();
     patchNavbar();
     patchHeroOverlay();
     patchStats();
+    patchGalleryCards();
+    patchManualLightTheme();
     patchFeaturesSection();
     patchYouTubeSlots();
-    patchExtraText();
     renderProductPage();
   }
 
