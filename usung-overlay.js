@@ -1,23 +1,42 @@
 /* ============================================================
-   유성에이스 PPTX 디렉션 오버레이 v7
-   - 네비게이션 바: 항상 다크 텍스트 (영상 위에서도)
-   - 히어로 오버레이: 화이트로 + 텍스트 다크로 (가독성)
-   - 상단 네비 dropdown 도 트리 구조 일관 적용
+   유성에이스 PPTX 디렉션 오버레이 v8 — Clean & Premium
+   - 메가메뉴: 7개 카테고리만 깔끔 (트리 제거)
+   - 메가메뉴 hover 롤백 완전 차단 (DOM replaceWith + Object.defineProperty)
+   - 히어로 영상 위 텍스트 임팩트 강화
    ============================================================ */
 (function() {
   'use strict';
-  console.log('[usung-overlay v7] loaded');
+  console.log('[usung-overlay v8] loaded');
 
+  const CATEGORIES = [
+    { id:'1.갤럭시',      label:'1. 갤럭시',         hex:'#1e40af', desc:'갤럭시 A · B · C · D 타입' },
+    { id:'2.LED',         label:'2. LED 조명',       hex:'#1e40af', desc:'갓등 · 우주선 · 아크릴' },
+    { id:'3.스텐파이프',   label:'3. 스텐파이프',     hex:'#1e40af', desc:'도금 · 도장 · 양옆/내부/텐션' },
+    { id:'4.스파이얼',    label:'4. 스파이얼 도장',  hex:'#1e40af', desc:'양옆/내부/텐션 시리즈' },
+    { id:'5.파이프 기타', label:'5. 파이프 기타옵션',hex:'#1e40af', desc:'고정텐션 · 사각측향 · 모터' },
+    { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       hex:'#1e40af', desc:'자바라 · 신형 · 장축' },
+    { id:'7.하향식 후드', label:'7. 하향식 후드',    hex:'#1e40af', desc:'코브라 · 망대 · 주물 · 나팔' }
+  ];
+
+  const CAT_BY_ID = {
+    '1.갤럭시':'1. 갤럭시', '2.LED':'2. LED 조명타입', '3.스텐파이프':'3. 스텐파이프',
+    '4.스파이얼':'4. 스파이얼 도장', '5.파이프 기타':'5. 파이프 기타옵션',
+    '6.후레쉬볼':'6. 후레쉬볼', '7.하향식 후드':'7. 하향식 후드'
+  };
+  const CAT_HEX = {
+    '1. 갤럭시':'#3b82f6','2. LED 조명타입':'#f59e0b','3. 스텐파이프':'#06b6d4',
+    '4. 스파이얼 도장':'#10b981','5. 파이프 기타옵션':'#8b5cf6',
+    '6. 후레쉬볼':'#f97316','7. 하향식 후드':'#ef4444'
+  };
+
+  // 사이드바 트리용 (제품 페이지에서 사용)
   const TREE = [
     { id:'1.갤럭시', label:'1. 갤럭시', hex:'#3b82f6', children:[
-      { id:'갤럭시A', label:'갤럭시A' },
-      { id:'갤럭시B', label:'갤럭시B' },
-      { id:'갤럭시C', label:'갤럭시C' },
-      { id:'갤럭시D', label:'갤럭시D' }
+      { id:'갤럭시A', label:'갤럭시A' }, { id:'갤럭시B', label:'갤럭시B' },
+      { id:'갤럭시C', label:'갤럭시C' }, { id:'갤럭시D', label:'갤럭시D' }
     ]},
     { id:'2.LED', label:'2. LED 조명', hex:'#f59e0b', children:[
-      { id:'LED 조명', label:'LED 조명' },
-      { id:'우주선/갓등', label:'우주선/갓등' }
+      { id:'LED 조명', label:'LED 조명' }, { id:'우주선/갓등', label:'우주선/갓등' }
     ]},
     { id:'3.스텐파이프', label:'3. 스텐파이프', hex:'#06b6d4', children:[
       { id:'도금', label:'도금', children:[
@@ -37,20 +56,9 @@
       { id:'스윙 텐션', label:'스윙텐션' }
     ]},
     { id:'5.파이프 기타', label:'5. 파이프 기타옵션', hex:'#8b5cf6', children:[] },
-    { id:'6.후레쉬볼', label:'6. 후레쉬볼', hex:'#f97316', children:[] },
-    { id:'7.하향식 후드', label:'7. 하향식 후드', hex:'#ef4444', children:[] }
+    { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       hex:'#f97316', children:[] },
+    { id:'7.하향식 후드', label:'7. 하향식 후드',    hex:'#ef4444', children:[] }
   ];
-
-  const CAT_BY_ID = {
-    '1.갤럭시':'1. 갤럭시', '2.LED':'2. LED 조명타입', '3.스텐파이프':'3. 스텐파이프',
-    '4.스파이얼':'4. 스파이얼 도장', '5.파이프 기타':'5. 파이프 기타옵션',
-    '6.후레쉬볼':'6. 후레쉬볼', '7.하향식 후드':'7. 하향식 후드'
-  };
-  const CAT_HEX = {
-    '1. 갤럭시':'#3b82f6','2. LED 조명타입':'#f59e0b','3. 스텐파이프':'#06b6d4',
-    '4. 스파이얼 도장':'#10b981','5. 파이프 기타옵션':'#8b5cf6',
-    '6. 후레쉬볼':'#f97316','7. 하향식 후드':'#ef4444'
-  };
 
   const COLOR_HEX = {
     '검정':'#0f172a','검정함마':'#1f2937','동':'#a16207','동함마':'#92400e','동도금':'#b45309',
@@ -112,71 +120,92 @@
     return items.filter(p => p.sub === nodeId || (p.sub && p.sub.startsWith(nodeId + '/')));
   }
 
+  // ==================== 원본 megaHoverCat 완전 무력화 ====================
   function killMegaHoverCat() {
-    if (typeof window.megaHoverCat === 'function' && !window._megaHoverKilled) {
-      window._origMegaHoverCat = window.megaHoverCat;
+    try {
+      Object.defineProperty(window, 'megaHoverCat', {
+        configurable: true,
+        enumerable: true,
+        get: function() { return function() {}; },
+        set: function() {}
+      });
+    } catch(e) {
       window.megaHoverCat = function() {};
-      window._megaHoverKilled = true;
     }
   }
 
-  // ==================== 메가메뉴 트리 ====================
-  let _megaObserver = null;
-  function patchMegaMenu() {
+  // ==================== 메가메뉴 — 7개 카테고리만 깔끔 ====================
+  let _megaInstalled = false;
+  function installCleanMegaMenu() {
     const list = document.getElementById('mega-cat-list');
-    if (!list) return false;
-
-    // 좌측: 카테고리만 (1차) — 간단명료
-    if (list.dataset.patched !== 'v7') {
-      list.innerHTML = TREE.map(t => {
-        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+t.id+'\'),120);" class="block text-left group w-full p-2 rounded-lg hover:bg-slate-50 transition">'+
-          '<div class="text-[13px] font-black tracking-tight" style="color:'+t.hex+';">'+t.label+'</div>'+
-        '</button>';
-      }).join('');
-      list.dataset.patched = 'v7';
-    }
-
-    // 우측: PPTX slide 5 트리 구조 + 카운트
     const megaList = document.getElementById('mega-menu-list');
-    if (megaList) {
-      if (megaList.dataset.patched !== 'v7') {
-        const ACE = getAceData();
-        const items = (ACE && ACE.product_lineup) ? ACE.product_lineup : [];
-        if (ACE && !ACE._remapped_v7) {
-          ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-          ACE._remapped_v7 = true;
-        }
+    if (!list || !megaList) return false;
+    if (_megaInstalled && list.dataset.aceClean === '1' && megaList.dataset.aceClean === '1') return true;
 
-        function renderNode(node, depth) {
-          const count = items.length ? filterByNode(items, node.id).length : 0;
-          const indent = depth * 14;
-          let html = '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+node.id+'\'),120);" class="block text-left w-full font-bold py-1 px-2 rounded hover:bg-slate-50 transition" style="padding-left:'+(indent+8)+'px;'+
-            (depth===0?'color:'+node.hex+';font-weight:900;font-size:13px;':'color:'+(depth===1?'#1e293b':'#475569')+';font-size:12px;font-weight:'+(depth===1?'700':'600')+';')+'">';
-          if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(depth===1?'#0f172a':'#94a3b8')+';"></span>';
-          html += node.label;
-          if (count > 0) html += ' <span class="text-[10px] opacity-60 ml-1">('+count+')</span>';
-          html += '</button>';
-          if (node.children && node.children.length) {
-            html += node.children.map(c => renderNode(c, depth + 1)).join('');
-          }
-          return html;
-        }
-        megaList.innerHTML = '<div class="space-y-0.5">' + TREE.map(t => renderNode(t, 0)).join('<div class="h-1.5"></div>') + '</div>';
-        megaList.dataset.patched = 'v7';
-        const t = document.getElementById('mega-list-title');
-        if (t) t.textContent = '제품 분류 트리';
+    // mega-cat-list 좌측 패널: 카테고리 7개 (깔끔, 컬러 강조 없이 다크 톤만)
+    list.innerHTML = CATEGORIES.map(c => {
+      return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">' +
+        '<div class="text-[14px] font-black tracking-tight text-slate-900">'+c.label+'</div>' +
+        '<div class="text-[11px] text-slate-500 mt-1">'+c.desc+'</div>' +
+      '</button>';
+    }).join('');
+    list.dataset.aceClean = '1';
 
-        if (!_megaObserver) {
-          _megaObserver = new MutationObserver(function() {
-            if (megaList.dataset.patched !== 'v7') {
-              megaList.dataset.patched = '';
-              patchMegaMenu();
+    // mega-menu-list 우측 패널: 깔끔하게 카테고리 카드 그리드만
+    megaList.innerHTML =
+      '<div class="grid grid-cols-2 gap-3">' +
+      CATEGORIES.map(c => {
+        return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="text-left p-4 rounded-2xl bg-white border border-slate-200 hover:border-slate-900 hover:shadow-lg transition group">' +
+          '<div class="text-[13px] font-black tracking-tight text-slate-900 group-hover:text-blue-700 transition">'+c.label+'</div>' +
+          '<div class="text-[11px] text-slate-500 mt-1 leading-snug">'+c.desc+'</div>' +
+        '</button>';
+      }).join('') +
+      '</div>';
+    megaList.dataset.aceClean = '1';
+
+    const title = document.getElementById('mega-list-title');
+    if (title) title.textContent = '7 CATEGORIES';
+
+    // mega-menu-list 잠금 — innerHTML setter override
+    try {
+      const desc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+      ['mega-menu-list', 'mega-cat-list'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || el._aceLocked) return;
+        let lockedHtml = el.innerHTML;
+        Object.defineProperty(el, 'innerHTML', {
+          configurable: true,
+          get: function() { return lockedHtml; },
+          set: function(v) {
+            // 외부에서 변경 시도하면 잠금 무시 (단, 우리가 lockedHtml 직접 갱신 가능)
+            // ACE 마커가 포함된 v만 허용
+            if (typeof v === 'string' && (v.includes('aceClean') || v.includes('filterByNode'))) {
+              lockedHtml = v;
+              desc.set.call(el, v);
             }
-          });
-          _megaObserver.observe(megaList, { childList: true });
-        }
-      }
+          }
+        });
+        el._aceLocked = true;
+      });
+    } catch(e) {
+      console.warn('[overlay] innerHTML lock failed, using observer fallback', e);
     }
+
+    // MutationObserver 백업
+    const obs = new MutationObserver(function(muts) {
+      muts.forEach(m => {
+        if (m.target === megaList || m.target === list) {
+          if (m.target.dataset.aceClean !== '1') {
+            _megaInstalled = false;
+            installCleanMegaMenu();
+          }
+        }
+      });
+    });
+    obs.observe(megaList, { childList: true, characterData: true });
+    obs.observe(list, { childList: true, characterData: true });
+
+    _megaInstalled = true;
     return true;
   }
 
@@ -212,30 +241,24 @@
     }
   }
 
-  // ==================== 네비게이션 바: 항상 화이트 (영상 위에서도) ====================
   function patchNavbar() {
     const nav = document.getElementById('navbar');
     if (!nav) return;
-    if (nav.dataset.patched === 'v7') return;
-
+    if (nav.dataset.patched === 'v8') return;
     function applyNavColors() {
-      // 항상 화이트 배경 + 다크 텍스트 (가독성 최우선)
-      nav.style.background = 'rgba(255,255,255,0.96)';
-      nav.style.backdropFilter = 'blur(20px)';
-      nav.style.webkitBackdropFilter = 'blur(20px)';
-      nav.style.borderBottom = '1px solid rgba(15,23,42,0.06)';
-      nav.style.boxShadow = '0 1px 8px rgba(15,23,42,0.04)';
-
-      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => {
-        el.style.color = '#0f172a';
-      });
+      nav.style.background = 'rgba(255,255,255,0.92)';
+      nav.style.backdropFilter = 'blur(24px) saturate(180%)';
+      nav.style.webkitBackdropFilter = 'blur(24px) saturate(180%)';
+      nav.style.borderBottom = '1px solid rgba(10,14,39,0.08)';
+      nav.style.boxShadow = '0 2px 8px rgba(10,14,39,0.04)';
+      nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => { el.style.color = '#0a0e27'; });
       nav.querySelectorAll('button').forEach(btn => {
         if (btn.closest('#mobile-menu')) return;
         if (btn.classList.contains('bg-black')) {
-          btn.style.background = '#0f172a';
+          btn.style.background = 'linear-gradient(135deg, #0a0e27 0%, #1e293b 100%)';
           btn.style.color = '#ffffff';
         } else if (!btn.classList.contains('nav-link')) {
-          btn.style.color = '#0f172a';
+          btn.style.color = '#0a0e27';
         }
       });
       const navLogo = document.getElementById('nav-logo');
@@ -244,41 +267,44 @@
     applyNavColors();
     window.addEventListener('scroll', applyNavColors, { passive: true });
     new MutationObserver(applyNavColors).observe(document.body, { subtree: false, attributes: true, attributeFilter: ['class'] });
-    nav.dataset.patched = 'v7';
+    nav.dataset.patched = 'v8';
   }
 
-  // ==================== 히어로 영상 오버레이 화이트로 변경 ====================
   function patchHeroOverlay() {
     const home = document.getElementById('page-home');
-    if (!home || home.dataset.heroPatched === 'v7') return;
+    if (!home || home.dataset.heroPatched === 'v8') return;
     const sticky = home.querySelector('.sticky');
     if (!sticky) return;
 
-    // 기존 다크 오버레이를 화이트 그라데이션으로 교체
-    sticky.querySelectorAll('.bg-black\\/80, .bg-black\\/70, .bg-black\\/60, [class*="bg-black/"]').forEach(el => {
-      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.70) 50%, rgba(255,255,255,0.92) 100%)';
+    sticky.querySelectorAll('[class*="bg-black/"]').forEach(el => {
+      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.85) 100%)';
       el.style.backdropFilter = 'blur(1px)';
     });
-
-    // 히어로 텍스트 강제 다크 톤
-    sticky.querySelectorAll('h1, h2, h3, p, span, div').forEach(el => {
-      if (el.tagName === 'VIDEO' || el.closest('video')) return;
+    sticky.querySelectorAll('h1, h2').forEach(el => {
+      el.style.color = '#0a0e27';
+      el.style.textShadow = '0 4px 24px rgba(255,255,255,0.95), 0 2px 8px rgba(255,255,255,0.8)';
+      el.style.letterSpacing = '-0.04em';
+    });
+    sticky.querySelectorAll('p').forEach(el => {
+      el.style.color = '#1e293b';
+      el.style.fontWeight = '600';
+    });
+    sticky.querySelectorAll('div').forEach(el => {
       const cls = el.className || '';
-      if (cls.includes('text-blue-400')) { el.style.color = '#2563eb'; }
-      else if (cls.includes('text-white')) { el.style.color = '#0f172a'; }
-      else if (cls.includes('text-white/')) { el.style.color = '#334155'; }
+      if (cls.includes('text-blue-400')) {
+        el.style.color = '#1e40af';
+        el.style.textShadow = '0 2px 12px rgba(255,255,255,0.9)';
+        el.style.letterSpacing = '0.32em';
+        el.style.fontWeight = '800';
+      }
     });
-    // gradient text (No.1)
     sticky.querySelectorAll('.text-transparent.bg-clip-text').forEach(el => {
-      el.style.backgroundImage = 'linear-gradient(90deg, #2563eb, #0ea5e9, #2563eb)';
+      el.style.backgroundImage = 'linear-gradient(90deg, #1e40af 0%, #0ea5e9 50%, #1e40af 100%)';
+      el.style.filter = 'drop-shadow(0 4px 20px rgba(30,64,175,0.35))';
     });
-    // SCROLL indicator
-    sticky.querySelectorAll('svg').forEach(s => {
-      s.style.stroke = '#0f172a';
-      s.style.color = '#0f172a';
-    });
+    sticky.querySelectorAll('svg').forEach(s => { s.style.stroke = '#0a0e27'; s.style.color = '#0a0e27'; });
 
-    home.dataset.heroPatched = 'v7';
+    home.dataset.heroPatched = 'v8';
   }
 
   // ==================== 제품 상세 모달 ====================
@@ -293,7 +319,7 @@
       '<div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">' +
         '<div class="relative bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">' +
           '<button onclick="window.closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0e27" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
           '</button>' +
           '<div id="ace-product-modal-body" class="p-8 md:p-10"></div>' +
         '</div>' +
@@ -315,7 +341,7 @@
       const colorOptionsHtml = variants.map((v, i) => {
         const label = v.color || v.finish || '기본';
         const isSel = i === selectedIdx;
-        return '<button data-idx="'+i+'" class="ace-variant-btn group relative aspect-square rounded-lg overflow-hidden border-2 transition '+(isSel?'border-blue-600 shadow-lg':'border-slate-200 hover:border-slate-400')+'" style="background:#fafafa;">' +
+        return '<button data-idx="'+i+'" class="ace-variant-btn group relative aspect-square rounded-lg overflow-hidden border-2 transition '+(isSel?'border-blue-700 shadow-lg':'border-slate-200 hover:border-slate-400')+'" style="background:#fafafa;">' +
           '<img src="'+v.img+'" alt="'+label+'" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-1.5" onerror="this.style.display=\'none\'" />' +
           '<div class="absolute bottom-0 inset-x-0 text-[8px] font-bold text-center py-0.5 px-0.5 bg-white/95 text-slate-700 truncate">'+label+'</div>' +
         '</button>';
@@ -350,7 +376,7 @@
               '</div>' +
             '</div>' +
             '<div class="flex gap-2 mt-auto">' +
-              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition text-center">📞 상담 문의 (1588-9123)</a>' +
+              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full text-white text-sm font-bold transition text-center" style="background:linear-gradient(135deg,#1e40af 0%,#0ea5e9 100%);box-shadow:0 8px 24px rgba(30,64,175,0.25);">📞 상담 문의 (1588-9123)</a>' +
               '<button onclick="window.closeProductModal()" class="px-5 py-3 rounded-full border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 transition">닫기</button>' +
             '</div>' +
           '</div>' +
@@ -358,7 +384,7 @@
         (variants.length > 1 ?
           '<div class="border-t border-slate-200 pt-6">' +
             '<div class="flex items-center justify-between mb-3">' +
-              '<div class="text-sm font-bold text-slate-700">색상 옵션 <span class="text-blue-600">'+variants.length+'</span>종</div>' +
+              '<div class="text-sm font-bold text-slate-700">색상 옵션 <span class="text-blue-700">'+variants.length+'</span>종</div>' +
               '<div class="text-xs text-slate-500">클릭하여 다른 색상 보기</div>' +
             '</div>' +
             '<div class="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-9 gap-2">' + colorOptionsHtml + '</div>' +
@@ -375,18 +401,17 @@
   }
   window.openProductModal = openProductModal;
 
-  // ==================== 제품 페이지 (사이드바 트리 + 우측 그리드) ====================
   function renderProductPage() {
     const ACE = getAceData();
     if (!ACE || !ACE.product_lineup) return false;
     const grid = document.getElementById('products-grid');
     const filter = document.getElementById('product-filter');
     if (!grid || !filter) return false;
-    if (grid.dataset.patched === 'v7') return true;
+    if (grid.dataset.patched === 'v8') return true;
 
-    if (!ACE._remapped_v7) {
+    if (!ACE._remapped_v8) {
       ACE.product_lineup.forEach(p => { const r = remap(p); p.cat = r.cat; p.sub = r.sub; p.color = r.color; });
-      ACE._remapped_v7 = true;
+      ACE._remapped_v8 = true;
     }
     let activeNode = '', activeColor = '';
 
@@ -398,8 +423,8 @@
         const isActive = activeNode === node.id;
         const indent = depth * 12 + 8;
         let html = '<button data-node="'+node.id+'" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded transition text-[13px]" style="padding-left:'+indent+'px;'+
-          (isActive ? 'background:'+(node.hex||'#0f172a')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#0f172a'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
-        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#0f172a':'#94a3b8'))+';"></span>';
+          (isActive ? 'background:'+(node.hex||'#0a0e27')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#0a0e27'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
+        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#0a0e27':'#94a3b8'))+';"></span>';
         html += node.label + ' <span class="opacity-60 text-[10px]">('+count+')</span></button>';
         if (node.children && node.children.length) {
           html += '<div class="space-y-0.5">' + node.children.map(c => nodeBtn(c, depth + 1)).join('') + '</div>';
@@ -407,9 +432,9 @@
         return html;
       }
       const allCount = ACE.product_lineup.length;
-      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto shadow-sm">' +
+      return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto" style="box-shadow:0 8px 24px rgba(10,14,39,0.06);">' +
         '<div class="text-[10px] font-bold tracking-[0.24em] text-slate-400 mb-3">제품 분류 트리</div>' +
-        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0f172a;color:#fff;font-weight:900;':'color:#0f172a;font-weight:900;')+'">' +
+        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0a0e27;color:#fff;font-weight:900;':'color:#0a0e27;font-weight:900;')+'">' +
           '🏠 전체 보기 <span class="opacity-60 text-[10px]">('+allCount+')</span>' +
         '</button>' +
         '<div class="space-y-0.5">' + TREE.map(t => nodeBtn(t, 0)).join('') + '</div>' +
@@ -422,12 +447,12 @@
       if (!colors.length) return '';
       let html = '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">소분류 · 칼라별</div>';
       html += '<div class="flex flex-wrap gap-2 mb-5">';
-      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0f172a':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#3b82f6,#ef4444,#22c55e);"></span>전체</button>';
+      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0a0e27':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0a0e27':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#1e40af,#ef4444,#22c55e);"></span>전체</button>';
       html += colors.map(c => {
         const active = c === activeColor;
         const dot = COLOR_HEX[c] || '#94a3b8';
         const ring = dot === '#ffffff' ? 'border:1px solid #cbd5e1;' : '';
-        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0f172a':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0f172a':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
+        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0a0e27':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0a0e27':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
       }).join('') + '</div>';
       return html;
     }
@@ -449,7 +474,7 @@
       const gList = Object.values(groups);
 
       let breadcrumbLabel = '전체 제품';
-      let activeHex = '#0f172a';
+      let activeHex = '#0a0e27';
       function findNode(tree, id, parents) {
         for (const t of tree) {
           if (t.id === id) return { node: t, parents: parents };
@@ -464,7 +489,7 @@
         const f = findNode(TREE, activeNode, []);
         if (f) {
           breadcrumbLabel = [...f.parents, f.node].map(n => n.label).join(' › ');
-          activeHex = (f.parents[0] || f.node).hex || '#0f172a';
+          activeHex = (f.parents[0] || f.node).hex || '#0a0e27';
         }
       }
 
@@ -494,20 +519,20 @@
             }).join('') + (variants.length>8 ? '<span class="text-[10px] text-slate-500 ml-1">+'+(variants.length-8)+'</span>' : '') + '</div></div>'
           ) : (main.finish ? '<div class="flex flex-wrap gap-1 mb-2">'+main.finish.split(',').slice(0,3).map(t=>'<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600">'+t.trim()+'</span>').join('')+'</div>' : '');
 
-          return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer">'+
+          return '<article data-group-key="'+g.key+'" class="ace-product-card group relative rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 flex flex-col cursor-pointer" style="box-shadow:0 8px 24px rgba(10,14,39,0.06);">'+
             '<div class="relative aspect-square overflow-hidden bg-slate-50">'+
               '<img src="'+main.img+'" alt="'+g.name+'" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display=\'none\';this.parentElement.style.background=\'linear-gradient(135deg,#f8fafc,#e2e8f0)\';" />'+
               '<div class="absolute top-2.5 left-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full text-white shadow" style="background:'+hex+';">'+g.cat+'</span></div>'+
               (g.sub ? '<div class="absolute top-2.5 right-2.5"><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/90 border border-slate-200 text-slate-700">'+g.sub+'</span></div>' : '')+
               (variants.length>1 ? '<div class="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-white shadow">'+variants.length+'색상</div>' : '')+
-              '<div class="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"><span class="px-3 py-1.5 rounded-full bg-white text-slate-900 text-xs font-bold shadow-lg">상세보기 →</span></div>'+
+              '<div class="absolute inset-0 bg-blue-700/0 group-hover:bg-blue-700/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"><span class="px-3 py-1.5 rounded-full bg-white text-slate-900 text-xs font-bold shadow-lg">상세보기 →</span></div>'+
             '</div>'+
             '<div class="p-3 flex-1 flex flex-col">'+
               '<h3 class="text-[13px] font-black tracking-tight text-slate-900 leading-snug mb-2 line-clamp-2">'+g.name+'</h3>'+
               variantPreview +
               '<div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">'+
                 '<span class="text-slate-400 font-semibold">USUNG ACE</span>'+
-                '<span class="font-bold text-blue-600 flex items-center gap-1">상세 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>'+
+                '<span class="font-bold text-blue-700 flex items-center gap-1">상세 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>'+
               '</div>'+
             '</div>'+
           '</article>';
@@ -545,7 +570,7 @@
     };
 
     render();
-    grid.dataset.patched = 'v7';
+    grid.dataset.patched = 'v8';
     return true;
   }
 
@@ -570,7 +595,7 @@
 
   function applyAll() {
     killMegaHoverCat();
-    patchMegaMenu();
+    installCleanMegaMenu();
     patchNavbar();
     patchHeroOverlay();
     patchFeaturesSection();
@@ -580,16 +605,20 @@
   }
 
   function init() {
+    killMegaHoverCat();
     applyAll();
     let n = 0;
     const iv = setInterval(() => {
       applyAll();
-      if (++n > 40) clearInterval(iv);
-    }, 250);
+      if (++n > 60) clearInterval(iv);
+    }, 200);
     new MutationObserver(applyAll).observe(document.body, {
       childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'id']
     });
   }
+
+  // 즉시 실행 (killMegaHoverCat을 가능한 빨리)
+  killMegaHoverCat();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
