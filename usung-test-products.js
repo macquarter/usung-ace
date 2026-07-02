@@ -7,6 +7,20 @@
     { no:2001, img:IMG_LED,  name:'우주선 갓등 [테스트]',   cat:'2. LED 조명타입', sub:'우주선/갓등',    color:'동',  finish:'동',  pipe:'' },
     { no:2002, img:IMG_STEN, name:'스텐 스윙텐션 [테스트]', cat:'3. 스텐파이프',   sub:'도금/스윙 텐션', color:'크롬', finish:'크롬', pipe:'' }
   ];
+
+  // 모달 제품 이미지를 크게 표시 (index_v6.html 수정 없이 CSS 오버라이드)
+  function injectModalCss(){
+    if(document.getElementById('usung-test-modal-css')) return;
+    var css = ''
+      + '#ace-product-modal-body .aspect-square.rounded-2xl{aspect-ratio:auto !important;min-height:400px !important;}'
+      + '@media(min-width:768px){#ace-product-modal-body .aspect-square.rounded-2xl{min-height:560px !important;}}'
+      + '#ace-product-modal-body .aspect-square.rounded-2xl img{max-width:100% !important;max-height:540px !important;width:auto !important;height:auto !important;padding:0.4rem !important;object-fit:contain !important;}';
+    var st = document.createElement('style');
+    st.id = 'usung-test-modal-css';
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
   function getACE(){ try { return window.ACE_DATA || (typeof ACE_DATA!=='undefined'?ACE_DATA:null); } catch(e){ return null; } }
   function inject(){
     var ACE = getACE();
@@ -22,6 +36,7 @@
     if(grid && typeof window.filterByNode === 'function'){ window.filterByNode(''); }
     return true;
   }
+  injectModalCss();
   var iv = setInterval(function(){ if(inject()) clearInterval(iv); }, 250);
-  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', inject); } else { inject(); }
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', function(){ injectModalCss(); inject(); }); } else { inject(); }
 })();
