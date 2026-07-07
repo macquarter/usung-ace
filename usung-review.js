@@ -9,6 +9,9 @@
  *  slide 3   홈 히어로 — "대한민국 덕트 No.1"만, 하단에 제품라인업/견적문의 버튼
  *  slide 4   FIM 헤딩 "움직임으로"(shimmer) 너무 연함 → 주변과 동일 진한 네이비
  *  slide 5   스탯 스트립 + FIM 카드 그리드(빨간 네모칸) 삭제
+ *  slide 18  기술 탭 "기술" → "기술 및 인증현황" 명칭 변경
+ *  slide 28  인증현황(고객센터) 내용을 코어기술 페이지 하단으로 이동해 한 탭으로 통합,
+ *            고객센터의 인증현황·프로세스 탭(및 프로세스 페이지) 제거
  *  slide 26  게시판 필터 — 전체/제품소식/블로그만, 기술정보·시공사례·업계동향 삭제
  *  slide 27  게시판 — 작성자 열 삭제, 댓글 [0] 숨김, NEW 배지는 최근 3개월(90일) 이내만
  *  slide 29  고객센터 — "시공 사례 / 견적 상담" → "견적 상담", "매장 규모별 맞춤 설계" 삭제
@@ -31,7 +34,10 @@
       + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\]{grid-template-columns:60px 90px 1fr 110px 80px !important;}'
       + '@media(min-width:768px){#page-board .md\\:grid-cols-\\[60px_90px_1fr_120px_110px_80px\\]{grid-template-columns:60px 90px 1fr 110px 80px !important;}}'
       + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4),'
-      + '#page-board .md\\:grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4){display:none !important;}';
+      + '#page-board .md\\:grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4){display:none !important;}'
+      // slide 28 : 코어기술로 이동한 인증현황 블록 — 구분선 + reveal 강제 표시(스크롤 애니 미발동 대비)
+      + '#ace-cert-merged{margin-top:2.5rem !important;padding-top:2.5rem !important;border-top:1px solid rgba(12,30,90,.10) !important;}'
+      + '#ace-cert-merged .reveal{opacity:1 !important;transform:none !important;}';
     var st = document.createElement('style');
     st.id = 'usung-review-css';
     st.textContent = css;
@@ -157,6 +163,38 @@
     });
   }
 
+  /* ---- slide 28 : 인증현황 내용을 코어기술 페이지 하단으로 이동 -------- */
+  function techCertMerge() {
+    if (document.getElementById('ace-cert-merged')) return;   // 이미 통합됨
+    var tech = document.getElementById('page-tech');
+    var cert = document.getElementById('page-certification');
+    if (!tech || !cert) return;
+    var block = cert.children[0];                             // .max-w-7xl 래퍼(제목+필터+카드+통계)
+    if (!block) return;
+    block.id = 'ace-cert-merged';
+    var kids = tech.children;
+    var lastCta = kids.length ? kids[kids.length - 1] : null; // 마지막 "설치문의" CTA 섹션 앞에 삽입
+    if (lastCta) { tech.insertBefore(block, lastCta); } else { tech.appendChild(block); }
+  }
+
+  /* ---- slide 28 : 고객센터의 인증현황·프로세스 탭 제거 ---------------- */
+  function hideNavRows() {
+    ['nav_process', 'nav_archive'].forEach(function (key) {
+      document.querySelectorAll('[data-i18n="' + key + '"]').forEach(function (sp) {
+        var row = sp.closest('button') || sp.closest('a') || sp.parentElement;
+        if (row) row.style.display = 'none';
+      });
+    });
+  }
+
+  /* ---- slide 18 : "기술" → "기술 및 인증현황" 명칭 변경 --------------- */
+  function relabelTechNav() {
+    // data-i18n="nav_tech" 가 재렌더 시 원문을 되돌리므로 가드 없이 매 패스 재적용
+    document.querySelectorAll('[data-i18n="nav_tech"]').forEach(function (sp) {
+      if ((sp.textContent || '').trim() !== '기술 및 인증현황') sp.textContent = '기술 및 인증현황';
+    });
+  }
+
   /* ---- 실행 하네스 -------------------------------------------------- */
   function applyAll() {
     injectReviewCss();
@@ -166,6 +204,9 @@
     try { boardFilters(); }    catch (e) {}
     try { boardMeta(); }       catch (e) {}
     try { customerMenu(); }    catch (e) {}
+    try { techCertMerge(); }   catch (e) {}
+    try { hideNavRows(); }     catch (e) {}
+    try { relabelTechNav(); }  catch (e) {}
   }
 
   function init() {
