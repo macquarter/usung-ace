@@ -20,6 +20,8 @@
  *  slide 26  게시판 필터 — 전체/제품소식/블로그만, 기술정보·시공사례·업계동향 삭제
  *  slide 27  게시판 — 작성자 열 삭제, 댓글 [0] 숨김, NEW 배지는 최근 3개월(90일) 이내만
  *  slide 29  고객센터 — "시공 사례 / 견적 상담" → "견적 상담", "매장 규모별 맞춤 설계" 삭제
+ *  [Task2]   부품 페이지 — 카드 크게(5→4열) + 박스 균일(정사각), 여백 축소
+ *            (※ 실제 균일 누끼는 "부품 크롭본" 48종 이미지 교체 필요 — 업로드 방식 확정 후 진행)
  * ===================================================================== */
 (function () {
   'use strict';
@@ -47,7 +49,14 @@
       + '#gallery-modal .gm-card{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) !important;}'
       + '@media(max-width:768px){#gallery-modal .gm-card{grid-template-columns:1fr !important;}}'
       + '#gallery-modal .gm-image{min-height:520px !important;}'
-      + '#gallery-modal .gm-image img{width:100% !important;height:100% !important;object-fit:cover !important;}';
+      + '#gallery-modal .gm-image img{width:100% !important;height:100% !important;object-fit:cover !important;}'
+      // Task2 : 부품 카드 크게 + 박스 균일 — 데스크톱 5→4열, md 4→3열 (셀이 커져 부품이 크게 보임)
+      + '#parts-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:1.5rem !important;}'
+      + '@media(min-width:768px){#parts-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}}'
+      + '@media(min-width:1024px){#parts-grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}}'
+      // 이미지 박스 여백 축소 → 부품이 프레임을 더 채워 크게 보이고, 박스 비율(정사각)은 유지되어 균일
+      + '#parts-grid .aspect-square{padding:.5rem !important;}'
+      + '#parts-grid .aspect-square img{max-width:100% !important;max-height:100% !important;}';
     var st = document.createElement('style');
     st.id = 'usung-review-css';
     st.textContent = css;
