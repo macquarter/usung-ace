@@ -27,8 +27,11 @@
     if (document.getElementById('usung-review-css')) return;
     var css = ''
       // slide 27 : 게시판 데스크톱 그리드에서 '작성자' 열(4번째 셀) 제거 (6열 → 5열)
+      // 헤더행 클래스: grid-cols-[...] / 데이터행 클래스: md:grid-cols-[...] (반응형)
       + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\]{grid-template-columns:60px 90px 1fr 110px 80px !important;}'
-      + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4){display:none !important;}';
+      + '@media(min-width:768px){#page-board .md\\:grid-cols-\\[60px_90px_1fr_120px_110px_80px\\]{grid-template-columns:60px 90px 1fr 110px 80px !important;}}'
+      + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4),'
+      + '#page-board .md\\:grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4){display:none !important;}';
     var st = document.createElement('style');
     st.id = 'usung-review-css';
     st.textContent = css;
@@ -146,9 +149,9 @@
         var t = (el.textContent || '').trim();
         if (/^매장\s*규모별\s*맞춤\s*설계$/.test(t)) {
           el.style.display = 'none';
-        } else if (/^시공\s*사례\s*\/\s*견적\s*상담$/.test(t) && el.dataset.aceRelabelled !== '1') {
+        } else if (/^시공\s*사례\s*\/\s*견적\s*상담$/.test(t)) {
+          // data-i18n="nav_inquiry" 가 재렌더 시 원문을 되돌리므로 가드 없이 매 패스 재적용
           el.textContent = '견적 상담';
-          el.dataset.aceRelabelled = '1';
         }
       });
     });
