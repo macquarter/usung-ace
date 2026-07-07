@@ -6,27 +6,42 @@
  * 이 파일을 inject 목록에서 빼면 즉시 원복(되돌리기 안전).
  *
  * [적용 현황]
- *  slide 3  홈 히어로 — "대한민국 덕트 No.1"만, 하단에 제품라인업/견적문의 버튼
- *  slide 4  FIM 헤딩 "움직임으로"(shimmer) 너무 연함 → 주변과 동일 진한 네이비
- *  slide 5  스탯 스트립 + FIM 카드 그리드(빨간 네모칸) 삭제
+ *  slide 3   홈 히어로 — "대한민국 덕트 No.1"만, 하단에 제품라인업/견적문의 버튼
+ *  slide 4   FIM 헤딩 "움직임으로"(shimmer) 너무 연함 → 주변과 동일 진한 네이비
+ *  slide 5   스탯 스트립 + FIM 카드 그리드(빨간 네모칸) 삭제
+ *  slide 26  게시판 필터 — 전체/제품소식/블로그만, 기술정보·시공사례·업계동향 삭제
+ *  slide 27  게시판 — 작성자 열 삭제, 댓글 [0] 숨김, NEW 배지는 최근 3개월(90일) 이내만
+ *  slide 29  고객센터 — "시공 사례 / 견적 상담" → "견적 상담", "매장 규모별 맞춤 설계" 삭제
  * ===================================================================== */
 (function () {
   'use strict';
 
   var NAVY  = '#0c1e5a';
   var BRAND = '#1e40af';
+  var NEW_DAYS = 90;
 
   function setImp(el, prop, val) { try { el.style.setProperty(prop, val, 'important'); } catch (e) {} }
+
+  /* ---- 리뷰 전용 CSS 1회 주입 --------------------------------------- */
+  function injectReviewCss() {
+    if (document.getElementById('usung-review-css')) return;
+    var css = ''
+      // slide 27 : 게시판 데스크톱 그리드에서 '작성자' 열(4번째 셀) 제거 (6열 → 5열)
+      + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\]{grid-template-columns:60px 90px 1fr 110px 80px !important;}'
+      + '#page-board .grid-cols-\\[60px_90px_1fr_120px_110px_80px\\] > :nth-child(4){display:none !important;}';
+    var st = document.createElement('style');
+    st.id = 'usung-review-css';
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
 
   /* ---- slide 3 : 홈 히어로 ------------------------------------------ */
   function homeHero() {
     var hero = document.getElementById('anim-hero');
     if (!hero) return;
-    // "오늘을 이끄는 원동력." 부제 숨김 → 큰 타이틀은 "대한민국 덕트 No.1"만
     hero.querySelectorAll('[data-cms="h_sub"], [data-i18n="hero_sub"]').forEach(function (el) {
       el.style.display = 'none';
     });
-    // 하단에 바로 제품 라인업 / 견적 문의 버튼 (1회 주입)
     if (!hero.querySelector('#ace-hero-cta')) {
       var wrap = document.createElement('div');
       wrap.id = 'ace-hero-cta';
@@ -73,24 +88,81 @@
 
   /* ---- slide 5 : 빨간 네모칸 삭제 (스탯 스트립 + FIM 카드) ----------- */
   function homeRemoveBoxed() {
-    // 임팩트 카피 "대한민국의 기술 유성에이스 세계로 나아갑니다."
     var impact = document.querySelector('#page-home [data-i18n="impact_copy"]');
     if (impact) { var box = impact.closest('div'); if (box) box.style.display = 'none'; }
-    // 스탯 스트립 28+ / 20y / 360° / 100%
     document.querySelectorAll('#page-home .count').forEach(function (c) {
       var g = c.closest('.grid'); if (g) g.style.display = 'none';
     });
-    // FIM 카드 그리드(4장)
     document.querySelectorAll('#page-home .fcard').forEach(function (card) {
       var g = card.closest('.grid'); if (g) g.style.display = 'none';
     });
   }
 
+  /* ---- slide 26 : 게시판 필터 탭 정리 ------------------------------- */
+  function boardFilters() {
+    var b = document.getElementById('page-board');
+    if (!b) return;
+    b.querySelectorAll('button').forEach(function (btn) {
+      var oc = btn.getAttribute('onclick') || '';
+      if (/setBoardFilter\('(기술정보|시공사례|업계동향)'\)/.test(oc)) {
+        btn.style.display = 'none';
+      }
+    });
+  }
+
+  /* ---- slide 27 : 게시판 댓글[0] 숨김 + NEW 배지 90일 제한 ---------- */
+  function boardMeta() {
+    var b = document.getElementById('page-board');
+    if (!b) return;
+    // 댓글 카운트 "[n]" 숨김 (댓글 미연동)
+    b.querySelectorAll('span, div').forEach(function (el) {
+      if (el.children.length === 0 && /^\[\d+\]$/.test((el.textContent || '').trim())) {
+        el.style.display = 'none';
+      }
+    });
+    // NEW 배지: 등록일이 90일 이내인 글만 유지
+    var now = Date.now();
+    b.querySelectorAll('span').forEach(function (badge) {
+      if (!/^new$/i.test((badge.textContent || '').trim())) return;
+      var row = badge.closest('a') || badge.closest('div[class*="grid-cols"]') ||
+                badge.closest('li') || badge.parentElement;
+      var txt = row ? row.textContent : '';
+      var m = txt.match(/(20\d\d)\.(\d\d)\.(\d\d)/);
+      if (m) {
+        var d = new Date(+m[1], +m[2] - 1, +m[3]).getTime();
+        if (now - d > NEW_DAYS * 86400000) badge.style.display = 'none';
+      }
+    });
+  }
+
+  /* ---- slide 29 : 고객센터 "견적 상담"으로 정리 --------------------- */
+  function customerMenu() {
+    // 내비게이션/메가메뉴 영역으로 스캔 범위 제한 (전체 DOM 스캔 방지)
+    var scopes = document.querySelectorAll(
+      'nav, header, [class*="mega"], [class*="menu"], [class*="dropdown"], [id*="menu"]');
+    scopes.forEach(function (scope) {
+      scope.querySelectorAll('*').forEach(function (el) {
+        if (el.children.length !== 0) return;
+        var t = (el.textContent || '').trim();
+        if (/^매장\s*규모별\s*맞춤\s*설계$/.test(t)) {
+          el.style.display = 'none';
+        } else if (/^시공\s*사례\s*\/\s*견적\s*상담$/.test(t) && el.dataset.aceRelabelled !== '1') {
+          el.textContent = '견적 상담';
+          el.dataset.aceRelabelled = '1';
+        }
+      });
+    });
+  }
+
   /* ---- 실행 하네스 -------------------------------------------------- */
   function applyAll() {
+    injectReviewCss();
     try { homeHero(); }        catch (e) {}
     try { fimHeading(); }      catch (e) {}
     try { homeRemoveBoxed(); } catch (e) {}
+    try { boardFilters(); }    catch (e) {}
+    try { boardMeta(); }       catch (e) {}
+    try { customerMenu(); }    catch (e) {}
   }
 
   function init() {
