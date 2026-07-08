@@ -1,0 +1,36 @@
+/* ============================================================
+   유성에이스 화이트톤 보정 — 블랙톤 잔재 4곳
+   theme-white.css 뒤에 로드되어 남은 다크 카드를 화이트톤으로 통일
+   1) 기술및인증현황 USE CASE 카드 3개
+   2) 제품소개 상담 CTA 박스
+   3) 홈 3D 프리뷰 패널
+   4) 푸터
+   ============================================================ */
+
+/* 1) page-tech USE CASE 카드 */
+#page-tech article[class*="from-[#0b1220]"]{background:#ffffff!important;border-color:#e2e8f0!important;box-shadow:0 14px 34px rgba(15,23,42,.07)!important}
+#page-tech article[class*="from-[#0b1220]"] h3{color:#0f172a!important}
+#page-tech article[class*="from-[#0b1220]"] p{color:#475569!important}
+#page-tech article[class*="from-[#0b1220]"] [class*="text-white"]{color:#64748b!important}
+#page-tech article[class*="from-[#0b1220]"] .text-lg.font-black[class*="text-white"]{color:#0f172a!important}
+#page-tech article[class*="from-[#0b1220]"] [class*="border-white"]{border-color:#e2e8f0!important}
+#page-tech article[class*="from-[#0b1220]"] span[class*="rounded-full"]{background:#eff6ff!important;border-color:#bfdbfe!important;color:#1d4ed8!important}
+
+/* 2) page-products 상담 CTA */
+#page-products [class*="from-blue-950"]{background:#ffffff!important;border-color:#e2e8f0!important;box-shadow:0 20px 50px rgba(15,23,42,.08)!important}
+#page-products [class*="from-blue-950"] h3{color:#0f172a!important}
+#page-products [class*="from-blue-950"] p{color:#475569!important}
+#page-products [class*="from-blue-950"] [class*="text-white"]{color:#475569!important}
+#page-products [class*="from-blue-950"] [class*="border-white"]{border-color:#cbd5e1!important}
+#page-products [class*="from-blue-950"] button[class*="border-white"]{color:#334155!important}
+#page-products [class*="from-blue-950"] a[class*="bg-white"]{background:#2563eb!important;color:#ffffff!important}
+
+/* 3) page-home 3D 프리뷰 패널 (내부 video 영역은 유지) */
+#page-home [class*="min-h-[720px]"]{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%)!important;border:1px solid #e2e8f0!important;color:#334155!important}
+#page-home [class*="min-h-[720px]"] [class*="text-white"]{color:#334155!important}
+
+/* 4) 푸터 */
+footer[class*="bg-[#0a0a0a]"]{background:#f8fafc!important;border-top-color:#e2e8f0!important;color:#475569!important}
+footer[class*="bg-[#0a0a0a]"] [class*="text-white"]{color:#334155!important}
+footer[class*="bg-[#0a0a0a]"] a{color:#475569!important}
+footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!important}
