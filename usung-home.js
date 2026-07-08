@@ -7,6 +7,7 @@
  * 슬라이드3: 홈 섹션 순서 재배치 + 2개 섹션 삭제.
  *   순서 = 1)신개념 유성에이스+통계 → 2)유성에이스 후드의 장점(3D) → 3)대한민국의 불 앞에서 → 4)시공 갤러리
  *   삭제 = FEATURES IN MOTION, VIDEO SHOWCASE
+ * + 후드의 장점(CORE TECHNOLOGY) 3D 그래픽 배경을 다크→푸른색으로 변경(hood3d-canvas 배경 fill 가로채기).
  * 원본 index_v6.html 은 건드리지 않고 런타임 DOM 패치. 되돌리기: inject.js 주입 1줄 제거.
  */
 (function () {
@@ -114,9 +115,64 @@
     });
   }
 
+  // 후드의 장점(CORE TECHNOLOGY) 3D 그래픽 배경을 푸른색으로 —
+  // 캔버스는 매 프레임 다크 그라디언트로 배경을 다시 칠하므로, 컨텍스트의
+  // 배경 fill(프레임 첫 fillRect(0,0,W,H))을 가로채 푸른 그라디언트로 교체한다.
+  var BG_TOP = '#1b3f86';   // 좌상단(밝은 블루)
+  var BG_BOT = '#0a1c48';   // 우하단(딥 네이비블루)
+  function tintHoodGraphic() {
+    var canvas = document.getElementById('hood3d-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx || ctx.__usungBlueBg) return;
+    ctx.__usungBlueBg = true;
+    var origClear = ctx.clearRect.bind(ctx);
+    var origFill = ctx.fillRect.bind(ctx);
+    ctx.clearRect = function (x, y, w, h) {
+      ctx.__frameStart = true;              // 매 프레임 시작 표시
+      return origClear(x, y, w, h);
+    };
+    ctx.fillRect = function (x, y, w, h) {
+      // 프레임의 첫 전체배경 fill(좌상단 0,0에서 시작)만 푸른 그라디언트로 교체
+      if (ctx.__frameStart && x === 0 && y === 0) {
+        ctx.__frameStart = false;
+        var g = ctx.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, BG_TOP);
+        g.addColorStop(1, BG_BOT);
+        var saved = ctx.fillStyle;
+        ctx.fillStyle = g;
+        origFill(x, y, w, h);
+        ctx.fillStyle = saved;
+        return;
+      }
+      return origFill(x, y, w, h);
+    };
+    // 캔버스 로드 전/여백에 잠깐 보이는 래퍼 배경도 동일 톤으로
+    var wrap = document.getElementById('hood-3d-wrap');
+    if (wrap) {
+      wrap.style.background = 'linear-gradient(135deg,' + BG_TOP + ',' + BG_BOT + ')';
+      // 플로팅 라벨칩: 다크 배경일 때 쓰던 어두운 글씨가 푸른 배경에서 안 보이므로
+      // 칩 배경을 딥블루 반투명으로 깔고 글씨를 밝게 (라벨 가독성 확보)
+      var chips = wrap.querySelectorAll('div.absolute');
+      Array.prototype.forEach.call(chips, function (c) {
+        if (c.__usungChip) return;
+        c.__usungChip = true;
+        if (getComputedStyle(c).backgroundColor !== 'rgba(0, 0, 0, 0)') {
+          c.style.setProperty('background', 'rgba(8,18,46,0.62)', 'important');
+          c.style.setProperty('border', '1px solid rgba(150,180,255,0.30)', 'important');
+        }
+        c.style.setProperty('color', '#e8eeff', 'important');
+        Array.prototype.forEach.call(c.querySelectorAll('*'), function (d) {
+          d.style.setProperty('color', '#e8eeff', 'important');
+        });
+      });
+    }
+  }
+
   function render() {
     setHeroTexts();
     reorderSections();
+    tintHoodGraphic();
     wireScroll();
   }
 
