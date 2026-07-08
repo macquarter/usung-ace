@@ -60,6 +60,13 @@
       + '#parts-grid .aspect-square img{max-width:100% !important;max-height:100% !important;}'
       // Task3 : 제품 상세 모달
       + '#up-modal{display:none;}'
+      + '#up-part-modal{display:none;}'
+      + '#up-part-modal.flex{display:flex !important;}'
+      + '.up-sw{border-color:rgba(255,255,255,.10);background:transparent;cursor:pointer;}'
+      + '.up-sw:hover{border-color:rgba(59,130,246,.45);}'
+      + '.up-sw-on{border-color:#3b82f6 !important;background:rgba(59,130,246,.15) !important;}'
+      + '.up-parts-row::-webkit-scrollbar{height:6px;}'
+      + '.up-parts-row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px;}'
       + '#up-modal.flex{display:flex !important;}'
       + '#up-modal img{image-rendering:auto;}';
     var st = document.createElement('style');
@@ -415,6 +422,100 @@
     if (/코브라|하향식|후드/.test(cat)) return '코브라후드';
     return '전체';
   }
+
+  /* 대분류 → 관련 부품(NP 인덱스) 매핑 (부품 및 옵션 스트립용) */
+  var UP_PARTS_MAP = {
+    '갤럭시':    [0, 1, 2, 3, 6, 12, 22, 24, 25, 26, 32, 33],
+    '파이프':    [0, 1, 2, 3, 15, 16, 17, 22, 25, 26, 32],
+    'LED조명':   [18, 19, 33, 34, 35, 36, 37, 39, 40],
+    '후레쉬볼':  [41, 42, 43, 44, 45, 46, 47, 20, 31],
+    '코브라후드':[24, 25, 26, 29, 32, 33, 34]
+  };
+
+  /* --- 라벨 유틸 --------------------------------------------------- */
+  function upLcp(strs) {
+    if (!strs.length) return '';
+    var a = strs.slice().sort(), first = a[0], last = a[a.length - 1], i = 0;
+    while (i < first.length && first.charAt(i) === last.charAt(i)) i++;
+    return first.slice(0, i);
+  }
+  /* 각 변형(마감/색상)의 짧은 라벨: 마감이 모두 고유하면 마감, 아니면 제품명−공통접두 */
+  function upVarLabels(items) {
+    var fins = items.map(function (p) { return p.finish || ''; });
+    var allFin = fins.every(function (f) { return !!f; });
+    var uniq = {}; fins.forEach(function (f) { uniq[f] = 1; });
+    if (allFin && Object.keys(uniq).length === items.length) return fins.slice();
+    var names = items.map(function (p) { return p.name || ''; });
+    var lcp = upLcp(names);
+    var cut = lcp.lastIndexOf(' ');
+    var pref = cut > 0 ? lcp.slice(0, cut + 1) : (lcp.length >= 2 ? lcp : '');
+    return names.map(function (n) { var s = n.slice(pref.length).trim(); return s || n; });
+  }
+  /* 모델(제품그룹) 제목: 제품그룹 있으면 그것, 없으면 제품명 공통접두, 없으면 섹션 라벨 */
+  function upModelTitle(label, names) {
+    var lcp = upLcp(names), cut = lcp.lastIndexOf(' ');
+    var t = cut >= 2 ? lcp.slice(0, cut).trim() : (lcp.length >= 2 ? lcp.trim() : '');
+    return t || label;
+  }
+
+  /* --- 부품 미니 모달 (제품 페이지에서도 부품 클릭 가능) ----------- */
+  function upPartImg(p) { try { return p.img.normalize('NFD'); } catch (e) { return p.img; } }
+  function upBuildPartModal() {
+    if (document.getElementById('up-part-modal')) return;
+    var m = document.createElement('div');
+    m.id = 'up-part-modal';
+    m.className = 'fixed inset-0 z-[10000] items-center justify-center p-4';
+    m.innerHTML =
+      '<div class="upp-bg absolute inset-0 bg-black/80 backdrop-blur-sm"></div>'
+      + '<div class="relative bg-[#0d0d0f] border border-white/10 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">'
+        + '<button id="upp-close" type="button" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg leading-none">✕</button>'
+        + '<div class="bg-white/[0.03] flex items-center justify-center p-8 min-h-[240px]"><img id="upp-img" alt="" class="max-w-full max-h-[44vh] object-contain" /></div>'
+        + '<div class="p-6">'
+          + '<div id="upp-cat" class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-1"></div>'
+          + '<h3 id="upp-name" class="text-lg font-black text-white mb-2"></h3>'
+          + '<p id="upp-desc" class="text-[13px] text-white/60 leading-relaxed mb-3"></p>'
+          + '<div id="upp-specs" class="text-[12px] text-white/45 border-t border-white/10 pt-3"></div>'
+        + '</div>'
+      + '</div>';
+    document.body.appendChild(m);
+    m.querySelector('.upp-bg').onclick = upClosePart;
+    document.getElementById('upp-close').onclick = upClosePart;
+  }
+  function upClosePart() {
+    var m = document.getElementById('up-part-modal');
+    if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    document.body.style.overflow = '';
+  }
+  window.upOpenPart = function (ni) {
+    upBuildPartModal();
+    var p = NP[ni]; if (!p) return;
+    var g = function (id) { return document.getElementById(id); };
+    if (g('upp-img'))   { g('upp-img').src = upPartImg(p); g('upp-img').alt = p.name; }
+    if (g('upp-cat'))     g('upp-cat').textContent = p.cat;
+    if (g('upp-name'))    g('upp-name').textContent = p.name;
+    if (g('upp-desc'))    g('upp-desc').textContent = p.desc;
+    if (g('upp-specs'))   g('upp-specs').textContent = p.specs;
+    var m = g('up-part-modal'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+  };
+
+  /* 부품 및 옵션 스트립 (대분류별) */
+  function upPartsStrip(cat) {
+    var idxs = UP_PARTS_MAP[cat] || [];
+    if (!idxs.length) return '';
+    var chips = idxs.map(function (ni) {
+      var p = NP[ni]; if (!p) return '';
+      return '<button type="button" onclick="upOpenPart(' + ni + ')" class="flex-none flex flex-col items-center gap-1 w-[66px] group">'
+        + '<span class="w-14 h-14 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden p-1 group-hover:border-blue-400/50 transition"><img src="' + upPartImg(p) + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
+        + '<span class="text-[9px] text-white/50 leading-tight text-center line-clamp-2">' + p.name + '</span>'
+        + '</button>';
+    }).join('');
+    return '<div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4">'
+      + '<div class="flex items-center gap-2 mb-3"><span class="text-[11px] font-bold tracking-widest text-blue-300/80">부품 및 옵션</span><span class="flex-1 h-px bg-white/10"></span></div>'
+      + '<div class="flex gap-2 overflow-x-auto pb-1 up-parts-row">' + chips + '</div>'
+      + '</div>';
+  }
+
+  /* --- 제품 상세 모달 --------------------------------------------- */
   function upBuildModal() {
     if (document.getElementById('up-modal')) return;
     var m = document.createElement('div');
@@ -425,10 +526,13 @@
       + '<div class="relative bg-[#0d0d0f] border border-white/10 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl">'
         + '<button id="up-close" type="button" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-lg leading-none">✕</button>'
         + '<div class="md:w-3/5 bg-white/[0.03] flex items-center justify-center p-6 min-h-[300px]"><img id="up-img" alt="" class="max-w-full max-h-[70vh] object-contain" /></div>'
-        + '<div class="md:w-2/5 p-7 flex flex-col">'
+        + '<div class="md:w-2/5 p-7 flex flex-col overflow-y-auto max-h-[90vh]">'
           + '<div id="up-cat" class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-2"></div>'
-          + '<h3 id="up-name" class="text-xl md:text-2xl font-black text-white leading-snug mb-4"></h3>'
-          + '<div id="up-tags" class="flex flex-wrap gap-1.5 mb-5"></div>'
+          + '<h3 id="up-name" class="text-xl md:text-2xl font-black text-white leading-snug mb-3"></h3>'
+          + '<div id="up-tags" class="flex flex-wrap gap-1.5 mb-4"></div>'
+          + '<div id="up-vars-lbl" class="text-white/40 text-[11px] mb-2 hidden">색상·마감 선택</div>'
+          + '<div id="up-vars" class="flex flex-wrap gap-1.5 mb-5"></div>'
+          + '<div id="up-parts-wrap" class="mb-3"></div>'
           + '<div class="mt-auto pt-5 border-t border-white/10 flex items-center justify-between">'
             + '<div class="flex items-center gap-2">'
               + '<button id="up-prev" type="button" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl leading-none">‹</button>'
@@ -459,12 +563,48 @@
     if (g('up-tags'))   g('up-tags').innerHTML = (p.tags || []).map(function (t) {
       return '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/60">' + t + '</span>';
     }).join('');
+    /* 색상·마감 스와치 (형제 변형) */
+    var vars = g('up-vars'), vlbl = g('up-vars-lbl');
+    var b = (p._blk != null) ? window.__upBlocks[p._blk] : null;
+    if (vars) {
+      if (b && b.imgs.length > 1) {
+        if (vlbl) vlbl.classList.remove('hidden');
+        vars.innerHTML = b.imgs.map(function (im, k) {
+          return '<button type="button" onclick="upModalVar(' + p._blk + ',' + k + ')" data-k="' + k + '" class="up-sw ' + (k === p._loc ? 'up-sw-on' : '') + ' flex-none flex flex-col items-center gap-1 w-[52px] rounded-lg p-1 border transition">'
+            + '<span class="w-11 h-11 rounded-md bg-white/[0.04] flex items-center justify-center overflow-hidden p-0.5"><img src="' + im + '" alt="" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
+            + '<span class="text-[9px] leading-tight text-center text-white/60 line-clamp-2">' + b.labels[k] + '</span>'
+            + '</button>';
+        }).join('');
+      } else { if (vlbl) vlbl.classList.add('hidden'); vars.innerHTML = ''; }
+    }
+    /* 부품 및 옵션 */
+    var pw = g('up-parts-wrap'); if (pw) pw.innerHTML = upPartsStrip(p.cat);
     if (g('up-prev'))   g('up-prev').onclick = function () { upOpenModal((i - 1 + arr.length) % arr.length); };
     if (g('up-next'))   g('up-next').onclick = function () { upOpenModal((i + 1) % arr.length); };
     if (g('up-counter')) g('up-counter').textContent = (i + 1) + ' / ' + arr.length;
     var m = g('up-modal'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
   }
+  window.upModalVar = function (n, k) {
+    var b = window.__upBlocks[n]; if (!b) return;
+    upOpenModal(b.gidx[k]);
+  };
   window.openProductModal = upOpenModal;
+
+  /* 인라인 스와치: 히어로 이미지 즉시 교체 */
+  window.upSwatch = function (n, k) {
+    var b = window.__upBlocks[n]; if (!b) return;
+    b.cur = k;
+    var img = document.getElementById('upimg-' + n); if (img) img.src = b.imgs[k];
+    var cap = document.getElementById('upcap-' + n); if (cap) cap.textContent = b.labels[k];
+    var root = img && img.closest ? img.closest('.up-block') : null;
+    if (root) [].forEach.call(root.querySelectorAll('.up-sw'), function (el) {
+      el.classList.toggle('up-sw-on', el.getAttribute('data-k') === String(k));
+    });
+  };
+  window.upZoom = function (n) {
+    var b = window.__upBlocks[n]; if (!b) return;
+    upOpenModal(b.gidx[b.cur || 0]);
+  };
 
   /* 대분류 필터칩 (엑셀 대분류 5종 + 전체) */
   function upRenderFilter() {
@@ -479,73 +619,78 @@
     }).join('');
   }
 
-  /* 카다로그형 계층 렌더러: 중분류=파란 번호 배너 / 제품그룹=소제목 / 마감=카드 */
+  /* 카다로그형 렌더러: 중분류=파란 번호 배너 / 제품그룹=모델 블록(히어로+색상 스와치) / 대분류별 부품 스트립 */
   function upRenderGrid() {
     var grid = document.getElementById('products-grid'); if (!grid) return;
     var src = upActiveCat === '전체' ? UP.slice() : UP.filter(function (p) { return p.cat === upActiveCat; });
     var empty = document.getElementById('products-empty'); if (empty) empty.classList.toggle('hidden', src.length > 0);
 
-    /* 내장 tailwind 그리드를 블록으로 강제 전환 (배너가 전폭을 차지) */
     setImp(grid, 'display', 'block');
     setImp(grid, 'gap', '0');
 
-    /* 중분류(type) 최초 등장 순서 유지 → 그 안에서 제품그룹(grp) 순서 유지 */
-    var order = [], map = {};
+    /* 섹션 = (대분류, 라벨). 코브라후드는 대분류로 병합, 이름 중복 제거 */
+    var order = [], sec = {};
     src.forEach(function (p) {
-      var t = p.type || p.cat;
-      if (!map[t]) { map[t] = { name: t, cat: p.cat, groups: [], gmap: {} }; order.push(t); }
+      var lbl = p.cat === '코브라후드' ? '코브라후드' : ((p.type && p.type.replace(/[()]/g, '').trim()) || p.cat);
+      var key = p.cat + '||' + lbl;
+      if (!sec[key]) { sec[key] = { cat: p.cat, label: lbl, groups: [], gmap: {}, seen: {} }; order.push(key); }
+      var s = sec[key];
+      if (s.seen[p.name]) return;
+      s.seen[p.name] = 1;
       var gk = p.grp || '';
-      if (!map[t].gmap[gk]) { map[t].gmap[gk] = []; map[t].groups.push(gk); }
-      map[t].gmap[gk].push(p);
+      if (!s.gmap[gk]) { s.gmap[gk] = []; s.groups.push(gk); }
+      s.gmap[gk].push(p);
     });
 
-    upFiltered = []; /* 렌더 순서대로 평탄화 → 모달 이전/다음 연속성 */
-    var html = '';
-    order.forEach(function (t, ti) {
-      var tg = map[t];
-      var cnt = 0; tg.groups.forEach(function (gk) { cnt += tg.gmap[gk].length; });
-      var num = ('0' + (ti + 1)).slice(-2);
-      html += '<section class="mb-12">'
-        + '<div class="flex items-center gap-4 rounded-2xl px-5 py-4 mb-6 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 shadow-lg shadow-blue-900/30">'
+    window.__upBlocks = {}; upFiltered = [];
+    var bn = 0, html = '';
+    order.forEach(function (key, si) {
+      var s = sec[key];
+      var cnt = 0; s.groups.forEach(function (gk) { cnt += s.gmap[gk].length; });
+      var num = ('0' + (si + 1)).slice(-2);
+      html += '<section class="mb-14">'
+        + '<div class="flex items-center gap-4 rounded-2xl px-5 py-4 mb-7 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 shadow-lg shadow-blue-900/30">'
           + '<span class="flex-none w-11 h-11 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-white font-black text-lg">' + num + '</span>'
-          + '<div class="min-w-0">'
-            + '<div class="text-white font-black text-lg md:text-xl leading-tight">' + tg.name + '</div>'
-            + '<div class="text-blue-100/80 text-[12px] font-semibold tracking-wide">' + tg.cat + ' · ' + cnt + '종</div>'
-          + '</div>'
+          + '<div class="min-w-0"><div class="text-white font-black text-lg md:text-xl leading-tight">' + s.label + '</div>'
+          + '<div class="text-blue-100/80 text-[12px] font-semibold tracking-wide">' + s.cat + ' · ' + cnt + '종</div></div>'
           + '<span class="ml-auto flex-none text-[11px] font-bold tracking-[0.2em] text-white/70">USUNG ACE</span>'
         + '</div>';
-      tg.groups.forEach(function (gk) {
-        var items = tg.gmap[gk];
-        if (gk) {
-          html += '<div class="flex items-center gap-2 mb-3 mt-7 px-1">'
-            + '<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>'
-            + '<h4 class="text-white font-bold text-[14px] tracking-tight">' + gk + '</h4>'
-            + '<span class="text-white/35 text-[12px]">' + items.length + '종</span>'
-            + '<span class="flex-1 h-px bg-white/10 ml-2"></span>'
-          + '</div>';
-        }
-        html += '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-2">';
-        items.forEach(function (p) {
+      s.groups.forEach(function (gk) {
+        var items = s.gmap[gk];
+        var names = items.map(function (p) { return p.name; });
+        var labels = upVarLabels(items);
+        var title = gk || upModelTitle(s.label, names) || s.label;
+        var n = bn++;
+        var imgs = [], gidx = [];
+        items.forEach(function (p, k) {
           var gi = upFiltered.length; upFiltered.push(p);
-          var label = p.finish || p.name;
-          html += '<article data-up="1" data-idx="' + gi + '" class="group relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent overflow-hidden hover:border-blue-400/50 transition-all hover:-translate-y-1 duration-500 cursor-pointer">'
-            + '<div class="relative aspect-square overflow-hidden bg-[#0a0e18]">'
-              + '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-110" />'
-            + '</div>'
-            + '<div class="p-3">'
-              + '<div class="text-white font-bold text-[12px] leading-snug line-clamp-2">' + label + '</div>'
-            + '</div>'
-          + '</article>';
+          p._blk = n; p._loc = k;
+          imgs.push(p.img); gidx.push(gi);
         });
-        html += '</div>';
+        window.__upBlocks[n] = { imgs: imgs, labels: labels, gidx: gidx, title: title, cur: 0 };
+        var swHtml = items.map(function (p, k) {
+          return '<button type="button" onclick="upSwatch(' + n + ',' + k + ')" data-k="' + k + '" class="up-sw ' + (k === 0 ? 'up-sw-on' : '') + ' flex-none flex flex-col items-center gap-1 w-[58px] rounded-lg p-1 border transition">'
+            + '<span class="w-12 h-12 rounded-md bg-white/[0.04] flex items-center justify-center overflow-hidden p-0.5"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
+            + '<span class="text-[9px] leading-tight text-center text-white/60 line-clamp-2">' + labels[k] + '</span>'
+            + '</button>';
+        }).join('');
+        html += '<div class="up-block grid md:grid-cols-2 gap-5 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-4 md:p-5 mb-5" data-up="1">'
+          + '<div class="relative rounded-xl overflow-hidden bg-[#0a0e18] aspect-[4/3] md:aspect-auto md:min-h-[280px] cursor-pointer group" onclick="upZoom(' + n + ')">'
+            + '<img id="upimg-' + n + '" src="' + items[0].img + '" alt="' + title + '" class="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />'
+            + '<span class="absolute bottom-2 right-2 text-[10px] bg-black/50 text-white/80 px-2 py-1 rounded-full">🔍 확대</span>'
+          + '</div>'
+          + '<div class="flex flex-col">'
+            + '<div class="text-white font-black text-base md:text-lg leading-snug mb-1">' + title + '</div>'
+            + '<div id="upcap-' + n + '" class="text-blue-300 text-[12px] font-semibold mb-3">' + labels[0] + '</div>'
+            + '<div class="text-white/40 text-[11px] mb-2">색상·마감 ' + items.length + '종 — 클릭해 변경</div>'
+            + '<div class="flex flex-wrap gap-1.5">' + swHtml + '</div>'
+          + '</div>'
+        + '</div>';
       });
+      html += upPartsStrip(s.cat);
       html += '</section>';
     });
     grid.innerHTML = html;
-
-    [].forEach.call(grid.querySelectorAll('[data-up="1"]'), function (card) {
-      card.onclick = function () { upOpenModal(parseInt(card.getAttribute('data-idx'), 10)); };
-    });
     grid.classList.remove('in'); void grid.offsetWidth; grid.classList.add('in');
   }
 
