@@ -553,12 +553,22 @@
       var active = c === upActiveCat;
       var sub = '';
       if (active) {
+        /* 활성 대분류의 하위목록 = 중분류(section) — 예: 갤럭시 → 갤럭시A/B/C/D */
+        var secOrder = [], secMap = {};
+        ids.forEach(function (id) {
+          var s = upModels[id].section;
+          if (!secMap[s]) { secMap[s] = 0; secOrder.push(s); }
+          secMap[s]++;
+        });
+        var curSec = (upView === 'detail' && upModels[upCurModel]) ? upModels[upCurModel].section : null;
         sub = '<div class="mt-1 mb-2 space-y-0.5 pl-3 ml-2 border-l border-white/10">'
-          + ids.map(function (id) {
-              var m = upModels[id];
-              var on = (upView === 'detail' && upCurModel === id);
-              return '<button type="button" onclick="upGoModel(' + id + ')" class="block w-full text-left px-2.5 py-1.5 rounded-md text-[12px] leading-tight truncate transition '
-                + (on ? 'bg-blue-600 text-white font-semibold' : 'text-white/50 hover:text-white hover:bg-white/5') + '">' + m.title + '</button>';
+          + secOrder.map(function (secLabel, si) {
+              var on = (curSec === secLabel);
+              return '<button type="button" onclick="upGoSec(\'' + c + '\',' + si + ')" class="w-full flex items-center justify-between gap-2 text-left px-2.5 py-1.5 rounded-md text-[12px] leading-tight transition '
+                + (on ? 'bg-blue-600 text-white font-semibold' : 'text-white/55 hover:text-white hover:bg-white/5') + '">'
+                + '<span class="truncate">' + secLabel + '</span>'
+                + '<span class="text-[10px] font-semibold opacity-60">' + secMap[secLabel] + '</span>'
+              + '</button>';
             }).join('')
           + '</div>';
       }
@@ -590,8 +600,8 @@
         + '<h2 class="text-2xl md:text-3xl font-black text-white leading-tight">' + upActiveCat
           + ' <span class="text-white/35 text-lg font-bold">' + total + '종</span></h2>'
       + '</div>';
-    order.forEach(function (sec) {
-      html += '<div class="mb-9">'
+    order.forEach(function (sec, si) {
+      html += '<div id="up-sec-' + si + '" class="mb-9 scroll-mt-28">'
         + '<div class="flex items-center gap-3 mb-4">'
           + '<span class="text-white font-bold text-[15px]">' + sec + '</span>'
           + '<span class="text-white/30 text-[12px] font-semibold">' + smap[sec].length + '</span>'
@@ -711,6 +721,17 @@
   window.upGoCat = function (c) {
     upActiveCat = c; upView = 'list'; upCurModel = -1;
     upRenderSide(); upRenderList(); upScrollTop();
+  };
+  /* 중분류(section) 클릭 → 목록에서 해당 섹션으로 스크롤 */
+  window.upGoSec = function (c, si) {
+    upActiveCat = c; upView = 'list'; upCurModel = -1;
+    upRenderSide(); upRenderList();
+    requestAnimationFrame(function () {
+      var el = document.getElementById('up-sec-' + si);
+      if (!el) { upScrollTop(); return; }
+      var y = el.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    });
   };
   window.upGoModel = function (id) {
     var m = upModels[id]; if (!m) return;
