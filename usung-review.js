@@ -573,7 +573,7 @@
     var s = document.createElement('script');
     s.id = 'up-data-script';
     s.src = '/usung-catalog-data.js';
-    s.onload = function () { upBuildFromData(); try { applyAll(); } catch (e) {} };
+    s.onload = function () { upBuildFromData(); try { applyAllGuarded(); } catch (e) {} };
     (document.head || document.documentElement).appendChild(s);
   }
 
@@ -596,13 +596,32 @@
     try { productsRebuild(); }    catch (e) {}
   }
 
+  /* 관찰자 폭주 방지: applyAll 중에는 옵저버를 끊고, 변경은 디바운스로 합침
+     (SPA 히어로 애니메이션이 DOM을 매 프레임 바꿔 applyAll이 초당 수백 번
+      호출되면서 렌더러가 얼어붙던 문제 수정) */
+  var _obs = null, _pending = false, _applying = false;
+  function applyAllGuarded() {
+    if (_applying) return;
+    _applying = true;
+    if (_obs) { try { _obs.disconnect(); } catch (e) {} }
+    try { applyAll(); } catch (e) {}
+    _applying = false;
+    if (_obs) { try { _obs.observe(document.body, { childList: true, subtree: true }); } catch (e) {} }
+  }
+  function scheduleApply() {
+    if (_pending) return;
+    _pending = true;
+    setTimeout(function () { _pending = false; applyAllGuarded(); }, 250);
+  }
+
   function init() {
     upLoadData();
-    applyAll();
+    applyAllGuarded();
     var n = 0;
-    var iv = setInterval(function () { applyAll(); if (++n > 80) clearInterval(iv); }, 200);
+    var iv = setInterval(function () { applyAllGuarded(); if (++n > 30) clearInterval(iv); }, 300);
     try {
-      new MutationObserver(applyAll).observe(document.body, { childList: true, subtree: true });
+      _obs = new MutationObserver(scheduleApply);
+      _obs.observe(document.body, { childList: true, subtree: true });
     } catch (e) {}
   }
 
