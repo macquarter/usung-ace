@@ -1,9 +1,9 @@
 /* usung-home.js — 홈(대문) 재구성 오버레이 (슬라이드 2·3)
- * 슬라이드2: 히어로 스크롤 멘트를 3개로 축소 + 마지막에 CTA 버튼(제품 라인업/견적).
+ * 슬라이드2: 히어로 스크롤 멘트를 3개로 축소 + 마지막 멘트3에 CTA 버튼(제품 라인업/견적).
  *   - 멘트1: 프리미엄 직화기 후드의 기준
  *   - 멘트2: 한 번 사용 해보면, 다시 찾는 이유가 있습니다.
- *   - 멘트3: 유성에이스를 쓰면, 후드의 기준이 달라집니다.
- *   - 기존 4개 기술 모션 프레임(anim-feat1~4)은 숨김, CTA 큰 타이틀도 숨김.
+ *   - 멘트3: 유성에이스를 쓰면, 후드의 기준이 달라집니다.  ← CTA 버튼 부착(usung-review.js homeHero)
+ *   - 기존 4개 기술 모션 프레임(anim-feat1~4)은 숨김, 별도 CTA 프레임(anim-cta)도 숨김.
  * 슬라이드3: 홈 섹션 순서 재배치 + 2개 섹션 삭제.
  *   순서 = 1)신개념 유성에이스+통계 → 2)유성에이스 후드의 장점(3D) → 3)대한민국의 불 앞에서 → 4)시공 갤러리
  *   삭제 = FEATURES IN MOTION, VIDEO SHOWCASE
@@ -44,21 +44,12 @@
       var el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
-    // CTA — 큰 타이틀/설명 숨기고 버튼만 남김
+    // 별도 CTA 프레임(anim-cta)은 전체 숨김 — CTA는 멘트3(anim-text2)에 직접 부착됨
     var cta = document.getElementById('anim-cta');
-    if (cta) {
-      var title = cta.querySelector('h2');
-      if (title) title.style.display = 'none';
-      var desc = cta.querySelector('p[data-cms="h_cta_desc"]');
-      if (desc) desc.style.display = 'none';
-      var tag = cta.querySelector('[data-cms="h_cta_tag"]');
-      if (tag) { tag.textContent = 'SINCE 2007 · USUNG ACE'; tag.style.marginBottom = '28px'; }
-      cta.style.background = 'transparent';
-      cta.style.backdropFilter = 'none';
-    }
+    if (cta) cta.style.display = 'none';
   }
 
-  // 스크롤 타임라인 재조정 — 멘트1 → 멘트2 → 멘트3 → CTA (feat 구간 제거)
+  // 스크롤 타임라인 재조정 — 멘트1 → 멘트2 → 멘트3(+CTA, 최종 유지) (feat/별도CTA 구간 제거)
   function wireScroll() {
     if (window.__usungHomeScroll) return;
     window.__usungHomeScroll = true;
@@ -82,14 +73,11 @@
       // 멘트2
       set('anim-text1', mr(p, 0.24, 0.32, 0, 1) * mr(p, 0.42, 0.50, 1, 0),
         'translateY(' + mr(p, 0.24, 0.32, 40, 0) + 'px)');
-      // 멘트3
-      set('anim-text2', mr(p, 0.54, 0.62, 0, 1) * mr(p, 0.72, 0.80, 1, 0),
-        'translateY(' + mr(p, 0.54, 0.62, 40, 0) + 'px)');
-      // CTA
-      var ctaOp = mr(p, 0.86, 0.94, 0, 1);
-      set('anim-cta', ctaOp, 'scale(' + mr(p, 0.86, 0.94, 0.92, 1) + ')');
-      var ctaEl = document.getElementById('anim-cta');
-      if (ctaEl) ctaEl.style.pointerEvents = ctaOp > 0.5 ? 'auto' : 'none';
+      // 멘트3 (+CTA 버튼 부착) — 마지막 상태로 유지(페이드아웃 없음), 버튼 클릭 가능
+      var m3op = mr(p, 0.54, 0.62, 0, 1);
+      set('anim-text2', m3op, 'translateY(' + mr(p, 0.54, 0.62, 40, 0) + 'px)');
+      var m3el = document.getElementById('anim-text2');
+      if (m3el) m3el.style.pointerEvents = m3op > 0.5 ? 'auto' : 'none';
     }
     window.addEventListener('scroll', tick, { passive: true });
     // 초기 1회 + 지연 재적용
