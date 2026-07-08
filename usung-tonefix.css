@@ -48,3 +48,12 @@ footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!impor
 
 /* 7) 홈 시안 라벨 — 밝은 시안(text-cyan-300)이 밝은 배경에서 안 보임 */
 #page-home [class*="text-cyan-300"]{color:#0e7490!important}
+
+/* 8) 옅은 회색 라벨(text-white/20~35 → slate-400)이 흰 배경에서 거의 안 보임
+   → slate-500(#64748b, 대비 4.8:1)로 상향. 화이트테마 페이지(홈 제외) 전역.
+   theme-white.css 와 동일 선택자·범위, 색상값만 한 단계 진하게. */
+.page:not(#page-home) [class*="text-white/3"],
+.page:not(#page-home) [class*="text-white/2"]{color:#64748b!important}
+
+/* 9) 제품소개 옅은 파랑 아이브로(text-blue-300, 흰 배경)이 흐릿 → 진한 파랑 */
+#page-products [class*="text-blue-300"]{color:#2563eb!important}
