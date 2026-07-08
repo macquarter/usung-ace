@@ -68,6 +68,9 @@
       + '.up-parts-row::-webkit-scrollbar{height:6px;}'
       + '.up-parts-row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px;}'
       + '#up-modal.flex{display:flex !important;}'
+      + '.upd-sw{border:1px solid #e5e7eb;background:#fff;cursor:pointer;}'
+      + '.upd-sw:hover{border-color:#3b82f6;}'
+      + '.upd-sw-on{border-color:#2563eb !important;box-shadow:0 0 0 2px rgba(37,99,235,.25) !important;}'
       + '#up-modal img{image-rendering:auto;}';
     var st = document.createElement('style');
     st.id = 'usung-review-css';
@@ -498,217 +501,263 @@
     var m = g('up-part-modal'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
   };
 
-  /* 부품 및 옵션 스트립 (대분류별) */
-  function upPartsStrip(cat) {
-    var idxs = UP_PARTS_MAP[cat] || [];
-    if (!idxs.length) return '';
-    var chips = idxs.map(function (ni) {
-      var p = NP[ni]; if (!p) return '';
-      return '<button type="button" onclick="upOpenPart(' + ni + ')" class="flex-none flex flex-col items-center gap-1 w-[66px] group">'
-        + '<span class="w-14 h-14 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden p-1 group-hover:border-blue-400/50 transition"><img src="' + upPartImg(p) + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
-        + '<span class="text-[9px] text-white/50 leading-tight text-center line-clamp-2">' + p.name + '</span>'
-        + '</button>';
-    }).join('');
-    return '<div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4">'
-      + '<div class="flex items-center gap-2 mb-3"><span class="text-[11px] font-bold tracking-widest text-blue-300/80">부품 및 옵션</span><span class="flex-1 h-px bg-white/10"></span></div>'
-      + '<div class="flex gap-2 overflow-x-auto pb-1 up-parts-row">' + chips + '</div>'
-      + '</div>';
-  }
+  /* =====================================================================
+   * 제품소개 — 카다로그형 2패널 레이아웃 (좌: 카테고리 사이드바 / 우: 목록·상세)
+   *  · 무한스크롤 제거: 카테고리별로 한 화면씩
+   *  · 제품 클릭 → 인페이지 상세뷰(뎁스, 흰 배경) + 부품 및 옵션 전체 노출 + 관련상품
+   *  · 모달/확대아이콘 제거
+   * ===================================================================== */
 
-  /* --- 제품 상세 모달 --------------------------------------------- */
-  function upBuildModal() {
-    if (document.getElementById('up-modal')) return;
-    var m = document.createElement('div');
-    m.id = 'up-modal';
-    m.className = 'fixed inset-0 z-[9999] items-center justify-center p-4';
-    m.innerHTML =
-      '<div class="up-modal-bg absolute inset-0 bg-black/80 backdrop-blur-sm"></div>'
-      + '<div class="relative bg-[#0d0d0f] border border-white/10 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl">'
-        + '<button id="up-close" type="button" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-lg leading-none">✕</button>'
-        + '<div class="md:w-3/5 bg-white/[0.03] flex items-center justify-center p-6 min-h-[300px]"><img id="up-img" alt="" class="max-w-full max-h-[70vh] object-contain" /></div>'
-        + '<div class="md:w-2/5 p-7 flex flex-col overflow-y-auto max-h-[90vh]">'
-          + '<div id="up-cat" class="text-[11px] font-bold tracking-[0.2em] text-blue-400 mb-2"></div>'
-          + '<h3 id="up-name" class="text-xl md:text-2xl font-black text-white leading-snug mb-3"></h3>'
-          + '<div id="up-tags" class="flex flex-wrap gap-1.5 mb-4"></div>'
-          + '<div id="up-vars-lbl" class="text-white/40 text-[11px] mb-2 hidden">색상·마감 선택</div>'
-          + '<div id="up-vars" class="flex flex-wrap gap-1.5 mb-5"></div>'
-          + '<div id="up-parts-wrap" class="mb-3"></div>'
-          + '<div class="mt-auto pt-5 border-t border-white/10 flex items-center justify-between">'
-            + '<div class="flex items-center gap-2">'
-              + '<button id="up-prev" type="button" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl leading-none">‹</button>'
-              + '<button id="up-next" type="button" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl leading-none">›</button>'
-            + '</div>'
-            + '<span id="up-counter" class="text-[12px] text-white/40"></span>'
-          + '</div>'
-          + '<a href="tel:1588-9123" class="mt-4 text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition">상담 문의</a>'
-        + '</div>'
-      + '</div>';
-    document.body.appendChild(m);
-    m.querySelector('.up-modal-bg').onclick = upCloseModal;
-    document.getElementById('up-close').onclick = upCloseModal;
-  }
-  function upCloseModal() {
-    var m = document.getElementById('up-modal');
-    if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
-    document.body.style.overflow = '';
-  }
-  function upOpenModal(i) {
-    upBuildModal();
-    var arr = upFiltered.length ? upFiltered : UP;
-    var p = arr[i]; if (!p) return;
-    var g = function (id) { return document.getElementById(id); };
-    if (g('up-img'))  { g('up-img').src = p.img; g('up-img').alt = p.name; }
-    if (g('up-cat'))    g('up-cat').textContent = p.cat + (p.type ? '  ·  ' + p.type : '') + (p.grp ? '  ·  ' + p.grp : '');
-    if (g('up-name'))   g('up-name').textContent = p.name;
-    if (g('up-tags'))   g('up-tags').innerHTML = (p.tags || []).map(function (t) {
-      return '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/60">' + t + '</span>';
-    }).join('');
-    /* 색상·마감 스와치 (형제 변형) */
-    var vars = g('up-vars'), vlbl = g('up-vars-lbl');
-    var b = (p._blk != null) ? window.__upBlocks[p._blk] : null;
-    if (vars) {
-      if (b && b.imgs.length > 1) {
-        if (vlbl) vlbl.classList.remove('hidden');
-        vars.innerHTML = b.imgs.map(function (im, k) {
-          return '<button type="button" onclick="upModalVar(' + p._blk + ',' + k + ')" data-k="' + k + '" class="up-sw ' + (k === p._loc ? 'up-sw-on' : '') + ' flex-none flex flex-col items-center gap-1 w-[52px] rounded-lg p-1 border transition">'
-            + '<span class="w-11 h-11 rounded-md bg-white/[0.04] flex items-center justify-center overflow-hidden p-0.5"><img src="' + im + '" alt="" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
-            + '<span class="text-[9px] leading-tight text-center text-white/60 line-clamp-2">' + b.labels[k] + '</span>'
-            + '</button>';
-        }).join('');
-      } else { if (vlbl) vlbl.classList.add('hidden'); vars.innerHTML = ''; }
-    }
-    /* 부품 및 옵션 */
-    var pw = g('up-parts-wrap'); if (pw) pw.innerHTML = upPartsStrip(p.cat);
-    if (g('up-prev'))   g('up-prev').onclick = function () { upOpenModal((i - 1 + arr.length) % arr.length); };
-    if (g('up-next'))   g('up-next').onclick = function () { upOpenModal((i + 1) % arr.length); };
-    if (g('up-counter')) g('up-counter').textContent = (i + 1) + ' / ' + arr.length;
-    var m = g('up-modal'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
-  }
-  window.upModalVar = function (n, k) {
-    var b = window.__upBlocks[n]; if (!b) return;
-    upOpenModal(b.gidx[k]);
-  };
-  window.openProductModal = upOpenModal;
-
-  /* 인라인 스와치: 히어로 이미지 즉시 교체 */
-  window.upSwatch = function (n, k) {
-    var b = window.__upBlocks[n]; if (!b) return;
-    b.cur = k;
-    var img = document.getElementById('upimg-' + n); if (img) img.src = b.imgs[k];
-    var cap = document.getElementById('upcap-' + n); if (cap) cap.textContent = b.labels[k];
-    var root = img && img.closest ? img.closest('.up-block') : null;
-    if (root) [].forEach.call(root.querySelectorAll('.up-sw'), function (el) {
-      el.classList.toggle('up-sw-on', el.getAttribute('data-k') === String(k));
-    });
-  };
-  window.upZoom = function (n) {
-    var b = window.__upBlocks[n]; if (!b) return;
-    upOpenModal(b.gidx[b.cur || 0]);
-  };
-
-  /* 대분류 필터칩 (엑셀 대분류 5종 + 전체) */
-  function upRenderFilter() {
-    var filt = document.getElementById('product-filter'); if (!filt) return;
-    var cats = ['전체'].concat(UP_CATS);
-    filt.innerHTML = cats.map(function (c) {
-      var count = c === '전체' ? UP.length : UP.filter(function (p) { return p.cat === c; }).length;
-      var active = c === upActiveCat;
-      var col = UP_COL[c] || { text:'text-white/70', bg:'bg-white/5', border:'border-white/15' };
-      var cls = active ? 'bg-white text-black border-white' : (col.text + ' ' + col.bg + ' ' + col.border + ' hover:bg-white/10');
-      return '<button onclick="filterProducts(this.dataset.cat)" data-cat="' + c + '" class="px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition border ' + cls + '">' + c + ' <span class="opacity-60 ml-1">' + count + '</span></button>';
-    }).join('');
-  }
-
-  /* 카다로그형 렌더러: 중분류=파란 번호 배너 / 제품그룹=모델 블록(히어로+색상 스와치) / 대분류별 부품 스트립 */
-  function upRenderGrid() {
-    var grid = document.getElementById('products-grid'); if (!grid) return;
-    var src = upActiveCat === '전체' ? UP.slice() : UP.filter(function (p) { return p.cat === upActiveCat; });
-    var empty = document.getElementById('products-empty'); if (empty) empty.classList.toggle('hidden', src.length > 0);
-
-    setImp(grid, 'display', 'block');
-    setImp(grid, 'gap', '0');
-
-    /* 섹션 = (대분류, 라벨). 코브라후드는 대분류로 병합, 이름 중복 제거 */
+  /* 모델(색상·마감 변형 묶음) 빌드 */
+  var upModels = [];      // [{id,cat,section,title,items[],labels[],imgs[]}]
+  var upByCat  = {};      // cat -> [modelId...]
+  function upBuildModels() {
+    upModels = []; upByCat = {};
+    UP_CATS.forEach(function (c) { upByCat[c] = []; });
     var order = [], sec = {};
-    src.forEach(function (p) {
-      var lbl = p.cat === '코브라후드' ? '코브라후드' : ((p.type && p.type.replace(/[()]/g, '').trim()) || p.cat);
+    UP.forEach(function (p) {
+      var lbl = p.cat === '코브라후드' ? '코브라후드'
+              : ((p.type && p.type.replace(/[()]/g, '').trim()) || p.cat);
       var key = p.cat + '||' + lbl;
-      if (!sec[key]) { sec[key] = { cat: p.cat, label: lbl, groups: [], gmap: {}, seen: {} }; order.push(key); }
+      if (!sec[key]) { sec[key] = { cat: p.cat, label: lbl, gmap: {}, groups: [], seen: {} }; order.push(key); }
       var s = sec[key];
-      if (s.seen[p.name]) return;
-      s.seen[p.name] = 1;
+      if (s.seen[p.name]) return; s.seen[p.name] = 1;
       var gk = p.grp || '';
       if (!s.gmap[gk]) { s.gmap[gk] = []; s.groups.push(gk); }
       s.gmap[gk].push(p);
     });
-
-    window.__upBlocks = {}; upFiltered = [];
-    var bn = 0, html = '';
-    order.forEach(function (key, si) {
+    order.forEach(function (key) {
       var s = sec[key];
-      var cnt = 0; s.groups.forEach(function (gk) { cnt += s.gmap[gk].length; });
-      var num = ('0' + (si + 1)).slice(-2);
-      html += '<section class="mb-14">'
-        + '<div class="flex items-center gap-4 rounded-2xl px-5 py-4 mb-7 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 shadow-lg shadow-blue-900/30">'
-          + '<span class="flex-none w-11 h-11 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-white font-black text-lg">' + num + '</span>'
-          + '<div class="min-w-0"><div class="text-white font-black text-lg md:text-xl leading-tight">' + s.label + '</div>'
-          + '<div class="text-blue-100/80 text-[12px] font-semibold tracking-wide">' + s.cat + ' · ' + cnt + '종</div></div>'
-          + '<span class="ml-auto flex-none text-[11px] font-bold tracking-[0.2em] text-white/70">USUNG ACE</span>'
-        + '</div>';
       s.groups.forEach(function (gk) {
-        var items = s.gmap[gk];
-        var names = items.map(function (p) { return p.name; });
+        var items  = s.gmap[gk];
+        var names  = items.map(function (p) { return p.name; });
         var labels = upVarLabels(items);
-        var title = gk || upModelTitle(s.label, names) || s.label;
-        var n = bn++;
-        var imgs = [], gidx = [];
-        items.forEach(function (p, k) {
-          var gi = upFiltered.length; upFiltered.push(p);
-          p._blk = n; p._loc = k;
-          imgs.push(p.img); gidx.push(gi);
-        });
-        window.__upBlocks[n] = { imgs: imgs, labels: labels, gidx: gidx, title: title, cur: 0 };
-        var swHtml = items.map(function (p, k) {
-          return '<button type="button" onclick="upSwatch(' + n + ',' + k + ')" data-k="' + k + '" class="up-sw ' + (k === 0 ? 'up-sw-on' : '') + ' flex-none flex flex-col items-center gap-1 w-[58px] rounded-lg p-1 border transition">'
-            + '<span class="w-12 h-12 rounded-md bg-white/[0.04] flex items-center justify-center overflow-hidden p-0.5"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
-            + '<span class="text-[9px] leading-tight text-center text-white/60 line-clamp-2">' + labels[k] + '</span>'
-            + '</button>';
-        }).join('');
-        html += '<div class="up-block grid md:grid-cols-2 gap-5 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-4 md:p-5 mb-5" data-up="1">'
-          + '<div class="relative rounded-xl overflow-hidden bg-[#0a0e18] aspect-[4/3] md:aspect-auto md:min-h-[280px] cursor-pointer group" onclick="upZoom(' + n + ')">'
-            + '<img id="upimg-' + n + '" src="' + items[0].img + '" alt="' + title + '" class="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />'
-            + '<span class="absolute bottom-2 right-2 text-[10px] bg-black/50 text-white/80 px-2 py-1 rounded-full">🔍 확대</span>'
-          + '</div>'
-          + '<div class="flex flex-col">'
-            + '<div class="text-white font-black text-base md:text-lg leading-snug mb-1">' + title + '</div>'
-            + '<div id="upcap-' + n + '" class="text-blue-300 text-[12px] font-semibold mb-3">' + labels[0] + '</div>'
-            + '<div class="text-white/40 text-[11px] mb-2">색상·마감 ' + items.length + '종 — 클릭해 변경</div>'
-            + '<div class="flex flex-wrap gap-1.5">' + swHtml + '</div>'
-          + '</div>'
-        + '</div>';
+        var title  = gk || upModelTitle(s.label, names) || s.label;
+        var id = upModels.length;
+        upModels.push({ id: id, cat: s.cat, section: s.label, title: title,
+                        items: items, labels: labels, imgs: items.map(function (p) { return p.img; }), _cur: 0 });
+        if (upByCat[s.cat]) upByCat[s.cat].push(id);
       });
-      html += upPartsStrip(s.cat);
-      html += '</section>';
     });
-    grid.innerHTML = html;
-    grid.classList.remove('in'); void grid.offsetWidth; grid.classList.add('in');
   }
 
+  var upActiveCat = '갤럭시';
+  var upView      = 'list';   // 'list' | 'detail'
+  var upCurModel  = -1;
+
+  /* ---- 좌측 카테고리 사이드바 ------------------------------------- */
+  function upRenderSide() {
+    var side = document.getElementById('up-side'); if (!side) return;
+    var html = UP_CATS.map(function (c) {
+      var ids = upByCat[c] || [];
+      var active = c === upActiveCat;
+      var sub = '';
+      if (active) {
+        sub = '<div class="mt-1 mb-2 space-y-0.5 pl-3 ml-2 border-l border-white/10">'
+          + ids.map(function (id) {
+              var m = upModels[id];
+              var on = (upView === 'detail' && upCurModel === id);
+              return '<button type="button" onclick="upGoModel(' + id + ')" class="block w-full text-left px-2.5 py-1.5 rounded-md text-[12px] leading-tight truncate transition '
+                + (on ? 'bg-blue-600 text-white font-semibold' : 'text-white/50 hover:text-white hover:bg-white/5') + '">' + m.title + '</button>';
+            }).join('')
+          + '</div>';
+      }
+      return '<div class="mb-0.5">'
+        + '<button type="button" onclick="upGoCat(\'' + c + '\')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-bold text-[13px] transition '
+          + (active ? 'bg-white text-black' : 'text-white/75 hover:bg-white/5') + '">'
+          + '<span>' + c + '</span><span class="text-[11px] font-semibold opacity-55">' + ids.length + '</span>'
+        + '</button>' + sub
+      + '</div>';
+    }).join('');
+    side.innerHTML =
+      '<div class="text-[10px] font-bold tracking-[0.25em] text-white/35 px-3 mb-3">제품 카테고리</div>' + html;
+  }
+
+  /* ---- 우측 목록(카테고리별 그리드) ------------------------------- */
+  function upRenderList() {
+    var main = document.getElementById('up-main'); if (!main) return;
+    var ids = upByCat[upActiveCat] || [];
+    var order = [], smap = {};
+    ids.forEach(function (id) {
+      var m = upModels[id];
+      if (!smap[m.section]) { smap[m.section] = []; order.push(m.section); }
+      smap[m.section].push(id);
+    });
+    var total = ids.length;
+    var html =
+      '<div class="mb-7">'
+        + '<div class="text-[11px] font-bold tracking-[0.2em] text-blue-300/80 mb-1">PRODUCT LINEUP</div>'
+        + '<h2 class="text-2xl md:text-3xl font-black text-white leading-tight">' + upActiveCat
+          + ' <span class="text-white/35 text-lg font-bold">' + total + '종</span></h2>'
+      + '</div>';
+    order.forEach(function (sec) {
+      html += '<div class="mb-9">'
+        + '<div class="flex items-center gap-3 mb-4">'
+          + '<span class="text-white font-bold text-[15px]">' + sec + '</span>'
+          + '<span class="text-white/30 text-[12px] font-semibold">' + smap[sec].length + '</span>'
+          + '<span class="flex-1 h-px bg-white/10"></span>'
+        + '</div>'
+        + '<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">'
+        + smap[sec].map(function (id) { return upCardHtml(id); }).join('')
+        + '</div>'
+      + '</div>';
+    });
+    main.innerHTML = html;
+    main.classList.remove('in'); void main.offsetWidth; main.classList.add('in');
+  }
+
+  function upCardHtml(id) {
+    var m = upModels[id];
+    var vinfo = m.items.length > 1 ? '색상·마감 ' + m.items.length + '종' : '단일 구성';
+    return '<button type="button" onclick="upGoModel(' + id + ')" class="group text-left bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-blue-400/40 rounded-2xl p-3 transition">'
+      + '<div class="aspect-square rounded-xl bg-[#0a0e18] overflow-hidden mb-3 flex items-center justify-center">'
+        + '<img src="' + m.imgs[0] + '" alt="' + m.title + '" loading="lazy" class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500" />'
+      + '</div>'
+      + '<div class="text-white font-bold text-[13px] leading-snug mb-0.5 truncate">' + m.title + '</div>'
+      + '<div class="text-white/40 text-[11px]">' + vinfo + '</div>'
+    + '</button>';
+  }
+
+  /* ---- 우측 상세뷰(뎁스, 흰 배경) --------------------------------- */
+  function upRenderDetail() {
+    var main = document.getElementById('up-main'); if (!main) return;
+    var m = upModels[upCurModel];
+    if (!m) { upView = 'list'; upRenderList(); return; }
+    var cur = m._cur || 0;
+    var multi = m.items.length > 1;
+
+    var swHtml = !multi ? '' :
+      '<div class="mb-6">'
+        + '<div class="text-neutral-500 text-[12px] font-semibold mb-2">색상·마감 ' + m.items.length + '종 — 클릭해 변경</div>'
+        + '<div class="flex flex-wrap gap-2">'
+        + m.items.map(function (p, k) {
+            return '<button type="button" data-k="' + k + '" onclick="upDetailVar(' + k + ')" class="upd-sw ' + (k === cur ? 'upd-sw-on' : '') + ' rounded-xl p-1.5 w-[64px] transition">'
+              + '<span class="block w-full aspect-square rounded-lg bg-neutral-50 overflow-hidden flex items-center justify-center p-1"><img src="' + p.img + '" alt="' + (m.labels[k] || '') + '" loading="lazy" class="max-w-full max-h-full object-contain" /></span>'
+              + '<span class="block text-[10px] text-neutral-500 mt-1 leading-tight truncate">' + (m.labels[k] || '') + '</span>'
+            + '</button>';
+          }).join('')
+        + '</div>'
+      + '</div>';
+
+    var tags = (m.items[cur].tags || []);
+    var tagHtml = tags.length ? '<div class="flex flex-wrap gap-1.5 mb-6">'
+      + tags.map(function (t) { return '<span class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-neutral-100 text-neutral-600 border border-neutral-200">' + t + '</span>'; }).join('')
+      + '</div>' : '';
+
+    main.innerHTML =
+      '<button type="button" onclick="upBackToList()" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-[13px] font-semibold mb-4 transition">'
+        + '<span class="text-lg leading-none">‹</span> 목록으로</button>'
+      + '<div class="bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/40">'
+        + '<div class="grid md:grid-cols-2">'
+          + '<div class="bg-neutral-50 flex items-center justify-center p-8 md:p-12 min-h-[360px] border-b md:border-b-0 md:border-r border-neutral-100">'
+            + '<img id="up-hero" src="' + m.imgs[cur] + '" alt="' + m.title + '" class="max-w-full max-h-[440px] object-contain" />'
+          + '</div>'
+          + '<div class="p-7 md:p-10">'
+            + '<div class="text-[11px] font-bold tracking-[0.18em] text-blue-600 mb-2">' + m.cat + '  ·  ' + m.section + '</div>'
+            + '<h2 class="text-2xl md:text-[28px] font-black text-neutral-900 leading-tight mb-2">' + m.title + '</h2>'
+            + '<div id="up-cap" class="text-blue-600 font-semibold text-[14px] mb-5">' + (m.labels[cur] || '') + '</div>'
+            + tagHtml + swHtml
+            + '<a href="tel:1588-9123" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[14px] px-6 py-3 rounded-xl transition">상담 문의</a>'
+          + '</div>'
+        + '</div>'
+        + upPartsGrid(m.cat)
+        + upRelatedHtml(m)
+      + '</div>';
+    main.classList.remove('in'); void main.offsetWidth; main.classList.add('in');
+  }
+
+  /* 부품 및 옵션 — 전체 노출 그리드(드래그 없음) */
+  function upPartsGrid(cat) {
+    var idxs = UP_PARTS_MAP[cat] || [];
+    if (!idxs.length) return '';
+    var cells = idxs.map(function (ni) {
+      var p = NP[ni]; if (!p) return '';
+      return '<button type="button" onclick="upOpenPart(' + ni + ')" class="group text-center">'
+        + '<div class="aspect-square rounded-xl bg-neutral-100 border border-neutral-200 group-hover:border-blue-400 flex items-center justify-center overflow-hidden p-2 mb-1.5 transition"><img src="' + upPartImg(p) + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain" /></div>'
+        + '<div class="text-[11px] text-neutral-600 leading-tight">' + p.name + '</div>'
+      + '</button>';
+    }).join('');
+    return '<div class="border-t border-neutral-200 p-7 md:p-10">'
+      + '<div class="text-neutral-900 font-black text-lg mb-1">부품 및 옵션</div>'
+      + '<div class="text-neutral-500 text-[13px] mb-5">이 제품군에 사용되는 부품·옵션입니다. 클릭하면 상세정보를 볼 수 있습니다.</div>'
+      + '<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">' + cells + '</div>'
+    + '</div>';
+  }
+
+  /* 관련 상품 — 같은 카테고리 다른 모델 */
+  function upRelatedHtml(m) {
+    var ids = (upByCat[m.cat] || []).filter(function (id) { return id !== m.id; }).slice(0, 8);
+    if (!ids.length) return '';
+    var cells = ids.map(function (id) {
+      var r = upModels[id];
+      return '<button type="button" onclick="upGoModel(' + id + ')" class="group text-left">'
+        + '<div class="aspect-square rounded-xl bg-neutral-100 border border-neutral-200 group-hover:border-blue-400 overflow-hidden flex items-center justify-center p-3 mb-2 transition"><img src="' + r.imgs[0] + '" alt="' + r.title + '" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" /></div>'
+        + '<div class="text-[12px] font-bold text-neutral-800 leading-tight truncate">' + r.title + '</div>'
+      + '</button>';
+    }).join('');
+    return '<div class="border-t border-neutral-200 bg-neutral-50/60 p-7 md:p-10">'
+      + '<div class="text-neutral-900 font-black text-lg mb-5">관련 상품</div>'
+      + '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">' + cells + '</div>'
+    + '</div>';
+  }
+
+  /* ---- 내비게이션(전역) ------------------------------------------- */
+  function upScrollTop() {
+    var pg = document.getElementById('page-products');
+    if (!pg) { window.scrollTo({ top: 0 }); return; }
+    var y = pg.getBoundingClientRect().top + window.scrollY - 88;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+  window.upGoCat = function (c) {
+    upActiveCat = c; upView = 'list'; upCurModel = -1;
+    upRenderSide(); upRenderList(); upScrollTop();
+  };
+  window.upGoModel = function (id) {
+    var m = upModels[id]; if (!m) return;
+    upActiveCat = m.cat; upCurModel = id; upView = 'detail'; m._cur = m._cur || 0;
+    upRenderSide(); upRenderDetail(); upScrollTop();
+  };
+  window.upBackToList = function () {
+    upView = 'list'; upCurModel = -1;
+    upRenderSide(); upRenderList(); upScrollTop();
+  };
+  window.upDetailVar = function (k) {
+    var m = upModels[upCurModel]; if (!m) return;
+    m._cur = k;
+    var img = document.getElementById('up-hero'); if (img) img.src = m.imgs[k];
+    var cap = document.getElementById('up-cap'); if (cap) cap.textContent = m.labels[k] || '';
+    [].forEach.call(document.querySelectorAll('#up-main .upd-sw'), function (el) {
+      el.classList.toggle('upd-sw-on', el.getAttribute('data-k') === String(k));
+    });
+  };
+  /* 외부 호환: 기존 필터/모달 훅 */
+  window.filterProducts = function (cat) { window.upGoCat(upMapCat(cat)); };
+  window.openProductModal = function (i) { /* 모달 제거됨 */ };
+
+  /* ---- 제품 페이지 재구성 진입점 ---------------------------------- */
   function productsRebuild() {
     var grid = document.getElementById('products-grid');
-    var filt = document.getElementById('product-filter');
-    if (!grid || !filt) return;
-    if (!UP.length) return; /* 데이터 파일 로드 전 */
+    if (!grid) return;
+    if (!UP.length) return;               /* 데이터 로드 전 */
     var setTxt = function (sel, txt) { var el = document.querySelector(sel); if (el && el.textContent !== txt) el.textContent = txt; };
     setTxt('[data-i18n="prod_hero_tag"]', 'PRODUCT LINEUP · 215 MODELS');
     setTxt('[data-i18n="prod_hero_t1"]', '215가지 제품,');
     setTxt('[data-i18n="prod_stat1"]', '5개 카테고리');
     setTxt('[data-i18n="prod_stat2"]', '215종 실제 사진');
-    window.filterProducts = function (cat) { upActiveCat = upMapCat(cat); upRenderFilter(); upRenderGrid(); };
-    window.openProductModal = upOpenModal;
-    if (grid.querySelector('[data-up="1"]')) return; /* 이미 재구성됨 */
-    upActiveCat = '전체';
-    upRenderFilter(); upRenderGrid(); upBuildModal();
+    /* 상단 필터칩 줄 숨김(카테고리는 좌측 사이드바로) */
+    var filt = document.getElementById('product-filter');
+    if (filt) { var fsec = filt.closest('section'); if (fsec && fsec.style.display !== 'none') fsec.style.display = 'none'; }
+    var empty = document.getElementById('products-empty'); if (empty) empty.classList.add('hidden');
+    if (grid.querySelector('#up-side')) return;   /* 이미 재구성됨 */
+    upBuildModels();
+    if (!upByCat[upActiveCat] || !upByCat[upActiveCat].length) upActiveCat = UP_CATS[0];
+    grid.className = 'grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 in';
+    setImp(grid, 'display', 'grid');
+    grid.innerHTML =
+      '<aside id="up-side" class="lg:sticky lg:top-24 lg:self-start"></aside>'
+      + '<div id="up-main" class="min-w-0"></div>';
+    upView = 'list'; upCurModel = -1;
+    upRenderSide(); upRenderList();
   }
 
   /* ---- 실행 하네스 -------------------------------------------------- */
