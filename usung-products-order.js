@@ -1,8 +1,11 @@
 /* usung-products-order.js — 제품소개 대분류 폴더 번호 (슬라이드5)
- * 요구: "폴더는 순서대로 배치되도록 번호를 붙임 (중분류/제품그룹은 번호 표시 X)"
+ *                          + 부품소개 상단 필터 바 삭제 (슬라이드7, 0708 검토)
+ * 요구1(제품소개): "폴더는 순서대로 배치되도록 번호를 붙임 (중분류/제품그룹은 번호 표시 X)"
  *   - 대분류(왼쪽 사이드바 폴더)에만 1~5. 번호를 붙인다.
  *   - 5번 폴더 라벨을 "하향식 후드 / 코브라 후드"로 표기(데이터 키 '코브라후드'는 불변).
  *   - 중분류(갤럭시A/B…), 제품그룹(양옆태엽…)은 번호 없음 — 그대로 둔다.
+ * 요구2(부품소개): 과장님 검토 — 상단 카테고리 필터 버튼 줄(#parts-filter) "삭제".
+ *   - 필터 컨테이너만 display:none 처리(전체 48개 카드는 그대로 노출).
  * 데이터(UP_DATA) 순서는 이미 마스터와 일치하므로 순서 변경 없이 라벨만 패치.
  * 원본 index_v6.html 은 건드리지 않는 런타임 오버레이. 되돌리기: inject.js 주입 1줄 제거.
  */
@@ -16,6 +19,12 @@
     '후레쉬볼':   { n: '4', label: '후레쉬볼' },
     '코브라후드': { n: '5', label: '하향식 후드 / 코브라 후드' }
   };
+
+  // 부품소개(슬라이드7): 상단 필터 버튼 바 삭제
+  function hidePartsFilter() {
+    var fe = document.getElementById('parts-filter');
+    if (fe) fe.style.setProperty('display', 'none', 'important');
+  }
 
   function keyFromBtn(b) {
     var oc = b.getAttribute('onclick') || '';
@@ -55,6 +64,10 @@
     observe();
     setTimeout(observe, 500);
     setTimeout(schedule, 1200);
+    // 부품소개 필터 바 삭제 — 초기 + 지연 재적용(원본 스크립트가 버튼을 늦게 추가해도 컨테이너는 숨김 유지)
+    hidePartsFilter();
+    setTimeout(hidePartsFilter, 300);
+    setTimeout(hidePartsFilter, 1200);
   }
 
   if (document.readyState === 'loading') {
@@ -70,6 +83,7 @@
     window.navigate = function (id) {
       var r = _nav.apply(this, arguments);
       if (id === 'products') schedule();
+      if (id === 'parts') { hidePartsFilter(); setTimeout(hidePartsFilter, 60); setTimeout(hidePartsFilter, 300); }
       return r;
     };
   }
