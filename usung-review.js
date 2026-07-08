@@ -20,8 +20,9 @@
  *  slide 26  게시판 필터 — 전체/제품소식/블로그만, 기술정보·시공사례·업계동향 삭제
  *  slide 27  게시판 — 작성자 열 삭제, 댓글 [0] 숨김, NEW 배지는 최근 3개월(90일) 이내만
  *  slide 29  고객센터 — "시공 사례 / 견적 상담" → "견적 상담", "매장 규모별 맞춤 설계" 삭제
- *  [Task2]   부품 페이지 — 카드 크게(5→4열) + 박스 균일(정사각), 여백 축소
- *            (※ 실제 균일 누끼는 "부품 크롭본" 48종 이미지 교체 필요 — 업로드 방식 확정 후 진행)
+ *  [Task2]   부품 페이지 — 48종 정규화 누끼(1000x1000)로 전면 재구성:
+ *            카드 크게(4열)+박스 균일(정사각), 필터 카테고리 재생성, 모달 NP 기준 교체
+ *            (이미지: parts/01_..~48_..png, macOS NFD 파일명 → 런타임 normalize('NFD'))
  * ===================================================================== */
 (function () {
   'use strict';
@@ -272,6 +273,105 @@
     });
   }
 
+  /* ---- [Task2] 부품 페이지 — 48종 재구성 (정규화 누끼 + 균일 카드) --------- */
+  var NP = [
+    { img:'parts/01_반후지_150-125파이.png', name:'반후지 (150·125Ø)', cat:'상부', desc:'후드와 덕트 연결부를 마감하는 크롬 커버. 원형 입구부를 깔끔하게 마감합니다.', specs:'크롬 도금 / 150·125Ø' },
+    { img:'parts/02_측향캡_125-100파이.png', name:'측향캡 (125·100Ø)', cat:'상부', desc:'측면 배기 방향의 덕트 마감 캡.', specs:'125·100Ø' },
+    { img:'parts/03_VD풍량조절댐퍼.png', name:'VD 풍량조절댐퍼', cat:'상부', desc:'덕트 내 공기 흐름량을 수동으로 조절하는 볼륨댐퍼.', specs:'VD = Volume Damper / 레버 수동' },
+    { img:'parts/04_FVD방화댐퍼.png', name:'FVD 방화댐퍼', cat:'상부', desc:'방화·풍량 통합 댐퍼. 화재 시 퓨즈가 용단되면 날개가 자동으로 닫혀 확산을 차단합니다.', specs:'FVD = Fire Volume Damper / 72°C 용단' },
+    { img:'parts/05_FVD휴즈.png', name:'FVD 휴즈', cat:'상부', desc:'FVD에 장착되는 온도 감응 퓨즈. 화재 시 용단되어 댐퍼를 자동 차단합니다.', specs:'72°C 용단 / 교체형' },
+    { img:'parts/06_휴즈핀.png', name:'휴즈핀', cat:'상부', desc:'FVD 휴즈를 댐퍼 본체에 고정하는 핀.', specs:'휴즈 고정용' },
+    { img:'parts/07_천정형캡.png', name:'천정형 캡 (150·125·100Ø)', cat:'상부', desc:'덕트가 천장을 관통하는 부위를 마감하는 캡.', specs:'150·125·100Ø' },
+    { img:'parts/08_티구찌.png', name:'티구찌', cat:'상부', desc:'T자형 연결 부속. 덕트 분기·교차부에서 방향을 전환합니다.', specs:'T형 연결 / 분기점용' },
+    { img:'parts/09_원형상향모터.png', name:'원형 상향모터', cat:'모터', desc:'원형 덕트에 탑재되는 상향 배기 팬 모터.', specs:'원형 덕트 / 상향 배기' },
+    { img:'parts/10_원형측향모터.png', name:'원형 측향모터', cat:'모터', desc:'원형 덕트에 탑재되는 측면 배기 팬 모터.', specs:'원형 덕트 / 측면 배기' },
+    { img:'parts/11_사각측향모터.png', name:'사각 측향모터', cat:'모터', desc:'사각 덕트에 탑재되는 측면 배기 팬 모터.', specs:'사각 덕트 / 측면 배기' },
+    { img:'parts/12_속레일.png', name:'속레일', cat:'부품', desc:'후드 승강 구조의 내부 슬라이드 레일.', specs:'슬라이드 레일 / 승강 구조' },
+    { img:'parts/13_사각태엽감속기_흰색.png', name:'사각 태엽감속기 (흰색)', cat:'부품', desc:'태엽 방식으로 후드 승강을 제어하는 사각형 감속기.', specs:'사각형 / 태엽 감속' },
+    { img:'parts/14_사각태엽감속기_검정.png', name:'사각 태엽감속기 (검정)', cat:'부품', desc:'사각 태엽감속기(검정 마감).', specs:'사각형 / 태엽 감속' },
+    { img:'parts/15_철제태엽감속기.png', name:'철제 태엽감속기', cat:'부품', desc:'철제 소재 태엽 감속기. 고하중 환경에 적합합니다.', specs:'철제 / 고하중 대응' },
+    { img:'parts/16_원형태엽감속기.png', name:'원형 태엽감속기', cat:'부품', desc:'원형 태엽 감속기.', specs:'원형 / 태엽 감속' },
+    { img:'parts/17_속링_텐션용.png', name:'속링 (텐션용)', cat:'부품', desc:'파이프 내부 연결부를 보강하는 링(텐션용).', specs:'내부 보강 / 텐션용' },
+    { img:'parts/18_빠찌링.png', name:'빠찌링', cat:'부품', desc:'텐션 장력을 미세 조절하는 링 부품.', specs:'텐션 조절용' },
+    { img:'parts/19_LED안정기.png', name:'LED 안정기', cat:'부품', desc:'LED 조명 구동용 안정기.', specs:'LED 전원부' },
+    { img:'parts/20_등받침.png', name:'등받침', cat:'부품', desc:'조명등을 후드 본체에 고정하는 받침 부속.', specs:'조명 고정용' },
+    { img:'parts/21_자바라하부봉대.png', name:'자바라 하부봉대', cat:'부품', desc:'하부 자바라(주름관)를 지지하는 봉대.', specs:'하부 봉대' },
+    { img:'parts/22_신형자바라하부봉대.png', name:'신형 자바라 하부봉대', cat:'부품', desc:'개선형 자바라 하부봉대.', specs:'신형 / 하부 봉대' },
+    { img:'parts/23_8단유지망.png', name:'8단 유지망', cat:'필터', desc:'8단 구조 그리스 필터. 유증기를 걸러 덕트 기름 축적을 줄입니다.', specs:'스테인리스 / 세척 재사용' },
+    { img:'parts/24_5단유지망.png', name:'5단 유지망', cat:'필터', desc:'5단 구조 그리스 필터.', specs:'스테인리스 / 세척 재사용' },
+    { img:'parts/25_롱망_127-100파이.png', name:'롱망 (127·100Ø)', cat:'필터', desc:'긴 형태의 유지망.', specs:'127·100Ø' },
+    { img:'parts/26_유지망_114-100파이.png', name:'유지망 (114·100Ø)', cat:'필터', desc:'원형 유지망.', specs:'114·100Ø' },
+    { img:'parts/27_기름받이_127-114-100파이.png', name:'기름받이 (127·114·100Ø)', cat:'하부', desc:'덕트에서 떨어지는 기름을 받는 기름받이.', specs:'127·114·100Ø' },
+    { img:'parts/28_기름받이_150파이.png', name:'150Ø 기름받이', cat:'하부', desc:'150Ø 규격 기름받이.', specs:'150Ø' },
+    { img:'parts/29_기름받이속.png', name:'기름받이 (속)', cat:'하부', desc:'기름받이 내부 삽입형.', specs:'속 삽입형' },
+    { img:'parts/30_기름받이망.png', name:'기름받이망', cat:'하부', desc:'기름받이에 결합되는 망.', specs:'기름받이 부속' },
+    { img:'parts/31_일체형기름받이.png', name:'일체형 기름받이', cat:'하부', desc:'이음새 없는 일체형 기름받이로 누유를 원천 차단합니다.', specs:'단일 성형 / 누유 방지' },
+    { img:'parts/32_갓기름받이.png', name:'갓 기름받이', cat:'하부', desc:'갓과 결합되는 기름받이.', specs:'갓 결합형' },
+    { img:'parts/33_나팔_150파이.png', name:'150Ø 나팔', cat:'나팔·갓', desc:'기름받이 하단 나팔캡. 받은 기름을 한 곳으로 모읍니다.', specs:'150Ø' },
+    { img:'parts/34_갓_200파이.png', name:'200Ø 갓', cat:'나팔·갓', desc:'배기 갓(후드 상부 커버).', specs:'200Ø' },
+    { img:'parts/35_갓_210파이.png', name:'210Ø 갓', cat:'나팔·갓', desc:'배기 갓(후드 상부 커버).', specs:'210Ø' },
+    { img:'parts/36_갓_250파이.png', name:'250Ø 갓', cat:'나팔·갓', desc:'배기 갓(후드 상부 커버).', specs:'250Ø' },
+    { img:'parts/37_갓_320파이.png', name:'320Ø 갓', cat:'나팔·갓', desc:'배기 갓(후드 상부 커버).', specs:'320Ø' },
+    { img:'parts/38_갓_350파이_반달.png', name:'350Ø 갓 (반달)', cat:'나팔·갓', desc:'반달형 배기 갓.', specs:'350Ø / 반달형' },
+    { img:'parts/39_갓_350파이_슬림.png', name:'350Ø 갓 (슬림)', cat:'나팔·갓', desc:'슬림형 배기 갓.', specs:'350Ø / 슬림형' },
+    { img:'parts/40_갓_450파이.png', name:'450Ø 갓', cat:'나팔·갓', desc:'대형 배기 갓.', specs:'450Ø' },
+    { img:'parts/41_갓_520파이.png', name:'520Ø 갓', cat:'나팔·갓', desc:'대형 배기 갓.', specs:'520Ø' },
+    { img:'parts/42_교체용후레쉬볼세트.png', name:'교체용 후레쉬볼 세트', cat:'후레쉬볼', desc:'커버(상)+후레쉬볼+커버(하)로 구성된 교체 세트.', specs:'교체 세트' },
+    { img:'parts/43_후레쉬볼커버_상.png', name:'후레쉬볼 커버 (상)', cat:'후레쉬볼', desc:'후레쉬볼 상부 커버.', specs:'커버 / 상부' },
+    { img:'parts/44_후레쉬볼커버_하.png', name:'후레쉬볼 커버 (하)', cat:'후레쉬볼', desc:'후레쉬볼 하부 커버.', specs:'커버 / 하부' },
+    { img:'parts/45_후레쉬볼_크롬.png', name:'후레쉬볼 (크롬)', cat:'후레쉬볼', desc:'크롬 마감 장식 후레쉬볼.', specs:'크롬 마감' },
+    { img:'parts/46_후레쉬볼_동.png', name:'후레쉬볼 (동)', cat:'후레쉬볼', desc:'동(구리) 마감 장식 후레쉬볼.', specs:'동 마감' },
+    { img:'parts/47_후레쉬볼_신주.png', name:'후레쉬볼 (신주)', cat:'후레쉬볼', desc:'신주(황동) 마감 장식 후레쉬볼.', specs:'신주 마감' },
+    { img:'parts/48_후레쉬볼_검정.png', name:'후레쉬볼 (검정)', cat:'후레쉬볼', desc:'검정 마감 장식 후레쉬볼.', specs:'검정 마감' }
+  ];
+  function partsRebuild() {
+    var grid = document.getElementById('parts-grid');
+    if (!grid) return;
+    // 저장소 파일명이 macOS NFD(자소분리)로 커밋됨 → URL도 NFD로 맞춰야 404 안 남
+    var partImg = function (p) { try { return p.img.normalize('NFD'); } catch (e) { return p.img; } };
+    // 모달 오프너를 NP 기준으로 교체
+    window.openPartModal = function (idx) {
+      var p = NP[idx]; if (!p) return;
+      var g = function (id) { return document.getElementById(id); };
+      var m = g('part-modal');
+      if (g('pm-img'))    { g('pm-img').src = partImg(p); g('pm-img').alt = p.name; }
+      if (g('pm-cat'))     g('pm-cat').textContent = p.cat;
+      if (g('pm-name'))    g('pm-name').textContent = p.name;
+      if (g('pm-desc'))    g('pm-desc').textContent = p.desc;
+      if (g('pm-specs'))   g('pm-specs').textContent = p.specs;
+      if (g('pm-prev'))    g('pm-prev').onclick = function () { window.openPartModal((idx - 1 + NP.length) % NP.length); };
+      if (g('pm-next'))    g('pm-next').onclick = function () { window.openPartModal((idx + 1) % NP.length); };
+      if (g('pm-counter')) g('pm-counter').textContent = (idx + 1) + ' / ' + NP.length;
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+    };
+    if (grid.querySelector('[data-np="1"]')) return; // 이미 재구성됨
+    grid.innerHTML = NP.map(function (p) {
+      return '<div class="part-card bg-[#111] border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center hover:bg-[#1a1a1c] hover:border-blue-500/30 transition-all cursor-pointer group" data-np="1" data-cat="' + p.cat + '">'
+        + '<div class="w-full aspect-square bg-white/[0.03] rounded-xl mb-3 flex items-center justify-center overflow-hidden p-3">'
+        + '<img src="' + partImg(p) + '" alt="' + p.name + '" loading="lazy" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />'
+        + '</div>'
+        + '<div class="text-[10px] font-bold tracking-widest text-blue-400/70 mb-1">' + p.cat + '</div>'
+        + '<span class="text-sm text-gray-200 font-bold">' + p.name + '</span>'
+        + '</div>';
+    }).join('');
+    [].forEach.call(grid.children, function (card, i) { card.onclick = function () { window.openPartModal(i); }; });
+    // 필터 버튼 재구성 (전체 버튼 유지)
+    var fe = document.getElementById('parts-filter');
+    if (fe) {
+      [].slice.call(fe.querySelectorAll('.parts-filter-btn')).forEach(function (b) {
+        if (!b.hasAttribute('data-i18n')) b.remove();
+      });
+      var cats = []; NP.forEach(function (p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+      cats.forEach(function (cat) {
+        var btn = document.createElement('button');
+        btn.className = 'parts-filter-btn px-4 py-2 rounded-full text-xs font-bold tracking-wider border border-white/10 bg-transparent text-white/50 hover:bg-white/5 transition-all';
+        btn.textContent = cat;
+        btn.onclick = function () { if (typeof window.filterParts === 'function') window.filterParts(cat); };
+        fe.appendChild(btn);
+      });
+    }
+  }
+
   /* ---- 실행 하네스 -------------------------------------------------- */
   function applyAll() {
     injectReviewCss();
@@ -288,6 +388,7 @@
     try { manualDeleteFeatures(); }catch (e) {}
     try { manualVideoSlot(); }     catch (e) {}
     try { galleryModalTweak(); }   catch (e) {}
+    try { partsRebuild(); }       catch (e) {}
   }
 
   function init() {
