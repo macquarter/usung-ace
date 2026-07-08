@@ -79,16 +79,26 @@
   }
 
   /* ---- slide 3 : 홈 히어로 ------------------------------------------ */
+  /* 요구(0708): CTA(제품 라인업 보기·견적 문의)를 멘트3
+   *   "유성에이스를 쓰면, 후드의 기준이 달라집니다." (anim-text2) 에 바로 붙임.
+   *   기존엔 멘트1(anim-hero) 하단 + 별도 CTA 프레임(anim-cta)에 있던 것을 멘트3로 이동. */
   function homeHero() {
+    // 멘트1(anim-hero) 서브텍스트 숨김 + 예전 위치의 CTA 제거
     var hero = document.getElementById('anim-hero');
-    if (!hero) return;
-    hero.querySelectorAll('[data-cms="h_sub"], [data-i18n="hero_sub"]').forEach(function (el) {
-      el.style.display = 'none';
-    });
-    if (!hero.querySelector('#ace-hero-cta')) {
+    if (hero) {
+      hero.querySelectorAll('[data-cms="h_sub"], [data-i18n="hero_sub"]').forEach(function (el) {
+        el.style.display = 'none';
+      });
+      var oldCta = hero.querySelector('#ace-hero-cta');
+      if (oldCta) oldCta.remove();
+    }
+    // CTA 버튼을 멘트3(anim-text2)에 직접 부착
+    var msg3 = document.getElementById('anim-text2');
+    if (!msg3) return;
+    if (!msg3.querySelector('#ace-hero-cta')) {
       var wrap = document.createElement('div');
       wrap.id = 'ace-hero-cta';
-      wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:32px;';
+      wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:38px;';
       wrap.innerHTML =
         '<button type="button" onclick="navigate(\'products\')" ' +
           'style="padding:15px 34px;border-radius:9999px;font-weight:800;font-size:16px;border:none;' +
@@ -100,7 +110,7 @@
           'cursor:pointer;background:rgba(255,255,255,.9);color:' + NAVY + ';' +
           'border:1.5px solid ' + NAVY + ';letter-spacing:-.01em;transition:transform .15s;" ' +
           'onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">견적 문의</button>';
-      hero.appendChild(wrap);
+      msg3.appendChild(wrap);
     }
   }
 
