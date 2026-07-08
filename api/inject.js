@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     let html = await r.text();
 
     // 화이트 테마 CSS + 오버레이 JS 삽입
-    const cssLink = '<link rel="stylesheet" href="/theme-white.css?v=' + V + '">\n  </head>';
+    const cssLink = '<link rel="stylesheet" href="/theme-white.css?v=' + V + '">\n  <link rel="stylesheet" href="/usung-tonefix.css?v=' + V + '">\n  </head>';
     const jsScript = '<script src="/usung-overlay.js?v=' + V + '" defer></script>\n<script src="/usung-test-products.js?v=' + V + '" defer></script>\n<script src="/usung-review.js?v=' + V + '" defer></script>\n</body>';
 
     if (!html.includes('theme-white.css')) {
