@@ -329,6 +329,15 @@
     if (!grid) return;
     // 저장소 파일명이 macOS NFD(자소분리)로 커밋됨 → URL도 NFD로 맞춰야 404 안 남
     var partImg = function (p) { try { return p.img.normalize('NFD'); } catch (e) { return p.img; } };
+    // 헤더 카운트 라벨을 실제 개수(48)로 정정 ("· 50 ITEMS" → "· 48 ITEMS")
+    var pp = document.getElementById('page-parts');
+    if (pp) {
+      [].forEach.call(pp.querySelectorAll('div'), function (el) {
+        if (el.children.length === 0 && /PARTS CATALOG/i.test(el.textContent)) {
+          el.textContent = 'PARTS CATALOG · ' + NP.length + ' ITEMS';
+        }
+      });
+    }
     // 모달 오프너를 NP 기준으로 교체
     window.openPartModal = function (idx) {
       var p = NP[idx]; if (!p) return;
