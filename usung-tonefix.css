@@ -1,10 +1,13 @@
 /* ============================================================
-   유성에이스 화이트톤 보정 — 블랙톤 잔재 4곳
+   유성에이스 화이트톤 보정 — 블랙톤 잔재
    theme-white.css 뒤에 로드되어 남은 다크 카드를 화이트톤으로 통일
    1) 기술및인증현황 USE CASE 카드 3개
    2) 제품소개 상담 CTA 박스
    3) 홈 3D 프리뷰 패널
    4) 푸터
+   5) 부품소개 제품명 라벨 (밝은 회색 → 안 보임)
+   6) 공지/게시판 앰버 뱃지 대비 보정
+   7) 홈 시안 라벨 대비 보정
    ============================================================ */
 
 /* 1) page-tech USE CASE 카드 */
@@ -34,3 +37,14 @@ footer[class*="bg-[#0a0a0a]"]{background:#f8fafc!important;border-top-color:#e2e
 footer[class*="bg-[#0a0a0a]"] [class*="text-white"]{color:#334155!important}
 footer[class*="bg-[#0a0a0a]"] a{color:#475569!important}
 footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!important}
+
+/* 5) 부품소개 제품명 라벨 — 밝은 회색(text-gray-200)이 흰 배경에서 안 보임 */
+#page-parts [class*="text-gray-200"]{color:#0f172a!important}
+#page-parts [class*="text-gray-300"]{color:#334155!important}
+
+/* 6) 공지/게시판 앰버 상태 뱃지 — 밝은 앰버가 흰 배경에서 대비 부족 */
+#page-notice [class*="bg-amber-500"][class*="text-amber-400"],
+#page-board [class*="bg-amber-500"][class*="text-amber-400"]{background:#fef3c7!important;color:#b45309!important;border-color:#fcd34d!important}
+
+/* 7) 홈 시안 라벨 — 밝은 시안(text-cyan-300)이 밝은 배경에서 안 보임 */
+#page-home [class*="text-cyan-300"]{color:#0e7490!important}
