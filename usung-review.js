@@ -23,9 +23,6 @@
  *  [Task2]   부품 페이지 — 48종 정규화 누끼(1000x1000)로 전면 재구성:
  *            카드 크게(4열)+박스 균일(정사각), 필터 카테고리 재생성, 모달 NP 기준 교체
  *            (이미지: parts/01_..~48_..png, macOS NFD 파일명 → 런타임 normalize('NFD'))
- *  [Task3]   제품 페이지 — 215종 카탈로그 재구성(UP 배열): 갤럭시/LED조명/파이프/후레쉬볼/코브라후드
- *            카테고리 필터+카드 그리드+상세 모달, filterProducts 재정의, 히어로 라벨 215로 정정
- *            (이미지: products/final/gal·led·pipe·ball·cobra·cobrat###.png, ASCII 파일명)
  * ===================================================================== */
 (function () {
   'use strict';
@@ -388,8 +385,16 @@
     }
   }
 
-  /* ---- [Task3] 제품 페이지 — 215종 카탈로그 재구성 --------------------- */
-  var UP = UP_DATA_PLACEHOLDER;
+  var UP = [];
+  function upBuildFromData() {
+    var D = window.UP_DATA || [];
+    UP = D.map(function (d) {
+      return { img: 'products/final/' + d[0] + '.png', cat: d[1], type: d[2],
+               grp: d[3], name: d[4], finish: d[5],
+               tags: (d[6] ? d[6].split('|') : []) };
+    });
+  }
+
   var UP_CATS = ['갤럭시', 'LED조명', '파이프', '후레쉬볼', '코브라후드'];
   var UP_COL = {
     '갤럭시':    { text:'text-blue-300',    bg:'bg-blue-500/10',    border:'border-blue-400/25' },
@@ -449,7 +454,7 @@
     var p = arr[i]; if (!p) return;
     var g = function (id) { return document.getElementById(id); };
     if (g('up-img'))  { g('up-img').src = p.img; g('up-img').alt = p.name; }
-    if (g('up-cat'))    g('up-cat').textContent = p.cat + (p.type ? '  ·  ' + p.type : '');
+    if (g('up-cat'))    g('up-cat').textContent = p.cat + (p.type ? '  ·  ' + p.type : '') + (p.grp ? '  ·  ' + p.grp : '');
     if (g('up-name'))   g('up-name').textContent = p.name;
     if (g('up-tags'))   g('up-tags').innerHTML = (p.tags || []).map(function (t) {
       return '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/60">' + t + '</span>';
@@ -460,6 +465,8 @@
     var m = g('up-modal'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; }
   }
   window.openProductModal = upOpenModal;
+
+  /* 대분류 필터칩 (엑셀 대분류 5종 + 전체) */
   function upRenderFilter() {
     var filt = document.getElementById('product-filter'); if (!filt) return;
     var cats = ['전체'].concat(UP_CATS);
@@ -471,50 +478,105 @@
       return '<button onclick="filterProducts(this.dataset.cat)" data-cat="' + c + '" class="px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition border ' + cls + '">' + c + ' <span class="opacity-60 ml-1">' + count + '</span></button>';
     }).join('');
   }
+
+  /* 카다로그형 계층 렌더러: 중분류=파란 번호 배너 / 제품그룹=소제목 / 마감=카드 */
   function upRenderGrid() {
     var grid = document.getElementById('products-grid'); if (!grid) return;
-    upFiltered = upActiveCat === '전체' ? UP.slice() : UP.filter(function (p) { return p.cat === upActiveCat; });
-    var empty = document.getElementById('products-empty'); if (empty) empty.classList.toggle('hidden', upFiltered.length > 0);
-    grid.innerHTML = upFiltered.map(function (p, idx) {
-      var col = UP_COL[p.cat] || { text:'text-white/70', bg:'bg-white/5', border:'border-white/15' };
-      var tags = (p.tags || []).slice(0, 3);
-      return '<article data-up="1" data-idx="' + idx + '" class="group relative rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden hover:border-blue-400/40 transition-all hover:-translate-y-1 duration-500 cursor-pointer">'
-        + '<div class="relative aspect-[4/3] overflow-hidden bg-[#0a0e18]">'
-          + '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-110" />'
-          + '<div class="absolute top-4 right-4"><span class="text-[9px] font-bold px-2.5 py-1 rounded-full border backdrop-blur-sm ' + col.text + ' ' + col.bg + ' ' + col.border + '">' + p.cat + '</span></div>'
-          + '<div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent"></div>'
-        + '</div>'
-        + '<div class="p-5">'
-          + '<h3 class="text-[15px] font-black tracking-tight text-white leading-snug mb-2 line-clamp-2">' + p.name + '</h3>'
-          + '<div class="flex flex-wrap gap-1.5">' + tags.map(function (t) { return '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-white/55">' + t + '</span>'; }).join('') + '</div>'
-          + '<div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]"><span class="text-white/35">USUNG ACE</span><span class="font-bold text-blue-400 flex items-center gap-1">자세히 보기 ›</span></div>'
-        + '</div>'
-      + '</article>';
-    }).join('');
-    [].forEach.call(grid.children, function (card) {
+    var src = upActiveCat === '전체' ? UP.slice() : UP.filter(function (p) { return p.cat === upActiveCat; });
+    var empty = document.getElementById('products-empty'); if (empty) empty.classList.toggle('hidden', src.length > 0);
+
+    /* 내장 tailwind 그리드를 블록으로 강제 전환 (배너가 전폭을 차지) */
+    setImp(grid, 'display', 'block');
+    setImp(grid, 'gap', '0');
+
+    /* 중분류(type) 최초 등장 순서 유지 → 그 안에서 제품그룹(grp) 순서 유지 */
+    var order = [], map = {};
+    src.forEach(function (p) {
+      var t = p.type || p.cat;
+      if (!map[t]) { map[t] = { name: t, cat: p.cat, groups: [], gmap: {} }; order.push(t); }
+      var gk = p.grp || '';
+      if (!map[t].gmap[gk]) { map[t].gmap[gk] = []; map[t].groups.push(gk); }
+      map[t].gmap[gk].push(p);
+    });
+
+    upFiltered = []; /* 렌더 순서대로 평탄화 → 모달 이전/다음 연속성 */
+    var html = '';
+    order.forEach(function (t, ti) {
+      var tg = map[t];
+      var cnt = 0; tg.groups.forEach(function (gk) { cnt += tg.gmap[gk].length; });
+      var num = ('0' + (ti + 1)).slice(-2);
+      html += '<section class="mb-12">'
+        + '<div class="flex items-center gap-4 rounded-2xl px-5 py-4 mb-6 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 shadow-lg shadow-blue-900/30">'
+          + '<span class="flex-none w-11 h-11 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-white font-black text-lg">' + num + '</span>'
+          + '<div class="min-w-0">'
+            + '<div class="text-white font-black text-lg md:text-xl leading-tight">' + tg.name + '</div>'
+            + '<div class="text-blue-100/80 text-[12px] font-semibold tracking-wide">' + tg.cat + ' · ' + cnt + '종</div>'
+          + '</div>'
+          + '<span class="ml-auto flex-none text-[11px] font-bold tracking-[0.2em] text-white/70">USUNG ACE</span>'
+        + '</div>';
+      tg.groups.forEach(function (gk) {
+        var items = tg.gmap[gk];
+        if (gk) {
+          html += '<div class="flex items-center gap-2 mb-3 mt-7 px-1">'
+            + '<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>'
+            + '<h4 class="text-white font-bold text-[14px] tracking-tight">' + gk + '</h4>'
+            + '<span class="text-white/35 text-[12px]">' + items.length + '종</span>'
+            + '<span class="flex-1 h-px bg-white/10 ml-2"></span>'
+          + '</div>';
+        }
+        html += '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-2">';
+        items.forEach(function (p) {
+          var gi = upFiltered.length; upFiltered.push(p);
+          var label = p.finish || p.name;
+          html += '<article data-up="1" data-idx="' + gi + '" class="group relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent overflow-hidden hover:border-blue-400/50 transition-all hover:-translate-y-1 duration-500 cursor-pointer">'
+            + '<div class="relative aspect-square overflow-hidden bg-[#0a0e18]">'
+              + '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" class="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-700 group-hover:scale-110" />'
+            + '</div>'
+            + '<div class="p-3">'
+              + '<div class="text-white font-bold text-[12px] leading-snug line-clamp-2">' + label + '</div>'
+            + '</div>'
+          + '</article>';
+        });
+        html += '</div>';
+      });
+      html += '</section>';
+    });
+    grid.innerHTML = html;
+
+    [].forEach.call(grid.querySelectorAll('[data-up="1"]'), function (card) {
       card.onclick = function () { upOpenModal(parseInt(card.getAttribute('data-idx'), 10)); };
     });
     grid.classList.remove('in'); void grid.offsetWidth; grid.classList.add('in');
   }
+
   function productsRebuild() {
     var grid = document.getElementById('products-grid');
     var filt = document.getElementById('product-filter');
     if (!grid || !filt) return;
-    // 히어로 라벨을 215/5개로 정정 (매 패스, 변경 있을 때만)
+    if (!UP.length) return; /* 데이터 파일 로드 전 */
     var setTxt = function (sel, txt) { var el = document.querySelector(sel); if (el && el.textContent !== txt) el.textContent = txt; };
     setTxt('[data-i18n="prod_hero_tag"]', 'PRODUCT LINEUP · 215 MODELS');
     setTxt('[data-i18n="prod_hero_t1"]', '215가지 제품,');
     setTxt('[data-i18n="prod_stat1"]', '5개 카테고리');
     setTxt('[data-i18n="prod_stat2"]', '215종 실제 사진');
-    // 내장 렌더러의 filterProducts 를 UP 기준으로 덮어씀
     window.filterProducts = function (cat) { upActiveCat = upMapCat(cat); upRenderFilter(); upRenderGrid(); };
     window.openProductModal = upOpenModal;
-    if (grid.querySelector('[data-up="1"]')) return; // 이미 재구성됨
+    if (grid.querySelector('[data-up="1"]')) return; /* 이미 재구성됨 */
     upActiveCat = '전체';
     upRenderFilter(); upRenderGrid(); upBuildModal();
   }
 
   /* ---- 실행 하네스 -------------------------------------------------- */
+  function upLoadData() {
+    if (window.UP_DATA) { upBuildFromData(); return; }
+    if (document.getElementById('up-data-script')) return;
+    var s = document.createElement('script');
+    s.id = 'up-data-script';
+    s.src = '/usung-catalog-data.js';
+    s.onload = function () { upBuildFromData(); try { applyAll(); } catch (e) {} };
+    (document.head || document.documentElement).appendChild(s);
+  }
+
   function applyAll() {
     injectReviewCss();
     try { homeHero(); }            catch (e) {}
@@ -535,6 +597,7 @@
   }
 
   function init() {
+    upLoadData();
     applyAll();
     var n = 0;
     var iv = setInterval(function () { applyAll(); if (++n > 80) clearInterval(iv); }, 200);
