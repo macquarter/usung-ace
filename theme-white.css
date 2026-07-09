@@ -81,7 +81,7 @@ main, #main-content { background:#fff !important; }
 }
 
 /* ============================================================
-   2) 히어로 — 영상 선명 + 다크 스크림(글씨 가독)
+   2) 히어로 — 차분한 신뢰감 (과한 글로우 제거)
    ============================================================ */
 #page-home > div:first-child { background:#000; }
 #page-home > div:first-child .sticky { background:transparent !important; }
@@ -435,3 +435,52 @@ footer.bg-black, footer.bg-\[\#000\], body > footer {
 #feature-modal { background:transparent !important; }
 #ace-product-modal .bg-white,
 #gallery-modal .gm-content { background:#ffffff !important; color:var(--fg) !important; }
+
+/* ============================================================
+   부품 상세 모달 화이트 톤 (S3)
+   대상: #part-modal(부품소개 페이지) · #up-part-modal(제품소개 미니모달)
+   원본은 bg-[#111]/bg-[#0d0d0f] 다크 카드 → 흰 카드 + 다크 글씨로 전환
+   ============================================================ */
+/* 스크림: 과한 블랙 → 딥네이비 반투명 */
+#part-modal { background:rgba(15,23,42,0.48) !important; }
+#up-part-modal .upp-bg { background:rgba(15,23,42,0.48) !important; }
+
+/* 카드 본체 흰색 */
+#part-modal > div,
+#up-part-modal > div.relative {
+    background:#ffffff !important;
+    border:1px solid rgba(2,6,23,0.10) !important;
+    box-shadow:0 24px 60px rgba(2,6,23,0.28) !important;
+}
+
+/* 이미지 영역 라이트 */
+#part-modal .bg-white\/\[0\.03\],
+#up-part-modal .bg-white\/\[0\.03\] { background:#f6f8fb !important; }
+
+/* 텍스트 색상 */
+#part-modal h3,
+#up-part-modal h3 { color:#0f172a !important; }
+#part-modal [id$="-desc"],
+#up-part-modal [id$="-desc"] { color:#475569 !important; }
+#part-modal [id$="-cat"],
+#up-part-modal [id$="-cat"] { color:var(--brand) !important; }
+#part-modal [id$="-specs"],
+#up-part-modal [id$="-specs"] { color:#334155 !important; }
+
+/* specs 박스 · 구분선 · 보조 라벨 */
+#part-modal .bg-white\/\[0\.03\].border,
+#part-modal .border-white\/5,
+#part-modal .border-white\/10,
+#up-part-modal .border-white\/10 { border-color:rgba(2,6,23,0.10) !important; }
+#part-modal .text-white\/40 { color:#64748b !important; }
+#part-modal .text-white\/75 { color:#334155 !important; }
+
+/* 버튼(닫기 · 이전 · 다음) 라이트 */
+#part-modal button,
+#up-part-modal button {
+    background:#f1f5f9 !important;
+    border-color:rgba(2,6,23,0.10) !important;
+    color:#334155 !important;
+}
+#part-modal button:hover,
+#up-part-modal button:hover { background:#e2e8f0 !important; }
