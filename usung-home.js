@@ -50,8 +50,21 @@
     if (cta) cta.style.display = 'none';
   }
 
+  // 히어로 스크롤값 절반 — 원본 h-[400vh](이동 300vh) → 250vh(이동 150vh)로 축소.
+  // 스티키 핀 구간(부모높이-100vh)과 타임라인 완료 지점(divisor*vh)을 동일하게 맞춰야
+  // 마지막 멘트 이후 빈 스크롤이 생기지 않는다: 250vh-100vh=150vh = 1.5*vh.
+  function halveHeroHeight() {
+    var wrap = document.querySelector('#page-home [class*="h-[400vh]"]');
+    if (!wrap) {
+      var sticky = document.querySelector('#page-home .sticky');
+      if (sticky && sticky.parentElement) wrap = sticky.parentElement;
+    }
+    if (wrap && wrap.style.height !== '250vh') wrap.style.height = '250vh';
+  }
+
   // 스크롤 타임라인 재조정 — 멘트1 → 멘트2 → 멘트3(+CTA, 최종 유지) (feat/별도CTA 구간 제거)
   function wireScroll() {
+    halveHeroHeight();
     if (window.__usungHomeScroll) return;
     window.__usungHomeScroll = true;
     function mr(v, a, b, c, d) {
@@ -67,7 +80,7 @@
       var home = document.getElementById('page-home');
       if (!home || !home.classList.contains('active')) return;
       var vh = window.innerHeight;
-      var p = Math.min(Math.max(window.scrollY / (vh * 3.0), 0), 1);
+      var p = Math.min(Math.max(window.scrollY / (vh * 1.5), 0), 1);
       // 멘트1
       set('anim-hero', mr(p, 0.10, 0.18, 1, 0),
         'scale(' + mr(p, 0.10, 0.18, 1, 0.9) + ') translateY(' + mr(p, 0.10, 0.18, 0, -60) + 'px)');
