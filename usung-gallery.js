@@ -42,10 +42,12 @@
       '#gallery-modal .gm-index{background:rgba(12,30,90,.72) !important;color:#dbeafe !important;border-color:rgba(147,197,253,.40) !important;}',
       '#gallery-modal .gm-close{background:#ffffff !important;color:' + NAVY + ' !important;border:1px solid rgba(12,30,90,.18) !important;}',
       '#gallery-modal .gm-nav{background:#ffffff !important;color:' + NAVY + ' !important;border:1px solid rgba(12,30,90,.18) !important;}',
-      /* ---- 시공갤러리 썸네일: 사진 위 라벨을 흰색으로 복구 + 하단 어두운 그라디언트 유지 ---- */
-      '#gallery-grid button .text-white{color:#ffffff !important;}',
-      '#gallery-grid button .text-blue-400{color:#93c5fd !important;}',
-      '#gallery-grid button .bg-gradient-to-t{background:linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.40) 35%, transparent 65%) !important;}',
+      /* ---- 시공갤러리 썸네일: 사진 위 라벨 흰색 복구 + 그림자 + 하단 어두운 그라디언트 ----
+         theme-white.css '.page:not(#page-home) .text-white'(특이도 1·2·0)를 이기려면
+         ID 2개(#page-gallery #gallery-grid)로 특이도를 올려야 함. 밝은 사진 대비용 text-shadow 추가. */
+      '#page-gallery #gallery-grid button .text-white{color:#ffffff !important;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.75) !important;}',
+      '#page-gallery #gallery-grid button .text-blue-400{color:#93c5fd !important;text-shadow:0 1px 3px rgba(0,0,0,.9) !important;}',
+      '#page-gallery #gallery-grid button .bg-gradient-to-t{background:linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.45) 38%, transparent 70%) !important;}',
       '#page-home #gallery-preview button .text-white{color:#ffffff !important;}',
       '#page-home #gallery-preview button .text-blue-400{color:#93c5fd !important;}',
       /* 풀스크린 라이트박스 */
