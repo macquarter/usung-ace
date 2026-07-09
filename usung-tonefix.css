@@ -57,3 +57,17 @@ footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!impor
 
 /* 9) 제품소개 옅은 파랑 아이브로(text-blue-300, 흰 배경)이 흐릿 → 진한 파랑 */
 #page-products [class*="text-blue-300"]{color:#2563eb!important}
+
+/* 10) 네비게이션 호버 애니메이션 통일 (S7)
+   문제: 드롭다운 캐럿이 제각각(회사·제품 11px / 기술 14px·opacity-50 / 고객센터는 캐럿 없음),
+        호버 피드백도 항목마다 미묘하게 다름.
+   해결: 기존 svg 캐럿을 모두 숨기고, 드롭다운 있는 항목에만 동일한 pseudo 캐럿을 부여.
+        모든 메뉴 호버 = 브랜드색 + 옅은 파랑 pill + 살짝 떠오름 + 동일 트랜지션.
+        드롭다운 항목은 호버 시 캐럿 180° 회전으로 통일. theme-white.css 뒤에 로드되어 우선 적용.
+        되돌리기: 이 블록만 삭제. */
+#navbar .nav-link{transition:color .2s ease,background-color .2s ease,transform .2s ease!important}
+#navbar .nav-item:hover>.nav-link,#navbar .nav-link:hover{color:var(--brand)!important;background-color:rgba(30,64,175,.08)!important;transform:translateY(-1px)}
+#navbar .nav-item:has(.dropdown)>.nav-link{gap:0!important}
+#navbar .nav-item:has(.dropdown)>.nav-link svg{display:none!important}
+#navbar .nav-item:has(.dropdown)>.nav-link::after{content:"";display:inline-block;width:0;height:0;margin-left:6px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55;vertical-align:middle;transition:transform .25s ease,opacity .2s ease;transform-origin:50% 40%}
+#navbar .nav-item:has(.dropdown):hover>.nav-link::after{transform:rotate(180deg);opacity:1}
