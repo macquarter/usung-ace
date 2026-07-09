@@ -81,7 +81,7 @@ main, #main-content { background:#fff !important; }
 }
 
 /* ============================================================
-   2) 히어로 — 차분한 신뢰감 (과한 글로우 제거)
+   2) 히어로 — 영상 선명 + 다크 스크림(글씨 가독)
    ============================================================ */
 #page-home > div:first-child { background:#000; }
 #page-home > div:first-child .sticky { background:transparent !important; }
@@ -89,52 +89,51 @@ main, #main-content { background:#fff !important; }
 #page-home > div:first-child .sticky > .bg-black\/80,
 #page-home > div:first-child .sticky > [class*="bg-black/"] {
     background:linear-gradient(180deg,
-        rgba(255,255,255,0.30) 0%,
-        rgba(255,255,255,0.55) 45%,
-        rgba(255,255,255,0.85) 100%) !important;
-    backdrop-filter:blur(1px);
+        rgba(0,0,0,0.12) 0%,
+        rgba(0,0,0,0.32) 52%,
+        rgba(0,0,0,0.55) 100%) !important;
+    backdrop-filter:none !important;
 }
 
 /* 히어로 타이틀 — 차분하고 신뢰감 있게 */
 #page-home > div:first-child .sticky h1 {
-    color:var(--fg-deep) !important;
-    text-shadow:0 2px 16px rgba(255,255,255,0.95), 0 1px 4px rgba(255,255,255,0.7);
+    color:#ffffff !important;
+    text-shadow:0 2px 18px rgba(0,0,0,0.65), 0 1px 4px rgba(0,0,0,0.55);
     letter-spacing:-0.045em;
     font-weight:900;
 }
 #page-home > div:first-child .sticky h2 {
-    color:var(--fg-deep) !important;
-    text-shadow:0 2px 16px rgba(255,255,255,0.9);
+    color:#ffffff !important;
+    text-shadow:0 2px 18px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5);
     letter-spacing:-0.04em;
     font-weight:900;
 }
 #page-home > div:first-child .sticky p,
 #page-home > div:first-child .sticky .scroll-element p {
-    color:#1e293b !important;
+    color:#f1f5f9 !important;
     font-weight:600;
-    text-shadow:0 1px 8px rgba(255,255,255,0.65);
+    text-shadow:0 1px 10px rgba(0,0,0,0.6);
 }
-#page-home > div:first-child .sticky .scroll-element div { color:var(--fg-deep) !important; }
+#page-home > div:first-child .sticky .scroll-element div { color:#ffffff !important; }
 #page-home > div:first-child .sticky .text-blue-400 {
-    color:var(--brand) !important;
-    text-shadow:0 1px 8px rgba(255,255,255,0.85);
+    color:#bfdbfe !important;
+    text-shadow:0 1px 10px rgba(0,0,0,0.6);
     letter-spacing:0.32em;
     font-weight:800;
 }
-#page-home > div:first-child .sticky [class*="text-white/"] { color:#1e293b !important; }
-#page-home > div:first-child .sticky [class*="text-white"] { color:var(--fg-deep) !important; }
-#page-home > div:first-child .sticky svg { color:var(--fg-deep) !important; stroke:var(--fg-deep) !important; }
+#page-home > div:first-child .sticky [class*="text-white/"] { color:#e2e8f0 !important; }
+#page-home > div:first-child .sticky [class*="text-white"] { color:#ffffff !important; }
+#page-home > div:first-child .sticky svg { color:#ffffff !important; stroke:#ffffff !important; }
 
-/* "No.1" — 차분한 단색 진한 블루 (그라데이션·glow 제거) */
+/* 그라데이션 스팬("후드의 기준" 등) — 밝은 블루 그라데이션(영상 위 대비 확보) */
 #page-home > div:first-child .sticky .text-transparent.bg-clip-text {
-    background-image:none !important;
-    background:none !important;
-    -webkit-background-clip:initial !important;
-    background-clip:initial !important;
-    color:var(--brand-deep) !important;
-    -webkit-text-fill-color:var(--brand-deep) !important;
-    filter:none !important;
-    text-shadow:0 2px 8px rgba(255,255,255,0.7);
+    background-image:linear-gradient(90deg,#93c5fd 0%,#67e8f9 50%,#60a5fa 100%) !important;
+    -webkit-background-clip:text !important;
+    background-clip:text !important;
+    color:transparent !important;
+    -webkit-text-fill-color:transparent !important;
+    filter:drop-shadow(0 2px 12px rgba(0,0,0,0.55)) !important;
+    text-shadow:none;
     font-weight:900;
     letter-spacing:-0.04em;
     animation:none !important;
@@ -148,11 +147,11 @@ main, #main-content { background:#fff !important; }
     font-weight:800;
 }
 #page-home > div:first-child .sticky button.bg-transparent {
-    border:2px solid var(--fg-deep) !important;
-    color:var(--fg-deep) !important;
+    border:2px solid #ffffff !important;
+    color:#ffffff !important;
     font-weight:800;
-    background:rgba(255,255,255,0.7) !important;
-    backdrop-filter:blur(8px);
+    background:rgba(0,0,0,0.28) !important;
+    backdrop-filter:blur(4px);
 }
 
 /* ============================================================
