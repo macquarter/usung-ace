@@ -10,14 +10,13 @@
   'use strict';
   console.log('[usung-overlay v10] loaded');
 
+  // 현재 라이브 제품 사이드바(usung-review.js UP_CATS)와 동일한 5분류 마스터
   const CATEGORIES = [
-    { id:'1.갤럭시',      label:'1. 갤럭시',         desc:'갤럭시 A · B · C · D 타입' },
-    { id:'2.LED',         label:'2. LED 조명',       desc:'갓등 · 우주선 · 아크릴' },
-    { id:'3.스텐파이프',   label:'3. 스텐파이프',     desc:'도금 · 도장 · 양옆/내부/텐션' },
-    { id:'4.스파이얼',    label:'4. 스파이얼 도장',  desc:'양옆/내부/텐션 시리즈' },
-    { id:'5.파이프 기타', label:'5. 파이프 기타옵션',desc:'고정텐션 · 사각측향 · 모터' },
-    { id:'6.후레쉬볼',    label:'6. 후레쉬볼',       desc:'자바라 · 신형 · 장축' },
-    { id:'7.하향식 후드', label:'7. 하향식 후드',    desc:'코브라 · 망대 · 주물 · 나팔' }
+    { id:'갤럭시',     label:'1. 갤럭시',                  desc:'갤럭시 A · B · C · D 타입' },
+    { id:'LED조명',    label:'2. LED조명',                 desc:'갓등 · 우주선 · 아크릴' },
+    { id:'파이프',     label:'3. 파이프',                  desc:'스텐 · 스파이얼 · 양옆/내부 태엽' },
+    { id:'후레쉬볼',   label:'4. 후레쉬볼',                desc:'자바라 · 신형 · 주름관' },
+    { id:'코브라후드', label:'5. 하향식 후드 / 코브라 후드', desc:'코브라 · 망대 · 주물 · 나팔' }
   ];
 
   const CAT_BY_ID = {
@@ -173,7 +172,7 @@
   // ==================== 메가메뉴 — 좌측만 (우측 hide) ====================
   function buildCatListHTML() {
     return CATEGORIES.map(c => {
-      return '<button onclick="navigate(\'products\');setTimeout(()=>window.filterByNode&&window.filterByNode(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200" data-ace-locked="1">' +
+      return '<button onclick="navigate(\'products\');setTimeout(()=>window.upGoCat&&window.upGoCat(\''+c.id+'\'),120);" class="block text-left group w-full px-3 py-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200" data-ace-locked="1">' +
         '<div class="text-[14px] font-black tracking-tight text-slate-900">'+c.label+'</div>' +
         '<div class="text-[11px] text-slate-500 mt-1">'+c.desc+'</div>' +
       '</button>';
@@ -291,47 +290,50 @@
     const sticky = home.querySelector('.sticky');
     if (!sticky) return;
 
+    // 흰색 필터 제거 → 영상이 선명하게 보이도록 아주 옅은 다크 스크림만 유지
+    // (글씨 가독성 확보용 최소 대비, blur 제거)
     sticky.querySelectorAll('[class*="bg-black/"]').forEach(el => {
-      el.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.85) 100%)';
-      el.style.backdropFilter = 'blur(1px)';
+      el.style.background = 'linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.30) 55%, rgba(0,0,0,0.50) 100%)';
+      el.style.backdropFilter = 'none';
     });
+    // 밝은 영상 위 → 글씨는 흰색 + 어두운 그림자로 가독성
     sticky.querySelectorAll('h1, h2').forEach(el => {
-      el.style.color = '#020617';
-      el.style.textShadow = '0 2px 16px rgba(255,255,255,0.95), 0 1px 4px rgba(255,255,255,0.7)';
+      el.style.color = '#ffffff';
+      el.style.textShadow = '0 2px 18px rgba(0,0,0,0.65), 0 1px 4px rgba(0,0,0,0.55)';
       el.style.letterSpacing = '-0.045em';
       el.style.fontWeight = '900';
     });
     sticky.querySelectorAll('p').forEach(el => {
-      el.style.color = '#1e293b';
+      el.style.color = '#f1f5f9';
       el.style.fontWeight = '600';
-      el.style.textShadow = '0 1px 8px rgba(255,255,255,0.65)';
+      el.style.textShadow = '0 1px 10px rgba(0,0,0,0.6)';
     });
     sticky.querySelectorAll('div').forEach(el => {
       const cls = el.className || '';
       if (cls.includes('text-blue-400')) {
-        el.style.color = '#1e40af';
-        el.style.textShadow = '0 1px 8px rgba(255,255,255,0.85)';
+        el.style.color = '#bfdbfe';
+        el.style.textShadow = '0 1px 10px rgba(0,0,0,0.6)';
         el.style.letterSpacing = '0.32em';
         el.style.fontWeight = '800';
       }
     });
-    // "No.1" - 차분한 단색 진한 블루 (그라데이션/glow 완전 제거)
+    // "No.1" - 밝은 흰색 단색 (그라데이션/glow 제거, 영상 위 선명)
     sticky.querySelectorAll('.text-transparent.bg-clip-text').forEach(el => {
       el.style.backgroundImage = 'none';
       el.style.background = 'none';
       el.style.webkitBackgroundClip = 'initial';
       el.style.backgroundClip = 'initial';
-      el.style.color = '#0c1e5a';
-      el.style.webkitTextFillColor = '#0c1e5a';
+      el.style.color = '#ffffff';
+      el.style.webkitTextFillColor = '#ffffff';
       el.style.filter = 'none';
-      el.style.textShadow = '0 2px 8px rgba(255,255,255,0.7)';
+      el.style.textShadow = '0 2px 12px rgba(0,0,0,0.6)';
       el.style.fontWeight = '900';
       el.style.animation = 'none';
     });
     sticky.querySelectorAll('svg').forEach(s => {
       if (s.closest('button.bg-black')) return;
-      s.style.stroke = '#020617';
-      s.style.color = '#020617';
+      s.style.stroke = '#ffffff';
+      s.style.color = '#ffffff';
     });
   }
 
