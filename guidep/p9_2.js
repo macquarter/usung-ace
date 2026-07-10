@@ -1,0 +1,1 @@
+(window.GB=window.GB||{}),(GB["guide9_swing"]=(GB["guide9_swing"]||"")+"hf4HNvIXGG6mqAAAAAAAAA==");
