@@ -107,7 +107,7 @@
       '</div>';
     }
     var imgFrame = src
-      ? '<div style="margin-top:auto;height:200px;border-radius:14px;border:1px solid '+LINE+';background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden">'+
+      ? '<div style="margin-top:auto;height:200px;border-radius:14px;border:1px solid '+LINE+';background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden">'+
           '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-in">'+
         '</div>'
       : '<div style="margin-top:auto;height:200px;display:flex;align-items:center;justify-content:center;color:#94a3b8;border:1px dashed '+LINE+';border-radius:14px">이미지 준비 중</div>';
