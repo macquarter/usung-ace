@@ -18,12 +18,18 @@
   }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // 4가지 핵심 특징 (텍스트, 카탈로그 정합)
+  // 4가지 핵심 특징 (텍스트, 카탈로그 정합) — 아이콘/포인트 컬러 포함(리디자인 0711)
+  var IC = {
+    oil:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7l5.7 5.6a8 8 0 1 1-11.4 0z"/></svg>',
+    swing:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
+    tool:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    shield:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>'
+  };
   var FEATURES = [
-    { n:'01', t:'기름유도장치 (기름받이속)', d:'사용 중 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.', tag:'기름 흘림 ZERO' },
-    { n:'02', t:'360° 자유 스윙', d:'파이프가 고정되지 않고 시계추처럼 부드럽게 회전합니다. 테이블을 치우지 않고 후드만 옆으로 옮겨 청소할 수 있어 부러질 염려가 없습니다.', tag:'파이프 파손 ZERO' },
-    { n:'03', t:'나사타입 간편 분리', d:'상·하부를 잇는 파이프링이 나사 방식이라 도구 없이 손으로 분리됩니다. 누구나 손쉽게 내부 청소를 할 수 있습니다.', tag:'도구 없이 분리' },
-    { n:'04', t:'유지망 필터', d:'기름을 여과해 모터와 덕트 내부를 청결하게 유지합니다. 모터 수명을 늘리고 화재를 예방하는 이중 효과가 있습니다.', tag:'모터수명 연장 + 화재예방' }
+    { n:'01', t:'기름유도장치 (기름받이속)', d:'사용 중 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.', tag:'기름 흘림 ZERO', ac:'#d97706', bg:'rgba(217,119,6,.10)', ic:IC.oil },
+    { n:'02', t:'360° 자유 스윙', d:'파이프가 고정되지 않고 시계추처럼 부드럽게 회전합니다. 테이블을 치우지 않고 후드만 옆으로 옮겨 청소할 수 있어 부러질 염려가 없습니다.', tag:'파이프 파손 ZERO', ac:'#2563eb', bg:'rgba(37,99,235,.10)', ic:IC.swing },
+    { n:'03', t:'나사타입 간편 분리', d:'상·하부를 잇는 파이프링이 나사 방식이라 도구 없이 손으로 분리됩니다. 누구나 손쉽게 내부 청소를 할 수 있습니다.', tag:'도구 없이 분리', ac:'#7c3aed', bg:'rgba(124,58,237,.10)', ic:IC.tool },
+    { n:'04', t:'유지망 필터', d:'기름을 여과해 모터와 덕트 내부를 청결하게 유지합니다. 모터 수명을 늘리고 화재를 예방하는 이중 효과가 있습니다.', tag:'모터수명 연장 + 화재예방', ac:'#059669', bg:'rgba(5,150,105,.10)', ic:IC.shield }
   ];
 
   // 양옆태엽 스윙 구조의 장점 (카탈로그 p36 스윙 다이어그램)
@@ -62,36 +68,53 @@
   var CHECK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" style="flex:none"><path d="M20 6 9 17l-5-5"/></svg>';
 
   function featureCard(f){
-    return '<div style="background:#fff;border:1px solid '+LINE+';border-radius:20px;padding:24px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)">'+
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">'+
-        '<span style="flex:none;width:38px;height:38px;border-radius:12px;background:rgba(30,64,175,.10);color:'+BRAND+';font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center">'+f.n+'</span>'+
-        '<h3 style="margin:0;font-size:18px;font-weight:800;color:'+NAVY+';letter-spacing:-.02em">'+esc(f.t)+'</h3>'+
-      '</div>'+
-      '<p style="margin:0 0 14px;font-size:13.5px;line-height:1.72;color:'+SUB+'">'+esc(f.d)+'</p>'+
-      '<div style="display:inline-flex;align-items:center;gap:6px;color:#059669;font-size:12px;font-weight:800">'+CHECK+esc(f.tag)+'</div>'+
+    return '<div style="position:relative;background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:26px 24px;box-shadow:0 10px 30px rgba(10,20,60,.06);overflow:hidden">'+
+      '<span style="position:absolute;top:4px;right:16px;font-size:78px;font-weight:900;line-height:1;color:'+f.ac+';opacity:.08;letter-spacing:-.04em;pointer-events:none">'+f.n+'</span>'+
+      '<div style="position:relative;width:52px;height:52px;border-radius:15px;background:'+f.bg+';color:'+f.ac+';display:flex;align-items:center;justify-content:center;margin-bottom:16px">'+f.ic+'</div>'+
+      '<h3 style="position:relative;margin:0 0 9px;font-size:18.5px;font-weight:800;color:'+NAVY+';letter-spacing:-.02em">'+esc(f.t)+'</h3>'+
+      '<p style="position:relative;margin:0 0 16px;font-size:13.5px;line-height:1.72;color:'+SUB+'">'+esc(f.d)+'</p>'+
+      '<div style="position:relative;display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:rgba(5,150,105,.09);color:#047857;font-size:12px;font-weight:800">'+CHECK+esc(f.tag)+'</div>'+
     '</div>';
   }
 
-  function methodCard(m, i){
-    var src = IMG(m.k);
-    var wide = !!m.wide;
-    var imgCss = wide
-      ? 'display:block;width:100%;height:auto;max-width:'+(m.maxw||720)+'px;margin:2px auto 0;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in'
-      : 'display:block;width:100%;height:auto;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in';
-    var imgHTML = src
-      ? '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" style="'+imgCss+'">'
-      : '<div style="padding:40px;text-align:center;color:#94a3b8;border:1px dashed '+LINE+';border-radius:14px">이미지 준비 중</div>';
-    var cardCss = 'background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:24px 22px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)'+(wide?';grid-column:1/-1':'');
-    return '<div style="'+cardCss+'">'+
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'+
+  // 카드 헤더(번호 뱃지 + 코드 + 제목) — 균일 높이 유지를 위해 공통 분리
+  function methodHeader(m, i){
+    return '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'+
         '<span style="flex:none;width:34px;height:34px;border-radius:10px;background:'+NAVY+';color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">'+(i+1)+'</span>'+
         '<div>'+
           '<div style="font-size:10px;font-weight:800;letter-spacing:.2em;color:'+BRAND+'">'+esc(m.code)+'</div>'+
           '<h3 style="margin:2px 0 0;font-size:19px;font-weight:800;color:'+NAVY+';letter-spacing:-.02em">'+esc(m.title)+'</h3>'+
         '</div>'+
-      '</div>'+
-      '<p style="margin:0 0 16px;font-size:13.5px;line-height:1.7;color:'+SUB+'">'+esc(m.cap)+'</p>'+
-      imgHTML+
+      '</div>';
+  }
+
+  // 균일 박스: 컨텐츠 양이 달라도 카드 높이/이미지틀 크기 동일.
+  // - 카드: flex column + height:100% (그리드 align-items:stretch 로 같은 행 균등)
+  // - 캡션: min-height 로 1~2줄 편차 흡수
+  // - 이미지: 고정 높이 틀(#f8fafc) + object-fit:contain (margin-top:auto 로 하단 정렬)
+  // 넓은 다이어그램(07/08)은 전체폭 카드로 별도 유지.
+  function methodCard(m, i){
+    var src = IMG(m.k);
+    var wide = !!m.wide;
+    if (wide) {
+      var wimg = src
+        ? '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" style="display:block;width:100%;height:auto;max-width:'+(m.maxw||720)+'px;margin:0 auto;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in">'
+        : '<div style="padding:40px;text-align:center;color:#94a3b8;border:1px dashed '+LINE+';border-radius:14px">이미지 준비 중</div>';
+      return '<div style="grid-column:1/-1;background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:24px 22px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)">'+
+        methodHeader(m,i)+
+        '<p style="margin:0 0 16px;font-size:13.5px;line-height:1.7;color:'+SUB+'">'+esc(m.cap)+'</p>'+
+        wimg+
+      '</div>';
+    }
+    var imgFrame = src
+      ? '<div style="margin-top:auto;height:200px;border-radius:14px;border:1px solid '+LINE+';background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden">'+
+          '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-in">'+
+        '</div>'
+      : '<div style="margin-top:auto;height:200px;display:flex;align-items:center;justify-content:center;color:#94a3b8;border:1px dashed '+LINE+';border-radius:14px">이미지 준비 중</div>';
+    return '<div style="display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:24px 22px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)">'+
+      methodHeader(m,i)+
+      '<p style="margin:0 0 16px;min-height:46px;font-size:13.5px;line-height:1.7;color:'+SUB+'">'+esc(m.cap)+'</p>'+
+      imgFrame+
     '</div>';
   }
 
@@ -132,7 +155,7 @@
       '<div style="margin-bottom:60px">'+
         '<div style="font-size:11px;font-weight:800;letter-spacing:.28em;color:'+BRAND+';margin-bottom:8px">PRODUCT FEATURES</div>'+
         '<h2 style="margin:0 0 24px;font-size:clamp(24px,3.4vw,32px);font-weight:800;color:'+NAVY+';letter-spacing:-.02em">유성에이스 후드, 4가지 핵심 특징</h2>'+
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px">'+
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;max-width:760px;margin:0 auto">'+
           FEATURES.map(featureCard).join('')+
         '</div>'+
       '</div>'+
@@ -142,7 +165,7 @@
         '<div style="font-size:11px;font-weight:800;letter-spacing:.28em;color:'+BRAND+';margin-bottom:8px">STEP-BY-STEP</div>'+
         '<h2 style="margin:0 0 10px;font-size:clamp(24px,3.4vw,32px);font-weight:800;color:'+NAVY+';letter-spacing:-.02em">사용 · 유지관리 방법</h2>'+
         '<p style="margin:0 0 26px;font-size:15px;color:'+SUB+'">카탈로그 실제 그림으로 정리했습니다. 그림을 누르면 크게 볼 수 있습니다.</p>'+
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start">'+
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:stretch">'+
           METHODS.map(methodCard).join('')+
         '</div>'+
       '</div>'+
