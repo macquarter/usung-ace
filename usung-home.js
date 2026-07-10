@@ -13,7 +13,49 @@
 (function () {
   'use strict';
 
-  var GRAD = 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600';
+  // 히어로 그라데이션 재작업(2026-07-11): 프리미엄 블루→시안→소프트화이트 + 은은한 시머 애니메이션.
+  // 기존 Tailwind 그라디언트(from-blue-500 via-cyan-400 to-blue-600) 대신 커스텀 클래스 사용.
+  var GRAD = 'usung-hgrad';
+
+  // 히어로용 스타일(그라데이션 폰트 + 스크롤 휠마크) 1회 주입
+  function injectHomeStyle() {
+    if (document.getElementById('usung-home-style')) return;
+    var css = ''
+      // ── 그라데이션 폰트 ──
+      + '.usung-hgrad{'
+      +   'background:linear-gradient(96deg,#93c5fd 0%,#38bdf8 30%,#22d3ee 52%,#67e8f9 72%,#e0f2fe 100%);'
+      +   'background-size:220% 100%;-webkit-background-clip:text;background-clip:text;'
+      +   '-webkit-text-fill-color:transparent;color:transparent;'
+      +   'text-shadow:0 2px 24px rgba(34,211,238,.18);'
+      +   'animation:usungHShine 6.5s ease-in-out infinite;}'
+      + '@keyframes usungHShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}'
+      // ── 스크롤 휠마크(마우스 모양) ──
+      + '#usung-scrollmark{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:40;'
+      +   'display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:none;opacity:0;transition:opacity .45s ease;}'
+      + '#usung-scrollmark .um-mouse{width:27px;height:44px;border:2px solid rgba(255,255,255,.9);border-radius:15px;'
+      +   'display:flex;justify-content:center;padding-top:7px;background:rgba(10,20,50,.14);'
+      +   'box-shadow:0 3px 18px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.06);}'
+      + '#usung-scrollmark .um-wheel{width:4px;height:9px;border-radius:2px;'
+      +   'background:linear-gradient(#fff,#a5f3fc);animation:usungWheel 1.7s cubic-bezier(.4,0,.2,1) infinite;}'
+      + '#usung-scrollmark .um-label{font-size:10px;letter-spacing:.3em;font-weight:800;color:rgba(255,255,255,.82);'
+      +   'text-shadow:0 1px 8px rgba(0,0,0,.35);}'
+      + '@keyframes usungWheel{0%{opacity:0;transform:translateY(-5px)}25%{opacity:1}55%{opacity:1;transform:translateY(7px)}100%{opacity:0;transform:translateY(7px)}}'
+      + '@media(max-width:640px){#usung-scrollmark{bottom:18px}#usung-scrollmark .um-label{display:none}}';
+    var s = document.createElement('style');
+    s.id = 'usung-home-style';
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  // 스크롤 휠마크 요소 생성(1회)
+  function ensureScrollMark() {
+    if (document.getElementById('usung-scrollmark')) return;
+    var m = document.createElement('div');
+    m.id = 'usung-scrollmark';
+    m.setAttribute('aria-hidden', 'true');
+    m.innerHTML = '<span class="um-mouse"><span class="um-wheel"></span></span><span class="um-label">SCROLL</span>';
+    document.body.appendChild(m);
+  }
 
   function setHeroTexts() {
     // 멘트1 — anim-hero
@@ -76,11 +118,17 @@
       var el = document.getElementById(id);
       if (el) { el.style.opacity = op; el.style.transform = tr; }
     }
+    function setMark(op) {
+      var mk = document.getElementById('usung-scrollmark');
+      if (mk) mk.style.opacity = op;
+    }
     function tick() {
       var home = document.getElementById('page-home');
-      if (!home || !home.classList.contains('active')) return;
+      if (!home || !home.classList.contains('active')) { setMark(0); return; }
       var vh = window.innerHeight;
       var p = Math.min(Math.max(window.scrollY / (vh * 1.5), 0), 1);
+      // 스크롤 휠마크 — 최상단에서만 노출, 스크롤 시작하면 페이드아웃
+      setMark(p < 0.05 ? 1 : 0);
       // 멘트1
       set('anim-hero', mr(p, 0.10, 0.18, 1, 0),
         'scale(' + mr(p, 0.10, 0.18, 1, 0.9) + ') translateY(' + mr(p, 0.10, 0.18, 0, -60) + 'px)');
@@ -183,6 +231,8 @@
   }
 
   function render() {
+    injectHomeStyle();
+    ensureScrollMark();
     setHeroTexts();
     reorderSections();
     tintHoodGraphic();
