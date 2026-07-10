@@ -108,6 +108,7 @@
       +   '</div>'
       +   '<div class="t8-num" aria-hidden="true">' + t.n + '</div>'
       + '</div>'
+      + '<div class="t8-fig" data-tech="' + t.n + '"></div>'
       + '<div class="t8-cols">'
       +   col('problem', '문제 원인', 'CAUSE', t.problem, '#dc2626')
       +   col('solve', '해결 방법', 'SOLUTION', t.solve, '#2563eb')
@@ -138,11 +139,95 @@
       + '.t8-bar{margin-top:16px;display:flex;gap:10px;align-items:center;background:linear-gradient(90deg,#eff6ff,#f0f9ff);border:1px solid #dbeafe;border-radius:16px;padding:14px 18px;font-size:14px;font-weight:600;color:#1e3a8a;line-height:1.5;}'
       + '.t8-bar-ic{width:24px;height:24px;border-radius:8px;background:#2563eb;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;}'
       + '.t8-bar-ic svg{width:14px;height:14px;}'
+      + '.t8-fig{display:none;margin:0 0 18px;}'
+      + '.t8-fig.on{display:block;}'
+      + '.t8-figbox{position:relative;display:inline-block;width:100%;text-align:center;}'
+      + '.t8-dimg{display:block;width:100%;max-width:360px;margin:0 auto;border:1px solid #eef2f7;border-radius:16px;background:#fff;cursor:zoom-in;transition:box-shadow .18s;}'
+      + '.t8-dimg:hover{box-shadow:0 10px 26px -12px rgba(37,99,235,.45);}'
+      + '.t8-figcap{margin:8px 0 0;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:#94a3b8;}'
+      + '.t8-lb{position:fixed;inset:0;background:rgba(15,23,42,.82);display:none;align-items:center;justify-content:center;z-index:99999;padding:24px;}'
+      + '.t8-lb.on{display:flex;}'
+      + '.t8-lb img{max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);background:#fff;}'
+      + '.t8-lb-x{position:absolute;top:18px;right:22px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;border:0;font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
       + '@media(max-width:860px){.t8-cols{grid-template-columns:1fr;}.t8-title{font-size:22px;}.t8-num{font-size:48px;}}';
     var s = document.createElement('style');
     s.id = 't8-style';
     s.textContent = css;
     document.head.appendChild(s);
+  }
+
+  // ---- 핵심기술 다이어그램(코어 기술.jpg 보강) : 필요 시에만 지연 로드 ----
+  var DIAG_V = '20260711';
+
+  function loadDiagramScripts() {
+    if (window.__t8diagLoad) return;
+    window.__t8diagLoad = true;
+    for (var i = 1; i <= 8; i++) {
+      var sc = document.createElement('script');
+      sc.src = '/techdiag/td' + i + '.js?v=' + DIAG_V;
+      sc.defer = true;
+      document.head.appendChild(sc);
+    }
+  }
+
+  function fillDiagrams() {
+    var GB = window.GB || {};
+    var figs = document.querySelectorAll('#tech-grid .t8-fig');
+    var done = figs.length > 0;
+    for (var k = 0; k < figs.length; k++) {
+      var f = figs[k];
+      if (f.getAttribute('data-loaded') === '1') continue;
+      var n = f.getAttribute('data-tech');
+      var key = 'tech' + parseInt(n, 10);
+      if (GB[key]) {
+        f.innerHTML = '<div class="t8-figbox">'
+          + '<img class="t8-dimg" alt="핵심기술 ' + n + ' 다이어그램" src="data:image/webp;base64,' + GB[key] + '">'
+          + '<p class="t8-figcap">이미지를 누르면 크게 볼 수 있습니다</p>'
+          + '</div>';
+        f.className = 't8-fig on';
+        f.setAttribute('data-loaded', '1');
+      } else {
+        done = false;
+      }
+    }
+    return done;
+  }
+
+  function loadDiagrams() {
+    ensureLightbox();
+    loadDiagramScripts();
+    var tries = 0;
+    (function poll() {
+      tries++;
+      if (fillDiagrams()) return;
+      if (tries < 50) setTimeout(poll, 150);
+    })();
+  }
+
+  function ensureLightbox() {
+    if (document.getElementById('t8-lb')) return;
+    var lb = document.createElement('div');
+    lb.id = 't8-lb';
+    lb.className = 't8-lb';
+    lb.innerHTML = '<button class="t8-lb-x" aria-label="닫기">×</button><img src="" alt="핵심기술 다이어그램 확대">';
+    document.body.appendChild(lb);
+    function close() { lb.className = 't8-lb'; }
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb || (e.target.className && String(e.target.className).indexOf('t8-lb-x') > -1)) close();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    if (!window.__t8lbClick) {
+      window.__t8lbClick = true;
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (t && t.classList && t.classList.contains('t8-dimg')) {
+          var box = document.getElementById('t8-lb');
+          if (!box) return;
+          box.querySelector('img').src = t.src;
+          box.className = 't8-lb on';
+        }
+      });
+    }
   }
 
   function render() {
@@ -151,6 +236,7 @@
     injectStyle();
     grid.className = 't8-wrap';
     grid.innerHTML = TECH8.map(panel).join('');
+    loadDiagrams();
   }
 
   // 원래 렌더러가 다시 다크카드로 덮어쓰지 못하도록 오버라이드
