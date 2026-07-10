@@ -48,9 +48,9 @@
       cap:'화재 시 72℃ 퓨즈가 녹으면 날개가 자동으로 닫혀 불길 확산을 차단합니다.' },
     { k:'guide6_sangbu', code:'METHOD 06', title:'상부 분리 (선택사항)',
       cap:'상부를 분리하면 덕트·모터 내부까지 점검하고 청소할 수 있습니다.' },
-    { k:'guide7_assy', code:'METHOD 07', title:'등제품 조립순서',
+    { k:'guide7_assy', code:'METHOD 07', title:'등제품 조립순서', wide:true, maxw:600,
       cap:'등받침 → 등 하판 → 갓 순서로 끼우면 완성됩니다. 아크릴등·한지등·LED 모두 동일합니다.' },
-    { k:'guide8_rail', code:'METHOD 08', title:'이동식 레일',
+    { k:'guide8_rail', code:'METHOD 08', title:'이동식 레일', wide:true, maxw:720,
       cap:'레일 방식으로 후드를 옆으로 밀어 이동시켜, 청소·점검 공간을 손쉽게 확보합니다.' }
   ];
 
@@ -74,11 +74,15 @@
 
   function methodCard(m, i){
     var src = IMG(m.k);
+    var wide = !!m.wide;
+    var imgCss = wide
+      ? 'display:block;width:100%;height:auto;max-width:'+(m.maxw||720)+'px;margin:2px auto 0;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in'
+      : 'display:block;width:100%;height:auto;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in';
     var imgHTML = src
-      ? '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" '+
-        'style="display:block;width:100%;height:auto;border-radius:14px;border:1px solid '+LINE+';background:#fff;cursor:zoom-in">'
+      ? '<img src="'+src+'" alt="'+esc(m.title)+'" loading="lazy" data-zoom="1" style="'+imgCss+'">'
       : '<div style="padding:40px;text-align:center;color:#94a3b8;border:1px dashed '+LINE+';border-radius:14px">이미지 준비 중</div>';
-    return '<div style="background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:24px 22px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)">'+
+    var cardCss = 'background:#fff;border:1px solid '+LINE+';border-radius:22px;padding:24px 22px 22px;box-shadow:0 10px 30px rgba(10,20,60,.06)'+(wide?';grid-column:1/-1':'');
+    return '<div style="'+cardCss+'">'+
       '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'+
         '<span style="flex:none;width:34px;height:34px;border-radius:10px;background:'+NAVY+';color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">'+(i+1)+'</span>'+
         '<div>'+
@@ -138,7 +142,7 @@
         '<div style="font-size:11px;font-weight:800;letter-spacing:.28em;color:'+BRAND+';margin-bottom:8px">STEP-BY-STEP</div>'+
         '<h2 style="margin:0 0 10px;font-size:clamp(24px,3.4vw,32px);font-weight:800;color:'+NAVY+';letter-spacing:-.02em">사용 · 유지관리 방법</h2>'+
         '<p style="margin:0 0 26px;font-size:15px;color:'+SUB+'">카탈로그 실제 그림으로 정리했습니다. 그림을 누르면 크게 볼 수 있습니다.</p>'+
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">'+
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start">'+
           METHODS.map(methodCard).join('')+
         '</div>'+
       '</div>'+
