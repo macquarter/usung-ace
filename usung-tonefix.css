@@ -77,3 +77,19 @@ footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!impor
    대상: #page-manual 안에서 인라인 그라디언트(#12307a 포함) 카드 내부의 h2 만. 흰 배경 제목은 건드리지 않음.
    되돌리기: 이 블록만 삭제. */
 #page-manual [style*="12307a"] h2{color:#fff!important}
+
+/* 12) 색으로 채워진 버튼/링크 위 흰 글씨가 theme-white 의 '.text-white→어둠' 규칙이나
+   기타 상속에 먹혀 검/적색으로 보이는 문제(제품 상담문의 버튼 등).
+   파란/남색/그라디언트 버튼은 흰 글씨 유지. 되돌리기: 이 블록만 삭제. */
+#ace-product-modal a[href^="tel:"],
+#ace-product-modal a.text-white{color:#fff!important}
+.page:not(#page-home) a.text-white[style*="gradient"],
+.page:not(#page-home) button.text-white[style*="gradient"],
+.page:not(#page-home) a[style*="linear-gradient"][href^="tel:"],
+.page:not(#page-home) [class*="bg-blue-5"].text-white,
+.page:not(#page-home) [class*="bg-blue-6"].text-white,
+.page:not(#page-home) [class*="bg-blue-7"].text-white,
+.page:not(#page-home) [class*="bg-blue-8"].text-white,
+.page:not(#page-home) [class*="bg-indigo-"].text-white,
+.page:not(#page-home) [class*="bg-sky-5"].text-white,
+.page:not(#page-home) [class*="bg-sky-6"].text-white{color:#fff!important}
