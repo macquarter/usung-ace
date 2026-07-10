@@ -71,3 +71,9 @@ footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!impor
 #navbar .nav-item:has(.dropdown)>.nav-link svg{display:none!important}
 #navbar .nav-item:has(.dropdown)>.nav-link::after{content:"";display:inline-block;width:0;height:0;margin-left:6px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55;vertical-align:middle;transition:transform .25s ease,opacity .2s ease;transform-origin:50% 40%}
 #navbar .nav-item:has(.dropdown):hover>.nav-link::after{transform:rotate(180deg);opacity:1}
+
+/* 11) 사용방법 '양옆태엽 스윙 구조의 장점' — 네이비 배경 위 제목이 검게 강제됨(theme-white h2 규칙).
+   블루/네이비 배경에 검은 글씨는 절대 불가 → 흰 글씨로 복원.
+   대상: #page-manual 안에서 인라인 그라디언트(#12307a 포함) 카드 내부의 h2 만. 흰 배경 제목은 건드리지 않음.
+   되돌리기: 이 블록만 삭제. */
+#page-manual [style*="12307a"] h2{color:#fff!important}
