@@ -230,12 +230,94 @@
     }
   }
 
+  // ── 히어로 배경영상 모바일 대응(2026-07-11) ──
+  // 문제: 모바일(iOS 저전력모드/데이터세이버 등)에서 배경영상 자동재생이 막히면
+  //        poster가 없어 히어로가 빈 화면으로 보임.
+  // 대응: (1) muted/playsinline/autoplay 속성 재확정 + 사용자 첫 상호작용 시 play() 넛지,
+  //        (2) 동일출처 영상의 첫 프레임을 클라이언트에서 캡처해 poster + 뒤편 <img> 폴백으로 사용.
+  //        → 영상이 재생 못해도 항상 건물 스틸 이미지가 보이게 함.
+  // 되돌리기: 이 함수와 render()의 fixHeroVideo() 호출 1줄 제거(원본 무변경).
+  function pickHeroVideo() {
+    var vids = Array.prototype.slice.call(
+      document.querySelectorAll('#page-home video, #anim-hero video, .sticky video')
+    ).filter(function (v, i, a) { return a.indexOf(v) === i; });
+    var vis = vids.filter(function (v) { return v.offsetWidth > 0 && v.offsetHeight > 0; });
+    return vis[0] || vids[0] || document.querySelector('video');
+  }
+
+  function fixHeroVideo() {
+    var v = pickHeroVideo();
+    if (!v) return;
+    try {
+      v.muted = true; v.defaultMuted = true; v.loop = true;
+      ['muted', 'playsinline', 'webkit-playsinline', 'autoplay', 'loop'].forEach(function (a) {
+        if (!v.hasAttribute(a)) v.setAttribute(a, '');
+      });
+      if (!v.getAttribute('preload')) v.setAttribute('preload', 'auto');
+    } catch (e) {}
+
+    var tryPlay = function () { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} };
+    tryPlay();
+    if (!v.__usungNudge) {
+      v.__usungNudge = true;
+      v.addEventListener('canplay', tryPlay);
+      v.addEventListener('loadeddata', tryPlay);
+      ['touchstart', 'pointerdown', 'click', 'scroll'].forEach(function (ev) {
+        window.addEventListener(ev, tryPlay, { once: true, passive: true });
+      });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) tryPlay(); });
+    }
+
+    if (!v.__usungPoster) {
+      var cap = function () {
+        try {
+          if (v.readyState < 2 || !v.videoWidth) return false;
+          // 인트로 검은 프레임 방지: 재생이 막혀 맨앞(0초)에 멈춰있으면 살짝 뒤로 시크
+          if (v.paused && v.currentTime < 0.8 && v.duration > 2) { try { v.currentTime = 1.2; } catch (e) {} return false; }
+          var c = document.createElement('canvas');
+          c.width = v.videoWidth; c.height = v.videoHeight;
+          c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+          var data = c.toDataURL('image/jpeg', 0.82);
+          if (!/^data:image\/jpeg;base64,/.test(data) || data.length < 3000) return false;
+          v.setAttribute('poster', data);
+          var host = v.parentNode; if (!host) { v.__usungPoster = true; return true; }
+          var img = host.querySelector('.usung-hero-fallback');
+          if (!img) {
+            img = document.createElement('img');
+            img.className = 'usung-hero-fallback';
+            img.setAttribute('aria-hidden', 'true');
+            img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;';
+            host.insertBefore(img, v); // 영상 뒤(먼저 그려짐) — 영상 재생 시 영상이 덮음
+          }
+          img.src = data;
+          v.__usungPoster = true;
+          var sync = function () {
+            var playing = !v.paused && v.readyState >= 3 && !v.ended;
+            v.style.opacity = playing ? '1' : '0'; // 재생 못하면 영상 숨기고 스틸 노출
+          };
+          sync();
+          ['play', 'playing', 'pause', 'ended', 'timeupdate', 'waiting', 'stalled'].forEach(function (ev) {
+            v.addEventListener(ev, sync);
+          });
+          return true;
+        } catch (e) { return false; }
+      };
+      if (!cap()) {
+        v.addEventListener('loadeddata', cap, { once: true });
+        v.addEventListener('canplay', cap, { once: true });
+        v.addEventListener('seeked', cap, { once: true });
+        var n = 0, iv = setInterval(function () { if (cap() || ++n > 14) clearInterval(iv); }, 500);
+      }
+    }
+  }
+
   function render() {
     injectHomeStyle();
     ensureScrollMark();
     setHeroTexts();
     reorderSections();
     tintHoodGraphic();
+    fixHeroVideo();
     wireScroll();
   }
 
