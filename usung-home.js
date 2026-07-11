@@ -23,10 +23,10 @@
     var css = ''
       // ── 그라데이션 폰트 ──
       + '.usung-hgrad{'
-      +   'background:linear-gradient(96deg,#93c5fd 0%,#38bdf8 30%,#22d3ee 52%,#67e8f9 72%,#e0f2fe 100%);'
+      +   'background:linear-gradient(96deg,#bfdbfe 0%,#60a5fa 30%,#3b82f6 52%,#60a5fa 72%,#dbeafe 100%);'
       +   'background-size:220% 100%;-webkit-background-clip:text;background-clip:text;'
       +   '-webkit-text-fill-color:transparent;color:transparent;'
-      +   'text-shadow:0 2px 24px rgba(34,211,238,.18);'
+      +   'text-shadow:0 2px 24px rgba(37,99,235,.18);'
       +   'animation:usungHShine 6.5s ease-in-out infinite;}'
       + '@keyframes usungHShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}'
       // ── 스크롤 휠마크(마우스 모양) ──
@@ -36,7 +36,7 @@
       +   'display:flex;justify-content:center;padding-top:7px;background:rgba(10,20,50,.14);'
       +   'box-shadow:0 3px 18px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.06);}'
       + '#usung-scrollmark .um-wheel{width:4px;height:9px;border-radius:2px;'
-      +   'background:linear-gradient(#fff,#a5f3fc);animation:usungWheel 1.7s cubic-bezier(.4,0,.2,1) infinite;}'
+      +   'background:linear-gradient(#fff,#bfdbfe);animation:usungWheel 1.7s cubic-bezier(.4,0,.2,1) infinite;}'
       + '#usung-scrollmark .um-label{font-size:10px;letter-spacing:.3em;font-weight:800;color:rgba(255,255,255,.82);'
       +   'text-shadow:0 1px 8px rgba(0,0,0,.35);}'
       + '@keyframes usungWheel{0%{opacity:0;transform:translateY(-5px)}25%{opacity:1}55%{opacity:1;transform:translateY(7px)}100%{opacity:0;transform:translateY(7px)}}'
@@ -179,8 +179,8 @@
   // 후드의 장점(CORE TECHNOLOGY) 3D 그래픽 배경을 푸른색으로 —
   // 캔버스는 매 프레임 다크 그라디언트로 배경을 다시 칠하므로, 컨텍스트의
   // 배경 fill(프레임 첫 fillRect(0,0,W,H))을 가로채 푸른 그라디언트로 교체한다.
-  var BG_TOP = '#1b3f86';   // 좌상단(밝은 블루)
-  var BG_BOT = '#0a1c48';   // 우하단(딥 네이비블루)
+  var BG_TOP = '#1e40af';   // 좌상단(밝은 블루)
+  var BG_BOT = '#0b1e4d';   // 우하단(딥 네이비블루)
   function tintHoodGraphic() {
     var canvas = document.getElementById('hood3d-canvas');
     if (!canvas) return;
