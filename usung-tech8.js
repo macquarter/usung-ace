@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var VER = '20260711text1';
+  var VER = '20260711diagram1';
 
   // 후드 구조 11 포인트 (첨부 해부도 기반)
   var PARTS = [
@@ -120,7 +120,10 @@
       +   'text-transform:uppercase;margin:0 0 6px;}'
       + '.t8-hero-title{color:#fff;font-size:26px;font-weight:900;letter-spacing:-.02em;margin:0 0 6px;}'
       + '.t8-hero-sub{color:#cbd5e1;font-size:14px;line-height:1.6;margin:0 0 22px;max-width:640px;}'
-      + '.t8-hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;}'
+      + '.t8-hero-diagram{background:#f7f9fc;border:1px solid #e2e8f0;border-radius:18px;padding:18px 18px 10px;margin:0 0 16px;}'
+      + '.t8-dh{color:#0b1e4d;font-size:14px;font-weight:800;letter-spacing:-.01em;margin:0 0 6px;}'
+      + '.t8-dh span{color:#64748b;font-weight:600;font-size:12px;margin-left:8px;}'
+      + '.t8-hood{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;}'
       + '.t8-panel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);'
       +   'border-radius:18px;padding:18px 18px 16px;}'
       + '.t8-panel-h{color:#e0f2fe;font-size:14px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px;'
@@ -208,12 +211,92 @@
     document.head.appendChild(s);
   }
 
-  function heroHTML() {
-    var parts = '';
-    for (var i = 0; i < PARTS.length; i++) {
-      parts += '<li><span class="t8-pn">' + pad(i + 1) + '</span>'
-        + '<span class="t8-pt"><b>' + esc(PARTS[i][0]) + '</b>' + esc(PARTS[i][1]) + '</span></li>';
+  // 후드 측면 단면 도면(SVG) + 11개 부품 콜아웃
+  function hoodSVG() {
+    var g = ''
+      // 천장 + 해치
+      + '<line x1="250" y1="44" x2="470" y2="44" stroke="#0b1e4d" stroke-width="3"/>'
+      + '<path d="M262 44 L274 32 M292 44 L304 32 M322 44 L334 32 M352 44 L364 32 M382 44 L394 32 M412 44 L424 32 M442 44 L454 32" stroke="#94a3b8" stroke-width="1.5"/>'
+      // 1 토출 덕트
+      + '<ellipse cx="360" cy="44" rx="27" ry="6" fill="#dbe3ee" stroke="#0b1e4d" stroke-width="1.5"/>'
+      + '<rect x="333" y="44" width="54" height="54" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      // 2 분리청소 플랜지
+      + '<rect x="325" y="98" width="70" height="20" rx="4" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<line x1="327" y1="108" x2="393" y2="108" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="5 4"/>'
+      // 3 F.V.D 댐퍼
+      + '<rect x="322" y="120" width="76" height="34" rx="3" fill="#eef2f8" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<line x1="330" y1="150" x2="390" y2="124" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<circle cx="386" cy="126" r="3.4" fill="#dc2626"/>'
+      // 4 스윙 볼조인트 + 360° 회전 표시
+      + '<rect x="345" y="154" width="30" height="20" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<ellipse cx="360" cy="192" rx="31" ry="12" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="5 4"/>'
+      + '<path d="M330 189 l-6 -4 6 -3" fill="none" stroke="#1d4ed8" stroke-width="1.5"/>'
+      + '<path d="M390 195 l6 4 -6 3" fill="none" stroke="#1d4ed8" stroke-width="1.5"/>'
+      + '<circle cx="360" cy="192" r="19" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<circle cx="360" cy="192" r="7" fill="#c9d4e3" stroke="#0b1e4d" stroke-width="1"/>'
+      // 본체 파이프
+      + '<rect x="337" y="210" width="46" height="150" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      // 5 방지망
+      + '<rect x="337" y="224" width="46" height="22" fill="url(#t8mesh)" stroke="#0b1e4d" stroke-width="1.5"/>'
+      // 6 텐션 스프링(코일)
+      + (function () { var s = ''; for (var k = 0; k < 6; k++) { s += '<ellipse cx="360" cy="' + (260 + k * 11) + '" rx="18" ry="5" fill="none" stroke="#0b1e4d" stroke-width="1.6"/>'; } return s; })()
+      // 7 걸링 스톱바
+      + '<rect x="316" y="334" width="88" height="12" rx="3" fill="#0b1e4d"/>'
+      // 8 나팔캡
+      + '<ellipse cx="360" cy="366" rx="27" ry="6" fill="#dbe3ee" stroke="#0b1e4d" stroke-width="1.5"/>'
+      // 9 나팔
+      + '<path d="M337 372 L383 372 L423 448 L297 448 Z" fill="url(#t8pipe)" stroke="#0b1e4d" stroke-width="2"/>'
+      // 10 기름받이속
+      + '<path d="M312 440 Q360 462 408 440" fill="none" stroke="#1d4ed8" stroke-width="1.6" stroke-dasharray="5 4"/>'
+      // 11 기름받이
+      + '<path d="M292 456 L428 456 L410 496 Q360 514 310 496 Z" fill="#eef2f8" stroke="#0b1e4d" stroke-width="2"/>'
+      + '<ellipse cx="360" cy="456" rx="68" ry="8" fill="#f7f9fc" stroke="#0b1e4d" stroke-width="1.5"/>'
+      // 210Ø 치수선
+      + '<line x1="292" y1="524" x2="428" y2="524" stroke="#1d4ed8" stroke-width="1.2"/>'
+      + '<line x1="292" y1="519" x2="292" y2="529" stroke="#1d4ed8" stroke-width="1.2"/>'
+      + '<line x1="428" y1="519" x2="428" y2="529" stroke="#1d4ed8" stroke-width="1.2"/>'
+      + '<text x="360" y="521" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">210Ø</text>';
+    var CALL = [
+      [1, 'L', 333, 70, '토출', '125Ø·150Ø'],
+      [2, 'R', 395, 108, '분리청소', '파이프링 분리'],
+      [3, 'L', 322, 137, 'F.V.D', '풍속조절·방화댐퍼'],
+      [4, 'R', 379, 192, '스윙', '360° 스윙'],
+      [5, 'L', 337, 235, '방지망', '이물질 방지망'],
+      [6, 'R', 383, 290, '텐션', '상하작동·강약조절'],
+      [7, 'L', 316, 340, '걸링', '스톱바·브레이크'],
+      [8, 'R', 386, 366, '나팔캡', '분리청소 가능'],
+      [9, 'L', 317, 410, '나팔', '하부 나팔'],
+      [10, 'R', 408, 442, '기름받이속', '기름 낙하 방지'],
+      [11, 'L', 292, 480, '기름받이', '210Ø']
+    ];
+    var co = '';
+    for (var i = 0; i < CALL.length; i++) {
+      var n = CALL[i][0], side = CALL[i][1], ax = CALL[i][2], ay = CALL[i][3];
+      var title = esc(CALL[i][4]), detail = esc(CALL[i][5]);
+      var bx = side === 'L' ? 118 : 602;
+      var edge = side === 'L' ? bx + 13 : bx - 13;
+      var tx = side === 'L' ? 98 : 622;
+      var anc = side === 'L' ? 'end' : 'start';
+      co += '<line x1="' + ax + '" y1="' + ay + '" x2="' + edge + '" y2="' + ay + '" stroke="#94a3b8" stroke-width="1.3"/>'
+        + '<circle cx="' + ax + '" cy="' + ay + '" r="3.2" fill="#0b1e4d"/>'
+        + '<circle cx="' + bx + '" cy="' + ay + '" r="13" fill="#0b1e4d"/>'
+        + '<text x="' + bx + '" y="' + (ay + 4) + '" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">' + n + '</text>'
+        + '<text x="' + tx + '" y="' + (ay - 2) + '" text-anchor="' + anc + '" font-size="13.5" font-weight="800" fill="#0f172a">' + title + '</text>'
+        + '<text x="' + tx + '" y="' + (ay + 14) + '" text-anchor="' + anc + '" font-size="11.5" fill="#5b6b82">' + detail + '</text>';
     }
+    return '<svg class="t8-hood" viewBox="0 0 720 544" xmlns="http://www.w3.org/2000/svg" font-family="inherit" role="img" aria-label="유성에이스 파이프형 후드 구조 도면 — 11개 부품">'
+      + '<defs>'
+      +   '<linearGradient id="t8pipe" x1="0" y1="0" x2="1" y2="0">'
+      +     '<stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e7edf5"/><stop offset="1" stop-color="#c9d4e3"/>'
+      +   '</linearGradient>'
+      +   '<pattern id="t8mesh" width="7" height="7" patternUnits="userSpaceOnUse">'
+      +     '<path d="M0 0 L7 0 M0 0 L0 7" stroke="#9fb0c6" stroke-width="1"/>'
+      +   '</pattern>'
+      + '</defs>'
+      + g + co + '</svg>';
+  }
+
+  function heroHTML() {
     var adv = '';
     for (var a = 0; a < ADV.length; a++) adv += '<li>' + esc(ADV[a]) + '</li>';
     var caut = '';
@@ -223,13 +306,14 @@
       + '<h2 class="t8-hero-title">유성에이스 후드의 장점</h2>'
       + '<p class="t8-hero-sub">유성에이스 파이프형 후드는 토출부터 기름받이까지 11개 부품이 유기적으로 맞물린 구조입니다. '
       +   '각 부품이 분리청소·풍속조절·안전정지 기능을 담당해, 사용 편의와 위생·안전을 동시에 잡았습니다.</p>'
-      + '<div class="t8-hero-grid">'
-      +   '<div class="t8-panel"><div class="t8-panel-h">후드 구조 11 포인트</div>'
-      +     '<ul class="t8-parts">' + parts + '</ul></div>'
-      +   '<div class="t8-panel"><div class="t8-panel-h">파이프 제품의 장점</div>'
-      +     '<ul class="t8-advlist">' + adv + '</ul>'
-      +     '<div class="t8-cautions">' + caut + '</div></div>'
-      + '</div></section>';
+      + '<div class="t8-hero-diagram">'
+      +   '<div class="t8-dh">후드 구조 한눈에 보기<span>측면 단면도 · 11개 부품</span></div>'
+      +   hoodSVG()
+      + '</div>'
+      + '<div class="t8-panel"><div class="t8-panel-h">파이프 제품의 장점</div>'
+      +   '<ul class="t8-advlist">' + adv + '</ul>'
+      +   '<div class="t8-cautions">' + caut + '</div></div>'
+      + '</section>';
   }
 
   function indexHTML() {
