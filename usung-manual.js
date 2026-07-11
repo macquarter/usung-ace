@@ -130,7 +130,8 @@
 
       // 스윙 구조 인트로 (guide9) + 장점
       '<div style="margin-bottom:60px;background:linear-gradient(135deg,'+NAVY+' 0%,#1e40af 100%);border-radius:28px;padding:38px 34px;color:#fff">'+
-        '<div style="display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:32px;align-items:center">'+
+        '<style>.um-swing{display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:32px;align-items:center}@media(max-width:640px){.um-swing{grid-template-columns:1fr;gap:22px}.um-swing img{max-width:280px!important}}</style>'+
+        '<div class="um-swing">'+
           '<div style="text-align:center">'+
             (IMG('guide9_swing')
               ? '<img src="'+IMG('guide9_swing')+'" alt="양옆태엽 스윙 구조" data-zoom="1" style="display:inline-block;width:100%;max-width:320px;height:auto;border-radius:16px;background:#fff;padding:10px;cursor:zoom-in">'
