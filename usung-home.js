@@ -46,8 +46,10 @@
       // 되돌리기: 아래 @media 블록 1개 제거(원본/데스크톱 무변경).
       // + 모바일 세로 30% 컴팩트(2026-07-12): min-height 720px → 504px(=720×0.7).
       //   캔버스는 컨테이너 크기에 맞춰 resize 이벤트로 재적합되므로(fixCoreCompactMobile에서 nudge) 찌그러짐 없음.
+      //   ※ min-height 만으로는 720px 에서 안 줄어듦(플로어일 뿐) → 캔버스가 height:100%+비트맵 종횡비로 720 유지.
+      //     definite height:504px 를 함께 줘야 컨테이너가 확정 높이가 되고 캔버스가 504 로 재적합됨.
       + '@media(max-width:640px){'
-      +   '#hood-3d-wrap{min-height:504px!important;}'
+      +   '#hood-3d-wrap{min-height:504px!important;height:504px!important;}'
       +   '#hood-3d-wrap>div:has(>[data-i18n="core_label_cap"]){bottom:19%!important;}'
       +   '#hood-3d-wrap>div:has([data-i18n="core_tagline"]){bottom:12px!important;left:50%!important;right:auto!important;width:max-content!important;max-width:92%!important;}'
       + '}';
