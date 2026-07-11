@@ -261,16 +261,16 @@
       nav.style.borderBottom = '1px solid rgba(2,6,23,0.08)';
       nav.style.boxShadow = '0 2px 12px rgba(2,6,23,0.06)';
       nav.querySelectorAll('.nav-link, .nav-link span, .nav-link svg').forEach(el => {
-        el.style.color = '#020617';
+        el.style.color = '#0b1e4d';
         el.style.fontWeight = '800';
       });
       nav.querySelectorAll('button').forEach(btn => {
         if (btn.closest('#mobile-menu')) return;
         if (btn.classList.contains('bg-black')) {
-          btn.style.background = 'linear-gradient(135deg, #020617 0%, #1e293b 100%)';
+          btn.style.background = 'linear-gradient(135deg, #0b1e4d 0%, #1e293b 100%)';
           btn.style.color = '#ffffff';
         } else if (!btn.classList.contains('nav-link')) {
-          btn.style.color = '#020617';
+          btn.style.color = '#0b1e4d';
         }
       });
       const navLogo = document.getElementById('nav-logo');
@@ -340,7 +340,7 @@
   function patchStats() {
     document.querySelectorAll('#page-home section [class*="text-5xl"][class*="font-black"], #page-home section [class*="text-6xl"][class*="font-black"], #page-home section [class*="text-7xl"][class*="font-black"]').forEach(el => {
       if (el.dataset.aceStat) return;
-      el.style.backgroundImage = 'linear-gradient(135deg, #0c1e5a 0%, #1e40af 100%)';
+      el.style.backgroundImage = 'linear-gradient(135deg, #0b1e4d 0%, #1e40af 100%)';
       el.style.webkitBackgroundClip = 'text';
       el.style.backgroundClip = 'text';
       el.style.color = 'transparent';
@@ -381,7 +381,7 @@
       card.style.background = 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)';
       card.style.border = '1px solid rgba(2,6,23,0.08)';
       card.style.boxShadow = '0 8px 24px rgba(2,6,23,0.06)';
-      card.querySelectorAll('h3').forEach(h => h.style.color = '#020617');
+      card.querySelectorAll('h3').forEach(h => h.style.color = '#0b1e4d');
       card.querySelectorAll('p').forEach(p => p.style.color = '#475569');
       card.querySelectorAll('.text-blue-300').forEach(t => t.style.color = '#1e40af');
       card.querySelectorAll('.bg-blue-500\\/20').forEach(b => b.style.background = 'rgba(30,64,175,0.10)');
@@ -392,10 +392,10 @@
       card.style.background = 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)';
       card.style.border = '1px solid rgba(2,6,23,0.08)';
       card.style.boxShadow = '0 8px 24px rgba(2,6,23,0.06)';
-      card.querySelectorAll('h2').forEach(h => h.style.color = '#020617');
+      card.querySelectorAll('h2').forEach(h => h.style.color = '#0b1e4d');
       card.querySelectorAll('p, li').forEach(p => p.style.color = '#475569');
       card.querySelectorAll('.text-blue-400').forEach(t => t.style.color = '#1e40af');
-      card.querySelectorAll('.text-cyan-300').forEach(t => t.style.color = '#0ea5e9');
+      card.querySelectorAll('.text-cyan-300').forEach(t => t.style.color = '#1d4ed8');
       card.querySelectorAll('.bg-blue-500\\/10').forEach(b => b.style.background = 'rgba(30,64,175,0.10)');
       card.querySelectorAll('.bg-white\\/\\[0\\.04\\]').forEach(b => b.style.background = '#f1f5f9');
     });
@@ -422,7 +422,7 @@
       '<div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">' +
         '<div class="relative bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">' +
           '<button onclick="window.closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#020617" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0b1e4d" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
           '</button>' +
           '<div id="ace-product-modal-body" class="p-8 md:p-10"></div>' +
         '</div>' +
@@ -479,7 +479,7 @@
               '</div>' +
             '</div>' +
             '<div class="flex gap-2 mt-auto">' +
-              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full text-white text-sm font-bold transition text-center" style="background:linear-gradient(135deg,#1e40af 0%,#0ea5e9 100%);box-shadow:0 12px 32px rgba(30,64,175,0.25);">📞 상담 문의 (1588-9123)</a>' +
+              '<a href="tel:1588-9123" class="flex-1 px-5 py-3 rounded-full text-white text-sm font-bold transition text-center" style="background:linear-gradient(135deg,#1e40af 0%,#1d4ed8 100%);box-shadow:0 12px 32px rgba(30,64,175,0.25);">📞 상담 문의 (1588-9123)</a>' +
               '<button onclick="window.closeProductModal()" class="px-5 py-3 rounded-full border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 transition">닫기</button>' +
             '</div>' +
           '</div>' +
@@ -528,8 +528,8 @@
         const isActive = activeNode === node.id;
         const indent = depth * 12 + 8;
         let html = '<button data-node="'+node.id+'" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded transition text-[13px]" style="padding-left:'+indent+'px;'+
-          (isActive ? 'background:'+(node.hex||'#020617')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#020617'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
-        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#020617':'#94a3b8'))+';"></span>';
+          (isActive ? 'background:'+(node.hex||'#0b1e4d')+';color:#fff;font-weight:900;' : 'color:'+(depth===0?(node.hex||'#0b1e4d'):'#475569')+';font-weight:'+(depth===0?'900':'600')+';')+'">';
+        if (depth > 0) html += '<span class="inline-block w-1 h-1 rounded-full mr-2 align-middle" style="background:'+(isActive?'#fff':(depth===1?'#0b1e4d':'#94a3b8'))+';"></span>';
         html += node.label + ' <span class="opacity-60 text-[10px]">('+count+')</span></button>';
         if (node.children && node.children.length) {
           html += '<div class="space-y-0.5">' + node.children.map(c => nodeBtn(c, depth + 1)).join('') + '</div>';
@@ -539,7 +539,7 @@
       const allCount = ACE.product_lineup.length;
       return '<aside class="lg:sticky lg:top-24 self-start space-y-1 bg-white rounded-2xl border border-slate-200 p-4 max-h-[80vh] overflow-y-auto" style="box-shadow:0 12px 32px rgba(2,6,23,0.06);">' +
         '<div class="text-[10px] font-bold tracking-[0.24em] text-slate-400 mb-3">제품 분류 트리</div>' +
-        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#020617;color:#fff;font-weight:900;':'color:#020617;font-weight:900;')+'">' +
+        '<button data-node="" class="ace-tree-btn block w-full text-left py-1.5 px-2 rounded text-[13px] mb-2" style="'+(activeNode===''?'background:#0b1e4d;color:#fff;font-weight:900;':'color:#0b1e4d;font-weight:900;')+'">' +
           '🏠 전체 보기 <span class="opacity-60 text-[10px]">('+allCount+')</span>' +
         '</button>' +
         '<div class="space-y-0.5">' + TREE.map(t => nodeBtn(t, 0)).join('') + '</div>' +
@@ -552,12 +552,12 @@
       if (!colors.length) return '';
       let html = '<div class="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-2">소분류 · 칼라별</div>';
       html += '<div class="flex flex-wrap gap-2 mb-5">';
-      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#020617':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#020617':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#1e40af,#ef4444,#22c55e);"></span>전체</button>';
+      html += '<button data-color="" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(activeColor===''?'#0b1e4d':'#fff')+';color:'+(activeColor===''?'#fff':'#475569')+';border-color:'+(activeColor===''?'#0b1e4d':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:linear-gradient(45deg,#1e40af,#ef4444,#22c55e);"></span>전체</button>';
       html += colors.map(c => {
         const active = c === activeColor;
         const dot = COLOR_HEX[c] || '#94a3b8';
         const ring = dot === '#ffffff' ? 'border:1px solid #cbd5e1;' : '';
-        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#020617':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#020617':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
+        return '<button data-color="'+c+'" class="ace-color-btn px-3 py-1.5 rounded-full text-[11px] font-bold border transition flex items-center gap-1.5" style="background:'+(active?'#0b1e4d':'#fff')+';color:'+(active?'#fff':'#475569')+';border-color:'+(active?'#0b1e4d':'#e2e8f0')+';"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:'+dot+';'+ring+'"></span>'+c+'</button>';
       }).join('') + '</div>';
       return html;
     }
@@ -579,7 +579,7 @@
       const gList = Object.values(groups);
 
       let breadcrumbLabel = '전체 제품';
-      let activeHex = '#020617';
+      let activeHex = '#0b1e4d';
       function findNode(tree, id, parents) {
         for (const t of tree) {
           if (t.id === id) return { node: t, parents: parents };
@@ -594,7 +594,7 @@
         const f = findNode(TREE, activeNode, []);
         if (f) {
           breadcrumbLabel = [...f.parents, f.node].map(n => n.label).join(' › ');
-          activeHex = (f.parents[0] || f.node).hex || '#020617';
+          activeHex = (f.parents[0] || f.node).hex || '#0b1e4d';
         }
       }
 
