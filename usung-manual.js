@@ -8,7 +8,7 @@
 (function () {
   'use strict';
 
-  var NAVY = '#0c1e5a', BRAND = '#1e40af', INK = '#1e293b', SUB = '#475569', LINE = 'rgba(12,30,90,.10)';
+  var NAVY = '#0b1e4d', BRAND = '#1e40af', INK = '#1e293b', SUB = '#475569', LINE = 'rgba(11,30,77,.10)';
   var VIDEO = 'https://www.youtube.com/watch?v=VNgsryiCnQY';
   // 이미지 조립: guidep/p*_*.js 청크가 window.GB[key] 에 raw webp base64 를 누적한다.
   // (구버전 fallback: window.USUNG_GUIDE_IMG[key] = 완성된 data-URI)
@@ -26,10 +26,10 @@
     shield:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>'
   };
   var FEATURES = [
-    { n:'01', t:'기름유도장치 (기름받이속)', d:'사용 중 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.', tag:'기름 흘림 ZERO', ac:'#d97706', bg:'rgba(217,119,6,.10)', ic:IC.oil },
+    { n:'01', t:'기름유도장치 (기름받이속)', d:'사용 중 기름이 전혀 흐르지 않습니다. 일체형 성형 기름받이가 후드 내부의 기름을 안전하게 모아 위생적으로 관리합니다.', tag:'기름 흘림 ZERO', ac:'#0b1e4d', bg:'rgba(11,30,77,.08)', ic:IC.oil },
     { n:'02', t:'360° 자유 스윙', d:'파이프가 고정되지 않고 시계추처럼 부드럽게 회전합니다. 테이블을 치우지 않고 후드만 옆으로 옮겨 청소할 수 있어 부러질 염려가 없습니다.', tag:'파이프 파손 ZERO', ac:'#2563eb', bg:'rgba(37,99,235,.10)', ic:IC.swing },
-    { n:'03', t:'나사타입 간편 분리', d:'상·하부를 잇는 파이프링이 나사 방식이라 도구 없이 손으로 분리됩니다. 누구나 손쉽게 내부 청소를 할 수 있습니다.', tag:'도구 없이 분리', ac:'#7c3aed', bg:'rgba(124,58,237,.10)', ic:IC.tool },
-    { n:'04', t:'유지망 필터', d:'기름을 여과해 모터와 덕트 내부를 청결하게 유지합니다. 모터 수명을 늘리고 화재를 예방하는 이중 효과가 있습니다.', tag:'모터수명 연장 + 화재예방', ac:'#059669', bg:'rgba(5,150,105,.10)', ic:IC.shield }
+    { n:'03', t:'나사타입 간편 분리', d:'상·하부를 잇는 파이프링이 나사 방식이라 도구 없이 손으로 분리됩니다. 누구나 손쉽게 내부 청소를 할 수 있습니다.', tag:'도구 없이 분리', ac:'#1e40af', bg:'rgba(30,64,175,.10)', ic:IC.tool },
+    { n:'04', t:'유지망 필터', d:'기름을 여과해 모터와 덕트 내부를 청결하게 유지합니다. 모터 수명을 늘리고 화재를 예방하는 이중 효과가 있습니다.', tag:'모터수명 연장 + 화재예방', ac:'#1d4ed8', bg:'rgba(29,78,216,.10)', ic:IC.shield }
   ];
 
   // 양옆태엽 스윙 구조의 장점 (카탈로그 p36 스윙 다이어그램)
@@ -129,7 +129,7 @@
       '</div>'+
 
       // 스윙 구조 인트로 (guide9) + 장점
-      '<div style="margin-bottom:60px;background:linear-gradient(135deg,'+NAVY+' 0%,#12307a 100%);border-radius:28px;padding:38px 34px;color:#fff">'+
+      '<div style="margin-bottom:60px;background:linear-gradient(135deg,'+NAVY+' 0%,#1e40af 100%);border-radius:28px;padding:38px 34px;color:#fff">'+
         '<div style="display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:32px;align-items:center">'+
           '<div style="text-align:center">'+
             (IMG('guide9_swing')
@@ -171,19 +171,19 @@
       '</div>'+
 
       // 안전 주의사항
-      '<div style="margin-bottom:52px;background:#fff7ed;border:1px solid #fed7aa;border-radius:22px;padding:26px 26px">'+
-        '<div style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#c2410c;margin-bottom:14px">SAFETY · 안전 주의사항</div>'+
+      '<div style="margin-bottom:52px;background:#fef2f2;border:1px solid #fecaca;border-radius:22px;padding:26px 26px">'+
+        '<div style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#b91c1c;margin-bottom:14px">SAFETY · 안전 주의사항</div>'+
         CAUTIONS.map(function(c){
           return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">'+
-            '<span style="color:#ea580c;font-weight:800;flex:none">※</span>'+
-            '<span style="font-size:13.5px;line-height:1.65;color:#9a3412">'+esc(c)+'</span>'+
+            '<span style="color:#dc2626;font-weight:800;flex:none">※</span>'+
+            '<span style="font-size:13.5px;line-height:1.65;color:#991b1b">'+esc(c)+'</span>'+
           '</div>';
         }).join('')+
       '</div>'+
 
       // 공식 영상
       '<div style="text-align:center;margin-bottom:16px">'+
-        '<a href="'+VIDEO+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:14.5px;font-weight:800;text-decoration:none">'+
+        '<a href="'+VIDEO+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:14.5px;font-weight:800;text-decoration:none">'+
           '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><polygon fill="#fff" points="9.545,15.568 15.818,12 9.545,8.432"/></svg>'+
           '유성에이스 공식 영상 보기'+
         '</a>'+
