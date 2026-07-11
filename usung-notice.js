@@ -11,7 +11,7 @@
 (function () {
   'use strict';
 
-  var NAVY = '#0c1e5a', BRAND = '#1e40af', INK = '#0c1e5a',
+  var NAVY = '#0b1e4d', BRAND = '#1e40af', INK = '#0b1e4d',
       SUB = '#475569', MUT = '#94a3b8';
 
   function esc(s) {
@@ -23,8 +23,8 @@
   function tagStyle(tag) {
     var t = (tag || '').trim();
     if (t === '업데이트') return 'background:rgba(30,64,175,.10);color:#1e40af;border:1px solid rgba(30,64,175,.22)';
-    if (t === 'A/S')     return 'background:rgba(180,83,9,.10);color:#b45309;border:1px solid rgba(180,83,9,.22)';
-    if (t === '이벤트')   return 'background:rgba(190,24,93,.09);color:#be185d;border:1px solid rgba(190,24,93,.20)';
+    if (t === 'A/S')     return 'background:rgba(11,30,77,.08);color:#0b1e4d;border:1px solid rgba(11,30,77,.20)';
+    if (t === '이벤트')   return 'background:rgba(29,78,216,.09);color:#1d4ed8;border:1px solid rgba(29,78,216,.20)';
     return 'background:rgba(71,85,105,.10);color:#475569;border:1px solid rgba(71,85,105,.20)'; /* 공지/기본 */
   }
 
@@ -88,7 +88,7 @@
       /* Pinned cards */
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:56px">' +
         /* 카드1 — 긴급 A/S (네이비) */
-        '<div style="position:relative;border-radius:24px;background:linear-gradient(135deg,' + NAVY + ',#1e3a8a);padding:28px;color:#fff;box-shadow:0 24px 60px rgba(12,30,90,.22);overflow:hidden">' +
+        '<div style="position:relative;border-radius:24px;background:linear-gradient(135deg,' + NAVY + ',#1e40af);padding:28px;color:#fff;box-shadow:0 24px 60px rgba(11,30,77,.22);overflow:hidden">' +
           '<div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:999px;background:rgba(255,255,255,.08);filter:blur(30px)"></div>' +
           '<div style="position:relative">' +
             '<div style="font-size:10px;font-weight:900;letter-spacing:.2em;color:#bfd3ff;margin-bottom:14px">PINNED · 중요</div>' +
