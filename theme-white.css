@@ -58,8 +58,20 @@ main, #main-content { background:#fff !important; }
     background:linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%) !important;
     transform:translateY(-1px);
 }
-#mobile-menu { background:rgba(2,6,23,0.97) !important; }
-#mobile-menu * { color:#fff !important; }
+/* 모바일 메뉴 — 흰 배경 + 네이비 글씨 (0711 가독성 수정)
+   기존: 어두운 배경 + 인라인 네이비 글씨 → 글씨 안보임(홈/언어 등).
+   되돌리기: 이 블록을 원복 → #mobile-menu{background:rgba(2,6,23,0.97)!important} / #mobile-menu *{color:#fff!important} */
+#mobile-menu { background:#ffffff !important; border-top:1px solid rgba(30,64,175,0.12) !important; }
+#mobile-menu button,
+#mobile-menu a,
+#mobile-menu span,
+#mobile-menu [class*="text-white"] { color:#0b1e4d !important; -webkit-text-fill-color:#0b1e4d !important; }
+#mobile-menu button:hover,
+#mobile-menu a:hover { background-color:#eff6ff !important; }
+#mobile-menu button.bg-black,
+#mobile-menu a.bg-black { background:linear-gradient(135deg,#1e40af,#2563eb) !important; color:#fff !important; -webkit-text-fill-color:#fff !important; }
+#mobile-menu .border-t,
+#mobile-menu [class*="border-white"] { border-color:rgba(30,64,175,0.12) !important; }
 
 /* 메가메뉴 dropdown — 폭 좁히기 (좌측만) */
 #navbar .dropdown {
@@ -518,3 +530,39 @@ footer.bg-black, footer.bg-\[\#000\], body > footer {
 #usungBot .ub-qk button:hover { background:#1e40af !important; border-color:#1e40af !important; }
 #usungBot .ub-ft input:focus { border-color:#1e40af !important; }
 #usungBot .ub-ft button { background:linear-gradient(135deg,#1e40af,#2563eb) !important; }
+
+/* ============================================================
+   제목 하이라이트 가독성 수정 (0711) — 이슈 #1
+   증상: "유성에이스 후드의 장점"(기술탭 .t8-hero), "양옆태엽 스윙 구조의 장점"
+   (사용법탭 .um-swing) 제목이 네이비 글씨 위 네이비 그라디언트 배경 →
+   회색/연보라 박스처럼 안보임.
+   수정: 해당 그라디언트 섹션 제목만 흰색으로. 배경 그라디언트는 유지.
+   되돌리기: 이 블록 삭제.
+   ============================================================ */
+.t8-hero .t8-hero-title,
+.t8-hero h1, .t8-hero h2,
+.um-swing h1, .um-swing h2, .um-swing h3 {
+    color:#ffffff !important;
+    -webkit-text-fill-color:#ffffff !important;
+    background:none !important;
+    background-clip:border-box !important;
+    -webkit-background-clip:border-box !important;
+    text-shadow:0 2px 12px rgba(2,6,23,0.35) !important;
+}
+
+/* ============================================================
+   네비 단순 드롭다운(회사소개/기술/고객센터) 마우스오버 색상 (0711) — 이슈 #2
+   기존: 항목이 hover:bg-black/5 (회색) → 메가메뉴만 blue 처리돼 있었음.
+   수정: 단순 드롭다운 버튼/링크 hover 도 블루(blue-50)로 통일.
+   되돌리기: 이 블록 삭제.
+   ============================================================ */
+#navbar .dropdown a:hover,
+#navbar .dropdown button:hover,
+#navbar .dropdown li:hover > a,
+#navbar .dropdown [class*="hover:bg-black"]:hover,
+#navbar .dropdown [class*="hover:bg-gray"]:hover,
+#navbar .dropdown [class*="hover:bg-slate"]:hover {
+    background-color:#eff6ff !important;
+    color:#1e40af !important;
+    -webkit-text-fill-color:#1e40af !important;
+}
