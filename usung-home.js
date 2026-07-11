@@ -44,7 +44,10 @@
       // ── 모바일 CORE TECHNOLOGY(후드의 장점) 3D 캔버스 라벨 겹침 방지(2026-07-12) ──
       // '520Ø 나팔캡 기름받이' 배지가 하단 중앙 '360° SWING' 필과 겹쳐서, 모바일에서만 배지를 위로 올리고 필을 살짝 내림.
       // 되돌리기: 아래 @media 블록 1개 제거(원본/데스크톱 무변경).
+      // + 모바일 세로 30% 컴팩트(2026-07-12): min-height 720px → 504px(=720×0.7).
+      //   캔버스는 컨테이너 크기에 맞춰 resize 이벤트로 재적합되므로(fixCoreCompactMobile에서 nudge) 찌그러짐 없음.
       + '@media(max-width:640px){'
+      +   '#hood-3d-wrap{min-height:504px!important;}'
       +   '#hood-3d-wrap>div:has(>[data-i18n="core_label_cap"]){bottom:19%!important;}'
       +   '#hood-3d-wrap>div:has([data-i18n="core_tagline"]){bottom:12px!important;left:50%!important;right:auto!important;width:max-content!important;max-width:92%!important;}'
       + '}';
@@ -237,6 +240,23 @@
     }
   }
 
+  // ── 모바일 CORE TECHNOLOGY 세로 컴팩트 재적합(2026-07-12) ──
+  // min-height 를 CSS(@media)로 504px 로 줄였을 때, 3D 캔버스 렌더러가 컨테이너 크기를
+  // 다시 읽도록 resize 이벤트를 한 번 흘려준다(렌더러가 window resize 에서 canvas 비트맵을
+  // 컨테이너 크기에 맞춰 재계산함 → 세로 찌그러짐 방지). 실기기(≤640px)는 처음부터 컴팩트로
+  // 초기화되지만, 오버레이 CSS 적용 타이밍이 렌더러 초기화보다 늦을 수 있어 안전하게 nudge.
+  // 되돌리기: 이 함수와 render()의 호출 1줄 제거.
+  function fixCoreCompactMobile() {
+    if (window.innerWidth > 640) return;
+    var wrap = document.getElementById('hood-3d-wrap');
+    if (!wrap) return;
+    // 이미 컴팩트(약 504px 근처)로 재적합됐으면 반복 nudge 생략
+    var h = Math.round(wrap.getBoundingClientRect().height);
+    if (wrap.__usungCompactFit && h <= 560) return;
+    try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+    wrap.__usungCompactFit = true;
+  }
+
   // ── 히어로 배경영상 모바일 대응(2026-07-11) ──
   // 문제: 모바일(iOS 저전력모드/데이터세이버 등)에서 배경영상 자동재생이 막히면
   //        poster가 없어 히어로가 빈 화면으로 보임.
@@ -261,26 +281,46 @@
         if (!v.hasAttribute(a)) v.setAttribute(a, '');
       });
       if (!v.getAttribute('preload')) v.setAttribute('preload', 'auto');
+      v.style.opacity = '1';           // 접속 즉시 항상 영상 노출(검은 스틸로 가려지지 않게)
+      v.removeAttribute('data-paused');
     } catch (e) {}
 
-    var tryPlay = function () { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} };
-    tryPlay();
-    if (!v.__usungNudge) {
-      v.__usungNudge = true;
-      v.addEventListener('canplay', tryPlay);
-      v.addEventListener('loadeddata', tryPlay);
-      ['touchstart', 'pointerdown', 'click', 'scroll'].forEach(function (ev) {
-        window.addEventListener(ev, tryPlay, { once: true, passive: true });
+    // 접속 즉시 자동재생 — play()를 여러 로드 이벤트 + 짧은 재시도 인터벌로 끈질기게 호출.
+    // (스크롤해야만 재생되던 문제: 기존엔 첫 스크롤/클릭에서만 넛지 → 로드 시점 재생 실패)
+    var kick = function () {
+      try {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {
+          // 자동재생 차단(주로 모바일) → 0초 검은 프레임 대신 실제 장면이 보이도록 살짝 시크
+          try { if (v.readyState >= 2 && v.currentTime < 0.5 && v.duration > 2) v.currentTime = 1.5; } catch (e) {}
+        });
+      } catch (e) {}
+    };
+    kick();
+    if (!v.__usungKick) {
+      v.__usungKick = true;
+      ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(function (ev) {
+        v.addEventListener(ev, kick);
       });
-      document.addEventListener('visibilitychange', function () { if (!document.hidden) tryPlay(); });
+      // 로드 타이밍/일시적 차단 대비 — 초기 몇 초간 짧게 재시도(재생되면 즉시 중단)
+      var kn = 0, kiv = setInterval(function () {
+        if (!v.paused || ++kn > 24) { clearInterval(kiv); return; }
+        kick();
+      }, 350);
+      // 모바일 자동재생 차단 최후수단: 사용자 첫 상호작용/탭 복귀 시에도 시도
+      ['touchstart', 'pointerdown', 'click'].forEach(function (ev) {
+        window.addEventListener(ev, kick, { passive: true });
+      });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
     }
 
+    // 폴백 스틸(영상 로드 전/완전 차단 시 배경) — 항상 영상 뒤(z-index:0). 영상 opacity 는 건드리지 않음.
     if (!v.__usungPoster) {
       var cap = function () {
         try {
           if (v.readyState < 2 || !v.videoWidth) return false;
-          // 인트로 검은 프레임 방지: 재생이 막혀 맨앞(0초)에 멈춰있으면 살짝 뒤로 시크
-          if (v.paused && v.currentTime < 0.8 && v.duration > 2) { try { v.currentTime = 1.2; } catch (e) {} return false; }
+          // 인트로 검은 프레임 방지: 맨앞(0초)에 있으면 실제 장면(1.5초)으로 시크 후 캡처
+          if (v.currentTime < 0.8 && v.duration > 2) { try { v.currentTime = 1.5; } catch (e) {} return false; }
           var c = document.createElement('canvas');
           c.width = v.videoWidth; c.height = v.videoHeight;
           c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
@@ -298,14 +338,6 @@
           }
           img.src = data;
           v.__usungPoster = true;
-          var sync = function () {
-            var playing = !v.paused && v.readyState >= 3 && !v.ended;
-            v.style.opacity = playing ? '1' : '0'; // 재생 못하면 영상 숨기고 스틸 노출
-          };
-          sync();
-          ['play', 'playing', 'pause', 'ended', 'timeupdate', 'waiting', 'stalled'].forEach(function (ev) {
-            v.addEventListener(ev, sync);
-          });
           return true;
         } catch (e) { return false; }
       };
@@ -324,6 +356,7 @@
     setHeroTexts();
     reorderSections();
     tintHoodGraphic();
+    fixCoreCompactMobile();
     fixHeroVideo();
     wireScroll();
   }
