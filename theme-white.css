@@ -11,13 +11,13 @@
     --bg-soft:#fafafa;
     --bg-mute:#f1f5f9;
     --fg:#0a0e27;
-    --fg-deep:#020617;
+    --fg-deep:#0b1e4d;
     --fg-soft:#1e293b;
     --fg-mute:#475569;
     --border:rgba(2,6,23,0.10);
     --brand:#1e40af;
-    --brand-2:#0ea5e9;
-    --brand-deep:#0c1e5a;
+    --brand-2:#1d4ed8;
+    --brand-deep:#0b1e4d;
     --shadow-sm:0 2px 8px rgba(2,6,23,0.06), 0 1px 2px rgba(2,6,23,0.04);
     --shadow-md:0 8px 24px rgba(2,6,23,0.10), 0 2px 8px rgba(2,6,23,0.06);
     --shadow-lg:0 24px 64px rgba(2,6,23,0.14), 0 8px 24px rgba(2,6,23,0.08);
@@ -49,7 +49,7 @@ main, #main-content { background:#fff !important; }
 #navbar .nav-link { transition:all 0.2s ease; font-weight:800 !important; letter-spacing:-0.01em; }
 #navbar .nav-link:hover { color:var(--brand) !important; background-color:rgba(30,64,175,0.06) !important; }
 #navbar button.bg-black {
-    background:linear-gradient(135deg, #020617 0%, #1e293b 100%) !important;
+    background:linear-gradient(135deg, #0b1e4d 0%, #1e293b 100%) !important;
     color:#fff !important;
     box-shadow:0 8px 24px rgba(2,6,23,0.20);
     font-weight:800;
@@ -127,7 +127,7 @@ main, #main-content { background:#fff !important; }
 
 /* 그라데이션 스팬("후드의 기준" 등) — 밝은 블루 그라데이션(영상 위 대비 확보) */
 #page-home > div:first-child .sticky .text-transparent.bg-clip-text {
-    background-image:linear-gradient(90deg,#93c5fd 0%,#67e8f9 50%,#60a5fa 100%) !important;
+    background-image:linear-gradient(90deg,#93c5fd 0%,#3b82f6 50%,#60a5fa 100%) !important;
     -webkit-background-clip:text !important;
     background-clip:text !important;
     color:transparent !important;
@@ -249,7 +249,7 @@ main, #main-content { background:#fff !important; }
 }
 
 /* USUNG ACE IN ACTION의 LIVE PREVIEW 카드는 다크 유지 (의도적 강조) */
-#page-home [id*="preview-3d"] { background:linear-gradient(135deg, #020617 0%, #1e3a8a 50%, #0c1e5a 100%) !important; }
+#page-home [id*="preview-3d"] { background:linear-gradient(135deg, #0b1e4d 0%, #1e40af 50%, #0b1e4d 100%) !important; }
 #page-home [id*="preview-3d"] * { color:#fff; }
 
 /* 홈 섹션 헤드라인 */
@@ -350,14 +350,14 @@ main, #main-content { background:#fff !important; }
 .page:not(#page-home) .text-blue-300 { color:var(--brand) !important; }
 .page:not(#page-home) .text-cyan-300 { color:var(--brand-2) !important; }
 .page:not(#page-home) .text-emerald-400 { color:#059669 !important; }
-.page:not(#page-home) .text-emerald-300 { color:#10b981 !important; }
-.page:not(#page-home) .text-amber-300 { color:#d97706 !important; }
-.page:not(#page-home) .text-rose-300 { color:#e11d48 !important; }
+.page:not(#page-home) .text-emerald-300 { color:#059669 !important; }
+.page:not(#page-home) .text-amber-300 { color:var(--brand) !important; }
+.page:not(#page-home) .text-rose-300 { color:#dc2626 !important; }
 
 .page:not(#page-home) [class*="border-white/"] { border-color:rgba(2,6,23,0.08) !important; }
 .page:not(#page-home) [class*="divide-white/"] > * + * { border-color:rgba(2,6,23,0.06) !important; }
 .page:not(#page-home) [class*="border-blue-400/"] { border-color:rgba(30,64,175,0.25) !important; }
-.page:not(#page-home) [class*="border-cyan-400/"] { border-color:rgba(14,165,233,0.25) !important; }
+.page:not(#page-home) [class*="border-cyan-400/"] { border-color:rgba(29,78,216,0.25) !important; }
 
 .page:not(#page-home) .bg-white\/5,
 .page:not(#page-home) .bg-white\/10,
@@ -382,7 +382,7 @@ main, #main-content { background:#fff !important; }
 
 /* 푸터 */
 footer.bg-black, footer.bg-\[\#000\], body > footer {
-    background:linear-gradient(135deg, #020617 0%, #0c1e5a 50%, #1e293b 100%) !important;
+    background:linear-gradient(135deg, #0b1e4d 0%, #1e40af 50%, #1e293b 100%) !important;
     color:#fff !important;
 }
 
