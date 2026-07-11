@@ -40,7 +40,14 @@
       + '#usung-scrollmark .um-label{font-size:10px;letter-spacing:.3em;font-weight:800;color:rgba(255,255,255,.82);'
       +   'text-shadow:0 1px 8px rgba(0,0,0,.35);}'
       + '@keyframes usungWheel{0%{opacity:0;transform:translateY(-5px)}25%{opacity:1}55%{opacity:1;transform:translateY(7px)}100%{opacity:0;transform:translateY(7px)}}'
-      + '@media(max-width:640px){#usung-scrollmark{bottom:18px}#usung-scrollmark .um-label{display:none}}';
+      + '@media(max-width:640px){#usung-scrollmark{bottom:18px}#usung-scrollmark .um-label{display:none}}'
+      // ── 모바일 CORE TECHNOLOGY(후드의 장점) 3D 캔버스 라벨 겹침 방지(2026-07-12) ──
+      // '520Ø 나팔캡 기름받이' 배지가 하단 중앙 '360° SWING' 필과 겹쳐서, 모바일에서만 배지를 위로 올리고 필을 살짝 내림.
+      // 되돌리기: 아래 @media 블록 1개 제거(원본/데스크톱 무변경).
+      + '@media(max-width:640px){'
+      +   '#hood-3d-wrap>div:has(>[data-i18n="core_label_cap"]){bottom:19%!important;}'
+      +   '#hood-3d-wrap>div:has([data-i18n="core_tagline"]){bottom:12px!important;left:50%!important;right:auto!important;width:max-content!important;max-width:92%!important;}'
+      + '}';
     var s = document.createElement('style');
     s.id = 'usung-home-style';
     s.textContent = css;
