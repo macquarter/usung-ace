@@ -93,3 +93,35 @@ footer[class*="bg-[#0a0a0a]"] [class*="border-white"]{border-color:#e2e8f0!impor
 .page:not(#page-home) [class*="bg-indigo-"].text-white,
 .page:not(#page-home) [class*="bg-sky-5"].text-white,
 .page:not(#page-home) [class*="bg-sky-6"].text-white{color:#fff!important}
+
+/* 13) 네비 드롭다운 마우스오버 완전 통일 (2026-07-12)
+   문제: 메뉴별로 hover 배경(회사=black/5, 제품=slate-50, 기술=blue/indigo/cyan-50, 고객센터=red/emerald/amber-50)과
+        글씨색(부제목 회색 유지 vs 파랑 전환)이 제각각 → 마우스오버 인상이 메뉴마다 다르게 보임.
+   해결: 드롭다운 안의 모든 항목 hover 배경을 동일한 옅은 파랑(#eff6ff)으로,
+        제목·부제목 글씨를 모두 브랜드 블루(#2563eb)로 통일.
+        단, 고객센터 '문의하기' 같은 색 채운 CTA 버튼(bg-blue-600/700, hover:bg-blue-600)은
+        흰 글씨 유지가 맞으므로 제외한다. 이 파일이 가장 마지막에 로드되어 우선 적용.
+        되돌리기: 이 블록만 삭제. */
+#navbar .dropdown [class*="hover:bg-black"]:hover,
+#navbar .dropdown [class*="hover:bg-white"]:hover,
+#navbar .dropdown [class*="hover:bg-gray-50"]:hover,
+#navbar .dropdown [class*="hover:bg-gray-100"]:hover,
+#navbar .dropdown [class*="hover:bg-slate-50"]:hover,
+#navbar .dropdown [class*="hover:bg-slate-100"]:hover,
+#navbar .dropdown [class*="hover:bg-blue-50"]:hover,
+#navbar .dropdown [class*="hover:bg-indigo-50"]:hover,
+#navbar .dropdown [class*="hover:bg-cyan-50"]:hover,
+#navbar .dropdown [class*="hover:bg-sky-50"]:hover,
+#navbar .dropdown [class*="hover:bg-red-50"]:hover,
+#navbar .dropdown [class*="hover:bg-rose-50"]:hover,
+#navbar .dropdown [class*="hover:bg-emerald-50"]:hover,
+#navbar .dropdown [class*="hover:bg-green-50"]:hover,
+#navbar .dropdown [class*="hover:bg-amber-50"]:hover,
+#navbar .dropdown [class*="hover:bg-orange-50"]:hover{background-color:#eff6ff!important;border-color:#bfdbfe!important}
+/* 제목·부제목 등 내부 텍스트를 hover 시 브랜드 블루로 통일 (색 채운 CTA 버튼 제외) */
+#navbar .dropdown button:not([class*="bg-blue-6"]):not([class*="bg-blue-7"]):not([class*="bg-blue-5"]):hover,
+#navbar .dropdown button:not([class*="bg-blue-6"]):not([class*="bg-blue-7"]):not([class*="bg-blue-5"]):hover *,
+#navbar .dropdown a:not([class*="bg-blue-6"]):not([class*="bg-blue-7"]):not([class*="bg-blue-5"]):hover,
+#navbar .dropdown a:not([class*="bg-blue-6"]):not([class*="bg-blue-7"]):not([class*="bg-blue-5"]):hover *,
+#navbar .dropdown li:hover > a,
+#navbar .dropdown li:hover > a *{color:#2563eb!important}
