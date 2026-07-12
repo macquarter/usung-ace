@@ -372,13 +372,22 @@
   function setupReveal() {
     var els = document.querySelectorAll('#tech-grid .t8-rv');
     if (!els.length) return;
+    // 병합된 상단 카드(후드의 장점 + 8대 핵심기술)는 한 몸이므로 항상 함께 노출
+    var hero = document.querySelector('#tech-grid .t8-hero');
+    var index = document.querySelector('#tech-grid .t8-index');
+    function markIn(el) {
+      if (!el || el.classList.contains('t8-in')) return;
+      el.classList.add('t8-in');
+      if (el === hero && index) index.classList.add('t8-in');
+      else if (el === index && hero) hero.classList.add('t8-in');
+    }
     if (!('IntersectionObserver' in window)) {
-      for (var f = 0; f < els.length; f++) els[f].classList.add('t8-in');
+      for (var f = 0; f < els.length; f++) markIn(els[f]);
       return;
     }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('t8-in'); io.unobserve(en.target); }
+        if (en.isIntersecting) { markIn(en.target); io.unobserve(en.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     for (var i = 0; i < els.length; i++) io.observe(els[i]);
@@ -387,7 +396,7 @@
       var vh = window.innerHeight || document.documentElement.clientHeight;
       for (var k = 0; k < els.length; k++) {
         var r = els[k].getBoundingClientRect();
-        if (r.top < vh * 0.92) els[k].classList.add('t8-in');
+        if (r.top < vh * 0.92) markIn(els[k]);
       }
     }, 120);
   }
