@@ -351,7 +351,7 @@
       + '</section>';
   }
 
-  // 상단 인덱스 칩 클릭 → 해당 카드로 부드럽게 스크롤
+  // 상단 인덱스 칩 클릭 → 해당 카드로 즉시 스크롤
   function wireIndex() {
     if (window.__t8idx) return;
     window.__t8idx = true;
@@ -362,23 +362,15 @@
       var n = chip.getAttribute('data-go');
       var target = document.getElementById('t8-slide-' + n);
       if (!target) return;
-      // 이 페이지에선 behavior:'smooth' 가 무력화되어 있어 rAF 수동 트윈으로 부드럽게 이동
+      // 이 페이지는 behavior:'smooth' 와 rAF 애니메이션이 전역적으로 무력화/스로틀되므로,
+      // 확실히 동작하는 즉시 스크롤로 해당 기술 카드 상단(네비 높이 보정)에 정확히 위치시킨다.
       var navH = 74;
-      var startY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      var destY = startY + target.getBoundingClientRect().top - navH;
-      if (destY < 0) destY = 0;
-      var dist = destY - startY;
-      if (Math.abs(dist) < 2) return;
-      var dur = Math.min(720, Math.max(300, Math.abs(dist) * 0.5));
-      var t0 = null;
-      function ez(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
-      function step(ts) {
-        if (t0 === null) t0 = ts;
-        var p = Math.min(1, (ts - t0) / dur);
-        window.scrollTo(0, Math.round(startY + dist * ez(p)));
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
+      var y = (window.pageYOffset || document.documentElement.scrollTop || 0)
+            + target.getBoundingClientRect().top - navH;
+      if (y < 0) y = 0;
+      window.scrollTo(0, y);
+      // 목표 카드는 리빌 애니메이션(t8-rv) 대상이므로 이동 즉시 노출 보장
+      target.classList.add('t8-in');
     });
   }
 
