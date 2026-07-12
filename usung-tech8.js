@@ -361,10 +361,24 @@
       if (!chip) return;
       var n = chip.getAttribute('data-go');
       var target = document.getElementById('t8-slide-' + n);
-      if (target) {
-        try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        catch (err) { target.scrollIntoView(); }
+      if (!target) return;
+      // 이 페이지에선 behavior:'smooth' 가 무력화되어 있어 rAF 수동 트윈으로 부드럽게 이동
+      var navH = 74;
+      var startY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var destY = startY + target.getBoundingClientRect().top - navH;
+      if (destY < 0) destY = 0;
+      var dist = destY - startY;
+      if (Math.abs(dist) < 2) return;
+      var dur = Math.min(720, Math.max(300, Math.abs(dist) * 0.5));
+      var t0 = null;
+      function ez(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
+      function step(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        window.scrollTo(0, Math.round(startY + dist * ez(p)));
+        if (p < 1) requestAnimationFrame(step);
       }
+      requestAnimationFrame(step);
     });
   }
 
