@@ -114,8 +114,8 @@
       + '.t8-slide.t8-in .t8-rvc:nth-child(4){transition-delay:.29s;}'
       + '.t8-slide.t8-in .t8-rvc:nth-child(5){transition-delay:.37s;}'
       // ── 상단 후드 해부도 히어로 ──
-      + '.t8-hero{background:linear-gradient(135deg,#0b1e4d 0%,#1e40af 100%);border-radius:26px;'
-      +   'padding:30px 30px 26px;margin:0 0 28px;box-shadow:0 24px 52px -30px rgba(11,30,77,.7);}'
+      + '.t8-core{background:linear-gradient(165deg,#0a1c48 0%,#122a6e 52%,#1d4ed8 100%);border-radius:26px;overflow:hidden;'
+      +   'margin:0 0 32px;box-shadow:0 26px 56px -30px rgba(11,30,77,.72);}.t8-hero{background:none;border-radius:0;box-shadow:none;margin:0;padding:30px 30px 22px;}'
       + '.t8-hero-eyebrow{color:#93c5fd;font-size:12px;font-weight:800;letter-spacing:.24em;'
       +   'text-transform:uppercase;margin:0 0 6px;}'
       + '.t8-hero-title{color:#fff;font-size:26px;font-weight:900;letter-spacing:-.02em;margin:0 0 6px;}'
@@ -148,8 +148,8 @@
       + '.t8-caution{color:#fca5a5;font-size:12.5px;line-height:1.55;margin:6px 0 0;'
       +   'padding-left:16px;text-indent:-16px;}'
       // ── 8대 기술 인덱스 ──
-      + '.t8-index{background:linear-gradient(135deg,#0b1e4d 0%,#1e40af 100%);border-radius:22px;'
-      +   'padding:24px 24px 20px;margin:0 0 32px;box-shadow:0 22px 48px -30px rgba(11,30,77,.6);}'
+      + '.t8-index{position:relative;background:none;border-radius:0;box-shadow:none;'
+      +   'padding:26px 30px 28px;margin:0;}.t8-index::before{content:"";position:absolute;left:30px;right:30px;top:0;height:1px;background:linear-gradient(90deg,rgba(147,197,253,0),rgba(147,197,253,.42),rgba(147,197,253,0));}'
       + '.t8-index-h{color:#93c5fd;font-size:12px;font-weight:800;letter-spacing:.24em;'
       +   'text-transform:uppercase;margin:0 0 4px;}'
       + '.t8-index-s{color:#fff;font-size:20px;font-weight:900;letter-spacing:-.02em;margin:0 0 16px;}'
@@ -195,10 +195,10 @@
       // ── 반응형 ──
       + '@media(max-width:900px){'
       +   '#tech-grid.t8-wrap{padding:0;}'
-      +   '.t8-hero{border-radius:18px;padding:20px 16px 18px;}'
+      +   '.t8-core{border-radius:18px;}.t8-hero{padding:20px 16px 14px;}'
       +   '.t8-hero-title{font-size:21px;}'
       +   '.t8-hero-grid{grid-template-columns:1fr;gap:14px;}'
-      +   '.t8-index{border-radius:16px;padding:18px 15px 15px;margin-bottom:24px;}'
+      +   '.t8-index{padding:18px 15px 18px;}.t8-index::before{left:15px;right:15px;}'
       +   '.t8-index-s{font-size:17px;}'
       +   '.t8-chips{grid-template-columns:repeat(2,1fr);gap:9px;}'
       +   '.t8-slide{border-radius:16px;padding:16px 15px;}'
@@ -301,7 +301,7 @@
     for (var a = 0; a < ADV.length; a++) adv += '<li>' + esc(ADV[a]) + '</li>';
     var caut = '';
     for (var c = 0; c < CAUTION.length; c++) caut += '<p class="t8-caution">※ ' + esc(CAUTION[c]) + '</p>';
-    return '<section class="t8-hero t8-rv">'
+    return '<section class="t8-hero">'
       + '<div class="t8-hero-eyebrow">PRODUCT STRUCTURE</div>'
       + '<h2 class="t8-hero-title">유성에이스 후드의 장점</h2>'
       + '<p class="t8-hero-sub">유성에이스 파이프형 후드는 토출부터 기름받이까지 11개 부품이 유기적으로 맞물린 구조입니다. '
@@ -323,7 +323,7 @@
         + '<span class="t8-chip-n">' + pad(j + 1) + '</span>'
         + '<span class="t8-chip-t">' + esc(DATA[j].t) + '</span></button>';
     }
-    return '<div class="t8-index t8-rv">'
+    return '<div class="t8-index">'
       + '<div class="t8-index-h">CORE TECHNOLOGY</div>'
       + '<div class="t8-index-s">유성에이스 8대 핵심 기술</div>'
       + '<div class="t8-chips">' + chips + '</div></div>';
@@ -416,7 +416,7 @@
     injectStyle();
     grid.className = 't8-wrap';
     grid.setAttribute('data-ver', VER);
-    var html = heroHTML() + indexHTML();
+    var html = '<div class="t8-core t8-rv">' + heroHTML() + indexHTML() + '</div>';
     for (var i = 0; i < DATA.length; i++) html += cardHTML(DATA[i], i);
     grid.innerHTML = html;
     hideScrollMark();
