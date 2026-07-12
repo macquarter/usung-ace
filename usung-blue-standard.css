@@ -1,0 +1,72 @@
+/* 유성에이스 배색 표준 오버레이 (Phase 3)
+   #7 사이트 전역 cyan 계열 액센트 → 브랜드 블루(#2563EB / #3B82F6 / #1D4ED8) 기준으로 통일
+   #4 내부 페이지 그라디언트 CTA 버튼 흰 글씨 복원(문의 접수하기 / 전체 자료 등)
+   #6 코어기술 "후드의 장점" + "8대 핵심기술" 두 다크카드를 하나로 병합
+   되돌리기: inject.js 에서 본 파일 <link> 한 줄 제거 + 파일 삭제 */
+
+/* ========== #7 cyan → blue 전역 표준화 ========== */
+.via-cyan-300{--tw-gradient-to:rgb(96 165 250/0)!important;--tw-gradient-stops:var(--tw-gradient-from),rgb(96 165 250),var(--tw-gradient-to)!important}
+.text-cyan-300{color:rgb(96 165 250)!important}
+.text-cyan-400{color:rgb(59 130 246)!important}
+.to-cyan-300{--tw-gradient-to:rgb(96 165 250)!important}
+.bg-cyan-500\/20{background-color:rgb(37 99 235/0.2)!important}
+.bg-cyan-500\/10{background-color:rgb(37 99 235/0.1)!important}
+.bg-cyan-300\/60{background-color:rgb(96 165 250/0.6)!important}
+.to-cyan-300\/30{--tw-gradient-to:rgb(96 165 250/0.3)!important}
+.text-cyan-200{color:rgb(191 219 254)!important}
+.from-cyan-500\/80{--tw-gradient-from:rgb(37 99 235/0.8)!important}
+.border-cyan-400\/25{border-color:rgb(59 130 246/0.25)!important}
+.border-cyan-300\/40{border-color:rgb(96 165 250/0.4)!important}
+.bg-cyan-400{background-color:rgb(59 130 246)!important}
+.via-cyan-400\/40{--tw-gradient-to:rgb(59 130 246/0)!important;--tw-gradient-stops:var(--tw-gradient-from),rgb(59 130 246/0.4),var(--tw-gradient-to)!important}
+.via-cyan-400{--tw-gradient-to:rgb(59 130 246/0)!important;--tw-gradient-stops:var(--tw-gradient-from),rgb(59 130 246),var(--tw-gradient-to)!important}
+.to-cyan-900\/10{--tw-gradient-to:rgb(30 58 138/0.1)!important}
+.to-cyan-500\/5{--tw-gradient-to:rgb(37 99 235/0.05)!important}
+.to-cyan-500\/10{--tw-gradient-to:rgb(37 99 235/0.1)!important}
+.to-cyan-400{--tw-gradient-to:rgb(59 130 246)!important}
+.text-cyan-400\/10{color:rgb(59 130 246/0.1)!important}
+.hover\:border-cyan-400\/40:hover{border-color:rgb(59 130 246/0.4)!important}
+.hover\:bg-cyan-50:hover{background-color:rgb(239 246 255)!important}
+.hover\:bg-cyan-400\/10:hover{background-color:rgb(59 130 246/0.1)!important}
+.group:hover .group-hover\:text-cyan-600{color:rgb(29 78 216)!important}
+.group:hover .group-hover\:bg-cyan-500\/20{background-color:rgb(37 99 235/0.2)!important}
+.group:hover .group-hover\:bg-cyan-500\/15{background-color:rgb(37 99 235/0.15)!important}
+.from-cyan-600\/20{--tw-gradient-from:rgb(29 78 216/0.2)!important}
+.border-cyan-500\/20{border-color:rgb(37 99 235/0.2)!important}
+.border-cyan-400\/20{border-color:rgb(59 130 246/0.2)!important}
+.bg-cyan-300\/30{background-color:rgb(96 165 250/0.3)!important}
+.bg-cyan-300{background-color:rgb(96 165 250)!important}
+
+/* ========== #4 그라디언트 CTA 버튼 흰 글씨 복원 ==========
+   원인: theme-white.css 의 `.page:not(#page-home) .text-white{color:#0b1e4d}` 가
+   내부 페이지의 그라디언트 버튼 흰 글씨까지 다크 네이비로 덮어써 대비 붕괴.
+   해법: 그라디언트 배경 위 버튼/링크의 흰 글씨를 더 높은 우선순위로 재지정. */
+.page:not(#page-home) button.bg-gradient-to-r.text-white,
+.page:not(#page-home) a.bg-gradient-to-r.text-white,
+.page:not(#page-home) button[class*="bg-gradient-to"].text-white,
+.page:not(#page-home) a[class*="bg-gradient-to"].text-white{
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+#inq-submit-btn, #inq-submit-btn span{
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+/* #7 로 to-cyan-400 이 blue-500 로 평탄화되므로 문의 버튼은 명시적 블루 그라디언트로 고정 */
+#inq-submit-btn{
+  background-image:linear-gradient(90deg,#2563eb 0%,#3b82f6 100%)!important;
+}
+
+/* ========== #6 코어기술 두 다크카드 → 하나의 카드로 병합 ========== */
+#tech-grid .t8-hero{
+  margin-bottom:0!important;
+  border-bottom-left-radius:0!important;border-bottom-right-radius:0!important;
+  box-shadow:0 -8px 30px -24px rgba(11,30,77,.55)!important;
+  position:relative;
+}
+#tech-grid .t8-hero::after{
+  content:"";position:absolute;left:6%;right:6%;bottom:0;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(147,197,253,.55),rgba(255,255,255,0));
+}
+#tech-grid .t8-index{
+  border-top-left-radius:0!important;border-top-right-radius:0!important;
+  box-shadow:0 26px 52px -30px rgba(11,30,77,.7)!important;
+}
