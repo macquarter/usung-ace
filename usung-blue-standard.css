@@ -70,3 +70,6 @@
   border-top-left-radius:0!important;border-top-right-radius:0!important;
   box-shadow:0 26px 52px -30px rgba(11,30,77,.7)!important;
 }
+
+/* ── #146 네비게이션 잔상(페이지 크로스페이드) 제거 ── */
+.page{transition:none!important}
