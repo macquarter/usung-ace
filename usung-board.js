@@ -3,6 +3,7 @@
  *   1) 정렬 탭(최신순 / 조회순 / 번호순) 삭제.
  *   2) '번호' 컬럼 삭제  — 실제 최신번호와 매칭이 안 됨.
  *   3) '조회' 컬럼 삭제  — 블로그 글이 조회 0 으로 떠서 마케팅상 안 좋음.
+ *   3-1) r5(S24) '작성자' 컬럼도 삭제 — 전부 동일 계정이라 노출 불필요(→ 분류·제목·등록일 3칸).
  *   4) 하단 페이지 순서번호가 안 눌러짐 → 실제 동작하는 페이지네이션으로 교체(페이지당 10개).
  * 원본 index_v6.html 불변. 런타임 DOM 오버레이 + <style> 주입.
  *   - renderBoard() 는 건드리지 않고, board-list 재렌더를 MutationObserver 로 감지해 매번 재적용.
@@ -19,9 +20,9 @@
     var css = [
       /* 정렬 탭 바 숨김 */
       '#page-board [data-usung-sortbar]{display:none !important;}',
-      /* 번호/조회 제거 후 남는 4칸(분류·제목·작성자·등록일) 그리드 재배치 */
+      /* 번호/조회/작성자 제거 후 남는 3칸(분류·제목·등록일) 그리드 재배치 */
       '#page-board #board-list > [data-usung-row]{grid-template-columns:1fr !important;}',
-      '@media(min-width:768px){#page-board #board-list > [data-usung-row]{grid-template-columns:90px 1fr 120px 110px !important;}}'
+      '@media(min-width:768px){#page-board #board-list > [data-usung-row]{grid-template-columns:90px 1fr 110px !important;}}'
     ].join('');
     var st = document.createElement('style');
     st.id = 'usung-board-css';
@@ -37,7 +38,7 @@
     }
   }
 
-  // 헤더 행: '번호'(첫칸) + '조회'(끝칸) 제거, 4칸 그리드로
+  // 헤더 행: '번호'(0)+'작성자'(3)+'조회'(끝칸) 제거, 3칸 그리드로
   function fixHeader() {
     var pg = document.getElementById('page-board');
     if (!pg) return;
@@ -46,10 +47,11 @@
     hdr.__usungHdr = true;
     var cells = Array.prototype.slice.call(hdr.children);
     if (cells.length >= 6) {
-      hdr.removeChild(cells[cells.length - 1]); // 조회
-      hdr.removeChild(cells[0]);                // 번호
+      hdr.removeChild(cells[cells.length - 1]); // 조회(끝칸)
+      hdr.removeChild(cells[3]);                // 작성자(4번째)
+      hdr.removeChild(cells[0]);                // 번호(첫칸)
     }
-    hdr.style.gridTemplateColumns = '90px 1fr 120px 110px';
+    hdr.style.gridTemplateColumns = '90px 1fr 110px';
   }
 
   function rowsOf(list) {
@@ -58,22 +60,27 @@
     });
   }
 
-  // 각 행에서 번호/조회 칸 제거 (한 번만)
+  // 각 행에서 번호/작성자/조회 칸 제거 (한 번만)
   function stripRow(r) {
     if (r.__usungStripped) return;
     r.__usungStripped = true;
     r.setAttribute('data-usung-row', '1');
     var cells = Array.prototype.slice.call(r.children);
+    var authorText = '';
     if (cells.length >= 6) {
+      authorText = (cells[3].textContent || '').trim();   // 작성자 텍스트 확보(모바일 메타 제거용)
       r.removeChild(cells[cells.length - 1]); // 조회(끝칸)
+      r.removeChild(cells[3]);                // 작성자(4번째)
       r.removeChild(cells[0]);                // 번호(첫칸)
     }
-    // 모바일 메타의 '조회 N' 조각 제거
+    // 모바일 메타의 '조회 N' + '작성자' 조각 제거
     var meta = r.querySelector('div[class*="md:hidden"]');
     if (meta) {
       var spans = meta.querySelectorAll('span');
       for (var i = spans.length - 1; i >= 0; i--) {
-        if (/조회/.test(spans[i].textContent || '')) { meta.removeChild(spans[i]); break; }
+        var stx = (spans[i].textContent || '').trim();
+        if (/조회/.test(stx)) { spans[i].remove(); continue; }              // 조회 N
+        if (authorText && stx === authorText) { spans[i].remove(); }         // 작성자
       }
     }
   }
