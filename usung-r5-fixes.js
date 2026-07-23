@@ -48,7 +48,8 @@
   }
 
   /* ---------- S2 : USE CASE 카드 라우팅 ---------- */
-  // 제품 목록에서 특정 중분류(section) 헤더로 스크롤
+  // 대분류 필터 후 특정 중분류(section) 헤더로 즉시 스크롤.
+  // 성공 시 해당 섹션 엘리먼트를 반환(호출측이 착지 위치를 검증하도록), 실패 시 false.
   function scrollToSec(label) {
     var pg = document.getElementById('page-products');
     if (!pg) return false;
@@ -57,8 +58,9 @@
       var sp = secs[i].querySelector('span');
       if (sp && (sp.textContent || '').trim() === label) {
         var y = secs[i].getBoundingClientRect().top + window.scrollY - 100;
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-        return true;
+        // behavior:'auto'(즉시) — smooth 는 직후 재렌더/upScrollTop 에 의해 중단됨
+        window.scrollTo({ top: Math.max(0, y), behavior: 'auto' });
+        return secs[i];
       }
     }
     return false;
@@ -75,10 +77,18 @@
       }
       try { window.filterProducts(cat); } catch (e) {}   // 대분류 필터(1회)
       if (sec) {
+        // 렌더 완료·늦은 upScrollTop/재렌더에도 흔들리지 않도록,
+        // 섹션이 실제로 상단 ~100px 에 착지할 때까지 매번 재스크롤(최대 ~2.6s).
         var m = 0;
         (function trySec() {
           m++;
-          if (!scrollToSec(sec) && m < 15) setTimeout(trySec, 120);
+          var el = scrollToSec(sec);
+          var landed = false;
+          if (el) {
+            var t = el.getBoundingClientRect().top;   // 착지 후 뷰포트 기준 위치
+            landed = (t >= 55 && t <= 145);
+          }
+          if (!landed && m < 22) setTimeout(trySec, 120);
         })();
       }
     })();
