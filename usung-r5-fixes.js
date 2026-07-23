@@ -1,0 +1,122 @@
+/* usung-r5-fixes.js — r5 반영 (S2·S10·S16·S27)
+ *  S2  홈 WHERE WE WORK "USE CASE" 3카드 링크 변경
+ *        01 → 제품소개 · 파이프(스텐도금)
+ *        02 → 제품소개 · LED조명
+ *        03 → 제품소개 · 후레쉬볼(갓 자바라)
+ *      (r5 슬라이드2: "연결되는 링크 변경 / 3.파이프스텐도금 / 2.LED조명 / 4.후레쉬볼 갓 자바라")
+ *  S10 문의 페이지 '문의유형' <select> 옵션이 어두워 글씨가 안 보임 → 밝게(흰 배경·검정 글씨)
+ *  S16 제품 상세 '색상·마감' 스와치가 너무 작음 → 약 2.5배 확대(64→160px) + 라벨 가독
+ *  S27 이미지 복사/다른이름 저장/드래그 방지(불펌 방지 — 캐주얼 차단 수준)
+ * 원본 index_v6.html 불변. 런타임 오버레이만. 되돌리기: inject.js 1줄 제거 + 파일 삭제.
+ */
+(function () {
+  'use strict';
+  if (window.__usungR5Fixes) return;
+  window.__usungR5Fixes = true;
+
+  /* ---------- S10 + S16 + S27(드래그) CSS ---------- */
+  function injectCss() {
+    if (document.getElementById('usung-r5-fixes-css')) return;
+    var css = [
+      /* S10 : 문의유형 select 옵션 밝게 (인라인 background:#1a1a2e 를 !important 로 덮어씀) */
+      '#inq-type option{background:#ffffff !important;color:#111827 !important;}',
+      /* S16 : 색상·마감 스와치 ~2.5배 확대 (기본 w-[64px] → 160px) + 라벨 전체 노출 */
+      '#up-main .upd-sw{width:160px !important;padding:10px !important;}',
+      '#up-main .upd-sw > span:last-child{font-size:14px !important;line-height:1.3 !important;' +
+        'white-space:normal !important;overflow:visible !important;text-overflow:clip !important;margin-top:8px !important;}',
+      /* S27 : 이미지 드래그 방지 */
+      'img{-webkit-user-drag:none !important;-khtml-user-drag:none !important;-moz-user-drag:none !important;user-drag:none !important;}'
+    ].join('');
+    var st = document.createElement('style');
+    st.id = 'usung-r5-fixes-css';
+    st.textContent = css;
+    (document.head || document.documentElement).appendChild(st);
+  }
+
+  /* ---------- S27 : 우클릭 복사·저장 / 드래그 방지 (이미지 한정) ---------- */
+  function guardImages() {
+    if (window.__usungImgGuard) return;
+    window.__usungImgGuard = true;
+    try {
+      document.addEventListener('contextmenu', function (e) {
+        if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+      }, true);
+      document.addEventListener('dragstart', function (e) {
+        if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+      }, true);
+    } catch (e) {}
+  }
+
+  /* ---------- S2 : USE CASE 카드 라우팅 ---------- */
+  // 제품 목록에서 특정 중분류(section) 헤더로 스크롤
+  function scrollToSec(label) {
+    var pg = document.getElementById('page-products');
+    if (!pg) return false;
+    var secs = pg.querySelectorAll('[id^="up-sec-"]');
+    for (var i = 0; i < secs.length; i++) {
+      var sp = secs[i].querySelector('span');
+      if (sp && (sp.textContent || '').trim() === label) {
+        var y = secs[i].getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function routeUseCase(cat, sec) {
+    try { if (typeof window.navigate === 'function') window.navigate('products'); } catch (e) {}
+    var tries = 0;
+    (function attempt() {
+      tries++;
+      if (typeof window.filterProducts !== 'function' || !document.getElementById('page-products')) {
+        if (tries < 25) setTimeout(attempt, 100);
+        return;
+      }
+      try { window.filterProducts(cat); } catch (e) {}   // 대분류 필터(1회)
+      if (sec) {
+        var m = 0;
+        (function trySec() {
+          m++;
+          if (!scrollToSec(sec) && m < 15) setTimeout(trySec, 120);
+        })();
+      }
+    })();
+  }
+
+  function bindCase(key, cat, sec) {
+    var sp = document.querySelector('[data-i18n="' + key + '"]');
+    if (!sp) return;
+    var btn = sp.closest('button');
+    if (!btn || btn.__r5uc) return;
+    btn.__r5uc = 1;
+    btn.removeAttribute('onclick');            // 인라인 onclick 제거
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      routeUseCase(cat, sec);
+    }, true);
+  }
+
+  function bindAll() {
+    bindCase('www_case1_btn', '파이프', '스텐도금');
+    bindCase('www_case2_btn', 'LED조명', null);
+    bindCase('www_case3_btn', '후레쉬볼', '후레쉬볼 갓 자바라');
+  }
+
+  function run() { try { injectCss(); guardImages(); bindAll(); } catch (e) {} }
+
+  run();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  var n = 0, iv = setInterval(function () { run(); if (++n > 40) clearInterval(iv); }, 100);
+
+  // 홈 섹션 재렌더 시 onclick 재바인딩 (엘리먼트 교체되면 새로 바인딩)
+  try {
+    var pend = false;
+    var mo = new MutationObserver(function () {
+      if (pend) return; pend = true;
+      setTimeout(function () { pend = false; try { bindAll(); } catch (e) {} }, 150);
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+  } catch (e) {}
+})();
