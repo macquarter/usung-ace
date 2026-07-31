@@ -69,20 +69,9 @@ function renderHero(){
       `<div class="hfloat"><img crossorigin="anonymous" onload="trimImg(this)" src="${R8_IMG+p.s}.png" alt="${p.cap} 파이프"></div>`+
       `<span class="hcap">${p.cap}</span></div>`
   ).join('');
-  // count-up (setInterval-based: fires even when rAF is throttled)
-  // 260729: 코브라후드 중복 행 제거로 실제 품목 수가 바뀌므로 데이터에서 직접 읽는다
-  const hn=document.getElementById('hnum'), NHERO=(typeof ITEMS!=='undefined'&&ITEMS.length)||206;
-  if(hn){
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches){hn.textContent=NHERO;}
-    else{
-      const DUR=1400,t0=Date.now();
-      const iv=setInterval(()=>{
-        const p=Math.min(1,(Date.now()-t0)/DUR);
-        hn.textContent=Math.round((1-Math.pow(1-p,3))*NHERO);
-        if(p>=1){hn.textContent=NHERO;clearInterval(iv);}
-      },33);
-    }
-  }
+  // 260731) 모델 수 카운트업(#hnum "206 MODELS") 제거 — 승연 지시.
+  // 품목 수는 데이터 정리 때마다 흔들리는데(코브라 중복 제거로 215→206) 히어로에 큰 숫자로
+  // 박아두면 그 자체가 유지보수 부채가 된다. 마크업의 .num 도 함께 걷어냈다.
 }
 function renderCTA(){
   // 어두운 주방 배경을 cover-crop해 컴팩트한 문의 스트립으로 구성

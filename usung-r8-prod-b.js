@@ -19,7 +19,7 @@ function catFxHTML(c){
 function renderCatNav(){
   const el=document.getElementById('cn-grid'); if(!el)return;
   el.innerHTML=R8_CATS.map((c,i)=>{
-    const M=META[c], label=(c==='코브라후드'?'하향식후드':c), n=byCatM[c].length;
+    const M=META[c], label=(c==='코브라후드'?'하향식후드':c);
     const mids=[...new Set(byCatM[c].map(m=>m.mid).filter(Boolean))].slice(0,4);
     return `<button class="cn-card" onclick='goCat("${c}")' aria-label="${label} 전체 보기">
       <span class="cn-no">${String(i+1).padStart(2,'0')}</span>
@@ -29,10 +29,10 @@ function renderCatNav(){
         <span class="cn-nm">${label}</span>
         <span class="cn-sub">${mids.length?mids.join(' · '):M.kr}</span>
         <span class="cn-fx">${catFxHTML(c)}</span>
-        <span class="cn-cnt">${n}종 <b>›</b></span>
+        <span class="cn-cnt">전체 보기 <b>›</b></span>
       </span></button>`;
   }).join('');
-  const t=document.getElementById('cn-total'); if(t)t.textContent=MODELS.length;
+  // 260731) 모델 총계(#cn-total)와 대분류별 "N종" 배지 제거 — 승연 지시.
 }
 // exact finish match against a style's real 마감 values
 function inStyle(m,s){const keys=STYLES[s];return m.items.some(it=>keys.includes(it.finish));}
@@ -85,7 +85,7 @@ function renderBands(){
         <div class="bn-head">
           <span class="bn-k">BEST &amp; NEW</span>
           <h2>인기 · 신규 모델</h2>
-          <p>가장 많이 선택된 인기 모델과 새롭게 추가된 신제품 4종을 먼저 만나보세요.</p>
+          <p>가장 많이 선택된 인기 모델과 새롭게 추가된 신제품을 먼저 만나보세요.</p>
         </div>
         <div class="bn-grid">${cards}</div>
       </div></section>`;
@@ -146,7 +146,7 @@ function renderCatMain(cat){
         <div class="mb"><div class="nm">${modelName(m)}</div><div class="fn">${m.items.length>1?'색상·마감 '+m.items.length+'종':(m.rep.finish||'단일')}</div></div>
       </div>`).join('')}</div></div>`;
   }).join('');
-  document.getElementById('cv-main').innerHTML=`<div class="kk">제품 라인업</div><h2>${M.kr} <b>${list.length}종</b></h2>${body}`;
+  document.getElementById('cv-main').innerHTML=`<div class="kk">제품 라인업</div><h2>${M.kr}</h2>${body}`;
 }
 function scrollMid(md){const el=document.getElementById('mid-'+md);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 

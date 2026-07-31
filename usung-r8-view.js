@@ -12,8 +12,8 @@ window.R8_VIEW = {
     <div class="wrap">
     <div class="hero-copy">
       <div class="hero-kicker">PRODUCT COLLECTION</div>
-      <div class="hero-h1"><span class="num" id="hnum">0</span><span>MODELS</span></div>
-      <div class="hero-sub">20년 기술력으로 완성한<br>국내 최대 후드 라인업</div>
+      <div class="hero-h1">국내 최대<span>HOOD LINEUP</span></div>
+      <div class="hero-sub">20년 기술력으로 완성한<br>후드 전문 제조사의 풀 라인업</div>
       <div class="hero-feats"><span>20년 기술력</span><span>국내 생산</span><span>다양한 디자인</span><span>맞춤 제작</span></div>
       <div class="hero-cta-row">
         <button class="hero-btn" onclick="scrollFilter()">제품 전체 보기 →</button>
@@ -30,7 +30,7 @@ window.R8_VIEW = {
     <div class="cn-head">
       <span class="cn-k">PRODUCT CATEGORY</span>
       <h2>제품 대분류에서<br>바로 찾아보세요</h2>
-      <p class="cn-d">5개 대분류 · <b id="cn-total">0</b>개 모델. 원하는 시리즈를 눌러 전체 라인업을 확인하세요.</p>
+      <p class="cn-d">대분류별로 정리된 후드 라인업. 원하는 시리즈를 눌러 전체 제품을 확인하세요.</p>
     </div>
     <div class="cn-grid" id="cn-grid"></div>
   </div></div>
