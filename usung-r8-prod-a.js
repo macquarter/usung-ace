@@ -103,7 +103,7 @@ function r8SetupReveal(){
 // part detail modal
 function openPart(id){
   const p=R8_PARTS[id];if(!p)return;
-  document.getElementById('pm-img').src=PART_BASE+id+'.png';
+  document.getElementById('pm-img').src=partSrc(id);
   document.getElementById('pm-img').alt=p.nm;
   // R3: extra shrink for low-res parts in the enlarged detail view
   document.querySelector('.pm-img').classList.toggle('lowres',PART_LOWRES.has(id));
@@ -131,7 +131,7 @@ function partTileHTML(id){
   const p=R8_PARTS[id]||{nm:id,sp:''};
   return `<div class="pt in${PART_LOWRES.has(id)?' lowres':''}">`
     +`<span class="px">${id.slice(1)}</span>`
-    +`<div class="pi"><img loading="lazy" crossorigin="anonymous" onload="trimImg(this)" src="${PART_BASE}${id}.png" alt="${p.nm}"></div>`
+    +`<div class="pi"><img loading="lazy" crossorigin="anonymous" onload="trimImg(this)" src="${partSrc(id)}" alt="${p.nm}"></div>`
     +`<div class="pn">${p.nm}</div><div class="ps">${p.sp||'&nbsp;'}</div></div>`;
 }
 function renderPartsPage(){
@@ -141,7 +141,7 @@ function renderPartsPage(){
     +`<div class="pp-grid">${PART_ORDER.map(partTileHTML).join('')}</div>`;
 }
 // 260730) 제품소개 하단 부품 티저 — 대표 4종만 노출 (구동부 · 모터 · 갓 · 후레쉬볼) + 전체 보기
-const PART_TEASER=['p12','p05','p38','p42'];
+const PART_TEASER=['p13','p09','p40','p46'];
 function renderPartsTeaser(){
   const el=document.getElementById('parts-cat-grid'); if(!el) return;
   el.innerHTML=PART_TEASER.map(partTileHTML).join('');

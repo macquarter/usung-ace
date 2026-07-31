@@ -209,7 +209,7 @@ function renderParts(cat){
   el.innerHTML=`<h4><span class="en">PARTS &amp; OPTIONS</span> 부품 및 옵션</h4>
     <p class="hint">※ 제품군에 사용되는 대표 옵션·부품 예시입니다. 실제 부품 구성은 제품·설치 환경에 따라 상이할 수 있습니다.</p>
     <div class="pt-grid">`+ids.map(id=>{const p=R8_PARTS[id]||{nm:id,sp:''};
-      return `<div class="pt${PART_LOWRES.has(id)?' lowres':''}"><div class="pi"><img loading="lazy" crossorigin="anonymous" onload="trimImg(this)" src="${PART_BASE}${id}.png" alt="${p.nm}"></div>
+      return `<div class="pt${PART_LOWRES.has(id)?' lowres':''}"><div class="pi"><img loading="lazy" crossorigin="anonymous" onload="trimImg(this)" src="${partSrc(id)}" alt="${p.nm}"></div>
         <div class="pn">${p.nm}</div><div class="ps">${p.sp||'&nbsp;'}</div></div>`;}).join('')+`</div>`;
   // scroll-interactive reveal — root = modal scroll container
   if(partObs)partObs.disconnect();
