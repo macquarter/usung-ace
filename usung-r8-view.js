@@ -172,10 +172,13 @@ window.R8_VIEW = {
     <div class="gal-tabs" id="gal-tabs"></div>
     <div class="gal-grid" id="gal-grid"></div>
   </div>
-</section>
+</section>`,
 
-
-<div class="lbox" id="lbox" onclick="if(event.target===this)closeLbox()">
+  /* 260731) 오버레이 4종은 원본 HTML 에서 갤러리 섹션 뒤에 있어 v-gallery 에 딸려 들어갔었다.
+     그 결과 #page-gallery(display:none) 안에 갇혀 제품소개·부품·기술력에서 모달이 열려도
+     화면에 안 나왔다(position:fixed 도 조상이 display:none 이면 무력). 별도 키로 분리해
+     mount.js 가 body 직속 .r8x 에 심는다. */
+  'v-overlay': `<div class="lbox" id="lbox" onclick="if(event.target===this)closeLbox()">
   <button class="lb-x" onclick="closeLbox()">×</button>
   <button class="lb-nav l" onclick="stepLbox(-1)">‹</button>
   <figure class="lb-fig"><img id="lb-img" src="" alt="">

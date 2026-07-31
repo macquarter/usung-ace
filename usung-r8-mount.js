@@ -82,7 +82,35 @@
       watch(host);
       done++;
     }
+    overlay();
     return done === Object.keys(MAP).length;
+  }
+
+  /* 오버레이(제품 모달 · 부품 모달 · 국내최초 모달 · 갤러리 라이트박스)는 body 직속에 심는다.
+     ★ 260731 사고: 원본 HTML 에서 이 4개가 갤러리 섹션 뒤에 있어 v-gallery 문자열에 딸려
+     들어갔고, 그대로 #page-gallery 안에 마운트됐다. 비갤러리 페이지에서는 #page-gallery 가
+     display:none 이라 .mask.on 이 붙어도 조상이 죽어 있어 크기가 0 → 제품 상세 모달이
+     아예 안 열렸다(position:fixed 는 조상 display:none 을 이기지 못한다). 실측: 제품소개에서
+     카드 클릭 시 mask.className='mask on' / display='flex' 인데 getBoundingClientRect 0x0.
+     CSS 가 .r8x 스코프이므로 body 직속에도 .r8x 래퍼가 필요하다. 자식이 전부 fixed 라
+     래퍼 자체 높이는 0 → 레이아웃에 영향 없음. */
+  function overlay() {
+    if (!window.R8_VIEW || !window.R8_VIEW['v-overlay']) return;
+    if (document.getElementById('r8-overlay-host')) return;
+    var ov = document.createElement('div');
+    ov.id = 'r8-overlay-host';
+    ov.className = 'r8x';
+    ov.innerHTML = window.R8_VIEW['v-overlay'];
+    /* ★ body 의 '맨 앞'이어야 한다 — append 가 아니다.
+       라이브 index_v6.html 은 body 직속에 #part-modal 을 갖고 있고 그 안의
+       pm-img / pm-cat / pm-name / pm-desc 4개 id 가 r8 부품모달과 겹친다.
+       getElementById 는 문서 순서상 앞선 것을 돌려주므로, 뒤에 붙이면 openPart() 가
+       라이브 쪽 빈 모달에 글을 써서 r8 모달이 텍스트 없이 열린다(실측).
+       #page-gallery 안에 있던 기존 배포본도 #main-content(body 1번째) 안이라 r8 이
+       이겼다 — 맨 앞에 넣으면 그 순서를 그대로 유지한다. 자식이 전부 fixed 라
+       first-child 여도 레이아웃에는 영향이 없다. */
+    document.body.insertBefore(ov, document.body.firstChild);
+    watch(ov);
   }
 
   window.__usungR8Unmount = function () {
@@ -94,6 +122,8 @@
       if (host) host.remove();
       if (keep) { while (keep.firstChild) page.appendChild(keep.firstChild); keep.remove(); }
     }
+    var ov = document.getElementById('r8-overlay-host');
+    if (ov) ov.remove();
     window.__usungR8Mount = false;
   };
 
