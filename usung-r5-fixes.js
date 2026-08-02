@@ -174,43 +174,40 @@
     })();
   }
 
-  function bindCase(key, cat, sec) {
-    var sp = document.querySelector('[data-i18n="' + key + '"]');
-    if (!sp) return;
-    var btn = sp.closest('button');
-    if (!btn || btn.__r5uc) return;
-    btn.__r5uc = 1;
-    btn.removeAttribute('onclick');            // 인라인 onclick 제거
-    btn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      routeUseCase(cat, sec);
-    }, true);
-  }
-
   // PPT「메인페이지,고객센터」slide2 의 번호는 제품소개 사이드바 순번이다.
   // 1.갤럭시 2.LED조명 3.파이프 4.후레쉬볼 5.하향식후드 (라이브 실측과 일치)
   // case1 의 '스텐도금' 은 260729 회의록 3-4 로 파이프 중분류가 구동(양옆태엽/텐션/
   // 내부태엽/기타옵션) 기준으로 바뀌면서 마감(grp)으로 내려가 스크롤 대상이 없다 → 대분류까지만.
-  function bindAll() {
-    bindCase('www_case1_btn', '파이프', null);
-    bindCase('www_case2_btn', 'LED조명', null);
-    bindCase('www_case3_btn', '후레쉬볼', '후레쉬볼 갓 자바라');
+  var CASES = {
+    www_case1_btn: ['파이프', null],
+    www_case2_btn: ['LED조명', null],
+    www_case3_btn: ['후레쉬볼', '후레쉬볼 갓 자바라']
+  };
+
+  /* ★ 버튼마다 리스너를 붙이면 안 된다(2026-08-02 실측).
+   * 홈 섹션이 재렌더되면 인라인 onclick 을 그대로 단 새 버튼으로 갈리는데, 재바인딩까지
+   * 빈틈이 생긴다. 그 틈에 눌리면 원본 onclick 의 filterProducts 로 가고, 그 마크업은
+   * .r8-original(display:none) 안이라 아무 일도 안 일어난다.
+   * 게다가 원본 인자는 구 매핑(case2='파이프')이라 살려 쓸 수도 없다.
+   * document 캡처 단계에서 가로채면 새로 그려진 버튼도 그대로 잡히고,
+   * stopPropagation 이 타깃 단계의 인라인 onclick 자체를 막는다. */
+  function bindDelegate() {
+    if (window.__r5ucDelegated) return;
+    window.__r5ucDelegated = true;
+    document.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest('button') : null;
+      if (!btn) return;
+      var sp = btn.querySelector('[data-i18n^="www_case"]');
+      var c = sp && CASES[sp.getAttribute('data-i18n')];
+      if (!c) return;
+      e.preventDefault();
+      e.stopPropagation();
+      routeUseCase(c[0], c[1]);
+    }, true);
   }
 
-  function run() { try { injectCss(); guardImages(); bindAll(); } catch (e) {} }
+  function run() { try { injectCss(); guardImages(); bindDelegate(); } catch (e) {} }
 
   run();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-  var n = 0, iv = setInterval(function () { run(); if (++n > 40) clearInterval(iv); }, 100);
-
-  // 홈 섹션 재렌더 시 onclick 재바인딩 (엘리먼트 교체되면 새로 바인딩)
-  try {
-    var pend = false;
-    var mo = new MutationObserver(function () {
-      if (pend) return; pend = true;
-      setTimeout(function () { pend = false; try { bindAll(); } catch (e) {} }, 150);
-    });
-    mo.observe(document.body, { childList: true, subtree: true });
-  } catch (e) {}
 })();
