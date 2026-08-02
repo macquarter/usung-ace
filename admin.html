@@ -334,6 +334,10 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
       <label>비밀번호</label>
       <input type="password" id="loginPw" placeholder="••••••" autocomplete="current-password" />
     </div>
+    <div class="login-field">
+      <label>서버 키 <span style="opacity:.6;font-weight:400">(게시판을 홈페이지에 공개할 때만)</span></label>
+      <input type="password" id="loginSrv" placeholder="비워두면 이 브라우저에만 저장됩니다" autocomplete="off" />
+    </div>
     <button class="login-btn" onclick="doLogin()">로그인</button>
     <div class="login-hint">데모 계정 : admin / admin</div>
   </div>
@@ -671,9 +675,11 @@ const BOARDS = {
     categories:['전체','시공후기','문의','칭찬','일반'],
     fields:[
       { id:'title',  label:'제목',    type:'text',     req:true },
-      { id:'cat',    label:'카테고리',  type:'select',  opts:['시공후기','문의','칭찬','일반'] },
+      // combo = 자유 입력 + 기존 분류 제안(datalist). 고정 select 로는 새 분류를 못 만든다.
+      { id:'cat',    label:'카테고리',  type:'combo',   ph:'직접 입력하거나 목록에서 선택' },
       { id:'author', label:'작성자',    type:'text' },
-      { id:'body',   label:'내용',    type:'textarea', req:true }
+      { id:'body',   label:'내용',    type:'textarea', req:true },
+      { id:'pin',    label:'상단고정',  type:'check' }
     ]
   },
   certification: {
@@ -731,6 +737,10 @@ function doLogin(){
   const pw = document.getElementById('loginPw').value;
   if(id === ADMIN.id && pw === ADMIN.pw){
     sessionStorage.setItem('cms-auth','1');
+    // 서버 키는 이 탭에서만 유지한다(localStorage 금지 — 공용 PC 에 남으면 안 된다).
+    const srv = (document.getElementById('loginSrv')||{}).value || '';
+    if(srv) sessionStorage.setItem('board-srv-key', srv);
+    else sessionStorage.removeItem('board-srv-key');
     showApp();
   } else {
     toast('아이디 또는 비밀번호가 일치하지 않습니다', true);
@@ -745,6 +755,36 @@ function showApp(){
   document.getElementById('appView').classList.add('active');
   loadLocal();
   R();
+  pullBoard();
+}
+
+// ============== 게시판 서버 동기화 (PPT slide6·7) ==============
+// localStorage 는 브라우저별이라 여기서 쓴 글이 방문자에게는 안 보인다.
+// 서버 키가 있으면 /api/board 로도 올려 홈페이지 공지게시판에 실제로 노출시킨다.
+async function pullBoard(){
+  try{
+    const r = await fetch('/api/board', { cache:'no-store' });
+    const j = await r.json();
+    if(!j || !j.configured || !Array.isArray(j.posts)) return;
+    // 서버가 비어 있는데 로컬에 글이 있으면 덮지 않는다 — 첫 이관 때 로컬 글이 날아간다.
+    if(!j.posts.length && (S.boards.board||[]).length) return;
+    S.boards.board = j.posts;
+    saveLocal(); R();
+  }catch(e){}
+}
+async function pushBoard(){
+  const key = sessionStorage.getItem('board-srv-key');
+  if(!key){ toast('서버 키 없이 저장했습니다 — 이 브라우저에만 보입니다', true); return; }
+  try{
+    const r = await fetch('/api/board', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-admin-key':key },
+      body: JSON.stringify({ posts: S.boards.board || [] })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok) toast(`홈페이지에 반영되었습니다 (${j.count}건)`);
+    else toast('서버 반영 실패 : ' + (j.error || r.status), true);
+  }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
 }
 
 // ============== FIRESTORE REST ==============
@@ -2081,6 +2121,12 @@ function bdForm(k, id){
       (f.opts||[]).forEach(o=>{ h += `<option value="${o}" ${v===o?'selected':''}>${o}</option>`; });
       h += `</select>`;
     }
+    else if(f.type==='combo'){
+      // 제안 목록은 실제 저장된 글에서 만든다 — 하드코딩하면 새 분류가 다음 글부터 안 뜬다.
+      const opts = [...new Set((S.boards[k]||[]).map(x=>x.cat).filter(Boolean))];
+      h += `<input type="text" id="fld_${f.id}" list="dl_${f.id}" value="${escHtml(v)}" placeholder="${f.ph||''}" />`;
+      h += `<datalist id="dl_${f.id}">${opts.map(o=>`<option value="${escHtml(o)}">`).join('')}</datalist>`;
+    }
     else if(f.type==='check')h += `<div style="padding:10px"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="fld_${f.id}" ${v?'checked':''} style="width:auto" /> 상단 고정</label></div>`;
     else                      h += `<input type="text" id="fld_${f.id}" value="${escHtml(v)}" placeholder="${f.ph||''}" />`;
     h += `</div>`;
@@ -2105,11 +2151,13 @@ function bdSave(k, id){
     S.boards[k].unshift({ id:'x'+Date.now(), ...data, views:0, createdAt:Date.now() });
   }
   saveLocal(); closeModal(); R(); toast('저장되었습니다');
+  if(k==='board') pushBoard();
 }
 function bdDel(k, id){
   if(!confirm('삭제하시겠습니까?')) return;
   S.boards[k] = S.boards[k].filter(x=>x.id!==id);
   saveLocal(); R(); toast('삭제되었습니다');
+  if(k==='board') pushBoard();
 }
 
 // ============== 챗봇 관리 ==============
