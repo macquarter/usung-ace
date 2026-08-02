@@ -76,6 +76,24 @@
   function r8Ready() {
     return typeof window.goCat === 'function' && !!document.getElementById('cv-tree');
   }
+  // 중분류 착지 — smooth 는 goCat 의 scrollTo(0,0)·재렌더에 끊기므로 즉시 스크롤 후
+  // 실제로 상단 ~90px 에 놓일 때까지 재시도한다(최대 ~2.6s).
+  function landMid(md) {
+    var m = 0;
+    (function tryMid() {
+      m++;
+      var el = document.getElementById('mid-' + md);
+      var landed = false;
+      if (el) {
+        var y = el.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'auto' });
+        var t = el.getBoundingClientRect().top;
+        landed = (t >= 55 && t <= 135);
+      }
+      if (!landed && m < 22) setTimeout(tryMid, 120);
+    })();
+  }
+
   function r8Route(cat, mid) {
     var t = 0;
     (function settle() {
@@ -86,18 +104,26 @@
         try { window.goCat(cat); } catch (e) {}
       }
       if (t < 7) { setTimeout(settle, 110); return; }
-      if (mid && typeof window.scrollMid === 'function') {
-        try { window.scrollMid(mid); } catch (e) {}
-      }
+      if (mid) setTimeout(function () { landMid(mid); }, 160);
     })();
   }
 
   function routeUseCase(cat, sec) {
     try { if (typeof window.navigate === 'function') window.navigate('products'); } catch (e) {}
-    if (r8Ready() || document.querySelector('#page-products .r8x')) {
-      setTimeout(function () { r8Route(cat, sec); }, 220);
-      return;
-    }
+    // ★ r8 준비 여부를 즉시 판정하면 안 된다(2026-08-02 실측).
+    // 첫 로드 직후에는 goCat/cv-tree 가 아직 없어 legacy 분기로 빠지는데,
+    // legacy 마크업은 .r8-original(display:none) 안이라 무반응으로 끝난다.
+    // r8 이 뜰 때까지 최대 ~2.5s 기다리고, 그래도 없으면(=?r8=0 비상구) legacy 로 간다.
+    var w = 0;
+    (function waitR8() {
+      w++;
+      if (r8Ready()) { r8Route(cat, sec); return; }
+      if (w < 25) { setTimeout(waitR8, 100); return; }
+      legacyRoute(cat, sec);
+    })();
+  }
+
+  function legacyRoute(cat, sec) {
     var tries = 0;
     (function attempt() {
       tries++;
