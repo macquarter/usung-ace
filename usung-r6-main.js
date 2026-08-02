@@ -82,10 +82,11 @@
     var css = [
       '#r6-core-card{background:#fff;}',
       '#r6-core-card .r6c-left{display:flex;align-items:center;justify-content:center;',
-      'background:linear-gradient(160deg,#f7f9fc 0%,#eef2f8 100%);padding:28px 16px;min-height:420px;}',
-      '#r6-core-card .r6c-left img{max-width:100%;max-height:620px;height:auto;display:block;',
-      'background:#fff;border-radius:18px;box-shadow:0 18px 50px -24px rgba(11,30,77,.28);}',
+      'background:#fff;padding:28px 16px;min-height:420px;}',
+      '#r6-core-card .r6c-left img{max-width:100%;max-height:620px;height:auto;display:block;background:#fff;}',
       '#r6-core-card .r6c-right{background:#fff;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;gap:22px;}',
+      // Both columns are white now, so a hairline keeps the split readable on desktop.
+      '@media (min-width:1024px){#r6-core-card .r6c-right{border-left:1px solid rgba(11,30,77,.08);}}',
       '#r6-core-card .r6c-item{display:flex;gap:14px;align-items:flex-start;}',
       '#r6-core-card .r6c-num{flex:0 0 auto;width:38px;height:32px;border-radius:8px;background:#0b1e4d;color:#fff;',
       'font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;letter-spacing:.02em;margin-top:2px;}',
