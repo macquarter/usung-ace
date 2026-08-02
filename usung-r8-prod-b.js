@@ -148,7 +148,15 @@ function renderCatMain(cat){
   }).join('');
   document.getElementById('cv-main').innerHTML=`<div class="kk">제품 라인업</div><h2>${M.kr}</h2>${body}`;
 }
-function scrollMid(md){const el=document.getElementById('mid-'+md);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+// scrollIntoView() is unusable here: body has overflow-x:hidden, which computes
+// overflow-y to auto, so body counts as a scroll container. Its scrollHeight equals
+// its clientHeight, so the scroll chain dead-ends there and never reaches <html>,
+// the real scroller. Scroll the window explicitly instead.
+function scrollMid(md){
+  const el=document.getElementById('mid-'+md);if(!el)return;
+  const y=el.getBoundingClientRect().top+window.scrollY-90;
+  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+}
 
 // ===== DETAIL POPUP (S17) =====
 function openModel(key,idx){
