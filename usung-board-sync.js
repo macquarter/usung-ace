@@ -62,11 +62,15 @@
 
     var seen = {}, next = [{ name: '전체', count: list.length }];
     list.forEach(function (b) {
-      if (!b.cat || seen[b.cat]) return;
+      // 블로그 글도 boardItems 안에 cat='블로그' 로 들어있다(실측 50건). 여기서 만들면
+      // 아래에서 한 번 더 붙어 탭이 두 개가 된다 → 맨 뒤에 한 번만 붙인다.
+      if (!b.cat || b.cat === '블로그' || seen[b.cat]) return;
       seen[b.cat] = 1;
       next.push({ name: b.cat, count: list.filter(function (x) { return x.cat === b.cat; }).length });
     });
+    var nblog = list.filter(function (x) { return x.cat === '블로그'; }).length;
     if (blog) next.push(blog);
+    else if (nblog) next.push({ name: '블로그', count: nblog });
     c.length = 0;
     c.push.apply(c, next);
   }
