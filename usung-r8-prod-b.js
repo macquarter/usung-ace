@@ -148,14 +148,28 @@ function renderCatMain(cat){
   }).join('');
   document.getElementById('cv-main').innerHTML=`<div class="kk">제품 라인업</div><h2>${M.kr}</h2>${body}`;
 }
-// scrollIntoView() is unusable here: body has overflow-x:hidden, which computes
-// overflow-y to auto, so body counts as a scroll container. Its scrollHeight equals
-// its clientHeight, so the scroll chain dead-ends there and never reaches <html>,
-// the real scroller. Scroll the window explicitly instead.
+// Two traps here, both measured live on 2026-08-02.
+// 1. scrollIntoView() never reaches the real scroller: body has overflow-x:hidden,
+//    which computes overflow-y to auto, so body counts as a scroll container. Its
+//    scrollHeight equals its clientHeight, so the chain dead-ends before <html>.
+// 2. behavior:'smooth' never even starts on this page. Only 'auto' moves.
+// So: jump immediately, then re-apply until the target actually settles near the top,
+// because goCat's scrollTo(0,0) and the lazy-image reflow can undo the first jump.
+let midSeq=0;
 function scrollMid(md){
-  const el=document.getElementById('mid-'+md);if(!el)return;
-  const y=el.getBoundingClientRect().top+window.scrollY-90;
-  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  const my=++midSeq;let n=0;
+  (function land(){
+    if(my!==midSeq)return;
+    n++;
+    const el=document.getElementById('mid-'+md);
+    let ok=false;
+    if(el){
+      window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-90),behavior:'auto'});
+      const t=el.getBoundingClientRect().top;
+      ok=(t>=55&&t<=135);
+    }
+    if(!ok&&n<22)setTimeout(land,120);
+  })();
 }
 
 // ===== DETAIL POPUP (S17) =====

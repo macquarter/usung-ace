@@ -77,11 +77,11 @@ function renderCTA(){
   // 어두운 주방 배경을 cover-crop해 컴팩트한 문의 스트립으로 구성
   document.getElementById('cta-r').innerHTML=`<img src="hero-bg.jpg" alt="">`;
 }
-// hero nudge helper — window.scrollTo, not scrollIntoView (see scrollMid in prod-b)
+// hero nudge helper — window.scrollTo + behavior:'auto' (see scrollMid in prod-b for why)
 function scrollFilter(){
   const el=document.getElementById('filterrow');if(!el)return;
   const y=el.getBoundingClientRect().top+window.scrollY-90;
-  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  window.scrollTo({top:Math.max(0,y),behavior:'auto'});
 }
 // scroll reveal — observe guide-page bands/teaser/cta
 let revObs=null;
