@@ -1,0 +1,94 @@
+/* usung-r10-fix.css — 260802 화면검토 지적 ②③④⑥
+ * MUST be linked after usung-tonefix.css (equal !important + equal specificity → source order decides).
+ * index_v6.html stays frozen; this is a runtime overlay only.
+ */
+
+/* ── ② caret (↓) markup and its rotate animation ──────────────────────────
+ * usung-tonefix.css draws a CSS triangle via .nav-link::after and rotates it on hover.
+ * .nav-item::after (index_v6.html:82) is a transparent hover bridge — never touch it. */
+#navbar .nav-item > .nav-link::after,
+#navbar .nav-item:has(.dropdown) > .nav-link::after,
+#navbar .nav-item:has(.dropdown):hover > .nav-link::after{
+  content:none !important;
+  display:none !important;
+  transform:none !important;
+  transition:none !important;
+}
+#navbar .nav-item > .nav-link{gap:0 !important;}
+#navbar .nav-item > .nav-link svg{display:none !important;}
+
+/* ② menus whose dropdown holds a single visible row must not open on hover.
+ * usung-r10.js counts the visible rows and marks .r10-solo. */
+#navbar .nav-item.r10-solo > .dropdown,
+#navbar .nav-item.r10-solo:hover > .dropdown{
+  display:none !important;
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+/* ── ⑥ first-paint flash ("캐시값") ───────────────────────────────────────
+ * api/inject.js appends ~60 defer scripts, so the browser paints the original nav
+ * (부품소개 / 고객센터 / 견적 상담 …) before the overlays relabel and hide them.
+ * Hide the same nodes from CSS so the first paint already matches the final state. */
+#primary-nav .nav-item:has(> .nav-link [data-i18n="nav_parts"]){display:none !important;}
+#primary-nav .dropdown button:has([data-i18n="nav_notice"]),
+#primary-nav .dropdown button:has([data-i18n="nav_process"]),
+#primary-nav .dropdown button:has([data-i18n="nav_manual"]),
+#primary-nav .dropdown button:has([data-i18n="nav_archive"]),
+#primary-nav .dropdown button:has([data-i18n="nav_inquiry"]){display:none !important;}
+
+/* ⑥ reveal gate. Pure-CSS fail-safe: even if usung-r10.js never runs the nav
+ * reappears at 0.7s. html.r10-navok shortens the wait once the overlays settle.
+ * #navbar is justify-between with 3 children, so gating only #primary-nav
+ * leaves the logo and the right cluster in place — no layout shift. */
+#primary-nav{
+  visibility:hidden;
+  opacity:0;
+  animation:r10-navreveal .18s ease .7s forwards;
+}
+/* The normal path reveals without the timeline: a background tab freezes its
+ * document timeline at t=0, so an animation-only reveal would leave the nav
+ * invisible until the tab is focused. */
+html.r10-navok #primary-nav{
+  visibility:visible;
+  opacity:1;
+  animation:none;
+}
+@keyframes r10-navreveal{to{visibility:visible;opacity:1;}}
+
+/* ── ③ white band above the dark heroes ──────────────────────────────────
+ * #navbar is 65px but the pages carry pt-24 (96px) → a 31px white strip. */
+:root{--r10-navh:65px;}
+#page-products.page,
+#page-tech.page{padding-top:var(--r10-navh) !important;}
+
+/* ── ③ product hero background ───────────────────────────────────────────
+ * .hero-bg is its own layer; the product cutouts live in .hero-visual > .hfloat > img,
+ * so blurring the background does not soften the products.
+ * usung-r8.css is appended at runtime by usung-r8-mount.js and therefore always wins
+ * source order → mirror its !important rules with a leading `html ` for specificity. */
+html .r8x:not(#_r8_) .hero-bg{
+  filter:blur(10px) brightness(1.12) saturate(.32) contrast(.82) !important;
+  transform:scale(1.2) !important;
+  animation-name:r10-kenburns !important;
+}
+@keyframes r10-kenburns{
+  0%{transform:scale(1.2) translate(0,0);}
+  100%{transform:scale(1.3) translate(-2.2%,-1.3%);}
+}
+html .r8x:not(#_r8_) .hero-veil{
+  background:linear-gradient(90deg,
+    #eef2f8 0%,
+    #eef2f8 28%,
+    rgba(238,242,248,.90) 45%,
+    rgba(238,242,248,.75) 70%,
+    rgba(238,242,248,.55) 100%) !important;
+}
+
+/* ── ④ "전체 보기 →" buttons ──────────────────────────────────────────────
+ * .band-hero and .cn-card are themselves the click target (onclick=goCat(...)),
+ * so removing the label keeps navigation. */
+html .r8x:not(#_r8_) .band-info .allbtn,
+html .r8x:not(#_r8_) .band-hero .bhov-go,
+html .r8x:not(#_r8_) .cn-card .cn-cnt{display:none !important;}

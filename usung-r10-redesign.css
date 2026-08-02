@@ -1,0 +1,61 @@
+/* usung-r10-redesign.css — 260802 지적 ⑦ 시공갤러리 · 기술력 리디자인
+ * Layout only; colors live in usung-r10-tone.css.
+ * usung-r8.css loads at runtime → every rule needs !important, and rules mirroring
+ * an r8 !important declaration also need the leading `html ` for specificity.
+ */
+
+/* ════════ 시공 갤러리 ════════ */
+
+/* The view stacked two headers: .gal-hero ("시공 갤러리") and .gal-find
+ * ("원하는 디자인을 빠르게 찾아보세요"). The second only restated the first
+ * and pushed the grid below the fold. */
+html .r8x:not(#_r8_) .gal-find{display:none !important;}
+
+html .r8x:not(#_r8_) .gal-hero{padding:56px 0 4px !important;}
+html .r8x:not(#_r8_) .gal-hero .gal-s{margin:16px 0 0 !important;}
+
+/* Tabs share the hero's left edge instead of floating centred, and the sticky bar
+ * is opaque — the old gradient let tiles bleed through its lower 30%.
+ * top:65px matches the measured #navbar height. */
+html .r8x:not(#_r8_) .gal-tabs{
+  justify-content:flex-start !important;
+  padding:20px 0 16px !important;
+  top:var(--r10-navh,65px) !important;
+  background:#fff !important;
+  box-shadow:0 1px 0 var(--line), 0 10px 14px -12px rgba(22,41,77,.28) !important;
+}
+html .r8x:not(#_r8_) .gal-grid{padding-top:22px !important;}
+
+/* The r9 phone CTA sits between the tabs and the grid; it was centred while the
+ * tabs floated centred too. Both share the hero's left edge now. */
+#page-gallery .r9gcta{justify-content:flex-start !important;margin:18px 0 0 !important;}
+
+/* Captions carry three real lines now (see usung-r10.js): style · site · spec.
+ * .gt-spec was already styled at usung-r8.css:784 but the generator never emitted it. */
+html .r8x:not(#_r8_) .gtile figcaption{padding:16px 14px 14px !important;gap:2px !important;}
+html .r8x:not(#_r8_) .gtile:after{
+  background:linear-gradient(0deg,
+    rgba(6,12,26,.94) 0%,
+    rgba(6,12,26,.42) 46%,
+    transparent 76%) !important;
+}
+html .r8x:not(#_r8_) .gt-zoom{color:#60A5FA !important;}
+
+@media(max-width:560px){
+  html .r8x:not(#_r8_) .gal-hero{padding:38px 0 2px !important;}
+  html .r8x:not(#_r8_) .gal-tabs{padding:14px 0 12px !important;top:58px !important;}
+  html .r8x:not(#_r8_) .gtile figcaption{padding:12px 11px 11px !important;}
+  html .r8x:not(#_r8_) .gtile .gt-site{font-size:13px !important;}
+  html .r8x:not(#_r8_) .gtile .gt-spec{font-size:10.5px !important;}
+}
+
+/* ════════ 기술력 ════════ */
+
+/* .tf-card has overflow:hidden, so the hood's right:-5% bleed was cropping the
+ * product silhouette. Pull it flush instead. */
+html .r8x:not(#_r8_) .tf-hood{right:0 !important;}
+
+/* The four "국내 최초" cards straddle the hero bottom; with the shorter page
+ * padding from usung-r10-fix.css the overlap needed re-balancing. */
+html .r8x:not(#_r8_) .th-hero{padding:92px 0 146px !important;}
+html .r8x:not(#_r8_) .tf-title{margin:12px 0 7px !important;}

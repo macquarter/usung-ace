@@ -1,0 +1,65 @@
+/* usung-r10-tone.css — 260802 지적 ⑦ 톤앤매너 통일
+ * One accent hue (brand blue) + one merchandising hue (--red, kept for BEST tags).
+ * Orange was a third hue with no distinct role → folded into blue.
+ * Six scattered pale blues collapsed onto blue-200 / blue-400.
+ *
+ * usung-r8.css is appended to <head> at runtime by usung-r8-mount.js, so it always
+ * wins source order over this static <link>. Every rule here needs !important, and
+ * the two r8 rules that already carry !important also need the leading `html `
+ * to outrank them on specificity: (1,3,1) vs (1,3,0).
+ */
+
+/* ── brand scale (usung-blue-standard.css) ──────────────────────────────── */
+html .r8x:not(#_r8_){
+  --ub:#1D4ED8 !important;   /* was #1b4fa0 */
+  --ub2:#2563EB !important;  /* was #2f6fd6 */
+  --ubL:#EFF6FF !important;  /* was #eaf1fb */
+  --r10-b200:#BFDBFE;
+  --r10-b400:#60A5FA;
+}
+
+/* ── pale blues → blue-200 ──────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bn-k{
+  color:var(--r10-b200) !important;
+  border-color:rgba(191,219,254,.42) !important;
+}
+html .r8x:not(#_r8_) .bn-cat,
+html .r8x:not(#_r8_) .band-hero .bhov-en,
+html .r8x:not(#_r8_) .bs-k,
+html .r8x:not(#_r8_) .bs-since em,
+html .r8x:not(#_r8_) .bs-lines .q,
+html .r8x:not(#_r8_) .bs-ch.dark .bs-no,
+html .r8x:not(#_r8_) .bs-ch.dark .bs-lead{color:var(--r10-b200) !important;}
+html .r8x:not(#_r8_) .bs-lines .q{border-left-color:rgba(191,219,254,.42) !important;}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-res b,
+html .r8x:not(#_r8_) .bs-bridge b{color:var(--r10-b200) !important;}
+
+/* ── bright accents → blue-400 ──────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bs-k i,
+html .r8x:not(#_r8_) .bs-ch.dark .bs-no i,
+html .r8x:not(#_r8_) .bs-vcap i{background:var(--r10-b400) !important;}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-q{border-color:var(--r10-b400) !important;}
+
+/* ── gradient text fills ────────────────────────────────────────────────────
+ * These three are clipped to the glyphs and painted via -webkit-text-fill-color:
+ * transparent. usung-r8.css declares background-clip:text WITHOUT !important, so
+ * an !important `background:` shorthand here would reset it to border-box and the
+ * gradient would paint as a solid box over invisible text. Restyle the image
+ * layer only. */
+html .r8x:not(#_r8_) .th-h1 .hl{
+  color:var(--r10-b400) !important;
+  background-image:linear-gradient(120deg,#60A5FA,#BFDBFE) !important;
+}
+html .r8x:not(#_r8_) .bs-h .hl{background-image:linear-gradient(105deg,#BFDBFE,#fff 72%) !important;}
+html .r8x:not(#_r8_) .bs-sign{background-image:linear-gradient(120deg,#BFDBFE,#fff 62%) !important;}
+
+/* ── orange → blue ──────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .fmodal:before{
+  background:linear-gradient(90deg,#60A5FA,#2563EB 42%,#1D4ED8) !important;
+}
+html .r8x:not(#_r8_) .fm-badge,
+html .r8x:not(#_r8_) .tf-badge{
+  background:linear-gradient(120deg,#2563EB,#1D4ED8) !important;
+  box-shadow:0 6px 14px rgba(37,99,235,.30) !important;
+}
+html .r8x:not(#_r8_) .th-quote .tq .hl{color:var(--r10-b400) !important;}
