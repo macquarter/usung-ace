@@ -1,0 +1,23 @@
+{
+  "posts": [
+    {
+      "id": "t1",
+      "cat": "공지",
+      "title": "상단 고정 테스트 글",
+      "author": "유성에이스",
+      "body": "본문",
+      "pin": true,
+      "createdAt": 1785668355094
+    },
+    {
+      "id": "t2",
+      "cat": "시공후기",
+      "title": "img src=x onerror=alert(1)주입시도",
+      "author": "김○○",
+      "body": "b",
+      "pin": false,
+      "createdAt": 1785581955094
+    }
+  ],
+  "updatedAt": 1785668355495
+}
