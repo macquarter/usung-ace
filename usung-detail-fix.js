@@ -4,8 +4,9 @@
    해결: 상세 히어로 그리드를 이미지쪽으로 넓힘(1.5fr : 1fr) + max-height 상향.
    - 데스크톱: 이미지 칼럼 폭 확대 + max-height 780 -> 실제로 크게 렌더
    - 모바일: 카드 풀블리드 + 여백 최소 + 88vh
-   - 상담 문의 버튼: tel: 전화 -> 문의 페이지(navigate)로 연결
    되돌리기: inject.js 에서 본 파일 <script> 한 줄 제거 + 파일 삭제
+   ※ 상담 문의 버튼을 tel: 대신 문의 페이지로 보내던 가로채기는 제거했다(2026-08-02).
+     260729 회의록 2번이 "무조건 전화연결로만" 으로 뒤집었고 문의 폼 자체가 사라졌다.
    * usung-review.js(핵심 렌더)는 전혀 건드리지 않음 */
 (function () {
   if (window.__usungDetailFix) return;
@@ -30,16 +31,4 @@
   st.textContent = css;
   (document.head || document.documentElement).appendChild(st);
 
-  /* ---- 2) 상담 문의 버튼: 전화 대신 문의 페이지 ---- */
-  document.addEventListener('click', function (e) {
-    var t = e.target;
-    if (!t || !t.closest) return;
-    var a = t.closest('#up-main a[href="tel:1588-9123"]');
-    if (!a) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (typeof window.navigate === 'function') {
-      window.navigate('about', 'inquiry-section');
-    }
-  }, true);
 })();
