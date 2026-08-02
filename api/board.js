@@ -16,14 +16,16 @@
  */
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-const REPO = process.env.BOARD_REPO || 'macquarter/usung-ace';
-const BRANCH = process.env.BOARD_BRANCH || 'main';
+// ★ 모듈 로드 시점에 읽지 말 것. 그러면 import 이후에 env 를 세팅하는 호출자(테스트 등)가
+// 조용히 기본값 main 을 쓰게 된다 — 실제로 테스트가 main 에 글을 써버렸다(2026-08-02).
+const repo = () => process.env.BOARD_REPO || 'macquarter/usung-ace';
+const branch = () => process.env.BOARD_BRANCH || 'main';
 const FILE = 'data/board.json';
 const MAX_BYTES = 256 * 1024;
 const MAX_POSTS = 300;
 
 function gh(path, init) {
-  return fetch(`https://api.github.com/repos/${REPO}/${path}`, {
+  return fetch(`https://api.github.com/repos/${repo()}/${path}`, {
     ...init,
     headers: {
       Authorization: `Bearer ${process.env.BOARD_TOKEN}`,
@@ -35,7 +37,7 @@ function gh(path, init) {
 }
 
 async function readFile() {
-  const r = await gh(`contents/${encodeURIComponent(FILE)}?ref=${BRANCH}`, { cache: 'no-store' });
+  const r = await gh(`contents/${FILE}?ref=${branch()}`, { cache: 'no-store' });
   if (r.status === 404) return { posts: [], sha: null };
   if (!r.ok) throw new Error('GitHub read ' + r.status);
   const j = await r.json();
@@ -50,10 +52,10 @@ function writeFile(posts, sha) {
   const body = {
     message: 'chore(board): 게시판 글 갱신 [skip ci]',
     content: Buffer.from(JSON.stringify({ posts, updatedAt: Date.now() }, null, 2)).toString('base64'),
-    branch: BRANCH
+    branch: branch()
   };
   if (sha) body.sha = sha;
-  return gh(`contents/${encodeURIComponent(FILE)}`, { method: 'PUT', body: JSON.stringify(body) });
+  return gh(`contents/${FILE}`, { method: 'PUT', body: JSON.stringify(body) });
 }
 
 // renderBoard() 가 템플릿 리터럴로 innerHTML 을 만든다 → 꺾쇠는 서버에서 걷어낸다.
@@ -116,12 +118,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 동시 수정으로 sha 가 어긋나면 409 → 다시 읽어 한 번만 재시도
-    for (let i = 0; i < 2; i++) {
+    // sha 가 어긋나면 409. 동시 수정뿐 아니라 GitHub 이 최대 60초(max-age=60) 묵은 응답을
+    // 주는 경우에도 난다 — 실측으로 확인했다. 그래서 재시도 전에 잠깐 기다린다.
+    for (let i = 0; i < 3; i++) {
+      if (i) await new Promise(r => setTimeout(r, 400 * i * i));
       const { sha } = await readFile();
       const w = await writeFile(posts, sha);
       if (w.ok) { res.status(200).json({ ok: true, count: posts.length }); return; }
-      if (w.status !== 409) { res.status(502).json({ ok: false, error: 'GitHub write ' + w.status }); return; }
+      if (w.status !== 409) {
+        const detail = await w.text().catch(() => '');
+        res.status(502).json({ ok: false, error: 'GitHub write ' + w.status + ' ' + detail.slice(0, 200) });
+        return;
+      }
     }
     res.status(409).json({ ok: false, error: '동시 수정 충돌 — 다시 저장해 주세요' });
   } catch (e) {
