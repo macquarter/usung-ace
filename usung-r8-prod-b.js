@@ -129,10 +129,10 @@ function renderTree(active){
   el.innerHTML=R8_CATS.map((c,i)=>{
     const label=(c==='코브라후드'?'하향식 후드 / 코브라':c);
     const mids=[...new Set(byCatM[c].map(m=>m.mid).filter(Boolean))];
-    const subs=(c===active&&mids.length)?`<div class="subs">${mids.map(md=>{
-       const cnt=byCatM[c].filter(m=>m.mid===md).length;
-       return `<div class="sub" onclick='scrollMid("${md}")'><span>${md}</span><span>${cnt}</span></div>`;}).join('')}</div>`:'';
-    return `<div class="cat ${c===active?'on':''}" onclick='goCat("${c}")'><span>${i+1}. ${label}</span><span class="n">${byCatM[c].length}</span></div>${subs}`;
+    // 모델 수 표기는 노출하지 않는다(2026-07-31 지시). 카운트 span 자체를 만들지 않는다.
+    const subs=(c===active&&mids.length)?`<div class="subs">${mids.map(md=>
+       `<div class="sub" onclick='scrollMid("${md}")'><span>${md}</span></div>`).join('')}</div>`:'';
+    return `<div class="cat ${c===active?'on':''}" onclick='goCat("${c}")'><span>${i+1}. ${label}</span></div>${subs}`;
   }).join('');
 }
 function renderCatMain(cat){
@@ -140,7 +140,7 @@ function renderCatMain(cat){
   const mids=[...new Set(list.map(m=>m.mid))];
   const body=mids.map(md=>{
     const ms=list.filter(m=>m.mid===md);
-    return `<div class="midg" id="mid-${md}"><h3>${md||M.kr} <em>${ms.length}</em></h3>
+    return `<div class="midg" id="mid-${md}"><h3>${md||M.kr}</h3>
       <div class="grid4">${ms.map(m=>`<div class="mcard" onclick='openModel("${m.key}",0)'>
         <div class="mt"><img loading="lazy" src="${m.rep.img}"></div>
         <div class="mb"><div class="nm">${modelName(m)}</div><div class="fn">${m.items.length>1?'색상·마감 '+m.items.length+'종':(m.rep.finish||'단일')}</div></div>

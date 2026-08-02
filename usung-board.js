@@ -22,7 +22,15 @@
       '#page-board [data-usung-sortbar]{display:none !important;}',
       /* 번호/조회/작성자 제거 후 남는 3칸(분류·제목·등록일) 그리드 재배치 */
       '#page-board #board-list > [data-usung-row]{grid-template-columns:1fr !important;}',
-      '@media(min-width:768px){#page-board #board-list > [data-usung-row]{grid-template-columns:90px 1fr 110px !important;}}'
+      '@media(min-width:768px){#page-board #board-list > [data-usung-row]{grid-template-columns:90px 1fr 110px !important;}}',
+      /* ★ 헤더는 인라인 style 로도 못 이긴다(2026-08-02 실측).
+       * usung-review.js 가 '#page-board .md\:grid-cols-[60px_90px_1fr_120px_110px_80px]' 에
+       * 5칸 grid 를 !important 로 박아 두는데, !important 는 인라인 선언도 이긴다.
+       * 그래서 헤더만 5칸(60/90/650/110/80)으로 남아 셀 3개가 앞 3트랙에 몰렸고,
+       * 행(90/1fr/110)과 어긋나 보였다 — PPT slide5 "정렬 맞춰주세요" 의 정체.
+       * 같은 !important 끼리는 명시도로 갈리므로 (1,1,1) 로 올려 (1,1,0) 을 이긴다. */
+      '#page-board div[data-usung-hdr]{grid-template-columns:1fr !important;}',
+      '@media(min-width:768px){#page-board div[data-usung-hdr]{grid-template-columns:90px 1fr 110px !important;}}'
     ].join('');
     var st = document.createElement('style');
     st.id = 'usung-board-css';
@@ -43,7 +51,9 @@
     var pg = document.getElementById('page-board');
     if (!pg) return;
     var hdr = pg.querySelector('div[class*="md:grid"]');
-    if (!hdr || hdr.__usungHdr) return;
+    if (!hdr) return;
+    hdr.setAttribute('data-usung-hdr', '1');   // CSS 훅 — 매번 재확인(재렌더 대비)
+    if (hdr.__usungHdr) return;
     hdr.__usungHdr = true;
     var cells = Array.prototype.slice.call(hdr.children);
     if (cells.length >= 6) {

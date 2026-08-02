@@ -66,8 +66,38 @@
     return false;
   }
 
+  /* ★ r8 이식 후 경로 변경 (2026-08-02)
+   * 원래는 filterProducts()+up-sec-* 로 갔으나, r8 이식 이후 그 마크업은 통째로
+   * .r8-original(display:none) 안으로 들어갔다. 필터도 스크롤도 숨은 DOM 에서만 일어나
+   * 클릭해도 겉보기엔 아무 일도 안 하는 상태였다(라이브 실측: page-products/v-main/scrollY=0).
+   * → r8 의 goCat(대분류) + scrollMid(중분류) 로 재배선한다.
+   * 타이밍: usung-r8-mount.js 의 navigate 래퍼가 +60ms 뒤 syncFromPage(true)→goMain() 으로
+   * v-main 을 강제하므로, 그보다 늦게 goCat 을 걸고 짧게 재확인해야 한다. */
+  function r8Ready() {
+    return typeof window.goCat === 'function' && !!document.getElementById('cv-tree');
+  }
+  function r8Route(cat, mid) {
+    var t = 0;
+    (function settle() {
+      t++;
+      var v = document.getElementById('v-cat');
+      var pg = document.getElementById('page-products');
+      if (pg && pg.classList.contains('active') && r8Ready() && (!v || !v.classList.contains('on'))) {
+        try { window.goCat(cat); } catch (e) {}
+      }
+      if (t < 7) { setTimeout(settle, 110); return; }
+      if (mid && typeof window.scrollMid === 'function') {
+        try { window.scrollMid(mid); } catch (e) {}
+      }
+    })();
+  }
+
   function routeUseCase(cat, sec) {
     try { if (typeof window.navigate === 'function') window.navigate('products'); } catch (e) {}
+    if (r8Ready() || document.querySelector('#page-products .r8x')) {
+      setTimeout(function () { r8Route(cat, sec); }, 220);
+      return;
+    }
     var tries = 0;
     (function attempt() {
       tries++;
@@ -108,8 +138,12 @@
     }, true);
   }
 
+  // PPT「메인페이지,고객센터」slide2 의 번호는 제품소개 사이드바 순번이다.
+  // 1.갤럭시 2.LED조명 3.파이프 4.후레쉬볼 5.하향식후드 (라이브 실측과 일치)
+  // case1 의 '스텐도금' 은 260729 회의록 3-4 로 파이프 중분류가 구동(양옆태엽/텐션/
+  // 내부태엽/기타옵션) 기준으로 바뀌면서 마감(grp)으로 내려가 스크롤 대상이 없다 → 대분류까지만.
   function bindAll() {
-    bindCase('www_case1_btn', '파이프', '스텐도금');
+    bindCase('www_case1_btn', '파이프', null);
     bindCase('www_case2_btn', 'LED조명', null);
     bindCase('www_case3_btn', '후레쉬볼', '후레쉬볼 갓 자바라');
   }
