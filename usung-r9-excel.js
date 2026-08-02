@@ -59,7 +59,15 @@
         'background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);' +
         'box-shadow:0 10px 26px rgba(37,99,235,.28);transition:transform .18s ease;}',
       '.r9gcta a:hover{transform:translateY(-2px);}',
-      '@media (max-width:600px){.r9gcta a{font-size:14px;padding:13px 20px;}}'
+      /* 라벨·전화번호는 각각 통째로 유지한다. 393px 에서 "문의하/기", "1588-/9123" 처럼
+         낱글자가 끊기는 것을 막는다(실측). 좁은 화면에서는 두 조각을 세로로 쌓는다. */
+      '.r9g-l,.r9g-t{white-space:nowrap;}',
+      '.r9g-l:after{content:"·";margin-left:10px;opacity:.55;}',
+      '@media (max-width:600px){',
+      '.r9gcta a{font-size:14px;padding:12px 20px;flex-direction:column;gap:3px;}',
+      '.r9g-l:after{display:none;}',
+      '.r9g-t{font-size:13px;opacity:.92;}',
+      '}'
     ].join('');
     var st = document.createElement('style');
     st.id = 'usung-r9-excel-css';
@@ -123,7 +131,8 @@
 
   function paintCta() {
     var a = document.querySelector('#usung-r9-gal-cta a');
-    if (a) a.innerHTML = '<span>' + ctaLabel() + '</span> · 대표전화 ' + TEL + ' <b>&rarr;</b>';
+    if (a) a.innerHTML = '<span class="r9g-l">' + ctaLabel() + '</span>' +
+      '<span class="r9g-t">대표전화 ' + TEL + ' &rarr;</span>';
   }
 
   function applyGallery() {
