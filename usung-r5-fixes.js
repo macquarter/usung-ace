@@ -78,33 +78,45 @@
   }
   // 중분류 착지 — smooth 는 goCat 의 scrollTo(0,0)·재렌더에 끊기므로 즉시 스크롤 후
   // 실제로 상단 ~90px 에 놓일 때까지 재시도한다(최대 ~2.6s).
+  var landSeq = 0;
   function landMid(md) {
-    var m = 0;
+    var my = ++landSeq, m = 0;
     (function tryMid() {
+      if (my !== landSeq) return;     // 뷰가 다시 그려져 새 요청이 왔으면 이 루프는 폐기
       m++;
       var el = document.getElementById('mid-' + md);
-      var landed = false;
+      var ok = false;
       if (el) {
         var y = el.getBoundingClientRect().top + window.scrollY - 90;
         window.scrollTo({ top: Math.max(0, y), behavior: 'auto' });
         var t = el.getBoundingClientRect().top;
-        landed = (t >= 55 && t <= 135);
+        ok = (t >= 55 && t <= 135);
       }
-      if (!landed && m < 22) setTimeout(tryMid, 120);
+      if (!ok && m < 22) setTimeout(tryMid, 120);
     })();
   }
 
+  /* ★ 감시는 길게 가져가야 한다(2026-08-02 실측).
+   * usung-r8-mount.js 는 UP_DATA 가 늦게 오면 최대 6초까지 100ms 간격으로 boot 를
+   * 재시도하고, boot 성공 시 syncFromPage() → goMain() 으로 v-main 을 켠다.
+   * 짧게 감시하면 그 늦은 goMain 에 v-cat 이 덮여 클릭이 무위로 끝난다.
+   * v-cat 이 꺼질 때마다 goCat 을 다시 걸고, 다시 켜지면 스크롤도 다시 잡는다. */
   function r8Route(cat, mid) {
-    var t = 0;
+    var t = 0, placed = false;
     (function settle() {
       t++;
       var v = document.getElementById('v-cat');
       var pg = document.getElementById('page-products');
-      if (pg && pg.classList.contains('active') && r8Ready() && (!v || !v.classList.contains('on'))) {
-        try { window.goCat(cat); } catch (e) {}
+      if (pg && pg.classList.contains('active') && r8Ready()) {
+        if (!v || !v.classList.contains('on')) {
+          try { window.goCat(cat); } catch (e) {}
+          placed = false;
+        } else if (!placed) {
+          placed = true;
+          if (mid) setTimeout(function () { landMid(mid); }, 120);
+        }
       }
-      if (t < 7) { setTimeout(settle, 110); return; }
-      if (mid) setTimeout(function () { landMid(mid); }, 160);
+      if (t < 24) setTimeout(settle, 110);
     })();
   }
 
