@@ -76,6 +76,15 @@
   function r8Ready() {
     return typeof window.goCat === 'function' && !!document.getElementById('cv-tree');
   }
+  // usung-r8-mount.js 의 gate() 와 같은 판정. 이식이 켜져 있다면 goCat 은 '늦게 뜰 뿐 반드시 뜬다'
+  // → 준비를 기다리다 시간이 다 됐다고 legacy 로 빠지면 안 된다(legacy 마크업은 숨어 있어 무반응).
+  function r8Off() {
+    try {
+      if (/[?&]r8=0\b/.test(location.search)) return true;
+      if (/[?&]r8=1\b/.test(location.search)) return false;
+      return localStorage.getItem('usungR8') === '0';
+    } catch (e) { return /[?&]r8=0\b/.test(location.search); }
+  }
   // 중분류 착지 — smooth 는 goCat 의 scrollTo(0,0)·재렌더에 끊기므로 즉시 스크롤 후
   // 실제로 상단 ~90px 에 놓일 때까지 재시도한다(최대 ~2.6s).
   var landSeq = 0;
@@ -102,7 +111,7 @@
    * 짧게 감시하면 그 늦은 goMain 에 v-cat 이 덮여 클릭이 무위로 끝난다.
    * v-cat 이 꺼질 때마다 goCat 을 다시 걸고, 다시 켜지면 스크롤도 다시 잡는다. */
   function r8Route(cat, mid) {
-    var t = 0, placed = false;
+    var t = 0, placed = false, stable = 0;
     (function settle() {
       t++;
       var v = document.getElementById('v-cat');
@@ -110,28 +119,31 @@
       if (pg && pg.classList.contains('active') && r8Ready()) {
         if (!v || !v.classList.contains('on')) {
           try { window.goCat(cat); } catch (e) {}
-          placed = false;
+          placed = false; stable = 0;
         } else if (!placed) {
-          placed = true;
+          placed = true; stable = 0;
           if (mid) setTimeout(function () { landMid(mid); }, 120);
+        } else {
+          stable++;
         }
       }
-      if (t < 24) setTimeout(settle, 110);
+      // 자리를 잡고 1.5초간 흔들리지 않으면 손을 뗀다. 계속 붙잡고 있으면 사용자가
+      // 직접 '목록으로' 를 눌러 빠져나가려는 것까지 되돌려 버린다.
+      if (stable < 14 && t < 60) setTimeout(settle, 110);
     })();
   }
 
   function routeUseCase(cat, sec) {
     try { if (typeof window.navigate === 'function') window.navigate('products'); } catch (e) {}
-    // ★ r8 준비 여부를 즉시 판정하면 안 된다(2026-08-02 실측).
-    // 첫 로드 직후에는 goCat/cv-tree 가 아직 없어 legacy 분기로 빠지는데,
-    // legacy 마크업은 .r8-original(display:none) 안이라 무반응으로 끝난다.
-    // r8 이 뜰 때까지 최대 ~2.5s 기다리고, 그래도 없으면(=?r8=0 비상구) legacy 로 간다.
+    // ★ legacy 로 빠질지는 '시간'이 아니라 '비상구가 켜졌는지'로 갈라야 한다(2026-08-02 실측).
+    // 393px iframe 에서 r8 준비까지 7.3초가 걸렸는데 대기 상한이 2.5초라, 이식이 멀쩡히
+    // 켜져 있는데도 legacy 로 새어 무반응으로 끝났다(legacy 마크업은 .r8-original 안에 숨어 있다).
+    if (r8Off()) { legacyRoute(cat, sec); return; }
     var w = 0;
     (function waitR8() {
       w++;
       if (r8Ready()) { r8Route(cat, sec); return; }
-      if (w < 25) { setTimeout(waitR8, 100); return; }
-      legacyRoute(cat, sec);
+      if (w < 150) setTimeout(waitR8, 100);
     })();
   }
 
