@@ -144,14 +144,18 @@
     var tabs = document.getElementById('gal-tabs');
     if (!tabs || tabs.__r9Observed) return;
     tabs.__r9Observed = true;
-    // 탭 활성 클래스가 바뀌면 라벨을 따라간다. CTA 는 형제라 되울림이 없다.
+    // ★ renderGalTabs() 는 #gal-tabs.innerHTML 을 통째로 갈아끼운다(usung-r8-gal.js).
+    //   버튼이 새로 생기므로 class 속성 변경이 일어나지 않는다 → childList 도 함께 봐야 한다.
+    //   CTA 는 #gal-tabs 의 형제라 paintCta() 가 되울림을 만들지 않는다.
     new MutationObserver(function () { paintCta(); })
-      .observe(tabs, { attributes: true, attributeFilter: ['class'], subtree: true });
+      .observe(tabs, { childList: true, attributes: true, attributeFilter: ['class'], subtree: true });
     var host = tabs.parentNode;
     if (host && !host.__r9Observed) {
       host.__r9Observed = true;
       new MutationObserver(function () {
+        // 뷰가 통째로 다시 그려지면 #gal-tabs 노드 자체가 바뀌므로 관찰도 다시 건다.
         if (!document.getElementById('usung-r9-gal-cta')) applyGallery();
+        observeGallery();
       }).observe(host, { childList: true });
     }
   }
