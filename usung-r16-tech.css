@@ -1,0 +1,72 @@
+/* usung-r16-tech.css — 국내최초 카드 축소 · 브랜드스토리 레이아웃 교정 · 통계 네모박스 제거
+ *                      (260803 6차 ①②③)
+ *
+ * ★ 명시도는 r13/r14/r15 와 같은 (1,3,1) 이다. 같은 명시도끼리는 나중에 로드되는 쪽이 이기므로
+ *   이 파일은 api/inject.js 의 CSS 목록에서 **맨 뒤**에 있어야 한다. 앞으로 옮기면 조용히 무효가 된다.
+ *
+ * ★ .bs-h · .bs-sign 처럼 background-clip:text 를 쓰는 요소는 여기서 건드리지 않는다.
+ *   background 단축을 쓰면 글자가 통째로 사라진다(§3 함정 2).
+ */
+
+/* ── ③ 통계 네모박스 제거 ────────────────────────────────────────────────
+ * r13-tech.css:133 이 이미 상자를 눕혀 놨는데 r15-tech.css:71 이 옅은 블루 판 + 파란 테두리로
+ * 되돌려 놓았다. border-radius 는 아무도 주지 않아 계산값이 0 → **직각 네모**가 된다.
+ * 배경·테두리만 지운다(패딩·간격은 r13 이 잡은 값을 그대로 쓴다). */
+html .r8x:not(#_r8_) .th-stats .wrap{
+  background-image:none;background-color:transparent;
+  border:0;border-radius:0;box-shadow:none;
+}
+
+/* ── ② 브랜드스토리 레이아웃 오류 3건 ───────────────────────────────────── */
+
+/* ②-a 오프닝 계단현상 — r15 회귀다.
+ *   r15-type.css:34 가 `.bs-open .wrap{text-align:left}` 로 글줄만 왼쪽으로 돌렸는데,
+ *   r13-tech-b.css 는 `.bs-h`·`.bs-stmt`·`.bs-lines` 를 여전히 `max-width` + `margin:… auto …`
+ *   로 **가운데 박스**에 담고 있다. 그래서 글은 왼쪽인데 박스가 저마다 다른 auto 여백
+ *   (실측 126 / 166 / 216px)을 갖게 되어 좌측 시작점이 279 · 405 · 445 · 495 로 계단이 됐다.
+ *   ★ `.bs-h` 는 클로징(.bs-close 흰 박스)에서도 쓰인다 → 반드시 `.bs-open` 으로 스코프할 것.
+ *   ★ `.bs-lines` 는 flex column 이라 `align-items:center` 가 span 을 따로 가운데로 민다
+ *     (실측 689 / 682 / 653). text-align 으로는 안 움직인다. */
+html .r8x:not(#_r8_) .bs-open .bs-h,
+html .r8x:not(#_r8_) .bs-open .bs-stmt,
+html .r8x:not(#_r8_) .bs-open .bs-lines{margin-left:0;margin-right:0}
+html .r8x:not(#_r8_) .bs-open .bs-lines{align-items:flex-start}
+html .r8x:not(#_r8_) .bs-open .bs-since{margin-left:0;margin-right:0}
+
+/* ②-b 홀수 챕터만 미디어가 넓어지던 문제.
+ *   r8.css:605 의 열 비율이 `.95fr 1.05fr` 인데 606 이 `.rev` 에서 `.bs-media{order:2}` 로
+ *   **자리만** 바꾼다. 열 폭은 그대로라 미디어가 짝수 챕터에서는 567px, 홀수에서는 513px 이
+ *   되어 스크롤할 때 사진 폭이 번갈아 흔들린다. 비율까지 같이 뒤집어 진짜 거울이 되게 한다. */
+html .r8x:not(#_r8_) .bs-ch.rev .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+
+/* ②-c 1번 챕터 미디어가 아래로 56px 삐져나오던 문제.
+ *   `.bs-media{height:480px}` 인데 `.bs-shots{grid-auto-rows:1fr}` 는 행을 **못 줄인다** —
+ *   그리드 아이템의 자동 최소 크기(min-height:auto)가 이미지 내재 높이 261px 를 바닥으로 잡아
+ *   261+14+261 = 536px 이 된다. 사진이 1장인 2·3번 챕터는 우연히 맞아떨어져 티가 안 났다.
+ *   `minmax(0,1fr)` 로 최소값을 0 으로 풀어야 480px 안에 들어온다. */
+html .r8x:not(#_r8_) .bs-shots{grid-auto-rows:minmax(0,1fr)}
+html .r8x:not(#_r8_) .bs-shots figure{min-height:0;overflow:hidden}
+
+/* ── ① 국내최초 4카드 위아래 40% 축소 ────────────────────────────────────
+ * 실측 392px → 목표 235px. 글 내용만으로 176px(뱃지21 + 12 + 제목35 + 12 + 본문50 + 여백46)이
+ * 필요하므로 여백을 먼저 줄이고(→160px) 남은 75px 를 상하 패딩에 준다.
+ * ★ 후드 사진은 absolute + `overflow:hidden` 이라 카드보다 크면 잘린다 → 230 → 184 로 같이 줄인다.
+ *   r13-tech.css:99 의 `max-width:150px` 는 r15 가 이미 `none` 으로 풀어놨다(유지). */
+html .r8x:not(#_r8_) .tf-title{margin:8px 0 8px !important}
+html .r8x:not(#_r8_) .tf-more{padding-top:14px}
+html .r8x:not(#_r8_) .tf-card{min-height:235px;padding:30px 38px}
+html .r8x:not(#_r8_) .tf-hood{height:184px;bottom:18px;right:28px !important}
+html .r8x:not(#_r8_) .tf-card:before{width:210px;height:210px;right:-30px;bottom:-40px}
+
+@media (max-width:980px){
+  html .r8x:not(#_r8_) .tf-card{min-height:214px;padding:24px 28px}
+  html .r8x:not(#_r8_) .tf-hood{height:158px;bottom:16px;right:20px !important}
+  html .r8x:not(#_r8_) .tf-card:before{width:180px;height:180px;right:-28px;bottom:-36px}
+}
+@media (max-width:520px){
+  /* ★ 이 폭에서는 카드가 이미 **내용 최소 높이**(실측 203px)다. 40% (→122px) 는 문구를
+   *   잘라내지 않고는 불가능하므로 여백만 걷어 ~185px 로 줄인다(약 9%). 사용자 확인 필요. */
+  html .r8x:not(#_r8_) .tf-card{min-height:0;padding:18px 22px}
+  html .r8x:not(#_r8_) .tf-hood{height:118px;bottom:12px;right:14px !important}
+  html .r8x:not(#_r8_) .tf-card:before{width:150px;height:150px;right:-26px;bottom:-34px}
+}
