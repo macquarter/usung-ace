@@ -56,7 +56,11 @@ html .r8x:not(#_r8_) .tf-title{
   font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.28;
   color:#1d1d1f;margin:16px 0 8px;
 }
-html .r8x:not(#_r8_) .tf-desc{font-size:14px;line-height:1.5;color:#6e6e73}
+/* r11 은 제목만 min-height 로 고정했는데, 이 리디자인에서 본문이 14px 로 줄면서
+ * 「양열대엽 스프링」 카드만 3줄로 흘러 「자세히 보기」 기준선이 21px 어긋났다
+ * (실측 344/365/343/344). 카드는 min-height:352px 고정이라 3줄분을 미리 잡아도
+ * 카드가 커지지 않는다. 3줄 = line-height 1.5 × 3 = 4.5em. */
+html .r8x:not(#_r8_) .tf-desc{font-size:14px;line-height:1.5;color:#6e6e73;min-height:4.5em}
 html .r8x:not(#_r8_) .tf-more{margin-top:16px;font-size:14px;font-weight:500;color:#2563EB}
 html .r8x:not(#_r8_) .tf-hood{filter:drop-shadow(0 10px 20px rgba(0,0,0,.16))}
 
@@ -197,6 +201,8 @@ html .r8x:not(#_r8_) .bs-sign-s{font-size:12px;letter-spacing:.18em;font-weight:
   html .r8x:not(#_r8_) .th-sub{font-size:16px}
   html .r8x:not(#_r8_) .th-firsts{margin-top:0;padding:52px 0 60px}
   html .r8x:not(#_r8_) .tf-card{min-height:0;padding:26px 22px}
+  /* 카드가 1열로 쌓여 기준선을 맞출 상대가 없다. 3줄분 예약을 풀어 여백을 없앤다. */
+  html .r8x:not(#_r8_) .tf-desc{min-height:0}
   html .r8x:not(#_r8_) .bs-open{padding:64px 0 60px}
   html .r8x:not(#_r8_) .bs-h{font-size:30px}
   html .r8x:not(#_r8_) .bs-ch{padding:56px 0}
