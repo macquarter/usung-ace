@@ -1,0 +1,96 @@
+/* usung-r14-tech.css — 기술력 페이지 라이트 톤 전환 + 섹션 리듬 정리 (260803 4차 ①②)
+ *
+ * r13 이 애플 스타일을 입히면서 히어로·브랜드스토리 4개 블록을 검은색(#000)으로 뒀는데,
+ * 사이트 나머지가 theme-white 흰 바탕이라 그 구간만 통째로 떠 보였다. 검정을 걷어내고
+ * 흰색 ↔ #f5f5f7 두 단계로만 교대시킨다. 강조색은 #2563EB(usung-blue-standard) 하나.
+ *
+ * ★ 명시도 — usung-r8.css 는 usung-r8-mount.js 가 <head> 에 append 하므로 inject.js 의
+ *   정적 <link> 를 항상 이긴다. `html .r8x:not(#_r8_)` (1,3,1) 로 올리고, r13 이
+ *   !important 를 쓴 선언은 여기서도 !important 로 맞받는다(같은 명시도면 나중 것이 이긴다).
+ *
+ * ★ 그라디언트 텍스트(.th-h1 .hl · .bs-h .hl · .bs-sign)에 `background:` 단축을 쓰지 말 것.
+ *   background-clip 까지 초기화되어 글자가 통째로 사라진다 → -webkit-text-fill-color 만 바꾼다.
+ */
+
+/* ── ① 검은 블록 4곳 → 라이트 ─────────────────────────────────── */
+html .r8x:not(#_r8_) .th-hero{
+  background-color:#fff;
+  background-image:linear-gradient(180deg,#f5f5f7 0%,#fff 100%);
+  color:#1d1d1f;
+}
+html .r8x:not(#_r8_) .bs-open{background-color:#f5f5f7;color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-ch.dark{background-color:#f5f5f7;color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-close{background-color:#f5f5f7;color:#1d1d1f}
+
+/* 히어로 문구 */
+html .r8x:not(#_r8_) .th-kick{color:#6e6e73}
+html .r8x:not(#_r8_) .th-h1{color:#1d1d1f}
+html .r8x:not(#_r8_) .th-h1 .hl{-webkit-text-fill-color:#2563EB;color:#2563EB !important}
+html .r8x:not(#_r8_) .th-sub{color:#6e6e73}
+
+/* 브랜드스토리 서두 */
+html .r8x:not(#_r8_) .bs-since{border-color:rgba(0,0,0,.14);color:#6e6e73}
+html .r8x:not(#_r8_) .bs-h{color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-h .hl{-webkit-text-fill-color:#2563EB}
+html .r8x:not(#_r8_) .bs-lines span{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-lines .q{color:#1d1d1f !important}
+html .r8x:not(#_r8_) .bs-stmt{color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-ph .f1,
+html .r8x:not(#_r8_) .bs-ph .f2{background:#e8e8ed}
+
+/* 챕터 — dark 변형을 밝은 바탕 기준으로 뒤집는다 */
+html .r8x:not(#_r8_) .bs-ch.dark .bs-no{color:#86868b !important}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-en{color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-kr{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-lead{color:#1d1d1f !important}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-body p{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-q{color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-res{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-res b{color:#1d1d1f !important}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-tail{color:#2563EB}
+html .r8x:not(#_r8_) .bs-vid,
+html .r8x:not(#_r8_) .bs-shots figure{background:#e8e8ed}
+html .r8x:not(#_r8_) .bs-vcap i{background:#2563EB}
+
+/* 맺음말 */
+html .r8x:not(#_r8_) .bs-cl-lines span{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-cl-body{color:#6e6e73}
+html .r8x:not(#_r8_) .bs-cl-body b{color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-sign{-webkit-text-fill-color:#1d1d1f;color:#1d1d1f}
+html .r8x:not(#_r8_) .bs-sign-s{color:#6e6e73}
+
+/* ── ② 섹션 리듬 — 내용 대비 여백이 과했다 ────────────────────── */
+/* 실측(1456px): 히어로가 내용 301px 에 상하 여백 290px, cert 는 내용 461px 에 130px.
+ * 애플 리듬을 유지하되 한 단계씩 줄여 화면당 정보 밀도를 올린다. */
+html .r8x:not(#_r8_) .th-hero{padding:110px 0 104px !important}
+html .r8x:not(#_r8_) .th-firsts{padding:110px 0}
+html .r8x:not(#_r8_) .bs-open{padding:110px 0 104px}
+html .r8x:not(#_r8_) .bs-ch{padding:110px 0}
+html .r8x:not(#_r8_) .bs-bridge{padding:96px 0}
+html .r8x:not(#_r8_) .th-cert{padding:110px 0 0 !important}
+html .r8x:not(#_r8_) .th-stats{margin:88px 0 0 !important}
+html .r8x:not(#_r8_) .th-sites{padding:100px 0 110px !important}
+html .r8x:not(#_r8_) .bs-close{padding:110px 0}
+
+@media (max-width:980px){
+  html .r8x:not(#_r8_) .th-hero{padding:76px 0 72px !important}
+  html .r8x:not(#_r8_) .th-firsts{padding:84px 0}
+  html .r8x:not(#_r8_) .bs-open{padding:84px 0 80px}
+  html .r8x:not(#_r8_) .bs-ch{padding:84px 0}
+  html .r8x:not(#_r8_) .bs-bridge{padding:72px 0}
+  html .r8x:not(#_r8_) .th-cert{padding:84px 0 0 !important}
+  html .r8x:not(#_r8_) .th-stats{margin:64px 0 0 !important}
+  html .r8x:not(#_r8_) .th-sites{padding:76px 0 84px !important}
+  html .r8x:not(#_r8_) .bs-close{padding:84px 0}
+}
+@media (max-width:520px){
+  html .r8x:not(#_r8_) .th-hero{padding:56px 0 52px !important}
+  html .r8x:not(#_r8_) .th-firsts{padding:56px 0 60px}
+  html .r8x:not(#_r8_) .bs-open{padding:56px 0 52px}
+  html .r8x:not(#_r8_) .bs-ch{padding:56px 0}
+  html .r8x:not(#_r8_) .bs-bridge{padding:52px 0}
+  html .r8x:not(#_r8_) .th-cert{padding:56px 0 0 !important}
+  html .r8x:not(#_r8_) .th-stats{margin:48px 0 0 !important}
+  html .r8x:not(#_r8_) .th-sites{padding:56px 0 60px !important}
+  html .r8x:not(#_r8_) .bs-close{padding:56px 0}
+}
