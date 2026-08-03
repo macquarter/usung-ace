@@ -52,21 +52,26 @@
       '.r9tel-main{font-size:20px;padding:16px 26px;width:100%;justify-content:center;}',
       '.r9tel-rows{gap:10px 20px;}',
       '}',
-      /* E4 : 갤러리 스타일 단위 전화 CTA */
-      '.r9gcta{display:flex;justify-content:center;margin:22px 0 4px;}',
-      '.r9gcta a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;' +
-        'padding:14px 28px;border-radius:999px;font-weight:800;font-size:15px;color:#fff;' +
+      /* E4 : 갤러리 스타일 단위 전화 CTA — 260803) 카테고리 탭 행 안쪽 우측으로 이동.
+         .gal-tabs 는 flex 라 마지막 자식으로 넣으면 마지막 탭 바로 오른쪽에 붙는다.
+         탭 높이(padding 9/18 · 14.5px)에 맞춰 크기를 낮춘다. */
+      '.r9gcta{display:inline-flex;margin:0;}',
+      '.r9gcta a{display:inline-flex;align-items:center;gap:9px;text-decoration:none;' +
+        'padding:9px 18px;border-radius:999px;font-weight:800;font-size:14px;color:#fff;' +
+        'line-height:1.25;' +
         'background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);' +
-        'box-shadow:0 10px 26px rgba(37,99,235,.28);transition:transform .18s ease;}',
+        'box-shadow:0 6px 16px rgba(37,99,235,.26);transition:transform .18s ease;}',
       '.r9gcta a:hover{transform:translateY(-2px);}',
       /* 라벨·전화번호는 각각 통째로 유지한다. 393px 에서 "문의하/기", "1588-/9123" 처럼
-         낱글자가 끊기는 것을 막는다(실측). 좁은 화면에서는 두 조각을 세로로 쌓는다. */
+         낱글자가 끊기는 것을 막는다(실측). */
       '.r9g-l,.r9g-t{white-space:nowrap;}',
-      '.r9g-l:after{content:"·";margin-left:10px;opacity:.55;}',
+      '.r9g-l:after{content:"·";margin-left:9px;opacity:.55;}',
+      /* 좁은 화면에서는 sticky 탭 줄이 두꺼워지지 않도록 번호를 감춘다.
+         href="tel:" 은 그대로라 탭 한 번으로 전화가 걸린다. */
       '@media (max-width:600px){',
-      '.r9gcta a{font-size:14px;padding:12px 20px;flex-direction:column;gap:3px;}',
+      '.r9gcta a{font-size:12.5px;padding:8px 13px;gap:0;}',
       '.r9g-l:after{display:none;}',
-      '.r9g-t{font-size:13px;opacity:.92;}',
+      '.r9g-t{display:none;}',
       '}'
     ].join('');
     var st = document.createElement('style');
@@ -129,22 +134,32 @@
     return '‘' + s + '’ 스타일로 문의하기';
   }
 
+  /* ★ CTA 가 #gal-tabs 안으로 들어가면서 관찰자(subtree:true)와 되울림이 생긴다.
+   *   라벨이 실제로 바뀔 때만 innerHTML 을 건드려 2회차에서 루프를 끊는다. */
   function paintCta() {
     var a = document.querySelector('#usung-r9-gal-cta a');
-    if (a) a.innerHTML = '<span class="r9g-l">' + ctaLabel() + '</span>' +
+    if (!a) return;
+    var k = ctaLabel();
+    if (a.__r9Label === k) return;
+    a.__r9Label = k;
+    a.innerHTML = '<span class="r9g-l">' + k + '</span>' +
       '<span class="r9g-t">대표전화 ' + TEL + ' &rarr;</span>';
   }
 
   function applyGallery() {
     var tabs = document.getElementById('gal-tabs');
     if (!tabs || !tabs.parentNode) return false;
-    if (!document.getElementById('usung-r9-gal-cta')) {
-      var w = document.createElement('div');
+    // 260803) 탭 행 바깥의 가운데 블록 → 탭 행 안쪽 마지막 자식(= 마지막 탭 우측).
+    //   renderGalTabs() 가 innerHTML 을 통째로 갈아끼우면 같이 지워지므로,
+    //   관찰자가 매번 되붙인다(observeGallery).
+    var w = document.getElementById('usung-r9-gal-cta');
+    if (!w) {
+      w = document.createElement('div');
       w.id = 'usung-r9-gal-cta';
       w.className = 'r9gcta';
       w.innerHTML = '<a href="' + TEL_HREF + '"></a>';
-      tabs.parentNode.insertBefore(w, tabs.nextSibling);
     }
+    if (w.parentNode !== tabs) tabs.appendChild(w);
     paintCta();
     return true;
   }
@@ -155,8 +170,8 @@
     tabs.__r9Observed = true;
     // ★ renderGalTabs() 는 #gal-tabs.innerHTML 을 통째로 갈아끼운다(usung-r8-gal.js).
     //   버튼이 새로 생기므로 class 속성 변경이 일어나지 않는다 → childList 도 함께 봐야 한다.
-    //   CTA 는 #gal-tabs 의 형제라 paintCta() 가 되울림을 만들지 않는다.
-    new MutationObserver(function () { paintCta(); })
+    //   CTA 도 함께 지워지므로 되붙인다. paintCta() 의 라벨 비교가 되울림을 끊는다.
+    new MutationObserver(function () { applyGallery(); })
       .observe(tabs, { childList: true, attributes: true, attributeFilter: ['class'], subtree: true });
     var host = tabs.parentNode;
     if (host && !host.__r9Observed) {

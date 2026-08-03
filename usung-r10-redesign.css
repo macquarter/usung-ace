@@ -26,9 +26,10 @@ html .r8x:not(#_r8_) .gal-tabs{
 }
 html .r8x:not(#_r8_) .gal-grid{padding-top:22px !important;}
 
-/* The r9 phone CTA sits between the tabs and the grid; it was centred while the
- * tabs floated centred too. Both share the hero's left edge now. */
-#page-gallery .r9gcta{justify-content:flex-start !important;margin:18px 0 0 !important;}
+/* 260803) The r9 phone CTA moved inside the tab row as its last flex item, so the
+ * 18px top margin that used to separate it from the tabs now drops it below their
+ * baseline. Sizing lives with the CTA itself in usung-r9-excel.js. */
+#page-gallery .r9gcta{justify-content:flex-start !important;margin:0 !important;}
 
 /* Captions carry three real lines now (see usung-r10.js): style · site · spec.
  * .gt-spec was already styled at usung-r8.css:784 but the generator never emitted it. */
