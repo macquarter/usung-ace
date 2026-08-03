@@ -54,4 +54,9 @@ window.__R16D=(window.__R16D||[]).concat([
 ["‘모던’ 스타일로 문의하기", "Inquire About ‘Modern’ Style", "‘モダン’スタイルでお問い合わせ", "按‘现代’风格咨询", "Liên hệ theo phong cách ‘Hiện đại’"],
 ["‘프리미엄’ 스타일로 문의하기", "Inquire About ‘Premium’ Style", "‘プレミアム’スタイルでお問い合わせ", "按‘高端’风格咨询", "Liên hệ theo phong cách ‘Cao cấp’"],
 ["‘레트로’ 스타일로 문의하기", "Inquire About ‘Retro’ Style", "‘レトロ’スタイルでお問い合わせ", "按‘复古’风格咨询", "Liên hệ theo phong cách ‘Retro’"],
+["모던 · 진원소우대전관평점", "Modern · Jinwonsou Daejeon Gwanpyeong Branch", "モダン · チンウォンソウ テジョン・クァンピョン店", "现代 · Jinwonsou 大田官坪店", "Hiện đại · Jinwonsou chi nhánh Daejeon Gwanpyeong"],
+["프리미엄 · 위드휴먼", "Premium · With Human", "プレミアム · ウィズヒューマン", "高端 · With Human", "Cao cấp · With Human"],
+["프리미엄 · 홍고박", "Premium · Honggobak", "プレミアム · ホンゴバク", "高端 · Honggobak", "Cao cấp · Honggobak"],
+["레트로 · 도포식당", "Retro · Dopo Restaurant", "レトロ · トポ食堂", "复古 · Dopo 餐厅", "Retro · Nhà hàng Dopo"],
+["레트로 · 운정삼겹매장", "Retro · Unjeong Samgyeop Store", "レトロ · ウンジョン サムギョプ店", "复古 · 云井三层肉店", "Retro · Cửa hàng thịt ba chỉ Unjeong"],
 ]);
