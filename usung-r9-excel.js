@@ -124,6 +124,11 @@
   function curStyle() {
     var on = document.querySelector('#gal-tabs .gal-tab.on');
     if (!on) return '';
+    /* r16: the label is swapped by the i18n engine, so reading textContent
+     * yields a translated name and produces a mixed-language CTA. The onclick
+     * argument keeps the original Korean category value — read that instead. */
+    var m = (on.getAttribute('onclick') || '').match(/filterGallery\("([^"]+)"\)/);
+    if (m) return m[1];
     // 버튼 라벨은 "클래식 26" 처럼 개수가 붙는다 → 숫자를 걷어낸다.
     return (on.textContent || '').replace(/[\d\s]+$/, '').trim();
   }
