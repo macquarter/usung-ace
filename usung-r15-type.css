@@ -13,8 +13,12 @@ html .r8x:not(#_r8_) .th-hero{text-align:left}
 html .r8x:not(#_r8_) .th-kick{font-weight:800}
 html .r8x:not(#_r8_) .th-h1{font-weight:900;letter-spacing:-.035em}
 html .r8x:not(#_r8_) .th-sub{margin-left:0;margin-right:0}
-/* r14 히어로 칩·유도버튼도 같이 왼쪽으로 */
-html .r8x:not(#_r8_) .r14-chips{justify-content:flex-start}
+/* r14 히어로 칩·유도버튼도 같이 왼쪽으로.
+ * ★ usung-r14-hero.css:48 이 `margin:38px auto 0` + `max-width:760px` 라
+ *   justify-content 만 바꾸면 랩 자체가 auto 여백(실측 196px)으로 가운데 남는다. */
+html .r8x:not(#_r8_) .r14-chips{
+  justify-content:flex-start;margin-left:0;margin-right:0;
+}
 html .r8x:not(#_r8_) .r14-cue{margin-left:0;margin-right:0}
 
 html .r8x:not(#_r8_) .th-cert{text-align:left !important}
