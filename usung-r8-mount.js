@@ -241,8 +241,19 @@
     if (typeof window.r8Build !== 'function') return;   // 슬라이스 아직 미로드
     if (!window.UP_DATA) return;                        // 카탈로그 데이터 대기
     if (!mount()) return;
+    /* booted 를 r8Build() 성공 뒤에 세운다. 먼저 세우면 build 안의 예외가 catch 에
+       삼켜진 채 100ms 재시도 타이머가 영구히 멈춰 #bands 가 빈 채로 남는다.
+       실제로 라이브에서 renderCatNav(prod-b) 가 아직 정의되기 전에 타이머가 발화해
+       ReferenceError 로 제품소개가 통째로 비는 일이 있었다(재현율 약 1/5).
+       MODELS 는 r8Build() 가 push 로 누적하는 배열이라 재시도 전에 반드시 비운다.
+       let 선언이라 usung-r8-data.js 미실행 시 typeof 도 TDZ 로 던지므로 try 로 감싼다. */
+    try { window.r8Build(); }
+    catch (e) {
+      console.error('[r8] build', e);
+      try { if (typeof MODELS !== 'undefined') MODELS.length = 0; } catch (e2) { }
+      return;
+    }
     booted = true;
-    try { window.r8Build(); } catch (e) { console.error('[r8] build', e); }
     syncFromPage();
   }
 
