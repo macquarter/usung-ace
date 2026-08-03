@@ -13,6 +13,11 @@
 /* 페이지 자체 아래여백은 페이지 스코프라 안전하게 0. 푸터 margin 80 은 전 페이지
  * 공용이라 건드리지 않고, 대신 ③ 의 블루 띠로 마지막 섹션을 채워 빈 띠 인상을 없앤다. */
 html #page-tech{padding-bottom:0 !important}
+/* 남은 80px 는 `footer{mt-20}` 이다. 푸터는 body 직속(형제 = main)이라 페이지
+ * 스코프 셀렉터로 좁힐 수 없어서 :has() 로 기술력이 켜져 있을 때만 없앤다.
+ * 전 페이지 공용 마진을 건드리면 나머지 10개 페이지가 같이 붙는다.
+ * (Chrome 105+ / Safari 15.4+ / Firefox 121+. 미지원 브라우저는 지금과 동일.) */
+html body:has(#page-tech.active) footer{margin-top:0}
 
 /* ── ②③ 클로징 — 블루 그라디언트 띠 + 흰 박스 ─────────────────────────── */
 html .r8x:not(#_r8_) .bs-close{
