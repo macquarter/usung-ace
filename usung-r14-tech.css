@@ -50,6 +50,11 @@ html .r8x:not(#_r8_) .bs-ch.dark .bs-res b{color:#1d1d1f !important}
 html .r8x:not(#_r8_) .bs-ch.dark .bs-tail{color:#2563EB}
 html .r8x:not(#_r8_) .bs-vid,
 html .r8x:not(#_r8_) .bs-shots figure{background:#e8e8ed}
+/* 영상 캡션 알약만 어두운 남색으로 남아 있었다(usung-r8.css:639, !important 없음).
+ * 히어로 칩(.r14-chip)과 같은 흰 유리로 맞춘다. */
+html .r8x:not(#_r8_) .bs-vcap{
+  background:rgba(255,255,255,.86);border:1px solid rgba(0,0,0,.09);color:#1d1d1f;
+}
 html .r8x:not(#_r8_) .bs-vcap i{background:#2563EB}
 
 /* 맺음말 */
