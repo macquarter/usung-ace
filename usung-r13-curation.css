@@ -1,0 +1,94 @@
+/* usung-r13-curation.css — 챗봇 큐레이션 표시 (260803 챗봇기능 정의서)
+ *
+ * 위젯은 body 직속 #usungBot 이라 .r8x 스코프 밖이다. 전역 버튼 스타일이 새어 들어오지
+ * 않도록 전부 #usungBot 접두로 명시도를 잡는다.
+ * 파란색은 usung-blue-standard 기준색 #2563EB 하나만 쓴다.
+ */
+
+/* .ub-msg 의 max-width:85% · white-space:pre-wrap 되돌리기.
+ * align-self:stretch 가 핵심 — .ub-msg 는 flex column 안에서 align-self:flex-start 라
+ * max-width 만 풀어도 내용 폭으로 오그라든다(실측 259px). 카드가 눌리지 않게 늘린다. */
+#usungBot .ub-msg.r13c-wide{max-width:100%;white-space:normal;align-self:stretch}
+
+/* ── 질문 ─────────────────────────────────────────────────────────── */
+#usungBot .r13c-q{font-size:13.5px;font-weight:800;color:#0f172a;line-height:1.45}
+#usungBot .r13c-step{
+  display:inline-block;margin-right:8px;padding:2px 8px;border-radius:999px;
+  background:#eff6ff;color:#2563EB;font-size:10.5px;font-weight:800;vertical-align:1px;
+}
+
+/* ── 선택지 ───────────────────────────────────────────────────────── */
+#usungBot .r13c-opts{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+#usungBot .r13c-opts button.r13c-opt{
+  width:100%;text-align:left;padding:10px 13px;
+  background:#fff;border:1px solid #e2e8f0;border-radius:12px;
+  color:#1e293b;-webkit-text-fill-color:#1e293b;
+  font-size:12.5px;font-weight:600;font-family:inherit;line-height:1.4;
+  cursor:pointer;transition:border-color .15s,color .15s,background .15s;
+}
+/* 칩 hover 규칙(④⑤)과 같은 원칙 — 채우지 않고 테두리·글자만 물들인다 */
+#usungBot .r13c-opts button.r13c-opt:hover{
+  border-color:#2563EB;color:#1D4ED8;-webkit-text-fill-color:#1D4ED8;background:#fff;
+}
+#usungBot .r13c-opts button.r13c-opt.vague{color:#64748b;-webkit-text-fill-color:#64748b;font-weight:500}
+/* 지난 질문의 선택지 — 흔적은 남기되 다시 눌리지 않게 */
+#usungBot .r13c-opts.done{pointer-events:none;opacity:.45}
+#usungBot .r13c-opts button.r13c-opt.go{
+  border-color:#2563EB;color:#1D4ED8;-webkit-text-fill-color:#1D4ED8;background:#f5f9ff;
+}
+
+/* ── 결과 ─────────────────────────────────────────────────────────── */
+#usungBot .r13c-res{margin-top:2px}
+#usungBot .r13c-rh{
+  font-size:11px;font-weight:800;letter-spacing:.02em;color:#2563EB;
+  margin:0 0 8px;
+}
+#usungBot .r13c-rh.alt{margin-top:14px;color:#64748b}
+
+#usungBot .r13c-card{
+  display:flex;align-items:center;gap:11px;
+  padding:10px;margin-bottom:7px;
+  background:#fff;border:1px solid #e2e8f0;border-radius:14px;cursor:pointer;
+  transition:border-color .15s;
+}
+#usungBot .r13c-card:hover{border-color:#2563EB}
+#usungBot .r13c-card.win{border-color:#2563EB;background:#f5f9ff}
+#usungBot .r13c-card img{
+  width:52px;height:52px;flex:0 0 52px;object-fit:contain;
+  background:#f8fafc;border-radius:9px;
+}
+#usungBot .r13c-ct{display:flex;flex-direction:column;gap:1px;min-width:0}
+#usungBot .r13c-ct b{
+  font-size:12.5px;font-weight:800;color:#0f172a;line-height:1.3;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#usungBot .r13c-ct span{font-size:10.5px;color:#64748b;line-height:1.35}
+#usungBot .r13c-var{color:#2563EB !important;font-weight:700}
+
+/* ── 추천 이유 · 색상 ─────────────────────────────────────────────── */
+#usungBot .r13c-why,
+#usungBot .r13c-cols{margin-top:10px;padding:10px 12px;background:#f8fafc;border-radius:12px}
+#usungBot .r13c-why b,
+#usungBot .r13c-cols b{display:block;font-size:10.5px;font-weight:800;color:#2563EB;margin-bottom:5px}
+/* 전역 리셋이 list-style:none 을 걸어 둬서 글머리표가 사라진다(실측) */
+#usungBot .r13c-why ul{margin:0;padding-left:16px;list-style:disc outside}
+#usungBot .r13c-why li{font-size:11.5px;color:#334155;line-height:1.6}
+#usungBot .r13c-cols div{display:flex;flex-wrap:wrap;gap:5px}
+#usungBot .r13c-cols span{
+  padding:4px 10px;background:#fff;border:1px solid #cbd5e1;border-radius:999px;
+  font-size:11px;font-weight:700;color:#1e293b;
+}
+#usungBot .r13c-note{margin-top:10px;font-size:10.5px;color:#94a3b8;line-height:1.5}
+
+/* ── 진입 알약 (빠른답변 줄) ──────────────────────────────────────── */
+#usungBot .ub-qk button.r13c-pin{
+  background:#2563EB;border-color:#2563EB;
+  color:#fff !important;-webkit-text-fill-color:#fff;font-weight:800;
+}
+#usungBot .ub-qk button.r13c-pin:hover{background:#1D4ED8;border-color:#1D4ED8}
+
+@media (max-width:480px){
+  #usungBot .r13c-opts button.r13c-opt{font-size:12px;padding:9px 12px}
+  #usungBot .r13c-card img{width:46px;height:46px;flex:0 0 46px}
+  #usungBot .r13c-ct b{font-size:12px}
+}

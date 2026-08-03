@@ -206,6 +206,11 @@
     }, true);
   }
 
+  // 챗봇 큐레이션(usung-r13-curation.js)이 추천 결과에서 같은 경로로 착지해야 한다.
+  // 이 라우터에는 r8Off 판정 · 최대 15초 준비 대기 · 중분류 착지 재시도가 들어 있어
+  // 복제하면 그 실측 지식이 갈라진다. 함수 하나만 밖으로 낸다.
+  window.__usungRoute = routeUseCase;
+
   function run() { try { injectCss(); guardImages(); bindDelegate(); } catch (e) {} }
 
   run();
