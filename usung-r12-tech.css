@@ -16,6 +16,14 @@
  * ★ usung-r11.css 이후에 로드되어야 한다(th-cert 정렬·여백을 다시 잡으므로).
  */
 
+/* ── 페이지 바탕 ────────────────────────────────────────────────────
+ * usung-r8.css:545 의 #v-tech{background:var(--bg)} 가 청회색 #f4f6fa 다.
+ * .th-firsts · .bs · .th-stats 세 섹션만 자기 배경이 없어 그 청회색이 비쳐
+ * 흰색인 인증·설치현장과 톤이 어긋났다(라이브 실측). 바탕을 흰색으로 눕힌다. */
+html .r8x:not(#_r8_) #v-tech{background-color:#fff}
+html .r8x:not(#_r8_) .th-firsts,
+html .r8x:not(#_r8_) .th-stats{background-color:#fff}
+
 /* ── 히어로 ─────────────────────────────────────────────────────────── */
 /* usung-r10-redesign.css:60 이 .th-hero padding 을 !important 로 못박았는데
  * 미디어쿼리가 없어 모바일에서도 92/146 이 그대로 걸린다. 여기서 되잡는다. */
