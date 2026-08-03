@@ -58,10 +58,22 @@
       return { m: m, s: s + Math.min(nv, 6) * 0.05, colors: hit };
     }).sort(function (a, b) { return b.s - a.s; });
   }
-  // 인기 = 색상·마감 선택지가 많은 순. 판매 데이터가 없어 쓰는 대용 지표다(잔여업무 A-18).
+  // 인기 = 규격 선택지가 많은 순. 판매 데이터가 없어 쓰는 대용 지표다(잔여업무 A-18).
+  // 그냥 상위 n개를 자르면 안 된다 — 실측 상위 8종이 전부 파이프인데다 modelName 이
+  // 마감 이름이라 '스텐도장 · 스텐도장 · 스파이얼 · 스파이얼 …' 로 같은 이름이 겹쳐 보인다.
+  // 대분류 1종씩 먼저 채우고(5개 = POP_N), 모자라면 이름 중복만 피해 마저 채운다.
   function popular(n) {
-    return models().slice().sort(function (a, b) { return b.items.length - a.items.length; })
-      .slice(0, n).map(function (m) { return { m: m, s: 0, colors: [] }; });
+    var by = models().slice().sort(function (a, b) { return b.items.length - a.items.length; });
+    var out = [], cats = {}, seen = {};
+    function take(m, onePerCat) {
+      var nm = mName(m);
+      if (seen[nm] || (onePerCat && cats[m.cat])) return;
+      seen[nm] = 1; cats[m.cat] = 1;
+      out.push({ m: m, s: 0, colors: [] });
+    }
+    by.forEach(function (m) { if (out.length < n) take(m, true); });
+    by.forEach(function (m) { if (out.length < n) take(m, false); });
+    return out;
   }
   // 대안은 서로 다른 시리즈에서 뽑는다. 카테고리만 비교하면 갤럭시 두 개가 나란히 서서
   // '대안'이라는 말이 무색해진다(실측: 갤럭시A 양옆태엽 · 갤럭시A 내부태엽).
