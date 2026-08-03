@@ -1,0 +1,62 @@
+/* usung-r15-type.css — 제품소개·기술력 표제를 회사소개 톤으로 · 갤러리 CTA 우측 (260803 5차 ⑤⑥)
+ *
+ * ★ 기준 실측(라이브 #page-about) — h1 96px/weight 900/align start,
+ *   h2 48px/weight 900/align start. 기술력은 600·center, 제품소개는 800·일부 center 였다.
+ *   → 양쪽 모두 weight 900 + 좌측정렬로 맞춘다.
+ *
+ * ★ 이 파일은 r12 ⑤ 의 결정("독립 섹션 표제는 가운데")을 사용자 요청으로 되돌린 것이다.
+ *   되돌릴 일이 생기면 이 파일의 text-align 선언만 지우면 된다.
+ */
+
+/* ── ⑤-A 기술력 ─────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .th-hero{text-align:left}
+html .r8x:not(#_r8_) .th-kick{font-weight:800}
+html .r8x:not(#_r8_) .th-h1{font-weight:900;letter-spacing:-.035em}
+html .r8x:not(#_r8_) .th-sub{margin-left:0;margin-right:0}
+/* r14 히어로 칩·유도버튼도 같이 왼쪽으로 */
+html .r8x:not(#_r8_) .r14-chips{justify-content:flex-start}
+html .r8x:not(#_r8_) .r14-cue{margin-left:0;margin-right:0}
+
+html .r8x:not(#_r8_) .th-cert{text-align:left !important}
+html .r8x:not(#_r8_) .th-sites{text-align:left}
+html .r8x:not(#_r8_) .th-cap-k{font-weight:800}
+html .r8x:not(#_r8_) .th-cap-h{font-weight:900;letter-spacing:-.028em}
+html .r8x:not(#_r8_) .th-cap-h,
+html .r8x:not(#_r8_) .th-cap-p{margin-left:0;margin-right:0}
+html .r8x:not(#_r8_) .st-n{font-weight:800}
+html .r8x:not(#_r8_) .tf-title{font-weight:800}
+
+/* 브랜드스토리 — 2단 편집형이라 원래 좌측이지만 r13 이 .bs-open 만 가운데로 뒀다 */
+html .r8x:not(#_r8_) .bs-open .wrap{text-align:left}
+html .r8x:not(#_r8_) .bs-h{font-weight:900;letter-spacing:-.035em}
+html .r8x:not(#_r8_) .bs-en{font-weight:900;letter-spacing:-.035em}
+html .r8x:not(#_r8_) .bs-lead{font-weight:800}
+html .r8x:not(#_r8_) .bs-bridge{text-align:left}
+html .r8x:not(#_r8_) .bs-bridge p{margin-left:0;margin-right:0;font-weight:800}
+html .r8x:not(#_r8_) .bs-sign{font-weight:900;letter-spacing:-.035em}
+
+/* ── ⑤-B 제품소개 ───────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .hero-h1{font-weight:900;letter-spacing:-.03em}
+/* r8.css:121 .bn-head{text-align:center} · 505 .filterrow .wrap{justify-content:center;text-align:center} */
+html .r8x:not(#_r8_) .bn-head{text-align:left}
+html .r8x:not(#_r8_) .bn-head h2{font-weight:900;letter-spacing:-.028em}
+html .r8x:not(#_r8_) .filterrow .wrap{justify-content:flex-start;text-align:left}
+html .r8x:not(#_r8_) .filterrow h2{font-weight:900;letter-spacing:-.028em}
+html .r8x:not(#_r8_) .ps-h,
+html .r8x:not(#_r8_) .cn-h,
+html .r8x:not(#_r8_) .cat-h,
+html .r8x:not(#_r8_) .band-h{font-weight:900;letter-spacing:-.026em}
+
+/* ── ⑥ 시공갤러리 문의 CTA 를 오른쪽으로 ──────────────────────────────
+ * usung-r10-redesign.css:32 가 `#page-gallery .r9gcta{margin:0 !important}` (1,1,0) 로
+ * 잡고 있다. 같은 !important 는 명시도로만 갈리므로 앞에 html 을 붙여 (1,1,1) 로 올린다.
+ * #gal-tabs 는 flex(justify-content:flex-start)라 margin-left:auto 로 오른쪽 끝에 붙는다. */
+html #page-gallery .r9gcta{margin-left:auto !important}
+
+@media (max-width:980px){
+  html .r8x:not(#_r8_) .th-h1{letter-spacing:-.03em}
+}
+@media (max-width:640px){
+  /* 좁은 화면에서는 탭이 줄바꿈되므로 CTA 를 폭 전체로 눕힌다 */
+  html #page-gallery .r9gcta{margin-left:0 !important;width:100%}
+}
