@@ -1,0 +1,210 @@
+/* usung-r12-tech.css — 260803 화면검토 2차 ⑤
+ * 기술력 페이지(#v-tech) 를 애플 톤으로. 콘텐츠·마크업·문구는 그대로 두고
+ * 색·여백·타이포·모서리만 바꾼다.
+ *
+ * 톤 규칙
+ *   배경   #fff 와 #f5f5f7 을 번갈아, 강조 구간만 #000
+ *   글자   본문 #1d1d1f · 보조 #6e6e73 · 다크 위 #f5f5f7 / #a1a1a6
+ *   타이포 굵기 800 → 600, 자간 -.02 ~ -.035em, 표제는 크게
+ *   면     그림자 제거 · 테두리 최소화 · 모서리 18~28px
+ *   여백   섹션 100 / 88 / 64px 리듬
+ *   강조색 브랜드 블루 유지(#2563EB · 다크 위 #60A5FA) — 표준 §2-5
+ *
+ * ★ background-clip:text 를 쓰는 3곳(.th-h1 .hl / .bs-h .hl / .bs-sign)의
+ *   배경은 건드리지 않는다. 단축 속성은 물론 background-image 교체도 하지 않아
+ *   "글자가 사라지는" 회귀 경로를 아예 만들지 않는다.
+ * ★ usung-r11.css 이후에 로드되어야 한다(th-cert 정렬·여백을 다시 잡으므로).
+ */
+
+/* ── 히어로 ─────────────────────────────────────────────────────────── */
+/* usung-r10-redesign.css:60 이 .th-hero padding 을 !important 로 못박았는데
+ * 미디어쿼리가 없어 모바일에서도 92/146 이 그대로 걸린다. 여기서 되잡는다. */
+html .r8x:not(#_r8_) .th-hero{background:#000;padding:112px 0 128px !important;text-align:center}
+html .r8x:not(#_r8_) .th-bg{filter:brightness(.42) saturate(.9);animation-duration:44s}
+html .r8x:not(#_r8_) .th-kick{
+  font-size:15px;letter-spacing:0;font-weight:600;color:#a1a1a6;text-transform:none;
+}
+html .r8x:not(#_r8_) .th-h1{font-size:64px;font-weight:600;letter-spacing:-.035em;line-height:1.07;margin:14px 0 0}
+html .r8x:not(#_r8_) .th-sub{
+  margin:22px auto 0;max-width:600px;font-size:19px;line-height:1.55;color:#a1a1a6;font-weight:400;
+}
+
+/* ── 국내최초 4카드 ─────────────────────────────────────────────────── */
+/* 애플은 히어로 위로 카드를 겹치지 않는다 → -118px 오버랩 해제 */
+html .r8x:not(#_r8_) .th-firsts{margin-top:0;padding:96px 0 112px}
+html .r8x:not(#_r8_) .th-first{gap:20px}
+html .r8x:not(#_r8_) .tf-card{
+  min-height:352px;background:#f5f5f7;border:0;border-radius:24px;
+  box-shadow:none;padding:32px 26px;
+  transition:transform .35s cubic-bezier(.28,.11,.32,1),background-color .35s;
+}
+html .r8x:not(#_r8_) .tf-card:hover{transform:translateY(-6px);background:#ededf0;box-shadow:none}
+/* 뱃지는 r10-tone 의 브랜드 블루 그라디언트를 그대로 둔다(카드 안 유일한 강조색).
+ * 파란 글로우 그림자만 뺀다 — r10 이 !important 라 여기서도 붙여야 이긴다. */
+html .r8x:not(#_r8_) .tf-badge{
+  font-size:12px;font-weight:600;letter-spacing:0;padding:5px 12px;box-shadow:none !important;
+}
+html .r8x:not(#_r8_) .tf-title{
+  font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.28;
+  color:#1d1d1f;margin:16px 0 8px;
+}
+html .r8x:not(#_r8_) .tf-desc{font-size:14px;line-height:1.5;color:#6e6e73}
+html .r8x:not(#_r8_) .tf-more{margin-top:16px;font-size:14px;font-weight:500;color:#2563EB}
+html .r8x:not(#_r8_) .tf-hood{filter:drop-shadow(0 10px 20px rgba(0,0,0,.16))}
+
+/* ── 브랜드 스토리 오프닝 ───────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bs-open{background-image:none;background-color:#000;padding:120px 0 112px}
+html .r8x:not(#_r8_) .bs-open:before{display:none}
+html .r8x:not(#_r8_) .bs-k{font-size:13px;letter-spacing:.04em;font-weight:600;color:#86868b}
+html .r8x:not(#_r8_) .bs-k i{background:#60A5FA}
+html .r8x:not(#_r8_) .bs-since{border-color:rgba(255,255,255,.22)}
+html .r8x:not(#_r8_) .bs-since em{font-size:11px;letter-spacing:.14em;font-weight:600;color:#86868b}
+html .r8x:not(#_r8_) .bs-since b{font-weight:600}
+html .r8x:not(#_r8_) .bs-h{font-size:56px;font-weight:600;letter-spacing:-.035em;line-height:1.08}
+html .r8x:not(#_r8_) .bs-lines span{font-size:18px;line-height:1.6;color:#a1a1a6;font-weight:400}
+html .r8x:not(#_r8_) .bs-lines .q{color:#f5f5f7;font-weight:500;border-left-color:rgba(255,255,255,.24)}
+html .r8x:not(#_r8_) .bs-stmt{font-size:26px;font-weight:600;letter-spacing:-.03em;line-height:1.4}
+html .r8x:not(#_r8_) .bs-ph figure{border-radius:24px;box-shadow:none;background:#1d1d1f}
+html .r8x:not(#_r8_) .bs-ph .f2{border-color:#000}
+
+/* ── 챕터 ───────────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bs-chs{background:#fff}
+html .r8x:not(#_r8_) .bs-ch{background:#fff;color:#1d1d1f;padding:104px 0}
+html .r8x:not(#_r8_) .bs-ch:nth-child(even){background:#f5f5f7}
+html .r8x:not(#_r8_) .bs-ch.dark{background-image:none;background-color:#000;color:#f5f5f7}
+html .r8x:not(#_r8_) .bs-ghost{font-weight:600;color:rgba(0,0,0,.04)}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-ghost{color:rgba(255,255,255,.05)}
+html .r8x:not(#_r8_) .bs-no{font-size:13px;letter-spacing:.04em;font-weight:600;color:#6e6e73}
+html .r8x:not(#_r8_) .bs-no i{background:#6e6e73}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-no{color:#86868b}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-no i{background:#86868b}
+html .r8x:not(#_r8_) .bs-en{font-size:52px;font-weight:600;letter-spacing:-.035em;color:#1d1d1f;margin:16px 0 4px}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-en{color:#f5f5f7}
+html .r8x:not(#_r8_) .bs-kr{font-size:15px;font-weight:500;letter-spacing:0;color:#6e6e73}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-kr{color:#86868b}
+html .r8x:not(#_r8_) .bs-lead{margin:28px 0 0;font-size:21px;font-weight:600;letter-spacing:-.025em;color:#2563EB}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-lead{color:#60A5FA}
+html .r8x:not(#_r8_) .bs-body p{font-size:17px;line-height:1.62;color:#6e6e73;margin:0 0 8px}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-body p{color:#a1a1a6}
+/* 애플은 인용에 좌측 바를 두지 않는다 — 큰 글자 자체로 강조 */
+html .r8x:not(#_r8_) .bs-q{
+  margin:32px 0 0;padding:0;border-left:0;
+  font-size:28px;font-weight:600;letter-spacing:-.03em;line-height:1.32;color:#1d1d1f;
+}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-q{color:#fff;border-left:0}
+html .r8x:not(#_r8_) .bs-res{margin:24px 0 0;font-size:17px;line-height:1.6;color:#6e6e73}
+html .r8x:not(#_r8_) .bs-res b{color:#2563EB;font-weight:600}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-res{color:#a1a1a6}
+html .r8x:not(#_r8_) .bs-ch.dark .bs-res b{color:#60A5FA}
+html .r8x:not(#_r8_) .bs-tail{
+  margin-top:24px;font-size:17px;font-weight:600;letter-spacing:-.02em;
+  border-radius:999px;padding:9px 20px;
+}
+html .r8x:not(#_r8_) .bs-vid,
+html .r8x:not(#_r8_) .bs-shots figure{border-radius:24px;box-shadow:none;background:#1d1d1f}
+html .r8x:not(#_r8_) .bs-vcap i{background:#60A5FA}
+
+/* ── 브리지 ─────────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bs-bridge{background:#f5f5f7;color:#1d1d1f;padding:96px 0}
+html .r8x:not(#_r8_) .bs-bridge:before{display:none}
+html .r8x:not(#_r8_) .bs-bridge p{font-size:30px;font-weight:600;letter-spacing:-.035em;line-height:1.42}
+html .r8x:not(#_r8_) .bs-bridge b{color:#2563EB}
+
+/* ── 인증 ───────────────────────────────────────────────────────────── */
+/* r11 은 .th-cert 의 padding·text-align 을 !important 로 잡았다(24·30행). 같은
+ * 명시도라 여기서도 !important 를 붙여야 이긴다. r11 이 좌측으로 통일한 근거는
+ * "히어로가 좌측"이었는데 ⑤ 에서 히어로를 가운데로 옮겼으므로 그 전제가 바뀌었다.
+ * 독립 섹션 표제(히어로·인증·설치현장)는 가운데, 2단 편집형 블록(브랜드스토리)은
+ * 좌측 — 애플이 쓰는 구분이다. */
+html .r8x:not(#_r8_) .th-cert{background:#fff;padding:112px 0 0 !important;text-align:center !important}
+html .r8x:not(#_r8_) .th-cap-k{font-size:15px;letter-spacing:0;font-weight:600;color:#6e6e73;text-transform:none}
+html .r8x:not(#_r8_) .th-cap-h{font-size:42px;font-weight:600;letter-spacing:-.03em;color:#1d1d1f;margin:10px 0 10px}
+html .r8x:not(#_r8_) .th-cap-s{font-size:18px;line-height:1.55;color:#6e6e73}
+html .r8x:not(#_r8_) .cert-row{gap:16px;margin-top:48px}
+html .r8x:not(#_r8_) .cert-item{
+  background:#f5f5f7;border:0;border-radius:18px;box-shadow:none;padding:14px 14px 16px;
+  transition:transform .3s cubic-bezier(.28,.11,.32,1),background-color .3s;
+}
+html .r8x:not(#_r8_) .cert-item:hover{transform:translateY(-5px);background:#ededf0;box-shadow:none}
+html .r8x:not(#_r8_) .cert-thumb{background:#fff;border-radius:12px}
+html .r8x:not(#_r8_) .cert-cap{margin-top:11px;font-size:12px;font-weight:500;color:#6e6e73}
+
+/* ── 통계 ───────────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .th-stats{margin:72px 0 0 !important}
+html .r8x:not(#_r8_) .th-stats .wrap{
+  background-image:none;background-color:#f5f5f7;border:0;border-radius:28px;
+  box-shadow:none;padding:64px 48px;gap:24px;
+}
+html .r8x:not(#_r8_) .st-c:not(:last-child):after{display:none}
+html .r8x:not(#_r8_) .st-n{font-size:56px;font-weight:600;letter-spacing:-.035em;color:#1d1d1f}
+html .r8x:not(#_r8_) .st-n em{font-size:26px;font-weight:600;color:#2563EB}
+html .r8x:not(#_r8_) .st-l{margin-top:14px;font-size:16px;letter-spacing:0;color:#6e6e73}
+
+/* ── 설치 현장 ──────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .th-sites{background:#fff;padding:112px 0 112px !important;text-align:center}
+html .r8x:not(#_r8_) .site-grid{gap:20px;margin-top:48px;text-align:left}
+html .r8x:not(#_r8_) .site-c{
+  background:#f5f5f7;border:0;border-radius:18px;box-shadow:none;
+  transition:transform .3s cubic-bezier(.28,.11,.32,1);
+}
+html .r8x:not(#_r8_) .site-c:hover{transform:translateY(-5px);box-shadow:none}
+html .r8x:not(#_r8_) .site-meta{padding:18px 20px 20px}
+html .r8x:not(#_r8_) .site-loc{font-size:17px;font-weight:600;letter-spacing:-.015em;color:#1d1d1f}
+html .r8x:not(#_r8_) .site-desc{font-size:14px;line-height:1.45;color:#6e6e73}
+
+/* ── 클로징 ─────────────────────────────────────────────────────────── */
+html .r8x:not(#_r8_) .bs-close{background-image:none;background-color:#000;padding:120px 0 124px}
+html .r8x:not(#_r8_) .bs-close:before{display:none}
+html .r8x:not(#_r8_) .bs-cl-lines span{font-size:21px;font-weight:500;letter-spacing:-.025em;color:#a1a1a6}
+html .r8x:not(#_r8_) .bs-cl-body{font-size:17px;line-height:1.75;color:#86868b;max-width:720px}
+html .r8x:not(#_r8_) .bs-cl-body b{color:#f5f5f7;font-weight:600}
+html .r8x:not(#_r8_) .bs-sign{font-weight:600;letter-spacing:-.03em}
+html .r8x:not(#_r8_) .bs-sign-s{font-size:12px;letter-spacing:.18em;font-weight:600;color:#6e6e73}
+
+/* ── 반응형 ─────────────────────────────────────────────────────────── */
+@media (max-width:980px){
+  html .r8x:not(#_r8_) .th-hero{padding:84px 0 92px !important}
+  html .r8x:not(#_r8_) .th-h1{font-size:44px}
+  html .r8x:not(#_r8_) .th-sub{font-size:17px}
+  html .r8x:not(#_r8_) .th-firsts{margin-top:0;padding:72px 0 84px}
+  html .r8x:not(#_r8_) .bs-open{padding:88px 0 80px}
+  html .r8x:not(#_r8_) .bs-h{font-size:38px}
+  html .r8x:not(#_r8_) .bs-stmt{font-size:22px}
+  html .r8x:not(#_r8_) .bs-ch{padding:76px 0}
+  html .r8x:not(#_r8_) .bs-en{font-size:40px}
+  html .r8x:not(#_r8_) .bs-q{font-size:23px}
+  html .r8x:not(#_r8_) .bs-bridge{padding:68px 0}
+  html .r8x:not(#_r8_) .bs-bridge p{font-size:23px}
+  html .r8x:not(#_r8_) .th-cert{padding:80px 0 0 !important}
+  html .r8x:not(#_r8_) .th-cap-h{font-size:32px}
+  html .r8x:not(#_r8_) .th-stats{margin:56px 0 0 !important}
+  html .r8x:not(#_r8_) .th-stats .wrap{padding:48px 32px}
+  html .r8x:not(#_r8_) .th-sites{padding:80px 0 80px !important}
+  html .r8x:not(#_r8_) .bs-close{padding:88px 0 92px}
+}
+@media (max-width:520px){
+  html .r8x:not(#_r8_) .th-hero{padding:64px 0 68px !important}
+  html .r8x:not(#_r8_) .th-h1{font-size:34px}
+  html .r8x:not(#_r8_) .th-kick{font-size:14px}
+  html .r8x:not(#_r8_) .th-sub{font-size:16px}
+  html .r8x:not(#_r8_) .th-firsts{margin-top:0;padding:52px 0 60px}
+  html .r8x:not(#_r8_) .tf-card{min-height:0;padding:26px 22px}
+  html .r8x:not(#_r8_) .bs-open{padding:64px 0 60px}
+  html .r8x:not(#_r8_) .bs-h{font-size:30px}
+  html .r8x:not(#_r8_) .bs-ch{padding:56px 0}
+  html .r8x:not(#_r8_) .bs-en{font-size:32px}
+  html .r8x:not(#_r8_) .bs-q{font-size:20px}
+  html .r8x:not(#_r8_) .bs-body p{font-size:16px}
+  html .r8x:not(#_r8_) .bs-bridge{padding:52px 0}
+  html .r8x:not(#_r8_) .bs-bridge p{font-size:19px}
+  html .r8x:not(#_r8_) .th-cert{padding:60px 0 0 !important}
+  html .r8x:not(#_r8_) .th-cap-h{font-size:26px}
+  html .r8x:not(#_r8_) .th-cap-s{font-size:16px}
+  html .r8x:not(#_r8_) .th-stats{margin:40px 0 0 !important}
+  html .r8x:not(#_r8_) .th-stats .wrap{padding:36px 22px}
+  html .r8x:not(#_r8_) .st-n{font-size:42px}
+  html .r8x:not(#_r8_) .th-sites{padding:60px 0 64px !important}
+  html .r8x:not(#_r8_) .bs-close{padding:64px 0 68px}
+  html .r8x:not(#_r8_) .bs-cl-lines span{font-size:17px}
+  html .r8x:not(#_r8_) .bs-cl-body{font-size:15.5px}
+}

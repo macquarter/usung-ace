@@ -5,7 +5,11 @@
    되돌리기: inject.js 에서 본 파일 <link> 한 줄 제거 + 파일 삭제 */
 
 /* ========== #7 cyan → blue 전역 표준화 ========== */
-.via-cyan-300{--tw-gradient-to:rgb(96 165 250/0)!important;--tw-gradient-stops:var(--tw-gradient-from),rgb(96 165 250),var(--tw-gradient-to)!important}
+/* 260803) --tw-gradient-to 를 여기서 !important 로 잡으면 뒤따르는 to-* 유틸리티가
+   영원히 진다. Tailwind 원본을 복사하며 딸려온 선언인데, 그 탓에
+   "from-blue-400 via-cyan-300 to-blue-500" 조합 12곳의 끝색이 투명으로 고정돼
+   글자 오른쪽이 사라졌다. via 대체색만 남기고 to 선언은 뺀다. */
+.via-cyan-300{--tw-gradient-stops:var(--tw-gradient-from),rgb(96 165 250),var(--tw-gradient-to)!important}
 .text-cyan-300{color:rgb(96 165 250)!important}
 .text-cyan-400{color:rgb(59 130 246)!important}
 .to-cyan-300{--tw-gradient-to:rgb(96 165 250)!important}

@@ -1,0 +1,54 @@
+/* usung-r12.css — 260803 화면검토 2차
+ *   ①  회사소개 등 그라디언트 제목이 오른쪽으로 갈수록 사라지던 문제 (색 보정)
+ *   ④  제품 대분류 카드의 시리즈 특징 칩 — 세로 배열 + 마우스오버 컬러
+ *
+ * index_v6.html 불변. 런타임 오버레이만 사용한다.
+ * usung-r8.css 는 usung-r8-mount.js 가 <head> 에 append 하므로 소스 순서에서
+ * 이 정적 <link> 를 항상 이긴다. .r8x 를 겨냥한 규칙 앞에 html 을 붙여
+ * r8 스코프(.r8x:not(#_r8_) = 1,1,0)보다 높은 명시도(1,1,1)를 확보한다.
+ * ★ background 단축 속성 금지 — background-clip:text 를 리셋해 글자가 사라진다.
+ */
+
+/* ── ① 그라디언트 제목 가독성 ───────────────────────────────────────────
+ * 글자가 사라진 근본 원인은 usung-blue-standard.css 의 .via-cyan-300 이
+ * --tw-gradient-to 를 !important 로 투명 고정해 뒤따르는 to-blue-500 이
+ * 영원히 지던 것이었다(해당 선언은 그 파일에서 제거).
+ * 다만 복구된 원 배색 #60a5fa→#3b82f6 은 theme-white 이후의 흰 배경에서
+ * 대비가 2.6:1 로 낮다. 밝은 배경 위 제목만 브랜드 블루 3단으로 깐다.
+ * cta_title2 만 검은 배경(#anim-cta)이라 제외했는데, 실측해보니 usung-home.js:103
+ * 이 그 프레임을 통째로 숨겨 화면에 뜨는 일이 없다. 제외는 무해하므로 유지. */
+.bg-clip-text.via-cyan-300:not([data-i18n="cta_title2"]){
+  background-image:linear-gradient(to right,#3B82F6 0%,#2563EB 52%,#1D4ED8 100%)!important;
+}
+
+/* ── ④ 시리즈 특징 칩 — 세로 배열 + hover 컬러 ─────────────────────────
+ * 가로 wrap 이라 3개짜리 카드(갤럭시/LED조명/파이프)만 2줄로 흘러 카드 높이가
+ * 들쭉날쭉했다. 세로 고정으로 5장 모두 같은 리듬이 된다. */
+html .r8x:not(#_r8_) .cn-fx{
+  flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:6px;margin-top:10px;
+}
+html .r8x:not(#_r8_) .cn-fx span{
+  width:100%;justify-content:flex-start;
+  background-color:#fff;background-image:none;
+  border-color:#e3e8f0;
+  padding:5px 11px 5px 5px;
+  transition:background-color .2s,border-color .2s,color .2s;
+}
+html .r8x:not(#_r8_) .cn-card:hover .cn-fx span,
+html .r8x:not(#_r8_) .cn-fx span:hover{
+  background-color:#2563EB;border-color:#2563EB;color:#fff;
+}
+/* 아이콘에 filter 를 걸지 말 것. ic/*.png 는 선화가 아니라 흰 원판(불투명 95% ·
+   흰 픽셀 87%) 위에 남색 글리프를 얹은 그림이라, brightness(0) invert(1) 을 주면
+   원판까지 흰색이 되어 통째로 흰 사각형이 된다(실측). 흰 배경에서는 원판이
+   묻혀 보이지 않다가 파란 칩 위에서 흰 원형 뱃지로 드러나므로 그대로 둔다. */
+
+/* 시리즈 밴드(.band-info) 안의 같은 칩도 세로로 맞춘다. 밴드 전체 hover 는
+ * 범위가 너무 넓어 칩 개별 hover 만 쓴다(위 :hover 규칙이 그대로 적용). */
+html .r8x:not(#_r8_) .cn-fx.band-fx{max-width:220px}
+
+@media (max-width:640px){
+  html .r8x:not(#_r8_) .cn-fx{gap:5px;margin-top:8px}
+  html .r8x:not(#_r8_) .cn-fx span{padding:4px 9px 4px 4px}
+  html .r8x:not(#_r8_) .cn-fx.band-fx{max-width:none}
+}
