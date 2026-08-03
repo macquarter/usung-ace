@@ -55,7 +55,9 @@ html .r8x:not(#_r8_) .bs-shots figure{background:#e8e8ed}
 html .r8x:not(#_r8_) .bs-vcap{
   background:rgba(255,255,255,.86);border:1px solid rgba(0,0,0,.09);color:#1d1d1f;
 }
-html .r8x:not(#_r8_) .bs-vcap i{background:#2563EB}
+/* 점은 r10-tone:40 이 !important 로 blue-400 을 잡고 있다. 남색 알약 위에서는 맞았지만
+ * 흰 알약 위에서는 대비가 약하다 → 같은 명시도끼리는 !important 로만 갈린다. */
+html .r8x:not(#_r8_) .bs-vcap i{background:#2563EB !important}
 
 /* 맺음말 */
 html .r8x:not(#_r8_) .bs-cl-lines span{color:#6e6e73}
