@@ -1,0 +1,74 @@
+/* usung-r17-bot.css — 260804 화면검토 7차 ④ (에이스봇)
+ *   ④-a  빠른답변 버튼을 2열 그리드로 (기존 flex-wrap → 2/3/1 들쭉날쭉)
+ *   ④-b  봇 창 높이 20% 확대 560 → 672px → 대화 영역 실측 147 → 약 259px
+ *   ④-c  전화번호 CTA 가 파란 알약 위 검은 글씨로 나오던 문제
+ *
+ * ④-c 원인 (실측 확정)
+ *   chatbot.js:392  .ub-msg.bot{ color:#0f172a !important; -webkit-text-fill-color:#0f172a }
+ *   `-webkit-text-fill-color` 는 상속되고 `color` 를 항상 덮어쓴다. .ub-cta 는 자기 color 를
+ *   #fff 로 선언하지만 조상에서 내려온 fill-color 가 이겨 검은 글씨가 된다.
+ *   (실측: 색 rgb(255,255,255) / -webkit-text-fill-color rgb(15,23,42))
+ *   usung-docent.css:12 가 .doc-h 에만 같은 처방을 이미 하고 있다 — 이를 CTA 전역으로 넓힌다.
+ *
+ * chatbot.js 는 불변. 이 파일은 CSS 만으로 처리한다.
+ */
+
+/* ── ④-c 전화 CTA 글자색 ─────────────────────────── */
+#usungBot .ub-cta,
+#usungBot .ub-cta * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+#usungBot .ub-cta {
+  padding: 12px 18px !important;
+  font-size: 13px !important;
+  letter-spacing: .01em;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .32);
+}
+/* 큐레이션 결과 카드 등 넓은 말풍선 안에서 fill-color 상속 차단 */
+#usungBot .ub-msg.bot .r13c-wide *,
+#usungBot .ub-msg.r13c-wide * {
+  -webkit-text-fill-color: currentColor;
+}
+/* 본문에 그냥 놓인 tel: 링크도 파란 글씨로 보이게 */
+#usungBot .ub-msg.bot a[href^="tel:"]:not(.ub-cta),
+#usungBot .ub-msg.bot a[href^="tel:"]:not(.ub-cta) * {
+  color: #1D4ED8 !important;
+  -webkit-text-fill-color: #1D4ED8 !important;
+  font-weight: 800;
+}
+
+/* ── ④-a 빠른답변 2열 ────────────────────────────── */
+#usungBot .ub-qk {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  align-content: start;
+}
+#usungBot .ub-qk button {
+  width: 100% !important;
+  padding: 10px 8px !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+  white-space: normal !important;
+  word-break: keep-all;
+  text-align: center;
+}
+/* 홀수 개일 때 마지막 버튼은 한 줄 전체를 쓴다 */
+#usungBot .ub-qk button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* ── ④-b 창 높이 +20% ────────────────────────────── */
+#usungBotWin {
+  height: 672px !important;
+  max-height: calc(100vh - 110px) !important;
+}
+#usungBotBody { flex: 1 1 auto !important; min-height: 0 !important; }
+
+@media (max-width: 480px) {
+  #usungBotWin {
+    height: 672px !important;
+    max-height: calc(100vh - 100px) !important;
+  }
+  #usungBot .ub-qk { gap: 6px !important; }
+  #usungBot .ub-qk button { padding: 9px 6px !important; font-size: 10.5px !important; }
+}

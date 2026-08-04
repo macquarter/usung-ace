@@ -1,0 +1,221 @@
+/* usung-r17.css — 260804 화면검토 7차 (①스타일 ② ③ ⑤)
+ *   ①  브랜드스토리 'BRAND STORY / SINCE1979' 줄 오른쪽 장식 마크 (마크업은 usung-r17.js)
+ *       + bs-k 가 blue-200(#BFDBFE) 이라 r14 라이트 전환 이후 배경(#f5f5f7) 대비 1.3:1 로
+ *         사실상 안 보인다 → 브랜드 블루로 교정
+ *   ②  제품소개 히어로 폰트를 기술력 히어로 스케일에 맞춤
+ *       기술력 실측: kick 17/800 · h1 80/900/-2.8px · sub 21/400
+ *       제품 실측(수정전): kicker 13/800 · h1 70/900 · h1 span 33/300 · sub 22/700 · feats 13/600
+ *   ③  BEST & NEW 섹션 배색만 라이트로 (레이아웃·구조 불변)
+ *   ⑤  상단 내비 Contact Us — 라운드가 보이도록 + hover 글씨 대비 확보
+ *
+ * 명시도 메모
+ *   · usung-r8.css 는 usung-r8-mount.js 가 런타임에 <head> 로 append 하므로
+ *     api/inject.js 의 정적 <link> 를 소스 순서에서 항상 이긴다.
+ *     → .r8x 대상 규칙은 전부 !important + `html .r8x:not(#_r8_)` (1,3,1) 로 올린다.
+ *   · ⑤ 는 usung-overlay.js 의 applyNavColors() 가 인라인 style.color 를 매번 다시 건다.
+ *     !important 는 인라인 style 도 이기므로 CSS 만으로 해결된다(JS 불필요).
+ */
+
+/* ══════════════ ① 브랜드스토리 헤더 마크 ══════════════ */
+html .r8x:not(#_r8_) .bs-open .bs-k {
+  color: #1D4ED8 !important;
+  border-color: rgba(37, 99, 235, .3) !important;
+}
+.r8x .r17-bshead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.r8x .r17-bsmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  margin-left: auto;
+}
+.r8x .r17-rail {
+  display: block;
+  width: clamp(48px, 12vw, 190px);
+  height: 1px;
+  background-image: linear-gradient(90deg, rgba(37, 99, 235, 0), rgba(37, 99, 235, .3) 45%, rgba(37, 99, 235, .65));
+}
+.r8x .r17-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 18px 9px 15px;
+  border: 1px solid rgba(37, 99, 235, .26);
+  border-radius: 999px;
+  background-color: #fff;
+  background-image: linear-gradient(135deg, rgba(37, 99, 235, .07), rgba(96, 165, 250, .13));
+  box-shadow: 0 6px 18px rgba(37, 99, 235, .10);
+}
+.r8x .r17-dia {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  background-image: linear-gradient(135deg, #1D4ED8, #60A5FA);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, .35);
+}
+.r8x .r17-seal-t { display: block; line-height: 1.2; }
+.r8x .r17-seal-t b {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 900;
+  letter-spacing: .2em;
+  color: #1D4ED8;
+}
+.r8x .r17-seal-t em {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: #86868B;
+  margin-top: 3px;
+}
+@media (max-width: 860px) {
+  .r8x .r17-bsmark { margin-left: 0; margin-top: 10px; }
+  .r8x .r17-rail { display: none; }
+}
+
+/* ══════════════ ② 제품소개 히어로 가독성 ══════════════ */
+html .r8x:not(#_r8_) .hero-kicker {
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  letter-spacing: .2em !important;
+  color: #1D4ED8 !important;
+}
+html .r8x:not(#_r8_) .hero-h1 {
+  font-size: 80px !important;
+  font-weight: 900 !important;
+  letter-spacing: -2.8px !important;
+  line-height: .96 !important;
+  color: #0B1E4D !important;
+}
+html .r8x:not(#_r8_) .hero-h1 span {
+  font-size: 46px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.01em !important;
+  margin-top: 12px !important;
+  color: #1D4ED8 !important;
+}
+html .r8x:not(#_r8_) .hero-sub {
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  color: #1F2C42 !important;
+  margin-top: 20px !important;
+}
+html .r8x:not(#_r8_) .hero-feats span {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #12325F !important;
+  background-color: #fff !important;
+  border: 1px solid #C6D5EA !important;
+  box-shadow: 0 2px 8px rgba(11, 30, 77, .08) !important;
+  padding: 8px 16px !important;
+}
+/* 배경 사진 위 글자 대비 — 흰 베일을 한 단계 더 */
+html .r8x:not(#_r8_) .hero-veil {
+  background-image: linear-gradient(100deg, rgba(240, 244, 250, .97) 0%, rgba(240, 244, 250, .93) 34%, rgba(240, 244, 250, .58) 56%, rgba(240, 244, 250, .12) 78%, rgba(240, 244, 250, 0) 100%) !important;
+}
+@media (max-width: 960px) {
+  html .r8x:not(#_r8_) .hero-h1 { font-size: 54px !important; letter-spacing: -1.6px !important; }
+  html .r8x:not(#_r8_) .hero-h1 span { font-size: 31px !important; }
+  html .r8x:not(#_r8_) .hero-kicker { font-size: 15px !important; }
+  html .r8x:not(#_r8_) .hero-sub { font-size: 18px !important; }
+  html .r8x:not(#_r8_) .hero-veil {
+    background-image: linear-gradient(180deg, rgba(240, 244, 250, .97), rgba(240, 244, 250, .93) 62%, rgba(240, 244, 250, .74)) !important;
+  }
+}
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .hero-h1 { font-size: 42px !important; letter-spacing: -1.2px !important; }
+  html .r8x:not(#_r8_) .hero-h1 span { font-size: 25px !important; }
+  html .r8x:not(#_r8_) .hero-kicker { font-size: 13px !important; }
+  html .r8x:not(#_r8_) .hero-sub { font-size: 16.5px !important; }
+  html .r8x:not(#_r8_) .hero-feats span { font-size: 12.5px !important; padding: 7px 13px !important; }
+}
+
+/* ══════════════ ③ BEST & NEW 라이트 배색 ══════════════ */
+html .r8x:not(#_r8_) .bn-sec {
+  background-color: #EEF4FF !important;
+  background-image: linear-gradient(180deg, #F7FAFF 0%, #E9F1FE 100%) !important;
+  color: #0F213F !important;
+}
+html .r8x:not(#_r8_) .bn-sec:before {
+  background-image:
+    radial-gradient(900px 420px at 12% -10%, rgba(96, 165, 250, .22), transparent 62%),
+    radial-gradient(700px 380px at 96% 110%, rgba(37, 99, 235, .14), transparent 60%) !important;
+}
+html .r8x:not(#_r8_) .bn-k {
+  color: #1D4ED8 !important;
+  background-color: rgba(255, 255, 255, .9) !important;
+  border: 1px solid rgba(37, 99, 235, .3) !important;
+}
+html .r8x:not(#_r8_) .bn-head h2 { color: #0B1E4D !important; }
+html .r8x:not(#_r8_) .bn-head p { color: #55637A !important; }
+html .r8x:not(#_r8_) .bn-card {
+  background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid #DCE7F8 !important;
+  box-shadow: 0 8px 22px rgba(11, 30, 77, .07) !important;
+}
+html .r8x:not(#_r8_) .bn-card:hover {
+  background-color: #fff !important;
+  border-color: #2563EB !important;
+  box-shadow: 0 22px 44px rgba(37, 99, 235, .18) !important;
+}
+html .r8x:not(#_r8_) .bn-th { background-color: #F6F9FF !important; }
+html .r8x:not(#_r8_) .bn-tag {
+  background-color: #1D4ED8 !important;
+  color: #fff !important;
+  box-shadow: 0 6px 16px rgba(29, 78, 216, .28) !important;
+}
+html .r8x:not(#_r8_) .bn-tag.new { background-color: #2563EB !important; }
+html .r8x:not(#_r8_) .bn-no { color: rgba(11, 30, 77, .12) !important; }
+html .r8x:not(#_r8_) .bn-cat { color: #2563EB !important; }
+html .r8x:not(#_r8_) .bn-nm { color: #0B1E4D !important; }
+html .r8x:not(#_r8_) .bn-cap { color: #5A6880 !important; }
+html .r8x:not(#_r8_) .bn-meta em,
+html .r8x:not(#_r8_) .bn-meta i {
+  background-color: #F1F6FE !important;
+  border: 1px solid #D8E4F7 !important;
+  color: #2A3A57 !important;
+}
+html .r8x:not(#_r8_) .bn-go { color: #1D4ED8 !important; }
+html .r8x:not(#_r8_) .bn-go i {
+  border: 1px solid rgba(37, 99, 235, .35) !important;
+  background-color: rgba(37, 99, 235, .07) !important;
+  color: #1D4ED8 !important;
+}
+html .r8x:not(#_r8_) .bn-card:hover .bn-go i {
+  background-color: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #fff !important;
+}
+
+/* ══════════════ ⑤ 상단 내비 Contact Us ══════════════ */
+html #navbar button.bg-white.rounded-full {
+  background-color: #2563EB !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, .32) !important;
+  transition: background-color .22s ease, box-shadow .22s ease, transform .22s ease !important;
+}
+html #navbar button.bg-white.rounded-full * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+html #navbar button.bg-white.rounded-full:hover {
+  background-color: #1D4ED8 !important;
+  box-shadow: 0 8px 22px rgba(29, 78, 216, .42) !important;
+  transform: translateY(-1px) !important;
+}
+html #navbar button.bg-white.rounded-full:hover,
+html #navbar button.bg-white.rounded-full:hover * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
