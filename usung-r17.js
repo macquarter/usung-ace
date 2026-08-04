@@ -1,21 +1,24 @@
-/* usung-r17.js — 260804 화면검토 7차 ① (브랜드스토리 헤더 마크 마운트)
+/* usung-r17.js — 260804 브랜드스토리 헤더 배치 (r18 에서 내용 변경)
  *
  * 하는 일
  *   `.r8x .bs-open .bs-tx` 안에서 한 줄에 나란히 있는 `.bs-k`(BRAND STORY)와
  *   `.bs-since`(SINCE1979) 를 flex 래퍼(`.r17-bshead`)로 감싸고,
- *   그 오른쪽 끝에 장식 마크(`.r17-bsmark`)를 붙인다. 스타일은 usung-r17.css.
+ *   그 **왼쪽**에 장식 레일(`.r17-bsmark`)을 넣어 두 라벨을 오른쪽으로 민다.
+ *   스타일은 usung-r17.css(래퍼) + usung-r18.css(우측 정렬·레일 재도색).
+ *
+ * r18 변경 (260804 8차 ①)
+ *   · r17 의 'USUNG ACE / PAJU · KOREA' 씰을 **제거**했다(사용자 요청).
+ *     마크는 이제 그라디언트 레일 하나뿐이고, 래퍼 맨 앞으로 들어가 여백을 먹는다.
+ *   · 이미 씰이 심긴 DOM 도 만날 수 있다(뷰 재렌더 전 상태) → 발견 시 innerHTML 을
+ *     현재 MARK 로 되맞춘다. 그래야 되돌아온 뷰에 옛 씰이 남지 않는다.
  *
  * 설계 메모
  *   1. 마크 내용은 **영문·기호만** 쓴다. r16 다국어 엔진(`usung-r16-i18n.js`)은 한국어
  *      원문을 키로 치환하므로, 새 한국어 문구를 넣으면 사전 5개 언어를 같이 늘려야 한다.
- *      언어중립 문구를 쓰면 그 작업 자체가 사라진다.
- *   2. 사실 주장을 새로 만들지 않는다. 'SINCE1979' 는 이미 화면에 있는 문구이고,
- *      'USUNG ACE' / 'PAJU · KOREA' 는 푸터 주소(경기 파주시)와 일치한다.
- *      연차 계산값("47 YEARS")은 사이트 안에 SINCE1979 와 "20년 기술력" 이 공존해
- *      모순이 되므로 넣지 않는다.
- *   3. `#v-tech` 는 다른 뷰로 갔다 오면 다시 그려질 수 있다 → MutationObserver 로 재적용.
+ *      언어중립 문구(지금은 아예 텍스트 없음)를 쓰면 그 작업 자체가 사라진다.
+ *   2. `#v-tech` 는 다른 뷰로 갔다 오면 다시 그려질 수 있다 → MutationObserver 로 재적용.
  *      `__r17mark` 플래그로 멱등을 보장한다.
- *   4. `.bs-k`/`.bs-since` 는 `.reveal` 클래스를 달고 있다. 노드를 옮겨도 클래스는
+ *   3. `.bs-k`/`.bs-since` 는 `.reveal` 클래스를 달고 있다. 노드를 옮겨도 클래스는
  *      그대로라 IntersectionObserver 상태(`in`)가 보존된다.
  */
 (function () {
@@ -23,12 +26,7 @@
   if (window.__usungR17) return;
   window.__usungR17 = true;
 
-  var MARK =
-    '<i class="r17-rail"></i>' +
-    '<span class="r17-seal">' +
-      '<i class="r17-dia"></i>' +
-      '<span class="r17-seal-t"><b>USUNG ACE</b><em>PAJU &middot; KOREA</em></span>' +
-    '</span>';
+  var MARK = '<i class="r17-rail"></i><i class="r17-dia"></i>';
 
   function apply() {
     try {
@@ -49,13 +47,18 @@
           head.appendChild(k);
           if (s) head.appendChild(s);
         }
-        if (!head.querySelector('.r17-bsmark')) {
-          var mk = document.createElement('span');
+        var mk = head.querySelector('.r17-bsmark');
+        if (!mk) {
+          mk = document.createElement('span');
           mk.className = 'r17-bsmark';
           mk.setAttribute('aria-hidden', 'true');
           mk.innerHTML = MARK;
-          head.appendChild(mk);
         }
+        // r17 씰이 남아 있으면 현재 MARK 로 되맞춘다 (레일 1개만 남긴다)
+        if (mk.querySelector('.r17-seal')) mk.innerHTML = MARK;
+        // 레일은 두 라벨 **왼쪽**에서 여백을 먹어야 한다 → 항상 첫 자식
+        if (head.firstChild !== mk) head.insertBefore(mk, head.firstChild);
+
         tx.__r17mark = 1;
       }
     } catch (e) {}

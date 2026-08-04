@@ -1,5 +1,6 @@
 /* usung-r17.css — 260804 화면검토 7차 (①스타일 ② ③ ⑤)
- *   ①  브랜드스토리 'BRAND STORY / SINCE1979' 줄 오른쪽 장식 마크 (마크업은 usung-r17.js)
+ *   ①  브랜드스토리 'BRAND STORY / SINCE1979' 줄 장식 마크 (마크업은 usung-r17.js)
+ *       r18 에서 씰(USUNG ACE)을 걷어내고 레일+다이아만 남겼다 → 배치는 usung-r18.css
  *       + bs-k 가 blue-200(#BFDBFE) 이라 r14 라이트 전환 이후 배경(#f5f5f7) 대비 1.3:1 로
  *         사실상 안 보인다 → 브랜드 블루로 교정
  *   ②  제품소개 히어로 폰트를 기술력 히어로 스케일에 맞춤
@@ -39,17 +40,6 @@ html .r8x:not(#_r8_) .bs-open .bs-k {
   height: 1px;
   background-image: linear-gradient(90deg, rgba(37, 99, 235, 0), rgba(37, 99, 235, .3) 45%, rgba(37, 99, 235, .65));
 }
-.r8x .r17-seal {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 18px 9px 15px;
-  border: 1px solid rgba(37, 99, 235, .26);
-  border-radius: 999px;
-  background-color: #fff;
-  background-image: linear-gradient(135deg, rgba(37, 99, 235, .07), rgba(96, 165, 250, .13));
-  box-shadow: 0 6px 18px rgba(37, 99, 235, .10);
-}
 .r8x .r17-dia {
   width: 11px;
   height: 11px;
@@ -58,23 +48,6 @@ html .r8x:not(#_r8_) .bs-open .bs-k {
   transform: rotate(45deg);
   background-image: linear-gradient(135deg, #1D4ED8, #60A5FA);
   box-shadow: 0 2px 6px rgba(37, 99, 235, .35);
-}
-.r8x .r17-seal-t { display: block; line-height: 1.2; }
-.r8x .r17-seal-t b {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 900;
-  letter-spacing: .2em;
-  color: #1D4ED8;
-}
-.r8x .r17-seal-t em {
-  display: block;
-  font-style: normal;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .15em;
-  color: #86868B;
-  margin-top: 3px;
 }
 @media (max-width: 860px) {
   .r8x .r17-bsmark { margin-left: 0; margin-top: 10px; }

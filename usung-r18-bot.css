@@ -1,0 +1,91 @@
+/* usung-r18-bot.css — 260804 화면검토 8차 ④ (챗봇 런처 → 도슨트 알약)
+ *
+ * 요청: "챗봇 아이콘은 도슨트로 하고 조금 더 잘보이도록"
+ * 현행 실측: #usungBotFab = 64x64 원형 · 내용은 이모지 '💬' 하나 · 반경 50%
+ *            배경 linear-gradient(135deg,#1e40af,#2563eb) (theme-white.css:526)
+ * 목표: 프로토타입 _proto_catalog_r8.html 의 #doc-fab 처럼
+ *       [말풍선 아이콘] 도슨트  형태의 알약 + 더 높은 시인성.
+ *
+ * 설계 메모
+ *   1. chatbot.js 는 불변. 버튼 내용물이 '💬' + <span class="dot"> 인데,
+ *      font-size:0 으로 이모지를 죽이고 ::before(아이콘)·::after(라벨)로 다시 그린다.
+ *      → JS 없이 CSS 만으로 끝난다.
+ *   2. ★ 라벨을 CSS content 로 넣는 이유 — r16 다국어 엔진은 **텍스트 노드**를 훑는다.
+ *      content 는 텍스트 노드가 아니라 치환 대상이 아니고, 사전(__R16D)도 건드릴 필요가 없다.
+ *      (반대로 5개 언어 전환 시에도 '도슨트' 로 고정된다. 챗봇 자체가 한국어 전용이라 무해.)
+ *   3. `.dot` 은 chatbot.js 에서 position:absolute 인데 기준이 #usungBot 이다.
+ *      알약으로 바뀌면 위치가 어긋나므로 버튼 자신을 position:relative 로 만들어 고정한다.
+ *   4. theme-white.css:526 `#usungBot #usungBotFab{...!important}` 과 명시도가 같으므로
+ *      앞에 `html` 을 붙여 (2,0,1) 로 올린다. (inject.js 링크 순서로도 이기지만 이중 안전)
+ */
+
+html #usungBot #usungBotFab {
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 15px 22px 15px 18px !important;
+  border-radius: 999px !important;
+  gap: 10px !important;
+  /* 이모지 💬 제거 — 자식이 없어 텍스트 노드만 죽는다 */
+  font-size: 0 !important;
+  line-height: 1 !important;
+  border: 1px solid rgba(255, 255, 255, .22) !important;
+  background-color: #1D4ED8 !important;
+  background-image: linear-gradient(135deg, #1D4ED8 0%, #2563EB 58%, #3B82F6 100%) !important;
+  box-shadow: 0 14px 34px rgba(29, 78, 216, .46), 0 2px 8px rgba(11, 30, 77, .20) !important;
+  transition: transform .2s ease, box-shadow .2s ease !important;
+}
+html #usungBot #usungBotFab::before {
+  content: '';
+  width: 21px;
+  height: 21px;
+  flex: 0 0 auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/><path d='M8 9h8M8 13h5'/></svg>");
+}
+html #usungBot #usungBotFab::after {
+  content: '도슨트';
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.2px;
+  line-height: 1;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  white-space: nowrap;
+}
+html #usungBot #usungBotFab:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 42px rgba(29, 78, 216, .54), 0 3px 10px rgba(11, 30, 77, .24) !important;
+}
+/* 온라인 점 — 알약 오른쪽 위 모서리로 */
+html #usungBot #usungBotFab .dot {
+  top: -3px !important;
+  right: -2px !important;
+  width: 13px !important;
+  height: 13px !important;
+  background: #22C55E !important;
+  border: 2.5px solid #fff !important;
+}
+/* 시인성 — 아주 느린 링 확산. box-shadow 를 쓰므로 위 선언을 애니메이션이 이어받는다 */
+@keyframes r18FabRing {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, .42), 0 14px 34px rgba(29, 78, 216, .46), 0 2px 8px rgba(11, 30, 77, .20); }
+  70%  { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0), 0 14px 34px rgba(29, 78, 216, .46), 0 2px 8px rgba(11, 30, 77, .20); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0), 0 14px 34px rgba(29, 78, 216, .46), 0 2px 8px rgba(11, 30, 77, .20); }
+}
+html #usungBot #usungBotFab { animation: r18FabRing 3s ease-out infinite; }
+html #usungBot #usungBotFab:hover { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html #usungBot #usungBotFab { animation: none; }
+}
+@media (max-width: 480px) {
+  html #usungBot #usungBotFab {
+    padding: 13px 18px 13px 15px !important;
+    gap: 8px !important;
+  }
+  html #usungBot #usungBotFab::before { width: 19px; height: 19px; }
+  html #usungBot #usungBotFab::after { font-size: 13.5px; }
+}
