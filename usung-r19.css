@@ -1,0 +1,95 @@
+/* usung-r19.css — 260809「라스트」제품 상세 부품 구성 배치 + LED 파이프 색상표
+ * ★ usung-r8.css 는 런타임에 <head> 로 붙어 소스 순서에서 항상 이긴다.
+ *   → .r8x 를 겨냥한 규칙은 앞에 html 을 붙여 명시도를 (1,2,1) 이상으로 올린다.
+ *   (r8 의 .r8x:not(#_r8_) .pt-grid 는 (1,2,0))
+ */
+
+/* ── 부품 그리드: PPT 의 4-4-2-2 블록이 아니라 폭에 맞춰 자연스럽게 흐르게 ── */
+html .r8x:not(#_r8_) .m-parts .r19-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch;
+}
+html .r8x:not(#_r8_) .m-parts .r19-grid .pt { cursor: default; }
+html .r8x:not(#_r8_) .m-parts .r19-grid .pt:hover { transform: translateY(-3px); }
+html .r8x:not(#_r8_) .m-parts .r19-grid .pt .pn { word-break: keep-all; }
+
+/* ── 파이프 색상표 (LED 제품 전용) ── */
+html .r8x:not(#_r8_) .m-parts .r19-cc {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+html .r8x:not(#_r8_) .m-parts .r19-cc h4 {
+  font-size: 15px; font-weight: 800; margin: 0 0 5px;
+  display: flex; align-items: center; gap: 8px;
+}
+html .r8x:not(#_r8_) .m-parts .r19-cc h4 .en {
+  font-size: 11px; letter-spacing: .14em; color: var(--ub2); font-weight: 800;
+}
+html .r8x:not(#_r8_) .m-parts .r19-cc .hint {
+  font-size: 12px; color: var(--sub); margin: 0 0 16px; line-height: 1.5;
+}
+html .r8x:not(#_r8_) .m-parts .r19-grp {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 10px;
+}
+html .r8x:not(#_r8_) .m-parts .r19-grp .r19-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 54px; padding: 5px 12px; border-radius: 999px;
+  background: #1D4ED8; color: #fff; -webkit-text-fill-color: #fff;
+  font-size: 11.5px; font-weight: 800; letter-spacing: .02em;
+}
+html .r8x:not(#_r8_) .m-parts .r19-grp b {
+  font-size: 11.5px; font-weight: 800; color: var(--ub2);
+}
+html .r8x:not(#_r8_) .m-parts .r19-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 0 0 22px;
+}
+html .r8x:not(#_r8_) .m-parts .r19-sw {
+  margin: 0; opacity: 0; transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+html .r8x:not(#_r8_) .m-parts .r19-sw.in { opacity: 1; transform: none; }
+html .r8x:not(#_r8_) .m-parts .r19-sw i {
+  display: block; aspect-ratio: 1/1; border-radius: 12px;
+  border: 1px solid var(--line);
+  background-image: url('/proto_assets/color_sprite.webp');
+  background-size: 500% 300%;
+  background-position: calc(var(--c) * 25%) calc(var(--r) * 50%);
+  transition: transform .22s cubic-bezier(.22, .61, .36, 1), box-shadow .22s;
+}
+html .r8x:not(#_r8_) .m-parts .r19-sw:hover i {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(22, 41, 77, .18);
+}
+html .r8x:not(#_r8_) .m-parts .r19-sw figcaption {
+  font-size: 11.5px; font-weight: 700; color: var(--ink);
+  text-align: center; padding: 8px 2px 0; word-break: keep-all;
+}
+html .r8x:not(#_r8_) .m-parts .r19-note {
+  font-size: 11px; color: var(--sub); margin: 2px 0 0; line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  html .r8x:not(#_r8_) .m-parts .r19-grid {
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)) !important;
+  }
+}
+@media (max-width: 520px) {
+  html .r8x:not(#_r8_) .m-parts .r19-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  html .r8x:not(#_r8_) .m-parts .r19-row {
+    grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  html .r8x:not(#_r8_) .m-parts .r19-sw figcaption { font-size: 10.5px; }
+  html .r8x:not(#_r8_) .m-parts .r19-cc { margin-top: 24px; padding-top: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html .r8x:not(#_r8_) .m-parts .r19-sw { transition: none; opacity: 1; transform: none; }
+}
