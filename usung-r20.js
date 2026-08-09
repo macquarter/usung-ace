@@ -230,11 +230,52 @@
     return true;
   }
 
+  /* ── S7·S8 잔여 — CMS 로더가 브랜드 표기를 되돌리는 경로 차단 ─────────────
+   * api/inject.js 응답시점 치환으로 HTML 9곳은 전부 YUSUNG ACE 로 나간다.
+   * 그런데 index_v6.html:5610 loadCmsContent() 가 파싱 시점에
+   * localStorage['usung-cms-state-v2'] 를 읽어 [data-cms] 텍스트를 덮어쓴다.
+   * 그 저장본은 admin.html 기본값에서 왔고 거기 옛 표기가 3개 있었다
+   * (h_tag · c_name_en · vid_tag). admin.html 은 고쳤지만 **이미 저장된
+   * 브라우저 값은 원격에서 못 고친다** → 화면과 저장본 양쪽에서 되잡는다.
+   * 실측(라이브): 오염 필드 2 · 오염 노드 1 = c_name_en(index_v6.html:1840,
+   * #page-about 안이라 회사소개를 열면 그대로 보인다).
+   * ★ 저장본도 고치는 이유 — 안 그러면 관리자가 다음 저장 때 옛 값을 다시 올린다.
+   * ★ `Y` 가 이미 붙은 것은 건드리지 않으므로 몇 번 돌아도 YY 가 안 생긴다. */
+  var OLDB = /(^|[^Y])USUNG ACE/g;
+
+  function reBrand(s) { OLDB.lastIndex = 0; return s.replace(OLDB, '$1YUSUNG ACE'); }
+
+  function fixBrand() {
+    var els = document.querySelectorAll('[data-cms]'), i;
+    for (i = 0; i < els.length; i++) {
+      var t = els[i].textContent || '';
+      var v = reBrand(t);
+      if (v !== t) els[i].textContent = v;
+    }
+  }
+
+  function fixBrandStore() {
+    try {
+      var K = 'usung-cms-state-v2', raw = localStorage.getItem(K);
+      if (!raw || raw.indexOf('USUNG ACE') < 0) return;
+      var st = JSON.parse(raw), c = st && st.content, k, d = 0;
+      if (!c) return;
+      for (k in c) {
+        if (typeof c[k] !== 'string') continue;
+        var v = reBrand(c[k]);
+        if (v !== c[k]) { c[k] = v; d++; }
+      }
+      if (d) localStorage.setItem(K, JSON.stringify(st));
+    } catch (e) {}
+  }
+
   // ── 부트 — r8 은 mount 재시도로 최대 6초까지 늦어질 수 있다(§3) ──────────
+  try { fixBrandStore(); } catch (e) { console.warn('[r20] brandStore', e); }
   var tick = 0;
   (function boot() {
     tick++;
     try { bindMega(); } catch (e) { console.warn('[r20] bindMega', e); }
+    try { fixBrand(); } catch (e) { console.warn('[r20] fixBrand', e); }
     var a = false, b = false, c = false, d = false;
     try { a = fixBest(); } catch (e) { console.warn('[r20] fixBest', e); }
     try { b = watchParts(); } catch (e) { console.warn('[r20] watchParts', e); }
