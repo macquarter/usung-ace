@@ -113,7 +113,12 @@
     for (k in BASE) if (BASE.hasOwnProperty(k)) over[k] = BASE[k];
     var f = FAM[fam] || {};
     for (k in f) if (f.hasOwnProperty(k)) over[k] = f[k];
-    return { ids: ids, over: over, color: m.cat === 'LED조명', fam: fam };
+    // 색상표는 「색상표 여기에」 표기가 있는 슬라이드에만 붙인다.
+    // S15~S22(갓등·우주선,아크릴) 8/8 에 표기 있음 · S23~S26(디자인등) 0/4 에 표기 없음.
+    // 색상표 원본 이미지(image20.png)도 S14~S22 에만 삽입돼 있고 S23~S26 에는 없다.
+    // S14 의 「색상표는 LED라인만 있으면 됩니다」는 계열 판정(갤럭시/파이프 제외)이고,
+    // 실제 배치 지시는 슬라이드별 「색상표 여기에」 쪽이 더 구체적이라 그쪽을 따른다.
+    return { ids: ids, over: over, color: m.cat === 'LED조명' && m.mid !== '디자인등', fam: fam };
   }
 
   function src(id) {
