@@ -54,6 +54,6 @@ window.__R16D=(window.__R16D||[]).concat([
  *   실제로 쓰이는 4종만 템플릿으로 두면 SKU 는 그대로 한국어로 남는다. */
 ["{n}Ø 양옆태엽 스윙 후드","{n}Ø Dual-Side Spring Swing Hood","{n}Ø 両側ゼンマイ スイングフード","{n}Ø 双侧发条摆动油烟罩","Chụp hút xoay lò xo hai bên {n}Ø"],
 ["{n}Ø 와이어리스 스윙텐션 후드","{n}Ø Wireless Swing-Tension Hood","{n}Ø ワイヤレススイングテンションフード","{n}Ø 无线摆动张力油烟罩","Chụp hút xoay lực căng không dây {n}Ø"],
-["{n}Ø 유성에이스 후드","{n}Ø USUNG ACE Hood","{n}Ø ユソンエースフード","{n}Ø 友盛ACE油烟罩","Chụp hút USUNG ACE {n}Ø"],
+["{n}Ø 유성에이스 후드","{n}Ø YUSUNG ACE Hood","{n}Ø ユソンエースフード","{n}Ø 友盛ACE油烟罩","Chụp hút YUSUNG ACE {n}Ø"],
 ["{n}Ø 자바라 신축형 후드","{n}Ø Telescoping Bellows Hood","{n}Ø 蛇腹伸縮式フード","{n}Ø 软管伸缩式油烟罩","Chụp hút ống mềm co giãn {n}Ø"],
 ]);

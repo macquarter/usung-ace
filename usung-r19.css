@@ -33,6 +33,7 @@ html .r8x:not(#_r8_) .m-parts .r19-cc .hint {
 }
 html .r8x:not(#_r8_) .m-parts .r19-grp {
   display: flex; align-items: center; gap: 8px; margin: 0 0 10px;
+  flex-wrap: wrap;
 }
 html .r8x:not(#_r8_) .m-parts .r19-grp .r19-tag {
   display: inline-flex; align-items: center; justify-content: center;
@@ -42,6 +43,14 @@ html .r8x:not(#_r8_) .m-parts .r19-grp .r19-tag {
 }
 html .r8x:not(#_r8_) .m-parts .r19-grp b {
   font-size: 11.5px; font-weight: 800; color: var(--ub2);
+}
+/* 260804 취합본 r2 S17 — 그룹별 마감 이름(도금=스텐도금 / 도장=스텐도장·스파이얼) */
+html .r8x:not(#_r8_) .m-parts .r19-grp .r19-fin {
+  font-size: 11.5px; font-weight: 700; color: var(--sub);
+  word-break: keep-all; line-height: 1.4;
+}
+html .r8x:not(#_r8_) .m-parts .r19-cc .hint b {
+  font-weight: 800; color: var(--ink);
 }
 html .r8x:not(#_r8_) .m-parts .r19-row {
   display: grid;
@@ -72,6 +81,10 @@ html .r8x:not(#_r8_) .m-parts .r19-sw figcaption {
 }
 html .r8x:not(#_r8_) .m-parts .r19-note {
   font-size: 11px; color: var(--sub); margin: 2px 0 0; line-height: 1.5;
+}
+/* 아크릴 변경불가 안내 — 주의사항이라 브랜드 블루로 한 단계 올린다 */
+html .r8x:not(#_r8_) .m-parts .r19-note.warn {
+  color: var(--ub2); font-weight: 700; margin: 0 0 4px;
 }
 
 @media (max-width: 860px) {

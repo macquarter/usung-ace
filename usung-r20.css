@@ -1,0 +1,133 @@
+/* usung-r20.css — 260804 취합본 r2 · CSS 전용 항목
+ *   S3   제품소개 히어로 1·2번째 제품 겹침 제거
+ *   S6   회사소개 자간 배열 · 끝배열 (낱말 중간 줄바꿈 제거 + 우측 정렬)
+ *   S12  제품소개 대분류 카드의 시리즈 특징 칩 삭제 (아래 밴드와 중복)
+ *   S15  BEST&NEW / 밴드 가로 스크롤바를 눈에 띄게 + 옆 모델 존재 암시
+ *   S20  시공갤러리 라이트박스의 빨간핀(📍) 줄 삭제
+ *
+ * index_v6.html 불변. 런타임 오버레이만 사용한다.
+ * usung-r8.css 는 usung-r8-mount.js 가 <head> 에 append 하므로 소스 순서에서
+ * 이 정적 <link> 를 항상 이긴다. .r8x 를 겨냥한 규칙 앞에 html 을 붙여
+ * r8 스코프(.r8x:not(#_r8_) = 1,1,0)보다 높은 명시도(1,1,1)를 확보한다.
+ */
+
+/* ── S12 대분류 카드 특징 칩 제거 ───────────────────────────────────────
+ * PPT: 「아래 중복된내용이 있어서 이 빨간네모박스 부분 삭제」.
+ * 빨간 박스는 PRODUCT CATEGORY 5장 카드의 칩 줄만 덮는다(EMU 환산 73.5%~).
+ * 중복의 실체 — usung-r8-prod-b.js 가 카드(:31)와 밴드(:111)에서 같은
+ * catFxHTML(c) 를 부른다. 같은 대분류면 출력이 문자 단위로 동일하다.
+ * 밴드(#bands)는 .filterrow 바로 아래 형제이므로 「아래」가 그쪽이다.
+ * ★ 밴드 쪽(.cn-fx.band-fx)은 남긴다 — 지우는 건 카드 쪽뿐이다.
+ * .cn-grid 는 grid(align-items 기본 stretch)라 칩이 빠져도 5장 높이가
+ * 그대로 맞는다. .cn-sub 는 min-height:2.9em 으로 이미 정규화돼 있다. */
+html .r8x:not(#_r8_) .cn-card .cn-fx{display:none}
+
+/* ── S20 라이트박스 빨간핀 줄 제거 ──────────────────────────────────────
+ * PPT: 「어떤 건 저 빨간 핀에 장소가 들어가 있고 어떤 건 빨간 핀에 제품명
+ *       들어가 있고, 어떤 건 없고 / 빨간핀 삭제」.
+ * 슬라이드의 빨간 박스 2개가 각각 「제품명이 들어간 핀」과 「핀이 없는 카드」를
+ * 가리킨다 — 즉 핀 없는 쪽이 기대 모습이다.
+ * usung-r8-gal.js:140 이 `📍 ${it.site}` 를 만들고 :144 가 site 가 있을 때만
+ * .lb-store 를 그린다. GALLERY 의 site 열 절반이 현장이 아니라 제품 메모라
+ * (r10 에서 확인) 값 자체가 신뢰할 수 없다 → 줄째로 감춘다.
+ * ★ 타일 캡션에는 핀이 없다(usung-r10.js:116 은 esc(title) 만 찍는다).
+ * 「제품명도 이상하게 들어가 있음 → 추후 텍스트 수정」은 이번 범위가 아니다. */
+html .r8x:not(#_r8_) .lb-store{display:none}
+
+/* ── S3 히어로 1·2번째 제품 겹침 제거 ───────────────────────────────────
+ * PPT: 「1,2번째 제품 겹치지 않도록 배열」. slide3 에 빨간박스가 없다 → 전역 지시.
+ * 겹침의 실체 — usung-r8.css:56 `.hpipe{flex:1 1 0; margin:0 -4%}` 가 4칸을
+ * 균등폭으로 자르고 좌우 여백을 음수로 당기는데, :61 `img{max-width:300%}` 라
+ * 넓은 제품은 자기 칸을 넘어 이웃 위로 흘러넘친다.
+ * 실측(PIL 알파 bbox 종횡비 · trimImg 가 캔버스로 잘라내므로 렌더 비율 = 이 값):
+ *   gal001 0.4365 / led006 0.3340 / pipe004 0.1376 / led020 0.3808  (합 1.2889)
+ * 히어로 시각영역 = 1152-24 을 1:1.1 로 나눈 590.9px → 균등칸 147.75px 인데
+ * 1·2번 쌍은 중심간 215.8px 이 필요하다 → 68px 겹침. 3-4번 쌍은 여유가 남는다.
+ * (사용자가 「1,2번째만」이라고 짚은 것과 실측이 정확히 일치한다.)
+ * ★ 균등칸을 비율로 재분배하는 대신 「내용 크기 + max-width:100%」로 바꾼다.
+ *   비율 분배는 자산이 바뀌면 다시 깨지지만, max-width:100% 는 넘침 자체가
+ *   구조적으로 불가능하다(자산 교체·CORS 로 trimImg 실패 시에도 안전).
+ * 430px 기준 자연폭 합 554.2 + gap 30 = 584.2 ≤ 590.9 → 줄어들지 않고 gap 정확.
+ * .hcap 은 usung-r8.css:67 에서 position:absolute 라 높이 변경에 영향이 없다.
+ * .hero .wrap 의 min-height:580px 가 바닥이라 히어로 자체는 ~30px 만 낮아진다. */
+html .r8x:not(#_r8_) .hero-visual{height:472px}
+html .r8x:not(#_r8_) .hero-imgs{height:472px;gap:10px}
+html .r8x:not(#_r8_) .hpipe{margin:0;flex:0 1 auto;min-width:0}
+html .r8x:not(#_r8_) .hpipe .hfloat{width:auto;max-width:100%}
+html .r8x:not(#_r8_) .hpipe img{height:430px;max-width:100%}
+/* r8:65 의 hover 확대 1.05 는 가장 넓은 1번(187.9px)을 9.4px 키워 여유 10px 을
+ * 1.3px 로 깎는다 → 1.02(3.75px 증가)로 낮춰 8.1px 을 남긴다.
+ * 같은 규칙의 filter(drop-shadow)는 별개 선언이라 그대로 살아 있다. */
+html .r8x:not(#_r8_) .hpipe:hover img{transform:translateY(-16px) scale(1.02)}
+
+/* ── S15 가로 스크롤바 가시성 + 옆 모델 존재 암시 ───────────────────────
+ * PPT: 「이동바 형태를 훨씬 잘보이도록. 옆에 다른 모델이 있음을 더 잘 알수
+ *       있도록 변경부탁해」. 빨간 동그라미는 밴드의 가로 스크롤바다.
+ * 현행 usung-r8.css:235-236 — 높이 7px · thumb #cdd6e6(연회색) · track 없음.
+ * .hrow 는 grid-auto-columns 가 3.2칸이라 5개 대분류 전부(최소 9모델) 실제로
+ * 넘친다 → 페이드를 상시 표시해도 거짓말이 되지 않는다(JS 불필요).
+ * ★ .band 는 자기 배경이 없어 밝은 페이지 배경을 그대로 물려받는다.
+ *   네이비 .bn-sec 은 .hrow 가 아니라 .bn-grid 를 쓰므로 흰 페이드가 닿지 않는다.
+ * .cards-area 는 r8:233 에서 이미 position:relative 라 ::after 에 추가 배선이 없다.
+ * background-clip:padding-box 는 같은 규칙 안에서 background 단축 뒤에 오므로
+ * 리셋되지 않는다(§3 「background 단축」 함정의 예외 — 순서가 핵심). */
+html .r8x:not(#_r8_) .hrow{scrollbar-color:#2563EB rgba(37,99,235,.16);scrollbar-width:auto;padding-bottom:22px}
+html .r8x:not(#_r8_) .hrow::-webkit-scrollbar{height:12px}
+html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-track{background:rgba(37,99,235,.12);border-radius:999px}
+html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-thumb{background:#2563EB;border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-thumb:hover{background:#1D4ED8;background-clip:padding-box}
+/* 오른쪽 끝 페이드 — 카드가 잘려 나가는 게 보이면 「더 있다」가 읽힌다.
+ * height 는 스크롤바(12) + padding-bottom 여유(14)를 뺀 만큼만 덮는다. */
+html .r8x:not(#_r8_) .cards-area::after{content:'';position:absolute;top:0;right:0;width:64px;height:calc(100% - 26px);background-image:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.92));pointer-events:none;z-index:2}
+
+/* ── 반응형 ─────────────────────────────────────────────────────────────
+ * ★ 위 기본 규칙은 (1,3,1) 이라 usung-r8.css 의 @media 규칙 (1,3,0) 도 이긴다.
+ *   → r8 이 좁은 화면에서 다시 잡는 값은 여기서 같은 미디어로 다시 써야 한다.
+ * r8:502 `.hpipe{width:22%}` + :504 `img{height:255px;max-width:240%}` 도
+ * 같은 이유로 겹친다 — 393px 에서 1·2번 쌍은 98.25px 이 필요한데 ~62px 뿐이다.
+ * 245px 기준 자연폭 합 315.8 + gap 18 = 333.8 ≤ 345(393-48) → 여유 11px. */
+@media (max-width:960px){
+  html .r8x:not(#_r8_) .hero-visual{height:282px}
+  html .r8x:not(#_r8_) .hero-imgs{height:282px;gap:6px}
+  html .r8x:not(#_r8_) .hpipe{width:auto;margin:0}
+  html .r8x:not(#_r8_) .hpipe img{height:245px;max-width:100%}
+}
+/* r8 은 ≤520px 에 히어로 규칙이 없어 960px 값이 320px 까지 그대로 내려간다.
+ * 375px(=327 가용)에서 315.8+18=333.8 이 넘치므로 한 단계 더 줄인다. */
+@media (max-width:380px){
+  html .r8x:not(#_r8_) .hpipe img{height:205px}
+}
+
+/* ── S6 회사소개 자간 배열 · 끝배열 ─────────────────────────────────────
+ * PPT: 「회사소개 | 자간 배열 및 끝배열 맞도록 수정」 + 빨간박스 3개.
+ * 실측으로 독립된 결함이 둘이었다. 박스 1·3 이 (a), 박스 2 가 (b).
+ *
+ * (a) 낱말 중간에서 줄이 끊긴다 — `#page-about` 에 word-break 선언이 아예 없다.
+ *     기본값 normal 은 한글 음절(UAX#14 class ID) 사이 어디서나 끊는다.
+ *     r8 은 keep-all 을 쓰지만 그 선언들은 전부 `.r8x` 스코프라 여기 못 닿는다.
+ *     라이브에서 재현된 파단 — 「…있습니다. 속 / 도가…」 「…되어 고 / 객님의…」
+ *     「…않는 정 / 교함은…」 「…우리의 사 / 명입니다.」 「…선도 / 하는…」.
+ *     → keep-all 만 넣으면 우측이 들쭉날쭉해진다(문단2 가 3→4줄, 101px 고아 발생).
+ *       「끝배열」이 그 요구이므로 justify 를 짝으로 넣어야 완성된다.
+ * ★ text-justify 는 auto 를 쓰지 말 것 — 낱말 사이를 벌려 강물(river)이 생긴다
+ *   (실측 최대 공백 4.5 → 15.8px). inter-character 는 글자 전체에 분산해
+ *   4.5 → 6.7px 에 그친다(평균 자간 피치 16.4 → 17.2). 사파리는 text-justify 를
+ *   모르므로 auto 로 열화되는데, 끝은 맞고 공백만 넓어지는 안전한 열화다.
+ * ★ justify 를 표제에 걸면 안 된다 — 짧은 h2 는 「유성에이스」가 폭 전체로
+ *   늘어난다(글자 피치 43 → 72px). 그래서 본문 2종만 대상으로 좁힌다.
+ *
+ * (b) 대표이사 회사명만 자간이 벌어져 「유성에이스 주식 / 회사」로 끊긴다.
+ *     범인은 내 규칙이 아니라 theme-white.css:361 이다 —
+ *       .page:not(#page-home) .text-blue-400{letter-spacing:0.32em}
+ *     11px 대문자 눈썹 라벨(CEO MESSAGE·COMPANY INFO)용으로 쓴 값인데
+ *     같은 클래스를 단 36px 회사명 span 까지 함께 맞았다(글자 피치 43px).
+ *     ★ theme-white.css 를 고치지 않는다 — 그 규칙이 실제로 필요한 눈썹 라벨이
+ *       살아 있고, 전수조사 결과 화면에 보이는 18px 이상 피해자는 이 span **하나뿐**이다
+ *       (나머지 한글 매치는 숨은 문의폼 라벨과 .r8-original 안 갤러리 캡션 50개).
+ *       그래서 전역 수정 대신 스코프 오버라이드로 그 하나만 되돌린다.
+ *     letter-spacing 쪽에는 !important 가 없으므로 명시도만 올리면 이긴다
+ *     (theme 1,2,0 vs 아래 1,2,2). 실측: 이름 폭 279px / 칼럼 331px / 줄수 1. */
+#page-about,#page-about *{word-break:keep-all;overflow-wrap:break-word}
+#page-about [data-i18n="about_hero_desc"],
+#page-about [data-cms^="a_ceo_p"]{text-align:justify;text-justify:inter-character}
+html #page-about h2 [data-cms="a_ceo_name"].text-blue-400{letter-spacing:-0.025em}

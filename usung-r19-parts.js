@@ -49,15 +49,35 @@
     }).join('');
   }
 
-  function colorChart() {
-    var C = window.R19.COLORS;
+  // 260804 취합본 r2 S16·S17 — 모델별 색상 정책
+  //   'all'   : 도금 7 + 도장 8 = 15종            (350·450갓등 · 600·450우주선)
+  //   'paint' : 도장 8종만                        (500Ø항아리갓등 「도장만 가능」)
+  //   'acryl' : 15종이되 파이프 한정 + 변경불가 안내 (450Ø우주선·400Ø원형 아크릴)
+  // ★ 색상 스프라이트 좌표는 COLORS.all 기준 절대 index 다. 도장만 그릴 때도
+  //   from 을 plate.length 로 넘겨야 칸이 밀리지 않는다.
+  function grp(tag, fin, names, from) {
+    return '<div class="r19-grp"><span class="r19-tag">' + tag + '</span>' +
+      '<b>' + names.length + '종</b><span class="r19-fin">' + esc(fin) + '</span></div>' +
+      '<div class="r19-row">' + swatches(names, from) + '</div>';
+  }
+
+  function colorChart(mode) {
+    var C = window.R19.COLORS, F = window.R19.FINISH || { plate: '', paint: '' };
+    var hint, body;
+    if (mode === 'paint') {
+      hint = '이 제품은 <b>도장 마감만</b> 가능합니다. 파이프는 아래 ' + C.paint.length + '종 중에서 선택하실 수 있습니다.';
+      body = grp('도장', F.paint, C.paint, C.plate.length);
+    } else {
+      hint = mode === 'acryl'
+        ? '이 제품은 <b>파이프 색상만</b> 변경할 수 있습니다. 파이프는 아래 ' + C.all.length + '종 중에서 선택하실 수 있습니다.'
+        : '이 제품은 <b>색상 선택이 가능</b>합니다. 파이프는 아래 ' + C.all.length + '종 마감 중에서 선택하실 수 있습니다.';
+      body = grp('도금', F.plate, C.plate, 0) + grp('도장', F.paint, C.paint, C.plate.length);
+    }
     return '<div class="r19-cc">' +
       '<h4><span class="en">COLOR &amp; FINISH</span> 파이프 색상표</h4>' +
-      '<p class="hint">파이프는 아래 15종 마감 중에서 선택하실 수 있습니다.</p>' +
-      '<div class="r19-grp"><span class="r19-tag">도금</span><b>' + C.plate.length + '종</b></div>' +
-      '<div class="r19-row">' + swatches(C.plate, 0) + '</div>' +
-      '<div class="r19-grp"><span class="r19-tag">도장</span><b>' + C.paint.length + '종</b></div>' +
-      '<div class="r19-row">' + swatches(C.paint, C.plate.length) + '</div>' +
+      '<p class="hint">' + hint + '</p>' + body +
+      (mode === 'acryl'
+        ? '<p class="r19-note warn">※ 아크릴(우주선 · 원형) 부분은 색상 변경이 불가합니다.</p>' : '') +
       '<p class="r19-note">※ 화면 및 조명 환경에 따라 실제 제품 색상과 차이가 있을 수 있습니다.</p>' +
       '</div>';
   }
@@ -94,7 +114,7 @@
         '<p class="hint">※ 해당 제품에 사용되는 부품 구성입니다. 설치 환경에 따라 일부 옵션이 달라질 수 있습니다.</p>' +
         '<div class="pt-grid r19-grid">' + p.ids.map(function (id) { return tile(id, p.over); }).join('') + '</div>';
     }
-    if (p.color) html += colorChart();
+    if (p.color) html += colorChart(p.color);
     el.innerHTML = html;
     reveal(el);
   }

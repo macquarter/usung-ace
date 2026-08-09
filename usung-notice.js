@@ -135,7 +135,10 @@
         '<div>' +
           '<div style="font-size:10px;letter-spacing:.24em;font-weight:900;color:#93c5fd;margin-bottom:8px">CUSTOMER CENTER</div>' +
           '<h3 style="font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.01em;margin:0">궁금한 점은 언제든 전화주세요</h3>' +
-          '<p style="color:rgba(255,255,255,.65);font-size:14px;margin:8px 0 0">평일 09:00 ~ 18:00 / 토·일·공휴일 휴무</p>' +
+          /* 260804 취합본 r2 S2 — 운영시간 08:30~17:30.
+             ★ 이 줄이 index_v6.html:2442 를 런타임에 덮는다(render() 가 .max-w-5xl 을 통째 교체)
+               → 고정된 원본의 09:00 표기는 화면에 뜨지 않는다. 원본은 건드릴 필요가 없다. */
+          '<p style="color:rgba(255,255,255,.65);font-size:14px;margin:8px 0 0">평일 08:30 ~ 17:30 / 토·일·공휴일 휴무</p>' +
         '</div>' +
         '<a href="tel:1588-9123" style="padding:16px 32px;border-radius:999px;background:#fff;color:' + NAVY + ';font-weight:900;font-size:18px;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.18);white-space:nowrap">📞 1588-9123</a>' +
       '</div>' +

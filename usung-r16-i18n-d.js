@@ -23,7 +23,7 @@ window.__R16D=(window.__R16D||[]).concat([
 ["하향식 후드","Down-Draft Hood","ダウンドラフトフード","下抽式油烟罩","Chụp hút hướng xuống"],
 ["시야 확보","Clear Sightlines","視界確保","确保视野","Đảm bảo tầm nhìn"],
 ["갤럭시 시리즈","Galaxy Series","ギャラクシーシリーズ","Galaxy系列","Dòng Galaxy"],
-["디자인과 기능을 모두 갖춘 유성에이스의 대표 라인업","USUNG ACE's flagship lineup, combining design and performance","デザインと機能を兼ね備えたユソンエースの代表ラインアップ","兼具设计与功能的友盛ACE代表产品线","Dòng sản phẩm tiêu biểu của USUNG ACE, kết hợp thiết kế và tính năng"],
+["디자인과 기능을 모두 갖춘 유성에이스의 대표 라인업","YUSUNG ACE's flagship lineup, combining design and performance","デザインと機能を兼ね備えたユソンエースの代表ラインアップ","兼具设计与功能的友盛ACE代表产品线","Dòng sản phẩm tiêu biểu của YUSUNG ACE, kết hợp thiết kế và tính năng"],
 ["갤럭시 시리즈 전체 보기 →","View All Galaxy Series →","ギャラクシーシリーズをすべて見る →","查看全部Galaxy系列 →","Xem tất cả dòng Galaxy →"],
 ["양옆태엽","Side Spring","両側ゼンマイ","两侧发条","Lò xo hai bên"],
 ["내부태엽","Internal Spring","内部ゼンマイ","内部发条","Lò xo bên trong"],

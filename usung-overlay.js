@@ -636,7 +636,7 @@
               '<h3 class="text-[13px] font-black tracking-tight text-slate-900 leading-snug mb-2 line-clamp-2">'+g.name+'</h3>'+
               variantPreview +
               '<div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">'+
-                '<span class="text-slate-400 font-semibold">USUNG ACE</span>'+
+                '<span class="text-slate-400 font-semibold">YUSUNG ACE</span>'+
                 '<span class="font-bold text-blue-700 flex items-center gap-1">상세 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>'+
               '</div>'+
             '</div>'+

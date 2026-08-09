@@ -68,6 +68,21 @@
     cob: {}
   };
 
+  // ── 색상표 정책 ────────────────────────────────────────────────────────
+  // 260804 취합본 r2 S17 「제품소개 – LED조명 - 색상표시」 본문 그대로.
+  // 적어주지 않은 모델은 기본값 'all'(도금 7 + 도장 8 = 15종)이다.
+  //   350Ø갓등(슬림)·350Ø갓등(반달)·450Ø갓등·600Ø우주선·450Ø우주선 → 도금·도장 모두 가능
+  //   500Ø항아리갓등 → 「도장만 가능」            ★ PPT 는 '항아리갓등', 카탈로그 grp 는 '500Ø항아리등'
+  //   450Ø우주선(아크릴)·400Ø원형(아크릴) → 「파이프 색상만 변경 가능 …
+  //                                          우주선과 원형 아크릴은 색상 변경 불가」
+  // ★ 카탈로그 실측이 뒷받침한다 — 500Ø항아리등 샘플 2개가 전부 스텐도장(도금 0),
+  //   아크릴 2종은 finish 값이 파이프 마감이 아니라 아크릴 색(빨강/노랑)이다.
+  var COLPOL = {
+    '500Ø항아리등': 'paint',
+    '450Ø우주선(아크릴)': 'acryl',
+    '400Ø원형(아크릴)': 'acryl'
+  };
+
   // 코브라후드 — 목록 순서 1·2·5 번만 부품이 붙는다 (S32)
   var COB = {
     '90Ø롱망코브라220': 'COB_R',
@@ -118,7 +133,12 @@
     // 색상표 원본 이미지(image20.png)도 S14~S22 에만 삽입돼 있고 S23~S26 에는 없다.
     // S14 의 「색상표는 LED라인만 있으면 됩니다」는 계열 판정(갤럭시/파이프 제외)이고,
     // 실제 배치 지시는 슬라이드별 「색상표 여기에」 쪽이 더 구체적이라 그쪽을 따른다.
-    return { ids: ids, over: over, color: m.cat === 'LED조명' && m.mid !== '디자인등', fam: fam };
+    // ★ color 는 260804 취합본 r2 S17 로 Boolean → 문자열이 됐다.
+    //   false | 'all'(15종) | 'paint'(도장 8종) | 'acryl'(15종 + 아크릴 변경불가 안내)
+    //   호출부는 truthy 판정만 하므로 기존 분기(!p.color / if(p.color))는 그대로 동작한다.
+    var color = false;
+    if (m.cat === 'LED조명' && m.mid !== '디자인등') color = COLPOL[m.grp] || 'all';
+    return { ids: ids, over: over, color: color, fam: fam };
   }
 
   function src(id) {
@@ -133,5 +153,13 @@
   };
   COLORS.all = COLORS.plate.concat(COLORS.paint);
 
-  w.R19 = { PN: PN, L: L, plan: plan, src: src, COLORS: COLORS, isNew: function (id) { return !!NEW[id]; } };
+  // 마감 이름 — 260804 취합본 r2 S17 「도금 = 스텐도금 / 도장 = 스텐도장, 스파이얼」
+  // 카탈로그 실측이 이를 뒷받침한다: 스텐도금 샘플은 크롬·동도금·신주도금(도금색),
+  // 스텐도장·스파이얼 샘플은 전부 함마(도장색)다. 지어낸 값이 아니다.
+  var FINISH = { plate: '스텐도금', paint: '스텐도장 · 스파이얼' };
+
+  w.R19 = {
+    PN: PN, L: L, plan: plan, src: src, COLORS: COLORS, FINISH: FINISH, COLPOL: COLPOL,
+    isNew: function (id) { return !!NEW[id]; }
+  };
 })(window);

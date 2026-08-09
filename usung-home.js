@@ -176,7 +176,10 @@
     var wherewe = find(/대한민국의 불 앞에서|WHERE WE WORK/);
     var gallery = find(/REAL CONSTRUCTION|진짜 현장 사진/);
     var motion = find(/FEATURES IN MOTION/);
-    var video = find(/USUNG ACE IN ACTION/);
+    // ★ S7·S8 로 화면 표기가 YUSUNG ACE 로 바뀌었다(api/inject.js 응답시점 치환).
+    //   이 정규식은 소스가 아니라 **살아있는 DOM 텍스트**를 매칭하므로 그대로 두면
+    //   영상 섹션을 못 찾아 숨김이 풀린다 → 두 표기를 모두 받도록 Y? 를 넣는다.
+    var video = find(/Y?USUNG ACE IN ACTION/);
 
     // 삭제 섹션 숨김
     if (motion) motion.style.display = 'none';

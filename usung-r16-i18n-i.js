@@ -24,25 +24,25 @@ window.__R16D=(window.__R16D||[]).concat([
 ["후드의 기준","The Standard in Hoods","フードの基準","油烟罩的标准","Tiêu chuẩn của chụp hút"],
 ["한 번 사용 해보면,","Once you have used it,","一度使えば、","用过一次，","Một lần sử dụng,"],
 ["다시 찾는 이유가 있습니다.","there is a reason customers come back.","また選ばれる理由があります。","就知道客户为何回头。","bạn sẽ hiểu vì sao khách quay lại."],
-["유성에이스를 쓰면,","With USUNG ACE,","ユソンエースを使えば、","使用友盛ACE，","Với USUNG ACE,"],
+["유성에이스를 쓰면,","With YUSUNG ACE,","ユソンエースを使えば、","使用友盛ACE，","Với YUSUNG ACE,"],
 ["후드의 기준이 달라집니다.","the standard for hoods changes.","フードの基準が変わります。","油烟罩的标准就此改变。","tiêu chuẩn của chụp hút sẽ thay đổi."],
 ["제품 라인업 보기","View Product Lineup","製品ラインナップ","查看产品线","Xem sản phẩm"],
 ["견적 문의","Request Quote","見積依頼","报价咨询","Yêu cầu báo giá"],
 ["시공 현장 {n}","Site {n}","施工現場 {n}","施工现场 {n}","Công trình {n}"],
 
 /* ── 회사소개 전화 카드 (usung-r9-excel.js · 잔여업무 A-13 해소) ───────── */
-["유성에이스","USUNG ACE","ユソンエース","友盛ACE","USUNG ACE"],
+["유성에이스","YUSUNG ACE","ユソンエース","友盛ACE","YUSUNG ACE"],
 ["경기 파주시 파주읍 센트럴산단1로 103","103, Central Sandan 1-ro, Paju-eup, Paju-si, Gyeonggi-do","京畿道パジュ市パジュ邑セントラル産団1路103","京畿道坡州市坡州邑中央产业园区1路103号","103, Central Sandan 1-ro, Paju-eup, Paju-si, Gyeonggi-do"],
 ["경기 파주시 파주읍","Paju-eup, Paju-si, Gyeonggi-do","京畿道パジュ市パジュ邑","京畿道坡州市坡州邑","Paju-eup, Paju-si, Gyeonggi-do"],
 ["센트럴산단1로 103","103, Central Sandan 1-ro","セントラル産団1路103","中央产业园区1路103号","103, Central Sandan 1-ro"],
 ["(봉암리 1371-9)","(Bongam-ri 1371-9)","(ボンアムリ 1371-9)","(凤岩里 1371-9)","(Bongam-ri 1371-9)"],
 ["견적 · 설치 · A/S 무엇이든 아래 번호로 연락 주세요.","For quotes, installation or after-sales service, please call the number below.","見積・設置・A/S、何でも下記の番号までご連絡ください。","报价、安装、售后，任何需求请拨打下方号码。","Báo giá, lắp đặt hay bảo hành — xin gọi số bên dưới."],
 ["📞 대표전화 1588-9123","📞 Main Line 1588-9123","📞 代表電話 1588-9123","📞 客服热线 1588-9123","📞 Tổng đài 1588-9123"],
-["평일 09:00 ~ 18:00","Weekdays 09:00 ~ 18:00","平日 09:00 ~ 18:00","工作日 09:00 ~ 18:00","Ngày thường 09:00 ~ 18:00"],
+["평일 08:30 ~ 17:30","Weekdays 08:30 ~ 17:30","平日 08:30 ~ 17:30","工作日 08:30 ~ 17:30","Ngày thường 08:30 ~ 17:30"],
 
 /* ── 공지 페이지 골격 (usung-notice.js · 문구는 i18n.js 원문) ──────────── */
 ["NOTICE · 공지사항","NOTICE","NOTICE · お知らせ","NOTICE · 公告","NOTICE · Thông báo"],
-["유성에이스 소식","USUNG ACE News","ユソンエースニュース","友盛ACE动态","Tin USUNG ACE"],
+["유성에이스 소식","YUSUNG ACE News","ユソンエースニュース","友盛ACE动态","Tin YUSUNG ACE"],
 ["중요한 공지, A/S 일정, 이벤트 소식을 한곳에서 확인하세요.","Check important notices, A/S schedules, and event news in one place.","重要なお知らせ、A/Sスケジュール、イベント情報を一箇所で確認。","在此查看重要公告、售后日程和活动信息。","Xem thông báo quan trọng, lịch A/S và sự kiện tại đây."],
 ["PINNED · 중요","PINNED · IMPORTANT","PINNED · 重要","PINNED · 重要","PINNED · QUAN TRỌNG"],
 ["PINNED · 이벤트","PINNED · EVENT","PINNED · イベント","PINNED · 活动","PINNED · SỰ KIỆN"],
@@ -53,7 +53,7 @@ window.__R16D=(window.__R16D||[]).concat([
 ["공지","Notice","お知らせ","公告","Thông báo"],
 ["이벤트","Event","イベント","活动","Sự kiện"],
 ["궁금한 점은 언제든 전화주세요","Call us anytime with your questions","ご不明な点はいつでもお電話ください","有任何疑问请随时来电","Có thắc mắc, hãy gọi cho chúng tôi bất cứ lúc nào"],
-["평일 09:00 ~ 18:00 / 토·일·공휴일 휴무","Weekdays 09:00 ~ 18:00 / Closed Sat, Sun and holidays","平日 09:00 ~ 18:00 / 土日祝休業","工作日 09:00 ~ 18:00 / 周六日及节假日休息","Ngày thường 09:00 ~ 18:00 / Nghỉ T7, CN và ngày lễ"],
+["평일 08:30 ~ 17:30 / 토·일·공휴일 휴무","Weekdays 08:30 ~ 17:30 / Closed Sat, Sun and holidays","平日 08:30 ~ 17:30 / 土日祝休業","工作日 08:30 ~ 17:30 / 周六日及节假日休息","Ngày thường 08:30 ~ 17:30 / Nghỉ T7, CN và ngày lễ"],
 
 /* ── 공지 게시글 9건 (제목 + 본문) ────────────────────────────────────── */
 ["2026 설 연휴 A/S 운영 안내","2026 Lunar New Year A/S Service Notice","2026年 旧正月連休 A/S 対応のご案内","2026年春节假期售后服务安排","Thông báo dịch vụ A/S dịp Tết Nguyên đán 2026"],
@@ -72,7 +72,7 @@ window.__R16D=(window.__R16D||[]).concat([
 ["기존 대비 폐쇄 속도 40% 향상, 스프링 수명 2배 연장된 2세대 F.V.D가 전 제품군에 기본 탑재됩니다.","The 2nd-generation F.V.D — 40% faster closing and twice the spring life — now comes standard across the entire product range.","従来比で閉鎖速度40%向上、スプリング寿命2倍となった第2世代F.V.Dが全製品に標準搭載されます。","关闭速度较原有产品提升40%、弹簧寿命延长2倍的第二代F.V.D，将标配于全系列产品。","F.V.D thế hệ 2 — tốc độ đóng nhanh hơn 40%, tuổi thọ lò xo gấp đôi — nay được trang bị tiêu chuẩn trên toàn bộ dòng sản phẩm."],
 ["설 연휴 기간 긴급 A/S 접수 안내","Urgent A/S Requests During the Lunar New Year Holiday","旧正月連休期間中の緊急A/S受付のご案内","春节假期紧急售后受理通知","Hướng dẫn tiếp nhận A/S khẩn cấp trong kỳ nghỉ Tết"],
 ["설 연휴 기간 긴급 상황 발생 시 1588-9123으로 연락 주시면 순차 대응해드립니다.","If an emergency arises during the Lunar New Year holiday, call 1588-9123 and we will respond in order of receipt.","旧正月連休期間中に緊急事態が発生した場合は、1588-9123までご連絡いただければ順次対応いたします。","春节假期期间如遇紧急情况，请拨打1588-9123，我们将依次处理。","Nếu có tình huống khẩn cấp trong kỳ nghỉ Tết, xin gọi 1588-9123, chúng tôi sẽ xử lý lần lượt."],
-["유성에이스 공식 블로그 리뉴얼 완료","USUNG ACE Official Blog Renewal Complete","ユソンエース公式ブログ リニューアル完了","友盛ACE官方博客改版完成","Hoàn tất đổi mới blog chính thức USUNG ACE"],
+["유성에이스 공식 블로그 리뉴얼 완료","YUSUNG ACE Official Blog Renewal Complete","ユソンエース公式ブログ リニューアル完了","友盛ACE官方博客改版完成","Hoàn tất đổi mới blog chính thức YUSUNG ACE"],
 ["네이버 공식 블로그가 새롭게 리뉴얼되었습니다. 시공 사례와 기술 정보를 확인하세요.","Our official Naver blog has been redesigned. Browse installation cases and technical information.","NAVER公式ブログを新しくリニューアルしました。施工事例と技術情報をご確認ください。","NAVER官方博客已全新改版，欢迎查看施工案例与技术信息。","Blog chính thức trên Naver đã được đổi mới. Mời xem các công trình và thông tin kỹ thuật."],
 
 /* ── 게시판 표 머리글·분류 탭 (i18n.js board_col_* 원문) ──────────────── */

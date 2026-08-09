@@ -21,7 +21,10 @@
   var TEL_HREF = 'tel:1588-9123';
   var MOBILE = '010-8254-9229';
   var FAX = '(031) 952-1706';   // 푸터·챗봇 표기와 동일 형식
-  var HOURS = '평일 09:00 ~ 18:00';
+  // 260804 취합본 r2 S2 — 「평일 08:30 ~ 17:30 으로 변경」(빨간박스 x533-676 y359-398)
+  // ★ r16 은 완전일치 조회라 usung-r16-i18n-i.js:41 의 ko 키도 같이 바꿔야 한다.
+  //   안 바꾸면 en/ja/zh/vi 4개 언어에서 조용히 미번역으로 남는다(§3 r16 함정 3).
+  var HOURS = '평일 08:30 ~ 17:30';
 
   /* ---------- CSS ---------- */
   function injectCss() {
@@ -46,6 +49,8 @@
       '.r9tel-rows > div{display:flex;align-items:baseline;gap:10px;font-size:15px;}',
       '.r9tel-rows span{color:#94a3b8;font-size:13px;font-weight:700;letter-spacing:.04em;}',
       '.r9tel-rows b,.r9tel-rows a{color:#0f172a;font-weight:700;text-decoration:none;}',
+      // S2 로 각주 줄을 지워 지금은 쓰이지 않는다. 「무료 실측 폐지인지 카드 정리인지」가
+      // 미확정(잔여업무)이라 되살릴 때 한 줄만 되돌리면 되도록 규칙은 남겨 둔다.
       '.r9tel-note{margin:22px 0 0;font-size:14px;color:#64748b;}',
       '@media (max-width:600px){',
       '.r9tel{padding:26px 20px;}',
@@ -93,8 +98,11 @@
         '<div><span>휴대폰</span><a href="tel:' + MOBILE.replace(/-/g, '') + '">' + MOBILE + '</a></div>' +
         '<div><span>팩스</span><b>' + FAX + '</b></div>' +
         '<div><span>운영시간</span><b>' + HOURS + '</b></div>' +
-      '</div>' +
-      '<p class="r9tel-note">현장 실측은 전국 어디든 무료입니다. 매장 주소와 평수만 알려주세요.</p>';
+      '</div>';
+      /* 260804 취합본 r2 S2 — 「삭제」(빨간박스 x96-499 y398-437 = 이 각주 줄).
+       * 지시 범위는 이 카드 한 곳이다 → chatbot.js 의 「현장 실측 무료」 문장 4곳은 손대지 않았다.
+       * 「무료 실측을 그만둔다」는 사실 변경인지 카드 정리인지 PPT 만으로는 못 가른다 → 잔여업무로 올린다.
+       * usung-r16-i18n-c.js:33 의 사전 행은 남겨 둔다(사문화된 키라 무해 · 되살릴 때 그대로 번역됨). */
     return d;
   }
 

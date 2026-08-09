@@ -22,10 +22,10 @@ window.__R16D=(window.__R16D||[]).concat([
 ["사용하는 사람의 입장에서 다시 생각했습니다.","We rethought it from the user's point of view.","使う人の立場から、もう一度考え直しました。","我们站在使用者的角度重新思考。","Chúng tôi đã suy nghĩ lại từ góc nhìn của người sử dụng."],
 ["“와이어를 외부로 꺼내면,","“If the wire were moved outside,","“ワイヤーを外に出せば、","“若把钢丝移到外部，","“Nếu đưa dây cáp ra ngoài,"],
 ["상태 확인도 쉬워지고 교체도 훨씬 편해지지 않을까?”","wouldn't checking and replacing it be far easier?”","状態確認も交換もずっと楽になるのでは？”","检查状态和更换是不是会方便得多？”","việc kiểm tra và thay thế chẳng phải sẽ dễ hơn nhiều?”"],
-["특허 제10-2743423호","Patent No. 10-2743423","特許 第10-2743423号","专利 第10-2743423号","Bằng sáng chế số 10-2743423"],
-["특허 제10-2755661호","Patent No. 10-2755661","特許 第10-2755661号","专利 第10-2755661号","Bằng sáng chế số 10-2755661"],
-["특허 제10-2889700호","Patent No. 10-2889700","特許 第10-2889700号","专利 第10-2889700号","Bằng sáng chế số 10-2889700"],
-["특허 제10-2916160호","Patent No. 10-2916160","特許 第10-2916160号","专利 第10-2916160号","Bằng sáng chế số 10-2916160"],
+// 260804 취합본 r2 S21 「특허번호 표기 삭제」 — 특허번호 4행을 삭제했다.
+// usung-r20.js 의 fixCerts() 가 캡션을 `특허` 로 줄이므로 이 4행은 죽은 키다.
+// 남은 `특허` 는 usung-r16-i18n-a.js:44 로 조회되어 5개 언어가 그대로 동작한다.
+// ★ 되살리지 말 것 — 여기 남겨 두면 언어 전환이 삭제한 번호를 다시 그린다.
 ["특허 출원 진행","Patent Application Pending","特許出願中","专利申请中","Đang nộp đơn sáng chế"],
 ["디자인 등록증","Design Registration Certificate","デザイン登録証","外观设计注册证","Giấy chứng nhận đăng ký kiểu dáng"],
 ["년+","+ Years","年+","年+","+ năm"],

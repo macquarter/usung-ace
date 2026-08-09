@@ -11,9 +11,9 @@
 
   var ENTITY = {
     ko: '유성에이스 주식회사',
-    en: 'USUNG ACE Co., Ltd.',
+    en: 'YUSUNG ACE Co., Ltd.',
     ja: '株式会社 ユソンエース',
-    vi: 'Công ty USUNG ACE',
+    vi: 'Công ty YUSUNG ACE',
     zh: '友盛ACE有限公司'
   };
   function curLang() {
