@@ -70,12 +70,24 @@ html .r8x:not(#_r8_) .hpipe:hover img{transform:translateY(-16px) scale(1.02)}
  *   네이비 .bn-sec 은 .hrow 가 아니라 .bn-grid 를 쓰므로 흰 페이드가 닿지 않는다.
  * .cards-area 는 r8:233 에서 이미 position:relative 라 ::after 에 추가 배선이 없다.
  * background-clip:padding-box 는 같은 규칙 안에서 background 단축 뒤에 오므로
- * 리셋되지 않는다(§3 「background 단축」 함정의 예외 — 순서가 핵심). */
-html .r8x:not(#_r8_) .hrow{scrollbar-color:#2563EB rgba(37,99,235,.16);scrollbar-width:auto;padding-bottom:22px}
+ * 리셋되지 않는다(§3 「background 단축」 함정의 예외 — 순서가 핵심).
+ * ★★ `scrollbar-color` 를 여기에 쓰면 아래 ::-webkit-scrollbar 규칙이 **통째로
+ *   무시된다**(Chrome 은 표준 속성이 지정되면 레거시 의사요소 스타일을 버린다).
+ *   그러면 macOS 기본값인 **오버레이 스크롤바**로 남아 레이아웃 폭 0 · 스크롤
+ *   중에만 보인다 = 「훨씬 잘 보이도록」의 정반대다. 393px 리그 실측 —
+ *   현행 0px / `scrollbar-color` 만 제거 **12px** / `scrollbar-width` 만 제거 0px.
+ *   즉 범인은 `scrollbar-color` 하나뿐이라 그것만 @supports 뒤로 물린다.
+ *   `scrollbar-width:auto` 는 초기값이라 무해해서 의도 표기용으로 남긴다. */
+html .r8x:not(#_r8_) .hrow{scrollbar-width:auto;padding-bottom:22px}
 html .r8x:not(#_r8_) .hrow::-webkit-scrollbar{height:12px}
 html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-track{background:rgba(37,99,235,.12);border-radius:999px}
 html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-thumb{background:#2563EB;border-radius:999px;border:2px solid transparent;background-clip:padding-box}
 html .r8x:not(#_r8_) .hrow::-webkit-scrollbar-thumb:hover{background:#1D4ED8;background-clip:padding-box}
+/* Firefox 처럼 ::-webkit-scrollbar 자체가 없는 브라우저에만 표준 속성으로 색을 준다.
+ * 이 게이트 안이라 Chrome/Safari 에는 적용되지 않고 위 12px 규칙이 살아남는다. */
+@supports not selector(::-webkit-scrollbar){
+  html .r8x:not(#_r8_) .hrow{scrollbar-color:#2563EB rgba(37,99,235,.16)}
+}
 /* 오른쪽 끝 페이드 — 카드가 잘려 나가는 게 보이면 「더 있다」가 읽힌다.
  * height 는 스크롤바(12) + padding-bottom 여유(14)를 뺀 만큼만 덮는다. */
 html .r8x:not(#_r8_) .cards-area::after{content:'';position:absolute;top:0;right:0;width:64px;height:calc(100% - 26px);background-image:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.92));pointer-events:none;z-index:2}
