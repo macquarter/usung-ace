@@ -162,12 +162,63 @@
   }
   fixPartDict();
 
+  /* ── ④ 제품 상세 「기본 규격」 Ø 줄 결손 3종 ──────────────────────────────
+   * usung-r8-prod-b.js:213 이 규격 줄을 **항목명(it.name)** 에서만 뽑는다.
+   *   500Ø항아리등 → 항목명 「500Ø항아리등 스텐도장 동함마」 ⇒ Ø 있음 → 규격 줄 뜸
+   *   450Ø갓등     → 항목명 「450갓등 스텐도금 동도금」       ⇒ Ø 없음 → 규격 줄 사라짐
+   * 모델명(빵부스러기)에는 450Ø 가 **이미 화면에 찍혀 있다.** 즉 없는 값을
+   * 지어내는 게 아니라 **이미 있는 값을 못 읽는 표시 결함**이다 —
+   * 같은 갓등 목록 안에서 4종 중 3종만 빠져 어긋난다(p29 와 같은 성격).
+   *
+   * ★ 반드시 **리터럴 Ø 가 있을 때만** 넣는다. \d{2,4} 로 넓히면
+   *   304스텐-양옆태엽(반후지) → 「304Ø」(304 는 강종) ·
+   *   사각코브라160 → 사각 후드에 Ø 가 붙는 오표기가 난다.
+   * ★ 라이브 전수 시뮬레이션(62모델 206항목): 새로 생기는 항목 8 / 모델 3
+   *   (350Ø갓등(슬림) · 350Ø갓등(반달) · 450Ø갓등) · 기존 규격 줄 변경 0 ·
+   *   같은 모델 안에서 항목마다 오락가락 0.
+   * ★ curModel 은 let 이라 밖에서 못 읽는다 → #m-crumb b 에서 모델명을 읽는다.
+   * ★ renderModalSel 은 함수 선언이라 window 속성이고, 무자격 호출 3곳
+   *   (selectFinish · stepFinish · 빌더 꼬리)이 전부 교체본을 본다.
+   *   #m-spec 은 매 호출마다 innerHTML 통째로 갈리므로 누적되지 않는다.
+   *   되돌리기는 이 블록 + tick() 의 wrapSel() 한 줄 삭제. */
+  function specRow() {
+    var tb = document.getElementById('m-spec');
+    if (!tb) return;
+    var ths = tb.querySelectorAll('th'), i;
+    for (i = 0; i < ths.length; i++) if (ths[i].textContent === '규격') return; // 이미 있음
+    var b = document.querySelector('#m-crumb b');
+    if (!b) return;
+    var d = b.textContent.match(/\d{2,4}\s?Ø/g);
+    if (!d || !d.length) return;
+    var u = [];
+    for (i = 0; i < d.length; i++) if (u.indexOf(d[i]) < 0) u.push(d[i]);
+    // ★ insertAdjacentHTML('afterbegin') 금지 — innerHTML 로 만든 표엔 암시적
+    //   tbody 가 생겨 그 **앞**에 꽂히고 <tr> 이 통째로 버려진다. insertRow(0)
+    //   은 명세상 첫 tbody 를 대상으로 하므로 안전하다.
+    var tr = tb.insertRow(0);
+    tr.innerHTML = '<th>규격</th><td>' + u.join(' · ') + '</td>';
+  }
+
+  function wrapSel() {
+    if (window.__r22sel) return true;
+    if (typeof window.renderModalSel !== 'function') return false;
+    var orig = window.renderModalSel;
+    window.renderModalSel = function () {
+      var r = orig.apply(this, arguments);
+      try { specRow(); } catch (e) { console.warn('[r22] spec', e); }
+      return r;
+    };
+    window.__r22sel = true;
+    return true;
+  }
+
   /* ── 부트 ─────────────────────────────────────────────────────────────
    * r8 뷰는 지연 렌더라 언제 심길지 모른다 → 100ms × 최대 8초 재시도.
    * 티저 감시자가 붙은 뒤에도 캡션은 언제든 다시 그려질 수 있어 계속 표식한다. */
   function tick() {
     watchTeaser();
     markCap();
+    wrapSel();
   }
 
   function boot() {
