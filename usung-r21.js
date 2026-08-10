@@ -132,6 +132,36 @@
     return els.length > 0;
   }
 
+  /* ── ③ 부품 사전 교정 1건 — p29 「기름받이속」 ────────────────────────────
+   * 유성 크롭 원본(부품 크롭본/`27. 기름받이속.png`)은 **한 단어**다.
+   * 그런데 usung-r8-data.js:115 는 p29 만 nm/sp 로 쪼개 놓았다 —
+   *   p29:{nm:'기름받이', sp:'속'}   → 화면에 「기름받이 / 속」 두 줄
+   *   p30:{nm:'기름받이망', sp:''}   → 같은 줄·같은 구조인데 이쪽은 한 단어
+   * 취향 문제가 아니라 **같은 파일 같은 줄 안의 불일치**다. sp 슬롯은 규격(Ø)과
+   * 변형(흰색/검정 · 상/하 · 크롬/동/신주)을 담는 자리인데 '속' 은 둘 다 아니다.
+   *
+   * ★ 원본은 build_graft.py 생성물이라 수기 수정 금지(§3) → 런타임에서 고친다.
+   *   const 는 재대입만 막고 **속성 변형은 허용**된다. 클래식 스크립트끼리는
+   *   전역 렉시컬 이름으로 닿는다(usung-r19-parts.js:28 이 이미 그렇게 읽는다).
+   *   데이터 파일 미실행 시 typeof 조차 TDZ 로 던지므로 반드시 try 로 감싼다.
+   * ★ 이 한 곳이 부품 표면 3곳을 동시에 고친다 —
+   *   (a) 부품소개 페이지 renderPartsPage() → PART_ORDER → partTileHTML()
+   *   (b) 제품소개 하단 티저 partTileHTML()  ← 둘 다 R8_PARTS 를 직접 읽는다
+   *   (c) 제품 상세 모달 r19 label() — R8_PARTS 를 기본값으로 읽고 p29 에는
+   *       오버라이드가 없다(usung-r19-parts-data.js 의 p29 는 PN 표뿐).
+   *   렌더 시점보다 앞선다: renderPartsPage() 는 goParts() 에서만 불리고,
+   *   티저는 아래 boot() 의 drawTeaser() 가 다시 그린다. 되돌리기는 이 블록 삭제. */
+  function fixPartDict() {
+    try {
+      if (typeof R8_PARTS !== 'object' || !R8_PARTS.p29) return false;
+      if (R8_PARTS.p29.nm === '기름받이속') return true;   // 멱등
+      R8_PARTS.p29.nm = '기름받이속';
+      R8_PARTS.p29.sp = '';
+      return true;
+    } catch (e) { return false; }
+  }
+  fixPartDict();
+
   /* ── 부트 ─────────────────────────────────────────────────────────────
    * r8 뷰는 지연 렌더라 언제 심길지 모른다 → 100ms × 최대 8초 재시도.
    * 티저 감시자가 붙은 뒤에도 캡션은 언제든 다시 그려질 수 있어 계속 표식한다. */
