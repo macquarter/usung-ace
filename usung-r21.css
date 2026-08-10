@@ -1,0 +1,68 @@
+/* usung-r21.css — 260810 추가 지시 ②
+ * 상단 메가메뉴 좌측 캡션(CATEGORIES) 을 '제품 전체 보기' 버튼으로.
+ * 문구 자체는 i18n.js 의 mega_categories 5개 언어에서 바꿨고, 여기서는 생김새만 맡는다.
+ *
+ * 명시도 — 원본 클래스는 Tailwind 유틸(0,1,0) 뿐이라 (0,2,1) 로 충분하지만,
+ * theme-white.css 등 런타임 오버레이가 뒤에 붙는 구조라 !important 로 못박는다(§3).
+ * `-webkit-text-fill-color` 를 color 와 같이 선언하는 이유는 §3 챗봇 함정 6 참조 —
+ * 조상이 fill-color 를 걸면 color 만 고쳐서는 화면이 안 바뀐다. */
+
+html .dropdown [data-i18n="mega_categories"] {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px !important;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #1D4ED8 !important;
+  -webkit-text-fill-color: #1D4ED8 !important;
+  background: #EEF4FF;
+  border: 1px solid rgba(37, 99, 235, .18);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .18s ease, color .18s ease,
+              box-shadow .18s ease, transform .18s ease;
+}
+
+html .dropdown [data-i18n="mega_categories"]:hover,
+html .dropdown [data-i18n="mega_categories"]:focus-visible {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 8px 20px -8px rgba(37, 99, 235, .55);
+  transform: translateY(-1px);
+}
+
+html .dropdown [data-i18n="mega_categories"]:focus-visible {
+  outline: 2px solid #1D4ED8;
+  outline-offset: 2px;
+}
+
+html .dropdown [data-i18n="mega_categories"]:active {
+  transform: translateY(0);
+}
+
+/* 좁은 화면에서는 메가메뉴 자체가 안 뜨지만(모바일은 햄버거),
+   중간 폭에서 드롭다운이 94vw 로 줄 때 캡션이 넘치지 않게 한 겹 더 눕힌다. */
+@media (max-width: 1100px) {
+  html .dropdown [data-i18n="mega_categories"] {
+    font-size: 11.5px !important;
+    padding: 8px 12px;
+    margin-bottom: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .dropdown [data-i18n="mega_categories"] {
+    transition: none;
+  }
+  html .dropdown [data-i18n="mega_categories"]:hover {
+    transform: none;
+  }
+}
