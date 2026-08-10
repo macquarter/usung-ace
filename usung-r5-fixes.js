@@ -105,14 +105,60 @@
     })();
   }
 
+  /* ── ★ 세대 토큰 · 강제 goMain 삼키기 (2026-08-10 신고 2건) ────────────────
+   * 신고 — (b1) 대분류를 누르면 대문이 번쩍인다. (b2) 그 직후 '제품 전체 보기' 를
+   * 눌러도 대문으로 안 간다. **둘 다 기존 동작이 원인인데 그 동작 자체는 옳다.**
+   *
+   *  (b1) usung-r8-mount.js:275 의 navigate 래퍼는 외부 호출이면 +60ms 뒤
+   *       syncFromPage(true) 를 부르고, force 라 멱등가드를 건너뛰고 goMain() 을
+   *       **강제**한다(늦은 부트 구제용). 실측 — [1ms navigate / 22ms goCat /
+   *       **132ms goMain** / 160ms goCat] → 그 사이 약 23ms 동안 v-main 이 보인다.
+   *  (b2) 아래 settle() 이 110ms 마다 goCat 을 다시 쏜다(§3 「조용히 안 먹는 4대 원인」의
+   *       처방). 최대 60틱 ≈ 6.6초 산다. 실측 — [1522ms 캡션클릭 / 1626ms goMain /
+   *       **1683ms goCat** / 1750ms goMain / **1807ms goCat**] → 최종 v-cat = 실패.
+   *       ★ 5초쯤 뒤에 누르면 루프가 이미 죽어 **성공한다.** 한 번 눌러 보고
+   *         「고쳐졌다」고 판정하면 안 되는 종류의 버그다.
+   *
+   * ★ 조치는 **라우터 안에서만** 한다. 전역 goCat 을 가로채는 안은 폐기했다 —
+   *   usung-r12.js:64 의 popstate 복원이 window.goCat(t.c) 를 부르므로
+   *   **브라우저 뒤로가기가 통째로 깨진다**(r12 가 r21 보다 먼저 로드돼 선점도 불가).
+   *   대신 (a) 세대 토큰으로 지난 라우팅 루프를 스스로 멈추고,
+   *        (b) 라우팅이 켜 둔 1회용 표를 mount 의 강제 goMain 이 소모하게 한다.
+   *   페이지 안의 카드·'← 전체 제품'·popstate 는 손대지 않는다. */
+  var routeGen = 0;          // 세대 — 새 요청이 오면 지난 루프는 즉시 자결한다
+  var swallow = 0;           // 남은 1회용 표(강제 goMain 삼키기)
+  var swallowT = 0;          // 표의 만료 시각
+
+  function wrapMain() {
+    var gm = window.goMain;
+    if (typeof gm !== 'function' || gm.__r22) return;
+    var w = function () {
+      /* 표가 살아 있을 때 **딱 한 번만** 삼킨다.
+         - 시한(≈0.9초) : mount 는 +60~130ms 에 쏜다. 그 뒤 사용자의 대문 이동은 살린다.
+         - view.on 검사 : 켜진 뷰가 하나도 없으면 **절대 막지 않는다**(빈 화면 방지). */
+      if (swallow > 0 && Date.now() < swallowT &&
+          document.querySelector('.r8x .view.on')) { swallow--; return; }
+      return gm.apply(this, arguments);
+    };
+    w.__r22 = 1;
+    window.goMain = w;
+  }
+
+  /* 진행 중인 대분류 라우팅을 포기한다 — usung-r21.js 의 '제품 전체 보기' 가 부른다.
+     정착 루프·중분류 착지 루프를 함께 무효화하고 남은 표도 버린다. */
+  function cancelRoute() { routeGen++; landSeq++; swallow = 0; swallowT = 0; }
+  window.__usungRouteCancel = cancelRoute;
+
   /* ★ 감시는 길게 가져가야 한다(2026-08-02 실측).
    * usung-r8-mount.js 는 UP_DATA 가 늦게 오면 최대 6초까지 100ms 간격으로 boot 를
    * 재시도하고, boot 성공 시 syncFromPage() → goMain() 으로 v-main 을 켠다.
    * 짧게 감시하면 그 늦은 goMain 에 v-cat 이 덮여 클릭이 무위로 끝난다.
    * v-cat 이 꺼질 때마다 goCat 을 다시 걸고, 다시 켜지면 스크롤도 다시 잡는다. */
-  function r8Route(cat, mid) {
+  function r8Route(cat, mid, gen) {
+    var my = gen || ++routeGen;
     var t = 0, placed = false, stable = 0;
     (function settle() {
+      if (my !== routeGen) return;   // 새 요청(또는 취소)이 왔다 — 이 루프는 폐기
       t++;
       var v = document.getElementById('v-cat');
       var pg = document.getElementById('page-products');
@@ -134,6 +180,12 @@
   }
 
   function routeUseCase(cat, sec) {
+    /* ★ 표를 켜는 곳은 여기 하나뿐이다 — 대분류 라우팅이 시작될 때만.
+       r20 메가메뉴 · r5 USE CASE · r13 큐레이션이 전부 이 함수로 모이므로
+       의도 출처를 빠짐없이 잡으면서도 다른 경로의 goMain 은 건드리지 않는다. */
+    var my = ++routeGen;
+    wrapMain();
+    swallow = 1; swallowT = Date.now() + 900;
     try { if (typeof window.navigate === 'function') window.navigate('products'); } catch (e) {}
     // ★ legacy 로 빠질지는 '시간'이 아니라 '비상구가 켜졌는지'로 갈라야 한다(2026-08-02 실측).
     // 393px iframe 에서 r8 준비까지 7.3초가 걸렸는데 대기 상한이 2.5초라, 이식이 멀쩡히
@@ -141,8 +193,9 @@
     if (r8Off()) { legacyRoute(cat, sec); return; }
     var w = 0;
     (function waitR8() {
+      if (my !== routeGen) return;   // 기다리는 동안 취소·재요청이 왔다
       w++;
-      if (r8Ready()) { r8Route(cat, sec); return; }
+      if (r8Ready()) { r8Route(cat, sec, my); return; }
       if (w < 150) setTimeout(waitR8, 100);
     })();
   }
@@ -206,12 +259,26 @@
     }, true);
   }
 
+  /* 사용자가 대문으로 나가려 하면 진행 중인 정착 루프를 스스로 접는다.
+     `← 전체 제품`(usung-r8-view.js:67·76) 을 대분류 클릭 직후 6.6초 안에 누르면
+     settle() 이 v-cat 을 다시 켜 되끌어간다 — 신고 ② 와 같은 결함이 다른 입구로 난 것.
+     ★ preventDefault·stopPropagation 을 하지 않는다. 인라인 onclick 의 goMain() 은
+       그대로 돌아야 하고, 여기서는 **우리 루프만** 포기한다(다른 코드에 영향 0). */
+  function bindAbandon() {
+    if (window.__r5aban) return;
+    window.__r5aban = true;
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target.closest('[onclick*="goMain("]') : null;
+      if (t) cancelRoute();
+    }, true);
+  }
+
   // 챗봇 큐레이션(usung-r13-curation.js)이 추천 결과에서 같은 경로로 착지해야 한다.
   // 이 라우터에는 r8Off 판정 · 최대 15초 준비 대기 · 중분류 착지 재시도가 들어 있어
   // 복제하면 그 실측 지식이 갈라진다. 함수 하나만 밖으로 낸다.
   window.__usungRoute = routeUseCase;
 
-  function run() { try { injectCss(); guardImages(); bindDelegate(); } catch (e) {} }
+  function run() { try { injectCss(); guardImages(); bindDelegate(); bindAbandon(); } catch (e) {} }
 
   run();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);

@@ -79,6 +79,13 @@
   var CAP = '[data-i18n="mega_categories"]';
 
   function goAllProducts() {
+    /* ★ 진행 중인 대분류 라우팅을 먼저 취소한다(2026-08-10 신고 ②).
+       usung-r5-fixes.js 의 정착 루프가 110ms 마다 goCat 을 다시 쏘고 있으면
+       여기서 대문을 켜도 곧바로 되끌려간다(실측 최종 v-cat).
+       취소 함수가 없는 옛 배포본에서도 조용히 넘어간다(안전한 열화). */
+    try {
+      if (typeof window.__usungRouteCancel === 'function') window.__usungRouteCancel();
+    } catch (e) { console.warn('[r21] cancel', e); }
     try {
       if (typeof window.navigate === 'function') window.navigate('products');
     } catch (e) { console.warn('[r21] navigate', e); }
