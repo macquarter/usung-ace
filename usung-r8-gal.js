@@ -22,9 +22,21 @@ function galItems(cat){
 }
 function galCount(cat){return cat==='전체'?galItems('전체').length:GALLERY[cat].length;}
 function goGallery(){showView('v-gallery');setNav('nav-gal');window.scrollTo(0,0);renderGallery('전체');}
+// r31/S18 — 칩 줄 맨 앞에 붙는 안내 패널.
+// 덱 260812_홈페이지_수정_r2 S18:「원하던 스타일로 안 들어감 … 시공갤러리에 이런 표현이
+// 강조가 됐으면 좋겠어서 이렇게 만들어주세요 · 빨간 네모박스와같이!」
+// 이 문구(.gal-find)는 원래 마크업에 있었는데 r10 이 「헤더가 두 번 나오고 그리드를 접힘
+// 아래로 민다」는 이유로 display:none 했다. 승연이 원한 건 삭제가 아니라 **칩 줄 왼쪽
+// 인라인 배치**다. .gal-find 는 계속 숨긴 채 같은 문구를 여기서 다시 넣는다.
+// ★ #gal-tabs 는 renderGalTabs 가 innerHTML 로 통째로 다시 그린다. DOM 삽입이 아니라
+//   생성 문자열에 넣어야 필터 클릭 후에도 살아남는다(r9 전화 CTA 도 같은 이유로 관찰자 재주입).
+// ★ .gal-tab 이 아니라 div 라서 r9-excel 의 '#gal-tabs .gal-tab.on' 조회에 안 걸린다.
+// ★ <br> 로 두 줄 나눈 건 r16 사전이 「원하는 디자인을」·「빠르게 찾아보세요」를 각각
+//   한 행으로 갖고 있어서다(usung-r16-i18n-a.js:57-58). 한 덩어리로 합치면 번역이 끊긴다.
+const GAL_FIND='<div class="gf-lead"><b>원하는 디자인을<br>빠르게 찾아보세요</b><span class="gf-k">스타일별</span></div>';
 function renderGalTabs(){
   // 260729: 제품소개의 스타일 칩(아이콘+개수)을 시공갤러리 탭으로 이관
-  document.getElementById('gal-tabs').innerHTML=GAL_CATS.map(c=>
+  document.getElementById('gal-tabs').innerHTML=GAL_FIND+GAL_CATS.map(c=>
     `<button class="gal-tab${c===galCat?' on':''}" onclick='filterGallery("${c}")'>`
     +(c==='전체'?'':`<span class="gt-ic">${iconFor(c)}</span>`)
     +`${c}<span>${galCount(c)}</span></button>`).join('');

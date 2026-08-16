@@ -56,6 +56,8 @@ window.__R16D=(window.__R16D||[]).concat([
 ["유성에이스가 시공한 직화기 후드 라인업. 갤럭시 시리즈, 아크릴등, 우주선 후드, 외부태엽 등 다양한 현장 사진을 스타일별로 만나보세요.","Grill hood installations by YUSUNG ACE. Browse real site photos by style — Galaxy series, acrylic lamps, spaceship hoods, external springs and more.","ユソンエースが施工した直火焼きフードのラインアップ。ギャラクシーシリーズ、アクリルランプ、宇宙船フード、外部ゼンマイなど、さまざまな現場写真をスタイル別にご覧ください。","友盛ACE施工的直火烤炉油烟罩系列。Galaxy系列、亚克力灯、飞船油烟罩、外部发条等丰富现场照片，按风格分类呈现。","Dải sản phẩm chụp hút bếp nướng trực tiếp do YUSUNG ACE thi công. Khám phá ảnh công trình theo từng phong cách: dòng Galaxy, đèn acrylic, chụp hút phi thuyền, lò xo ngoài và nhiều loại khác."],
 ["원하는 디자인을","Find the design you want","お好みのデザインを","想要的设计","Thiết kế bạn muốn"],
 ["빠르게 찾아보세요","in just seconds","すばやく見つけてください","快速找到","tìm thấy thật nhanh"],
+/* r31/S18 — 시공갤러리 칩 줄 왼쪽 안내 패널의 라벨(usung-r8-gal.js GAL_FIND) */
+["스타일별","By Style","スタイル別","按风格","Theo phong cách"],
 ["스타일을 선택하면 해당 분위기의 시공 현장만 모아 보여드립니다.","Pick a style and we'll show you only the sites that match it.","スタイルを選ぶと、その雰囲気の施工現場だけをまとめてご覧いただけます。","选择风格后，将只显示相应氛围的施工现场。","Chọn một phong cách để xem riêng những công trình mang phong cách đó."],
 ["기본 규격","Standard Specifications","基本規格","基本规格","Quy cách cơ bản"],
 ["대표전화 문의하기","Call Our Main Line","代表電話でお問い合わせ","拨打总机咨询","Liên hệ tổng đài"],

@@ -108,13 +108,19 @@
     var p = window.R19.plan(model());
     if (!p.ids.length && !p.color) { el.style.display = 'none'; el.innerHTML = ''; return; }
     el.style.display = '';
+    // ★ r31/S06 — 색상표를 부품 구성보다 **앞**에 그린다.
+    //   덱 260812_홈페이지_수정_r2 S06:「색상표가 부품소개 아래에 있어서 보기가 어려워서요 …
+    //   전체 제품의 제품소개 옆에 색상표 있게 해주세용」
+    //   #m-parts 는 #m-opts(색상·마감 스와치) 바로 다음 블록이다. 색상표를 이 블록 첫머리로
+    //   올리면 스와치 → 색상표가 붙어, 부품 그리드를 지나쳐야 보이던 문제가 사라진다.
+    //   순서만 바꿨다 — colorChart/부품 그리드의 마크업·데이터는 그대로다.
     var html = '';
+    if (p.color) html += colorChart(p.color);
     if (p.ids.length) {
       html += '<h4><span class="en">PARTS &amp; COMPONENTS</span> 부품 구성</h4>' +
         '<p class="hint">※ 해당 제품에 사용되는 부품 구성입니다. 설치 환경에 따라 일부 옵션이 달라질 수 있습니다.</p>' +
         '<div class="pt-grid r19-grid">' + p.ids.map(function (id) { return tile(id, p.over); }).join('') + '</div>';
     }
-    if (p.color) html += colorChart(p.color);
     el.innerHTML = html;
     reveal(el);
   }

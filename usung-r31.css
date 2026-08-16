@@ -1,0 +1,79 @@
+/* usung-r31.css — 260812_홈페이지_수정_r2 S06 · S18
+ * usung-r8.css 가 런타임에 로드되므로 그쪽 선언을 덮어야 하는 규칙은 !important 와
+ * 선행 `html ` 이 필요하다(usung-r10-redesign.css 와 같은 이유).
+ */
+
+/* ════════ S18 — 시공갤러리 칩 줄 왼쪽 안내 패널 ════════
+ * 「원하는 디자인을 빠르게 찾아보세요」 를 별도 헤더가 아니라 칩 줄의 첫 flex 아이템으로
+ * 둔다. .gal-tabs 는 이미 flex-wrap 이라 좁아지면 저절로 아래로 접힌다.
+ * .gal-find(원래 전폭 헤더)는 r10 이 감춘 상태 그대로 둔다 — 되살리면 헤더가 두 번 나온다.
+ */
+html .r8x:not(#_r8_) #gal-tabs .gf-lead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 6px 0 0;
+  padding: 0 16px 0 0;
+  border-right: 1px solid var(--line);
+  align-self: stretch;
+}
+html .r8x:not(#_r8_) #gal-tabs .gf-lead b {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--navy);
+  letter-spacing: -.01em;
+  word-break: keep-all;
+}
+/* 칩 줄을 무엇으로 거르는지 알려주는 라벨. 클릭 대상이 아니라서 화살표를 달지 않는다. */
+html .r8x:not(#_r8_) #gal-tabs .gf-lead .gf-k {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ub);
+  background: var(--ubL);
+  border: 1px solid var(--ub2);
+  border-radius: 999px;
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+/* 모바일 — 패널이 칩과 한 줄에 들어가면 칩이 잘린다. 전폭으로 떨어뜨리고
+ * 오른쪽 구분선을 아래 구분선으로 바꾼다. (r10 이 top:58px 로 낮춘 구간과 같은 폭)
+ * ★ #gal-tabs 는 sticky 다 — 여기서 키운 높이만큼 스크롤 내내 화면을 먹는다.
+ *   그래서 글자·여백을 데스크톱보다 한 단계씩 줄여 44px 안쪽으로 묶는다. */
+@media (max-width: 720px) {
+  html .r8x:not(#_r8_) #gal-tabs .gf-lead {
+    flex: 1 0 100%;
+    gap: 8px;
+    margin: 0 0 2px;
+    padding: 0 0 8px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  html .r8x:not(#_r8_) #gal-tabs .gf-lead b { font-size: 13px; line-height: 1.3; }
+  html .r8x:not(#_r8_) #gal-tabs .gf-lead .gf-k { font-size: 11px; padding: 4px 10px; }
+}
+
+/* ════════ S06 — 제품 상세 모달: 색상표를 부품 구성 앞으로 ════════
+ * 순서 교체는 usung-r19-parts.js 가 한다. 여기서는 구분선만 따라 옮긴다.
+ * .r19-cc 의 border-top 은 '위의 부품 그리드와 나를 가르는 선' 이었다. 맨 위로 오면
+ * .m-parts 자체의 8px 테두리와 겹쳐 줄이 두 개로 보인다 → 첫 자식일 때만 지운다.
+ */
+html .r8x:not(#_r8_) .m-parts .r19-cc:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+/* 지운 구분선은 이제 뒤따르는 「부품 구성」 제목이 진다. */
+html .r8x:not(#_r8_) .m-parts .r19-cc + h4 {
+  margin-top: 30px !important;
+  padding-top: 26px !important;
+  border-top: 1px solid var(--line) !important;
+}
+@media (max-width: 720px) {
+  html .r8x:not(#_r8_) .m-parts .r19-cc + h4 {
+    margin-top: 24px !important;
+    padding-top: 20px !important;
+  }
+}
