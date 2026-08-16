@@ -43,10 +43,10 @@ window.R8_VIEW = {
     <div class="parts-sec-head">
       <div class="ps-l">
         <span class="ps-en">PARTS &amp; COMPONENTS</span>
-        <h3 class="ps-h">후드를 완성하는 부품 · 구성품 <b>48종</b></h3>
-        <p class="ps-d">태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지 — 후드에 들어가는 정품 부품 48종입니다. 대표 4종을 먼저 확인해 보세요.</p>
+        <h3 class="ps-h">후드를 완성하는 부품 · 구성품 <b>51종</b></h3>
+        <p class="ps-d">태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지 — 후드에 들어가는 정품 부품 51종입니다. 대표 4종을 먼저 확인해 보세요.</p>
       </div>
-      <button class="ps-all" onclick="goParts()">부품 전체 48종 보기 <b>→</b></button>
+      <button class="ps-all" onclick="goParts()">부품 전체 51종 보기 <b>→</b></button>
     </div>
     <div class="pp-grid pp-4" id="parts-cat-grid"></div>
   </section>

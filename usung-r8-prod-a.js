@@ -129,8 +129,8 @@ function partTileHTML(id){
 }
 function renderPartsPage(){
   document.getElementById('parts-body').innerHTML=
-    `<div class="pp-intro"><div class="kk">PARTS &amp; COMPONENTS</div><h2>부품 · 구성품 <b>48종</b></h2>`
-    +`<p class="pp-sub">태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지, 유성에이스 후드에 들어가는 정품 부품 48종입니다.</p></div>`
+    `<div class="pp-intro"><div class="kk">PARTS &amp; COMPONENTS</div><h2>부품 · 구성품 <b>51종</b></h2>`
+    +`<p class="pp-sub">태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지, 유성에이스 후드에 들어가는 정품 부품 51종입니다.</p></div>`
     +`<div class="pp-grid">${PART_ORDER.map(partTileHTML).join('')}</div>`;
 }
 // 260730) 제품소개 하단 부품 티저 — 대표 4종만 노출 (구동부 · 모터 · 갓 · 후레쉬볼) + 전체 보기

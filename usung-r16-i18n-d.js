@@ -51,7 +51,7 @@ window.__R16D=(window.__R16D||[]).concat([
 ["후레쉬볼 갓 자바라","Fresh Ball Shade Bellows","フレッシュボール傘蛇腹","新鲜球灯罩软管","Ống mềm chụp đèn Quả cầu tươi"],
 ["공간 효율을 높이는 하향식·코브라 후드 라인업","A down-draft·Cobra hood lineup that raises space efficiency","空間効率を高めるダウンドラフト·コブラフードのラインアップ","提升空间效率的下抽式·Cobra油烟罩产品线","Dòng chụp hút hướng xuống·Cobra giúp nâng cao hiệu quả không gian"],
 ["하향식 후드 전체 보기 →","View All Down-Draft Hoods →","ダウンドラフトフードをすべて見る →","查看全部下抽式油烟罩 →","Xem tất cả chụp hút hướng xuống →"],
-["48종","48 Types","48種","48种","48 loại"],
+["51종","51 Types","51種","51种","51 loại"],
 ["사각 태엽감속기","Square Spring Reducer","角型ゼンマイ減速機","方形发条减速机","Hộp giảm tốc lò xo vuông"],
 ["흰색","White","ホワイト","白色","Trắng"],
 ["원형 상향모터","Round Up-Draft Motor","円形上向きモーター","圆形上排电机","Mô tơ tròn hướng lên"],
