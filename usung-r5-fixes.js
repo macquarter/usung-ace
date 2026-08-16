@@ -163,12 +163,16 @@
       var v = document.getElementById('v-cat');
       var pg = document.getElementById('page-products');
       if (pg && pg.classList.contains('active') && r8Ready()) {
-        if (!v || !v.classList.contains('on')) {
+        /* ★ 첫 안착은 v-cat 상태와 무관하게 무조건 goCat 을 부른다.
+           예전엔 'v-cat 이 꺼져 있을 때만' 불렀다. 그러면 이미 분류 화면이 열려 있는
+           상태(=두 번째 이후 클릭)에서는 goCat 이 한 번도 안 불려 분류가 안 바뀐다.
+           덱 S03「최초 분류탭 클릭에만 반응」· S02「모두 파이프로 연결」이 같은 원인이다. */
+        if (!placed) {
           try { window.goCat(cat); } catch (e) {}
-          placed = false; stable = 0;
-        } else if (!placed) {
           placed = true; stable = 0;
           if (mid) setTimeout(function () { landMid(mid); }, 120);
+        } else if (!v || !v.classList.contains('on')) {
+          placed = false; stable = 0;   // 늦은 goMain 에 덮였다 — 다음 틱에 다시 안착
         } else {
           stable++;
         }

@@ -6,7 +6,7 @@
 // ===== TECH PAGE (기술력 · S20) =====
 // hero: photographic dark background (cat_led.jpg) + dark veil, like the product hero
 const FIRSTS=[
- {src:'proto_assets/tf_black.png', t:'와이어 없이 상하작동',cat:'파이프',key:'파이프|텐션|스텐도금',
+ {src:'proto_assets/tf_black.png', t:'와이어없이 상하작동 텐션',cat:'파이프',key:'파이프|텐션|스텐도금',
    d:'와이어 없이 구조만으로<br>부드러운 상하 작동 구현',
    sub:'와이어리스 텐션 승강 구조',
    body:'기존 후드는 와이어와 도르래로 높이를 조절해, 시간이 지나면 와이어가 늘어나거나 끊어지고 작동이 뻑뻑해지는 문제가 있었습니다. 유성에이스는 와이어를 완전히 배제하고, 자체 개발한 텐션 구조만으로 후드를 부드럽게 올리고 내릴 수 있는 방식을 국내 최초로 구현했습니다.',
@@ -16,7 +16,7 @@ const FIRSTS=[
      {h:'유지보수 최소화',p:'소모성 부품이 없어 교체 주기가 길고 관리 비용이 절감됩니다.'}
    ],
    note:'파이프 시리즈 · 스텐도금 라인에 적용'},
- {src:'proto_assets/tf_silver.png',t:'양열대엽 스프링 구조',cat:'갤럭시',key:'갤럭시|갤럭시A|양옆태엽',
+ {src:'proto_assets/tf_silver.png',t:'외장형 양옆태엽',cat:'갤럭시',key:'갤럭시|갤럭시A|양옆태엽',
    d:'양측 대엽 스프링 작동으로<br>더욱 안정적인 작동',
    sub:'양측 대엽 스프링 밸런스 구조',
    body:'한쪽에만 스프링을 두면 장시간 사용 시 힘이 한쪽으로 쏠려 후드가 기울거나 처지기 쉽습니다. 갤럭시A는 양측에 대엽(大葉) 스프링을 배치해 좌우 힘을 균등하게 분산하는 구조를 적용, 어느 위치에서도 흔들림 없이 안정적으로 멈추고 작동합니다.',
@@ -26,7 +26,7 @@ const FIRSTS=[
      {h:'내구 수명 향상',p:'편하중이 줄어 스프링 피로도가 낮아 오래 사용할 수 있습니다.'}
    ],
    note:'갤럭시 시리즈 · 갤럭시A(양옆태엽) 라인에 적용'},
- {src:'proto_assets/tf_copper.png',t:'360° 스윙 구조',cat:'코브라후드',key:'코브라후드||90Ø롱망코브라220',
+ {src:'proto_assets/tf_copper.png',t:'360도 스윙',cat:'코브라후드',key:'코브라후드||90Ø롱망코브라220',
    d:'360° 자유 회전으로<br>후드 각도 조절 가능',
    sub:'360° 자유 회전 코브라 암',
    body:'조리 위치와 연기 방향은 매장마다 다릅니다. 코브라후드는 후드 암이 360° 자유롭게 회전하도록 설계되어, 배기가 필요한 방향으로 후드를 자유롭게 돌려 사용할 수 있습니다. 좁은 매장이나 다구(多口) 조리대에서도 배기 효율을 극대화합니다.',
@@ -36,8 +36,11 @@ const FIRSTS=[
      {h:'다양한 규격',p:'90Ø 롱망 코브라 등 매장 규모에 맞춰 선택할 수 있습니다.'}
    ],
    note:'하향식 후드 · 코브라 라인에 적용'},
- {src:'proto_assets/tf_cobra.png', t:'FVD 불꽃차단 시스템',cat:'갤럭시',key:'갤럭시|갤럭시B|304스텐-양옆태엽(FVD)',
-   d:'최고 불꽃 역화 방지 및<br>안전한 배기 시스템',
+ /* ★ 덱 S19 는 이 카드의 **명칭만** 「FVD불꽃차단 시스템 → 필터(기름받이속, 기름받이망)」로 바꾸라고 했다.
+    카드 앞면(t·d)까지만 새 이름에 맞췄다. d 는 지어낸 문장이 아니라 i18n.js 의 유지망필터 설명을 그대로 옮긴 것이다.
+    아래 sub·body·points·note·key 는 여전히 FVD 내용이다 — 덱이 대체 문안을 주지 않아 건드리지 않았다. 문안 받으면 교체할 것. */
+ {src:'proto_assets/tf_cobra.png', t:'필터(기름받이속, 기름받이망)',cat:'갤럭시',key:'갤럭시|갤럭시B|304스텐-양옆태엽(FVD)',
+   d:'기름을 여과해 모터와<br>덕트 내부를 청결하게 유지',
    sub:'FVD 불꽃 역화 차단 댐퍼',
    body:'숯·불판 조리 중 튀어 오른 불꽃이 배기 덕트로 빨려 들어가면 화재로 이어질 수 있습니다. 갤럭시B의 FVD(Flame Vapor Damper) 구조는 배기 경로에서 불꽃의 역화를 물리적으로 차단해, 조리 중 화재 위험을 크게 낮추고 안전한 배기 환경을 유지합니다.',
    points:[
@@ -157,7 +160,6 @@ function renderTech(){
       <div class="tf-txt">
         <span class="tf-badge">국내 최초</span>
         <div class="tf-title">${f.t}</div><div class="tf-desc">${f.d}</div>
-        <span class="tf-more">자세히 보기 <b>→</b></span>
       </div>
       <img class="tf-hood" src="${f.src}" alt="${f.t}" onerror="this.style.opacity=0">
     </div>`).join('');
