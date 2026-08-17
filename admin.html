@@ -789,6 +789,26 @@ async function pushBoard(){
   }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
 }
 
+// ============== 발행해도 화면에 안 나오는 항목 표시 ==============
+// ★ 왜 필요한가 (2026-08-17 라이브 실측):
+//   index_v6.html 에는 [data-cms] 가 83개 있지만, 실제 화면에 보이는 건 19개뿐이다.
+//   나머지는 오버레이(usung-r8-view.js·usung-home.js 등)가 그 섹션을 자기 마크업으로
+//   **다시 그려서** 원본 요소가 DOM 에 남은 채 화면에서 밀려나 있다.
+//     - 8개는 요소 자체가 사라진다 (usung-home.js:80 이 h1 innerHTML 을 교체)
+//     - 56개는 존재하나 전 구간 스크롤에도 한 번도 안 보인다
+//   이걸 표시하지 않으면 「고쳐도 반영이 안 되더라」가 그대로 재발한다.
+//   발행 배관이 아니라 **화면 소유권**의 문제다. 확장하려면 오버레이가 CMS 를 참조하도록
+//   고쳐야 하고, 어느 문구를 열지는 승연 판단이 필요하다.
+const CMS_LIVE = new Set([
+  'a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4','a_desc',
+  'a_promise1','a_promise2','a_promise_desc','a_tag','a_title1','a_title2',
+  'c_addr','c_addr_sub','c_biz','c_fax','c_name','c_name_en','c_tel'
+]);
+function cmsBadge(fid){
+  if(CMS_LIVE.has(fid)) return ` <span style="font-size:10px;color:#34d399;font-weight:700">● 반영됨</span>`;
+  return ` <span style="font-size:10px;color:#fbbf24;font-weight:700" title="이 문구는 다른 화면 구성요소가 덮어쓰고 있어, 고쳐도 홈페이지에 나타나지 않습니다. 반영이 필요하면 알려주세요.">⚠ 미반영</span>`;
+}
+
 // ============== 홈페이지 내용 발행 (승연 지시「cms까지 걸어줘」) ==============
 // 💾 임시저장 = localStorage (이 브라우저에만). 🚀 발행 = /api/cms → 방문자 화면에 실제 반영.
 // 둘을 한 버튼으로 묶지 않은 이유: 글자 하나 고칠 때마다 GitHub 커밋이 나가면
@@ -1063,7 +1083,7 @@ function rPageEdit(k){
         const v = S.content[fid]||'';
         const isLong = v.length > 50 || v.includes('\n');
         h += `<div class="ed-ln">
-          <div class="ed-lb">${fid}</div>
+          <div class="ed-lb">${fid}${cmsBadge(fid)}</div>
           ${isLong
             ? `<textarea class="ed-in" oninput="sEd('${fid}',this.value)">${escHtml(v)}</textarea>`
             : `<div class="ed-in" contenteditable="true" oninput="sEd('${fid}',this.innerText)">${escHtml(v)}</div>`}
