@@ -2561,5 +2561,11 @@ document.getElementById('loginPw').addEventListener('keypress', e=>{
      ★ admin.html 은 정적 파일이라 ?v= 자동 주입이 없다 — 이 스크립트를 고치면
        아래 v= 값을 손으로 올려야 브라우저가 새로 받는다. -->
 <script src="/usung-r40-dash.js?v=r40a"></script>
+<!-- r41) 「화면에서 편집」. admin.html 에 박아둔 104개 목록 대신 실제 사이트를
+     iframe 으로 읽어 편집한다. live=상태·저장, ui=화면. live 가 먼저여야 한다
+     (ui 가 R41 을 참조). 위 인라인 스크립트가 rSidebar/rView 를 정의한 뒤에 실려야
+     감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
+<script src="/usung-r41-live.js?v=r41"></script>
+<script src="/usung-r41-ui.js?v=r41"></script>
 </body>
 </html>
