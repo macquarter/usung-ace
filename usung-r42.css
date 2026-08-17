@@ -1,0 +1,248 @@
+/* usung-r42.css — 260817 모바일 최적화 (승연 요청 3·4번)
+ *
+ * usung-r8.css 가 런타임 로드라 그쪽 선언을 덮으려면 선행 `html ` + !important 가
+ * 필요하다(usung-r10-redesign.css·usung-r31.css 와 같은 이유).
+ *
+ * 실측 근거 (라이브 393x852, 2026-08-17):
+ *   ① .hrow  보이는폭 345px 에 카드 246x452 + gap 14  → 한 화면에 1.4장
+ *   ② .pp-grid.pp-4  172.5px x 2열 = 2x2, 카드 233px  → 4장이 세로로 흩어짐
+ *   ③ .cta   버튼 305x56 이 좌측 정렬, .cta-r 이미지블록 112px
+ *   ④ 갤러리 문의 진입점이 sticky 탭바 안 150x32 칩 하나뿐
+ *   ⑤ 전역(헤더·푸터) tel: 링크 0개 — 전화로만 받는 회사인데 상시 진입점이 없다
+ */
+
+/* ════════════════════════════════════════════════════════════════
+ * ① 제품 시리즈 가로행 — 1.4장 → 3장 + 4번째 힌트
+ *
+ * r8.css:537 @media(max-width:520px) 가 `grid-auto-columns:72%` 를 준다.
+ * 72% = 248px. 3장을 넣으려면 (100% - gap*2)/3.25 = 100px 이 나와야 한다.
+ * 3.25 로 나누는 이유: 3.0 이면 4번째가 gap 뒤에 완전히 잘려 「더 있다」는
+ * 신호가 사라진다. 0.25 를 남겨 15px 쯤 걸치게 한다 = 가로 스크롤 힌트.
+ *
+ * 폭 기준을 560px 로 잡은 건 r8.css 의 태블릿 구간(521~560px)이 2.1장이라
+ * 여기도 같이 조여야 「3장」이 아이폰~작은 태블릿에서 일관되기 때문이다.
+ * ════════════════════════════════════════════════════════════════ */
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .hrow {
+    grid-auto-columns: calc((100% - 20px) / 3.25) !important;
+    gap: 10px !important;
+    padding: 2px 2px 12px !important;
+  }
+
+  /* 카드를 좁히면 3/4 썸네일이 그만큼 낮아진다(100px → 133px).
+     본문은 손대지 않으면 125px 그대로라 카드가 위아래로 어색해진다 → 같이 조인다. */
+  html .r8x:not(#_r8_) .hrow .pc-body {
+    padding: 8px 8px 10px !important;
+  }
+  html .r8x:not(#_r8_) .hrow .pc-cat {
+    font-size: 10px !important;
+    letter-spacing: .04em !important;
+    margin-bottom: 3px !important;
+  }
+  /* 제품명은 「304스텐-양옆태엽(FVD)」처럼 길다. 100px 폭에서 자유롭게 흐르면
+     카드마다 높이가 달라져 행이 들쭉날쭉해진다 → 2줄로 고정하고 넘치면 자른다.
+     -webkit-line-clamp 는 iOS/안드로이드 크롬 모두 지원한다. */
+  html .r8x:not(#_r8_) .hrow .pc-name {
+    font-size: 12.5px !important;
+    line-height: 1.32 !important;
+    height: 2.64em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    word-break: keep-all !important;
+  }
+  html .r8x:not(#_r8_) .hrow .pc-fin {
+    font-size: 10.5px !important;
+    margin-top: 3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  /* › 화살표는 100px 카드에서 이름과 겹친다. 3장을 보여주는 게 목적이므로 뺀다. */
+  html .r8x:not(#_r8_) .hrow .pc-go { display: none !important; }
+
+  /* 썸네일 안쪽 여백도 같이 줄인다 — 10px 는 100px 카드에서 사진을 20% 먹는다. */
+  html .r8x:not(#_r8_) .hrow .pc-thumb { padding: 5px !important; }
+  html .r8x:not(#_r8_) .hrow .pc-tag {
+    font-size: 8.5px !important;
+    padding: 2px 5px !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * ② 제품소개 하단 부품 티저 — 2x2 → 4열 1행 (「4개 한번에」)
+ *
+ * ★ 선택자를 `.pp-grid.pp-4` 로 한정한다. `.pp-grid` 단독은 부품 페이지
+ *   (renderPartsPage, 51종)도 쓰는 클래스라 같이 건드리면 부품 페이지가
+ *   4열이 되어 카드가 84px 로 뭉갠다. 승연 요청은 「제품소개 대문」 한정이다.
+ * ════════════════════════════════════════════════════════════════ */
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .pp-grid.pp-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 7px !important;
+  }
+  /* 카드 폭 (361 - 21)/4 = 85px. 안쪽 값이 그대로면 이름이 3~4줄로 터진다. */
+  html .r8x:not(#_r8_) .pp-grid.pp-4 .pt { padding: 8px 5px 9px !important; }
+  html .r8x:not(#_r8_) .pp-grid.pp-4 .pi {
+    height: 62px !important;
+    min-height: 0 !important;
+    margin-bottom: 5px !important;
+  }
+  html .r8x:not(#_r8_) .pp-grid.pp-4 .pn {
+    font-size: 10.5px !important;
+    line-height: 1.3 !important;
+    height: 2.6em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    word-break: keep-all !important;
+  }
+  /* 규격(.ps)은 85px 폭에서 읽을 수 없다. 티저의 목적은 「부품이 이런 게 있다」이고
+     정확한 규격은 부품 페이지·모달에 있으므로 여기서만 접는다. */
+  html .r8x:not(#_r8_) .pp-grid.pp-4 .ps { display: none !important; }
+  html .r8x:not(#_r8_) .pp-grid.pp-4 .px {
+    font-size: 9px !important;
+    padding: 1px 4px !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * ③ 최하단 「상담하기」 CTA
+ *
+ * 전화로만 문의를 받는 회사다. 이 버튼이 제품소개 페이지의 종착점이므로
+ * 좌측 정렬 305px 대신 전폭으로 세워 엄지로 누르기 쉽게 만든다.
+ * ════════════════════════════════════════════════════════════════ */
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .cta-l { padding: 26px 20px 24px !important; }
+  html .r8x:not(#_r8_) .cta-l h3 { font-size: 21px !important; line-height: 1.3 !important; }
+  html .r8x:not(#_r8_) .cta-l p { font-size: 14px !important; margin-top: 10px !important; }
+  html .r8x:not(#_r8_) .cta-l .btn {
+    width: 100% !important;
+    margin-top: 20px !important;
+    padding: 17px 14px !important;
+    font-size: 16.5px !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    /* r8 의 ctaPulse 애니메이션이 전폭 버튼에서는 화면 전체가 뛰는 것처럼 보인다. */
+    animation: none !important;
+  }
+  /* 사진 블록은 분위기 담당이라 없애지 않되, 112px 는 스크롤 낭비다. */
+  html .r8x:not(#_r8_) .cta-r { min-height: 88px !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * ④ 시공갤러리 — 문의 진입점을 그리드 아래 전폭 카드로
+ *
+ * 지금은 sticky 탭바 안 150x32 칩 하나뿐이고, 그 칩은 스크롤하면 탭바와 함께
+ * 계속 붙어 있지만 너무 작아 눈에 띄지 않는다. 사진을 다 본 직후가 문의 시점이므로
+ * 그리드 끝에 전폭 카드를 놓는다. 마크업은 usung-r42.js 가 심는다.
+ * ★ 탭바 자체는 건드리지 않는다 — r31fix 가 여기서 회귀를 냈다(고정 영역 44%).
+ * ════════════════════════════════════════════════════════════════ */
+/* ★ 카드는 `.wrap`(max-width:1200px · padding:0 24px) 안, #gal-grid 바로 뒤에 들어간다.
+ *   그래서 여기서 다시 폭을 계산하면 24px 이 두 번 먹는다 → width:100% 로 둔다.
+ *   #gal-grid 의 `padding-bottom:80px`(r8.css:770)은 그리드가 마지막이라는 전제였다.
+ *   뒤에 카드가 붙었으니 그만큼 줄여야 카드가 붕 뜨지 않는다. */
+html .r8x:not(#_r8_) #gal-grid { padding-bottom: 24px !important; }
+html .r8x:not(#_r8_) .r42-gcta {
+  margin: 0 auto 64px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 30px 28px;
+  background: linear-gradient(135deg, #16294d 0%, #223f74 100%);
+  color: #fff;
+  text-align: center;
+}
+html .r8x:not(#_r8_) .r42-gcta h3 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+  color: #fff !important;
+}
+html .r8x:not(#_r8_) .r42-gcta p {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #c2cee2;
+}
+html .r8x:not(#_r8_) .r42-gcta .r42-gbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 20px;
+  padding: 16px 34px;
+  border-radius: 999px;
+  background: #fff;
+  color: #16294d;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: -.3px;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .28);
+}
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .r42-gcta {
+    width: calc(100% - 32px);
+    padding: 24px 18px;
+    margin-top: 26px;
+  }
+  html .r8x:not(#_r8_) .r42-gcta h3 { font-size: 19px; }
+  html .r8x:not(#_r8_) .r42-gcta p { font-size: 13.5px; }
+  html .r8x:not(#_r8_) .r42-gcta .r42-gbtn { width: 100%; padding: 16px 14px; font-size: 16px; }
+  /* 작은 칩(usung-r9-excel.js E4 의 #usung-r9-gal-cta)은 전폭 카드가 생겼으니 중복이다.
+     sticky 탭바 높이도 그만큼 돌려받는다.
+     ★ `body.r42-gcta-on` 이 붙었을 때만 감춘다 — 이 클래스는 usung-r42.js 가 카드를
+       실제로 붙인 뒤에만 단다. 무조건 감추면 카드 주입이 실패했을 때(스크립트 로드 실패,
+       #gal-grid 부재) 갤러리 문의 진입점이 0개가 된다. */
+  html body.r42-gcta-on .r8x:not(#_r8_) #gal-tabs #usung-r9-gal-cta { display: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * ⑤ 모바일 하단 고정 전화 바
+ *
+ * 실측: 모바일에서 보이는 tel: 링크가 회사소개 페이지 y=3532 아래 3개뿐이다.
+ * 「무조건 전화연결」이 방침인데(usung-r9-excel.js E2) 상시 진입점이 없다.
+ *
+ * ★ r31fix 교훈 — 고정 요소는 화면을 영구히 먹는다. 56px = 852px 의 6.6% 로
+ *   묶고, 회사소개 전화 패널이 화면에 들어오면 스스로 접는다(r42.js 가 토글).
+ *   모달이 열려 있을 때도 접는다 — 모달 자체에 「대표전화 문의하기」가 있다.
+ * ════════════════════════════════════════════════════════════════ */
+#r42-telbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) * .6);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  color: #fff;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: -.2px;
+  text-decoration: none;
+  box-shadow: 0 -6px 22px rgba(15, 32, 54, .28);
+  transition: transform .22s ease;
+}
+#r42-telbar .r42-tb-k {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .82;
+  letter-spacing: .06em;
+}
+#r42-telbar.r42-off { transform: translateY(100%); }
+@media (max-width: 560px) {
+  #r42-telbar { display: flex; }
+  /* 바가 마지막 콘텐츠를 가리지 않도록 문서 끝에 여백을 준다. */
+  body.r42-telbar-on { padding-bottom: 56px; }
+}
+/* 인쇄물에는 고정 바가 의미 없다. */
+@media print { #r42-telbar { display: none !important; } }
