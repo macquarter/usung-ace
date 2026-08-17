@@ -93,7 +93,13 @@
   html .r8x:not(#_r8_) .pp-grid.pp-4 .pn {
     font-size: 10.5px !important;
     line-height: 1.3 !important;
-    height: 2.6em !important;
+    /* ★ height:2.6em 로 고정했더니 두 줄짜리 이름의 둘째 줄이 통째로 잘렸다.
+       「VD 풍량조절댐퍼」가 "VD " / "풍량조절댐퍼" 로 감기는데 둘째 줄 글자 상단이
+       상자 바닥과 1px 차이로 겹쳐 화면엔 "VD" 만 남았다(Range.getClientRects 실측).
+       clamp 가 2줄을 보장하므로 높이는 고정하지 말고 최소값만 준다 — 1줄 이름과
+       2줄 이름의 카드 높이는 min-height 로 맞춰진다. */
+    height: auto !important;
+    min-height: 2.6em !important;
     overflow: hidden !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;

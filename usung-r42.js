@@ -138,8 +138,16 @@
         syncTelbar();
       }, { threshold: 0.01 });
     }
-    var t = document.querySelectorAll('#usung-r9-tel, #r42-gcta, #usung-r9-gal-cta');
+    /* ★ 처음엔 아이디 3개만 박아 뒀는데 그건 조건이 아니라 조건의 예시였다.
+       제품소개 하단 `.cta-l .btn` 이 `tel:15889123` 인데 목록에 없어서, 같은 번호가
+       화면 y=362 과 고정바 y=796 에 동시에 뜬다(실측). 그래서 아이디가 아니라
+       **화면에 보이는 tel: 링크**라는 실제 조건을 관찰한다 — 앞으로 전화 CTA 가
+       늘어도 이 목록을 고칠 필요가 없다.
+       ★ #r42-telbar 는 반드시 제외한다. 자신은 position:fixed 라 항상 교차하므로
+         visibleCta 가 0 이 될 수 없고, 숨었다 보였다를 무한 반복하게 된다. */
+    var t = document.querySelectorAll('a[href^="tel:"], #usung-r9-tel, #r42-gcta, #usung-r9-gal-cta');
     for (var i = 0; i < t.length; i++) {
+      if (t[i].id === 'r42-telbar' || t[i].closest('#r42-telbar')) continue;
       if (!t[i].__r42Watched) { t[i].__r42Watched = 1; io.observe(t[i]); }
     }
   }
