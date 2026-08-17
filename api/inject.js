@@ -4,9 +4,31 @@
 export const config = { runtime: 'nodejs' };
 
 const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
-const V = Date.now();
+
+// ★ 캐시버스팅 값(?v=)은 반드시 **배포**를 가리켜야 한다. 원래 `Date.now()` 였는데
+//   그건 배포 시각이 아니라 **서버리스 인스턴스가 시작한 시각**이라 배포와 무관하다.
+//   그래서 양쪽으로 다 틀렸다:
+//   ① 웜 인스턴스가 살아 있으면 새 코드를 올려도 옛 ?v= 를 계속 뿌린다. HTML 은
+//      no-cache 라 항상 최신인데 오버레이 JS 는 브라우저 디스크 캐시에서 옛 것이 나온다
+//      → **새 HTML 위에 옛 오버레이가 겹쳐 그려진다.** 승연이 본 「이전 내용이 중복」이 이것.
+//      (실측: age 2982s 동안 ?v=1786927919940 고정, x-vercel-cache: HIT)
+//   ② 반대로 인스턴스가 재시작되면 내용이 하나도 안 바뀌었는데 58개 파일을 전부 다시 받는다.
+//   커밋 SHA 는 배포마다 유일하고 같은 배포 안에서는 불변이라 ①②를 동시에 없앤다.
+// ★ 상수가 아니라 게터인 이유: 모듈 최상위에서 `process.env` 를 읽으면 안 된다
+//   (KNOWLEDGE.md 「서버리스 3대 함정」1 — ESM import 호이스팅으로 조용히 기본값이 박힌다).
+// ★ 12자로 자르는 건 URL 길이 절약용. 커밋 SHA 12자는 이 리포 규모에서 충돌하지 않는다.
+// 로컬(Vercel 밖)에서는 두 env 가 모두 없으므로 Date.now() 로 떨어진다 — 기존 동작 유지.
+const deployId = () => (
+  process.env.VERCEL_GIT_COMMIT_SHA
+  || process.env.VERCEL_DEPLOYMENT_ID
+  || String(Date.now())
+).slice(0, 12);
 
 export default async function handler(req, res) {
+  // 요청 시점에 1회 평가해 지역 상수로 둔다. 아래 cssLink·jsScript 는 손대지 않는다
+  // — 그 두 줄은 **물리적으로 한 줄**이어야 하고(개행 = SyntaxError = 사이트 전체 500),
+  //   V 라는 이름 그대로 104곳에서 쓰인다.
+  const V = deployId();
   try {
     const r = await fetch(RAW_URL, { cache: 'no-store' });
     if (!r.ok) throw new Error('raw fetch ' + r.status);
