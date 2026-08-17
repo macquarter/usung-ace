@@ -163,11 +163,22 @@
 
     var srvOk = b.configured && c.configured;
 
+    // ★ /api/board 가 담는 건 「고객게시판」 하나뿐이다(admin.html:773 이 S.boards.board 에만 넣는다).
+    //   공지사항·인증현황은 서버로 올라가는 경로 자체가 없어 이 브라우저에만 있다.
+    //   서버 수와 로컬 수가 다르면 「썼지만 아직 방문자에게 안 보이는 글」이 있다는 뜻이므로
+    //   합계를 뭉뚱그리지 않고 둘을 나란히 보여준다.
+    var lb = {};
+    try { lb = (typeof S !== 'undefined' && S.boards) || {}; } catch (e) { lb = {}; }
+    var locBoard = (lb.board || []).length;
+    var sync = posts === locBoard;
+
     var stats =
       card('서버 저장소', srvOk ? '연결됨' : '미설정',
         srvOk ? 'CMS · 게시판 둘 다 정상' : 'Vercel 환경변수 확인 필요', srvOk ? 'ok' : 'bad')
-      + card('게시판 글 (서버)', num(posts),
-        posts ? '/api/board 실측' : '아직 등록된 글 없음', posts ? 'ok' : 'mute')
+      + card('고객게시판 글', num(posts) + '<span style="font-size:15px;color:var(--tx4)"> / ' + num(locBoard) + '</span>',
+        sync ? '서버 · 이 브라우저 일치'
+             : '서버 ' + num(posts) + '건 · 이 브라우저 ' + num(locBoard) + '건 — 아직 발행 안 됨',
+        sync ? 'ok' : 'warn')
       + card('발행된 CMS 항목', num(cmsN),
         cmsN ? '마지막 발행 ' + ago(c.updatedAt) : '아직 발행한 적 없음', cmsN ? 'ok' : 'mute')
       + card('방문자', '측정 안 함', '애널리틱스 미설치 — 아래 참조', 'warn');
@@ -176,6 +187,9 @@
     var siteBody =
       row('배포 커밋', D.deploy ? '<code>' + esc(D.deploy) + '</code>' : '확인 실패', D.deploy ? 'ok' : 'bad')
       + row('제품 카탈로그', prods ? num(prods) + '종 · ' + num(cats) + '개 분류' : '읽지 못함', prods ? 'ok' : 'bad')
+      + row('공지사항 · 인증현황',
+        num((lb.notice || []).length) + '건 · ' + num((lb.certification || []).length) + '건'
+        + ' <span style="color:var(--tx4);font-weight:400">(이 브라우저에만)</span>', 'warn')
       + row('robots.txt', seo.robots === 200 ? '정상 (200)' : '없음 (' + seo.robots + ')', seo.robots === 200 ? 'ok' : 'bad')
       + row('sitemap.xml', seo.sitemap === 200 ? '정상 (200)' : '없음 (' + seo.sitemap + ')', seo.sitemap === 200 ? 'ok' : 'bad')
       + row('구조화 데이터 (JSON-LD)', seo.jsonld ? seo.jsonld + '건' : '없음', seo.jsonld ? 'ok' : 'bad')
@@ -185,6 +199,12 @@
       + row('Open Graph (카톡·페북 미리보기)', seo.og ? seo.og + '개 태그' : '없음', seo.og ? 'ok' : 'bad');
 
     if (!seoOk) siteBody += note('검색엔진 노출 설정에 빠진 항목이 있습니다.');
+    if (!sync || (lb.notice || []).length || (lb.certification || []).length) {
+      siteBody += note(
+        '<b>공지사항과 인증현황은 서버로 올라가는 경로가 없습니다.</b> '
+        + '지금 이 컴퓨터에서만 보이고, 홈페이지 방문자에게는 보이지 않습니다. '
+        + '서버와 연결된 것은 고객게시판 하나뿐입니다.');
+    }
     siteBody += note(
       '<b>방문자 수는 지금 셀 수 없습니다.</b> 이 사이트에는 방문자 분석 도구가 '
       + '하나도 설치돼 있지 않습니다(구글 애널리틱스·네이버 애널리틱스·Vercel Analytics 모두 없음). '
