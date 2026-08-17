@@ -1,0 +1,46 @@
+# 유성에이스 (YUSUNG ACE) — robots.txt  / r39, 2026-08-17
+# 이전까지 이 파일이 없어서(404) 크롤러가 매 요청마다 404 를 받고 있었다.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /api/
+
+# ── 생성형 검색엔진(GEO) 크롤러 ──────────────────────────────
+# 명시적으로 허용한다. 막아두면 ChatGPT·Claude·Perplexity 답변에
+# 이 회사가 아예 인용되지 않는다.
+# ★ 다만 이 봇들은 대부분 자바스크립트를 실행하지 않는다. 지금 구조에서는
+#   원본 HTML 에 있는 만큼(회사소개·홈 정도)만 읽힌다.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ── 국내 검색 ────────────────────────────────────────────────
+User-agent: Yeti
+Allow: /
+
+User-agent: Daumoa
+Allow: /
+
+Sitemap: https://usung-ace.vercel.app/sitemap.xml

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  유성에이스 sitemap — r39, 2026-08-17
+
+  ★ URL 이 하나뿐인 이유를 여기 적어 둔다(다음 사람이 「빠뜨렸나?」 하지 않도록).
+    index_v6.html:5398 의 navigate() 는 .page 요소에 class 를 토글할 뿐
+    history.pushState 를 호출하지 않는다. 그래서 회사소개·제품소개·기술력·
+    시공갤러리 어디를 눌러도 주소창은 계속 https://usung-ace.vercel.app/ 다.
+    없는 주소를 사이트맵에 적으면 전부 404 로 잡혀 신뢰도만 깎인다.
+
+  → 페이지별 URL 을 만들려면 라우팅 개편 또는 정적 사전렌더가 필요하다. 별건.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://usung-ace.vercel.app/</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

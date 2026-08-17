@@ -3,6 +3,9 @@
 // - 원본 index_v6.html 은 raw GitHub URL 에서 fetch
 export const config = { runtime: 'nodejs' };
 
+// r39 — 검색엔진/생성형엔진 노출용 head 블록. 별도 모듈인 이유는 api/_seo.js 머리말 참조.
+import { seoHead, SEO_MARK } from './_seo.js';
+
 const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
 
 // ★ 캐시버스팅 값(?v=)은 반드시 **배포**를 가리켜야 한다. 원래 `Date.now()` 였는데
@@ -134,6 +137,13 @@ export default async function handler(req, res) {
     }
     if (!html.includes('usung-r27-prepaint')) {
       html = html.replace('</head>', preStyle + '</head>');
+    }
+
+    // r39) SEO / GEO — description·canonical·OG·JSON-LD.
+    //   원본에는 <title> 밖에 없었다(description·canonical·OG·JSON-LD 전부 0건).
+    //   ★ </head> 앞에 넣는다. 위 preStyle 과 순서가 겹치지 않도록 각각 따로 replace 한다.
+    if (!html.includes(SEO_MARK)) {
+      html = html.replace('</head>', seoHead() + '\n</head>');
     }
 
     // 응답 헤더 — 항상 최신
