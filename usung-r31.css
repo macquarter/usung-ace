@@ -17,25 +17,19 @@ html .r8x:not(#_r8_) #gal-tabs .gf-lead {
   border-right: 1px solid var(--line);
   align-self: stretch;
 }
+/* ★ r32 / r3 덱 s5 — 「…빠르게 찾아보세요**만 키우고, 스타일별 삭제**」.
+ * 15 → 17.5px. 더 키우지 않는 이유: #gal-tabs 는 `position:sticky` 라 여기서 늘어난
+ * 높이가 스크롤 내내 화면을 먹는다(r31fix 회귀와 같은 함정). 문구는 <br> 로 2줄이라
+ * 17.5×1.32×2 ≈ 46px — 옆 칩(패딩 포함 ≈38px)보다 8px 큰 선에서 멈춘다.
+ * 같이 있던 「스타일별」 라벨(.gf-k)은 지시대로 마크업에서 뺐고(usung-r8-gal.js:36)
+ * 여기 있던 .gf-k 규칙도 함께 지웠다. 되살리려면 두 곳을 같이 되돌릴 것. */
 html .r8x:not(#_r8_) #gal-tabs .gf-lead b {
-  font-size: 15px;
+  font-size: 17.5px;
   font-weight: 800;
-  line-height: 1.35;
+  line-height: 1.32;
   color: var(--navy);
-  letter-spacing: -.01em;
+  letter-spacing: -.015em;
   word-break: keep-all;
-}
-/* 칩 줄을 무엇으로 거르는지 알려주는 라벨. 클릭 대상이 아니라서 화살표를 달지 않는다. */
-html .r8x:not(#_r8_) #gal-tabs .gf-lead .gf-k {
-  flex: 0 0 auto;
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--ub);
-  background: var(--ubL);
-  border: 1px solid var(--ub2);
-  border-radius: 999px;
-  padding: 5px 12px;
-  white-space: nowrap;
 }
 
 /* ★ 모바일에서는 이 패널을 아예 뺀다 — 처음엔 전폭으로 떨어뜨려 글자·여백만 줄였는데,
@@ -48,7 +42,10 @@ html .r8x:not(#_r8_) #gal-tabs .gf-lead .gf-k {
  *    GAL_FIND 에서 <br> 을 빼고 두 <span> + 공백으로 바꿔야 하는데, r16 사전이 두 문구를
  *    각각 한 행으로 갖고 있어 텍스트 노드가 둘로 유지되는지 먼저 확인해야 한다.
  * 폭 기준을 560px 으로 잡은 건 usung-r10-redesign.css:45 가 .gal-tabs 를 top:58px 로
- * 낮추는 지점과 같게 맞추려는 것이다(720px 은 어느 기존 구간과도 맞지 않았다). */
+ * 낮추는 지점과 같게 맞추려는 것이다(720px 은 어느 기존 구간과도 맞지 않았다).
+ * ★ r32(s5)에서 「스타일별」 칩을 빼서 패널이 **가로로는** 짧아졌지만, 같은 지시로 문구를
+ *   15→17.5px 키웠기 때문에 **세로는 오히려 늘었다**(43.8 → 46.2px). 모바일 숨김을 풀
+ *   근거가 되지 못한다 — 그대로 둔다. */
 @media (max-width: 560px) {
   html .r8x:not(#_r8_) #gal-tabs .gf-lead { display: none; }
 }

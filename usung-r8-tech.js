@@ -154,9 +154,15 @@ function bhAutoPlay(){
 }
 function renderTech(){
   if(techBuilt)return; techBuilt=true;
+  /* r32 / r3 덱 s6 — 「'자세히 보기' 지워주고 **모달도 삭제**」.
+     r30 에서 카드 앞면의 .tf-more(「자세히 보기 →」)만 지웠는데, 카드 자체가
+     role="button" + onclick="openFirst(i)" 라 아무 데나 눌러도 모달이 그대로 떴다.
+     → 클릭·키보드 진입점과 button 시맨틱을 전부 뺀다. 이제 카드는 그냥 정보 타일이다.
+     ★ openFirst()·#fmask·CERTS 등 아래 코드는 지우지 않는다 — 호출만 안 되면 무해하고,
+       승연이 「역시 모달은 두자」 하면 이 한 줄만 되돌리면 된다.
+     ★ 커서·hover 들썩임은 usung-r32.css 가 죽인다(여기서 클래스만 남긴다). */
   document.getElementById('th-first').innerHTML=FIRSTS.map((f,i)=>
-    `<div class="tf-card reveal" style="transition-delay:${i*90}ms" role="button" tabindex="0"
-       onclick="openFirst(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFirst(${i})}">
+    `<div class="tf-card reveal r32-nolink" style="transition-delay:${i*90}ms">
       <div class="tf-txt">
         <span class="tf-badge">국내 최초</span>
         <div class="tf-title">${f.t}</div><div class="tf-desc">${f.d}</div>

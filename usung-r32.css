@@ -1,0 +1,87 @@
+/* usung-r32.css — 260812_홈페이지_수정_r3.pptx s6
+ *
+ * 이 파일은 cssLink 맨 끝(usung-r31.css 다음)에 실린다. 아래 규칙이 덮어야 하는 것들은
+ * 전부 `html .r8x:not(#_r8_) …`(명시도 1,2,1) 라 같은 형태면 로드 순서로 이긴다.
+ * 예외적으로 !important 를 쓴 곳은 상대가 !important 인 경우뿐이며 각각 이유를 적었다.
+ */
+
+/* ════════ s6-① 「자세히 보기」 + 모달 삭제의 뒤처리 ════════
+ * 카드에서 onclick/role/tabindex 를 뺐다(usung-r8-tech.js). 그런데 보이는 성질은
+ * CSS 가 따로 들고 있다 — usung-r8.css:560 의 `cursor:pointer` 와
+ * usung-r13-tech.css:70 의 hover 배경 전환. 손가락 커서와 hover 반응이 남아 있으면
+ * 「눌러도 아무 일이 없는 버튼」이 돼서 지금보다 더 나쁘다. 같이 죽인다.
+ * ★ hover 시 사진 확대(.tf-hood scale)는 남긴다 — 클릭 유도가 아니라 장식이고,
+ *   r13/r15 가 모두 갖고 있어 없애면 카드가 완전히 죽은 판처럼 보인다.
+ */
+html .r8x:not(#_r8_) .tf-card.r32-nolink { cursor: default; }
+html .r8x:not(#_r8_) .tf-card.r32-nolink:focus-visible { outline: 0; }
+
+/* ════════ s6-② 「기술력 사진 배경 … 푸른색 그라데이션 화사하게 더 넣어주세요」 ════════
+ * 지금 배경은 usung-r13-tech.css:68 의 `#f5f5f7`(애플식 무채색)이다. 여기에 유성
+ * 브랜드 블루를 얹는다. 색은 새로 만들지 않고 usung-blue-standard.css 가 기준으로
+ * 삼은 #2563EB / #3B82F6 계열의 **엷은 톤**만 쓴다.
+ *
+ * ★ 진한 파랑을 깔지 않는 이유: 카드 글자는 .tf-title #1d1d1f · .tf-desc #6e6e73 로
+ *   어둡다. 배경을 채도 높은 파랑으로 만들면 대비가 3:1 아래로 떨어져 본문이 안 읽힌다.
+ *   「화사하게」는 밝기를 올리라는 말이지 어둡게 하라는 말이 아니다 → 밝은 쪽으로 간다.
+ * ★ background 단축 대신 background-image 로 쓴다. .tf-card 는 background-clip:text 를
+ *   쓰지 않지만, 이 리포는 단축 지정이 형제 규칙을 통째로 날린 전례가 있다(§3 함정 2).
+ * ★ r13 의 hover 는 `background:#ededf0`(단축·같은 명시도)다. 뒤에 오는 이 파일이
+ *   이기지만, 단축이 background-image 를 지우는 순서 문제를 피하려고 hover 도 여기서
+ *   background-image 로 다시 정의한다.
+ */
+html .r8x:not(#_r8_) .tf-card {
+  background-color: #eef4ff;
+  background-image: linear-gradient(148deg,
+      #f7fbff 0%,
+      #e8f1ff 38%,
+      #daeaff 72%,
+      #cfe3ff 100%);
+  border: 1px solid rgba(59, 130, 246, .14);
+}
+html .r8x:not(#_r8_) .tf-card:hover {
+  background-color: #e7f0ff;
+  background-image: linear-gradient(148deg,
+      #f2f8ff 0%,
+      #dfebff 38%,
+      #cfe2ff 72%,
+      #c2daff 100%);
+}
+
+/* 사진 뒤 원형 글로우. usung-r15-tech.css:87 이 rgba(37,99,235,.13) 로 아주 옅게
+ * 깔아 놨는데, 배경이 이미 푸른 톤이 되면서 묻혀 버린다. 「더 넣어주세요」에 맞춰
+ * 진하게 + 두 색으로 겹쳐 깊이를 준다. 사진(.tf-hood)은 z-index:1 이라 위에 뜬다. */
+html .r8x:not(#_r8_) .tf-card:before {
+  background-image:
+    radial-gradient(circle, rgba(37, 99, 235, .26) 0%, rgba(37, 99, 235, 0) 66%),
+    radial-gradient(circle, rgba(96, 165, 250, .30) 0%, rgba(96, 165, 250, 0) 48%);
+}
+
+/* 배경이 파래진 만큼 글자를 브랜드 네이비로 옮긴다. 회색 글자를 푸른 면에 그대로 두면
+ * 색이 탁해 보인다. 대비는 오히려 올라간다(#16294d on #e8f1ff ≈ 12:1).
+ * ★ .tf-title 의 margin 은 건드리지 않는다 — r13-tech.css:79 가 !important 로 잡고 있어
+ *   여기서 다시 쓰면 r16-tech.css:55 의 8px 조정과 싸운다. 색만 바꾼다. */
+html .r8x:not(#_r8_) .tf-title { color: var(--navy); }
+html .r8x:not(#_r8_) .tf-desc  { color: #4d5b73; }
+/* 뱃지 「국내 최초」 — r13-tech.css:88 이 알약을 벗기고 #6e6e73 회색 캡션으로 눕혀 놨다.
+ * 그 형태는 유지하고 색만 브랜드 블루로. (알약을 되살리면 r13 의 애플식 정리가 깨진다) */
+html .r8x:not(#_r8_) .tf-badge { color: var(--ub2); }
+
+/* ════════ s6-③ 「자세히 보기」 제거가 남긴 아래 빈칸 ════════
+ * usung-r16-tech.css:57 의 min-height:235px 는 .tf-more 가 있던 시절 값이다.
+ * r30 에서 .tf-more 를 지운 뒤로 글 쪽 바닥에 그만큼 빈 공간이 남는다.
+ *
+ * 얼마나 줄일 수 있나 — **사진이 바닥을 정한다.**
+ *   .tf-hood 는 absolute(height 184 · bottom 18)이고 .tf-card 는 overflow:hidden 이라
+ *   카드가 202px 보다 짧아지는 순간 사진 윗부분이 잘린다. 이게 절대 하한이다.
+ *   글 쪽 자연 높이는 패딩60 + 뱃지20 + 여백8 + 제목35 + 여백8 + 본문50 ≈ 181px.
+ *   (본문 d 에는 <br> 이 박혀 있어 항상 2줄이다 — 계산이 흔들리지 않는다)
+ * → 235 → 210 . 사진 하한 202 위로 8px 만 남기고, 빈칸은 25px 걷는다.
+ *   사진·패딩은 건드리지 않는다. 그쪽을 같이 줄이면 r15/r16 이 네 번 겹쳐 잡아 놓은
+ *   값들과 싸우게 되고, 이득(추가 8px)에 비해 깨질 자리가 너무 많다.
+ * ★ 980px·520px 구간은 r16 이 이미 214 / 0(내용 최소)로 내려놨다 → 건드리지 않는다.
+ *   그래서 이 규칙은 981px 이상에서만 건다.
+ */
+@media (min-width: 981px) {
+  html .r8x:not(#_r8_) .tf-card { min-height: 210px; }
+}

@@ -33,7 +33,11 @@ function goGallery(){showView('v-gallery');setNav('nav-gal');window.scrollTo(0,0
 // ★ .gal-tab 이 아니라 div 라서 r9-excel 의 '#gal-tabs .gal-tab.on' 조회에 안 걸린다.
 // ★ <br> 로 두 줄 나눈 건 r16 사전이 「원하는 디자인을」·「빠르게 찾아보세요」를 각각
 //   한 행으로 갖고 있어서다(usung-r16-i18n-a.js:57-58). 한 덩어리로 합치면 번역이 끊긴다.
-const GAL_FIND='<div class="gf-lead"><b>원하는 디자인을<br>빠르게 찾아보세요</b><span class="gf-k">스타일별</span></div>';
+// ★ r32 / r3 덱 s5 — 「원하는 디자인을 빠르게 찾아보세요**만 키우고, 스타일별 삭제**」.
+//   r2 덱 S18 이 복원하라고 한 원본 패널에는 「스타일별 ⌄」 드롭다운이 함께 있었고 나도
+//   그대로 되살렸는데(.gf-k), r3 에서 그건 빼라고 정정이 왔다. 라벨을 지우고 문구를 키운다.
+//   확대는 usung-r31.css 의 `.gf-lead b` 에서 한다(여기는 마크업만).
+const GAL_FIND='<div class="gf-lead"><b>원하는 디자인을<br>빠르게 찾아보세요</b></div>';
 function renderGalTabs(){
   // 260729: 제품소개의 스타일 칩(아이콘+개수)을 시공갤러리 탭으로 이관
   document.getElementById('gal-tabs').innerHTML=GAL_FIND+GAL_CATS.map(c=>
