@@ -4,6 +4,7 @@
     { "src": "/api/blog", "dest": "/api/blog.js" },
     { "src": "/api/board", "dest": "/api/board.js" },
     { "src": "/api/cms", "dest": "/api/cms.js" },
+    { "src": "/api/login", "dest": "/api/login.js" },
     { "src": "/api/inject", "dest": "/api/inject.js" },
     { "src": "/", "dest": "/api/inject" },
     { "src": "/index", "dest": "/api/inject" },
@@ -20,6 +21,12 @@
     },
     {
       "source": "/",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/admin",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]

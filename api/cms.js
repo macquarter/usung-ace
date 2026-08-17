@@ -25,7 +25,7 @@
  *   GitHub Contents API 와 서버리스 응답 한도를 넘긴다. 텍스트(content)만 받는다.
  *   이미지 교체는 지금처럼 리포에 파일로 커밋하는 방식이 맞다.
  */
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { authed } from './_auth.js';
 
 // ★ 모듈 최상위에서 env 를 읽지 말 것 — import 호이스팅 때문에 값이 구워진다(board.js 와 동일 함정).
 const repo = () => process.env.BOARD_REPO || 'macquarter/usung-ace';
@@ -98,18 +98,13 @@ function normalize(obj) {
   return out;
 }
 
-// 길이까지 감추려고 양쪽을 해시한 뒤 비교한다(board.js 와 동일).
-const digest = (s) => createHash('sha256').update(String(s == null ? '' : s)).digest();
-function authed(req) {
-  const key = process.env.BOARD_ADMIN_KEY;
-  if (!key) return false;
-  return timingSafeEqual(digest(req.headers['x-admin-key']), digest(key));
-}
+// r44) 인증은 api/_auth.js 한 곳으로 모았다. x-admin-token(신규 로그인) 또는
+// x-admin-key(r37 원문 키) 둘 다 통과 — 원문 키 경로는 안전줄로 일부러 남긴다.
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, x-admin-token');
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const configured = !!(process.env.BOARD_TOKEN && process.env.BOARD_ADMIN_KEY);

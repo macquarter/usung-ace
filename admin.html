@@ -327,19 +327,15 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
       <div class="login-sub">관리자 로그인 · CMS Admin Panel</div>
     </div>
     <div class="login-field">
-      <label>아이디</label>
-      <input type="text" id="loginId" placeholder="admin" value="admin" autocomplete="username" />
+      <label>관리자 비밀번호</label>
+      <input type="password" id="loginPw" placeholder="••••••••" autocomplete="current-password" />
     </div>
-    <div class="login-field">
-      <label>비밀번호</label>
-      <input type="password" id="loginPw" placeholder="••••••" autocomplete="current-password" />
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">로그인</button>
+    <div class="login-hint" id="loginMsg">홈페이지에 발행하려면 로그인이 필요합니다</div>
+    <div style="margin-top:14px;text-align:center">
+      <a href="#" onclick="enterReadonly();return false;"
+         style="font-size:12px;color:#94a3b8;text-decoration:underline">비밀번호 없이 둘러보기 (발행 불가)</a>
     </div>
-    <div class="login-field">
-      <label>서버 키 <span style="opacity:.6;font-weight:400">(게시판을 홈페이지에 공개할 때만)</span></label>
-      <input type="password" id="loginSrv" placeholder="비워두면 이 브라우저에만 저장됩니다" autocomplete="off" />
-    </div>
-    <button class="login-btn" onclick="doLogin()">로그인</button>
-    <div class="login-hint">데모 계정 : admin / admin</div>
   </div>
 </div>
 
@@ -374,7 +370,7 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
       <div class="tb-mo"><span class="dot"></span><span id="tbMode">로컬 모드</span></div>
       <button class="tb-btn" onclick="toggleTheme()">🌓 테마</button>
       <button class="tb-btn" onclick="saveAll()">💾 임시저장</button>
-      <button class="tb-btn pri" onclick="publishCms()" title="홈페이지에 실제로 반영합니다">🚀 홈페이지에 발행</button>
+      <button class="tb-btn pri" data-needs-auth onclick="publishCms()" title="홈페이지에 실제로 반영합니다">🚀 홈페이지에 발행</button>
     </header>
     <div class="ct" id="ct"></div>
   </div>
@@ -408,7 +404,9 @@ const FB = {
   key: 'YOUR_WEB_API_KEY'
 };
 const USE_FIREBASE = false;
-const ADMIN = { id: 'admin', pw: 'admin' };
+// r44) const ADMIN = { id:'admin', pw:'admin' } 를 삭제했다.
+//   서버가 한 번도 보지 않는 값이라 자물쇠가 아니었고, 로그인 화면에 인쇄까지 돼 있었다.
+//   이제 비밀번호 검사는 /api/login 이 BOARD_ADMIN_KEY 로 한다.
 
 // ============== PAGES 메타데이터 (44 data-cms fields) ==============
 const PAGES = {
@@ -732,37 +730,118 @@ let S = {
   filterCat: { notice:'전체', board:'전체', certification:'전체' }
 };
 
-// ============== AUTH ==============
-function doLogin(){
-  const id = document.getElementById('loginId').value.trim();
-  const pw = document.getElementById('loginPw').value;
-  if(id === ADMIN.id && pw === ADMIN.pw){
-    sessionStorage.setItem('cms-auth','1');
-    // 서버 키는 이 탭에서만 유지한다(localStorage 금지 — 공용 PC 에 남으면 안 된다).
-    const srv = (document.getElementById('loginSrv')||{}).value || '';
-    if(srv) sessionStorage.setItem('board-srv-key', srv);
-    else sessionStorage.removeItem('board-srv-key');
-    showApp();
-  } else {
-    toast('아이디 또는 비밀번호가 일치하지 않습니다', true);
-  }
+// ============== AUTH (r44 — 서버 검증) ==============
+// 예전: admin/admin 을 이 파일 안에서 비교했다. 서버는 보지도 않았고 소스에 박혀 있었다.
+//       거기에 「서버 키」 칸이 따로 있어서 비밀이 둘이었다(하나는 가짜).
+// 지금: 비밀번호를 /api/login 이 검사하고, 통과하면 12시간짜리 서명 토큰을 준다.
+//       그 토큰이 발행 권한이다. 비밀은 하나뿐이다.
+// ★ 진입과 발행을 분리한 이유 — api/login.js 주석 참조.
+//   비밀번호를 아직 아무도 모르면 로그인은 전부 실패한다. 그때 화면까지 막으면
+//   Vercel 을 만지기 전까지 관리자가 죽는다. 그래서 「둘러보기」로는 들어올 수 있고,
+//   대신 발행 버튼이 잠기고 배너가 뜬다.
+function setToken(t){ if(t) sessionStorage.setItem('cms-token', t); else sessionStorage.removeItem('cms-token'); }
+function getToken(){ return sessionStorage.getItem('cms-token') || ''; }
+// 토큰 만료를 화면단에서 미리 안다. 서명은 서버만 검증하지만 exp 는 payload 에 평문으로 있다.
+// ★ 이걸 안 하면 만료된 토큰으로 발행을 눌러야만 만료를 알게 된다 — 배너도 안 뜬다.
+function tokenAlive(t){
+  if(!t) return false;
+  try{
+    const p = t.slice(0, t.indexOf('.')).replace(/-/g,'+').replace(/_/g,'/');
+    return Number(JSON.parse(atob(p)).exp) > Date.now();
+  }catch(e){ return false; }
+}
+// 발행에 쓸 헤더. 토큰이 있으면 토큰, 없으면 예전 원문 키(있는 경우)로 물러난다.
+function authHeaders(){
+  const t = getToken();
+  if(t && tokenAlive(t)) return { 'x-admin-token': t };
+  if(t) setToken('');   // 만료분은 그 자리에서 버린다
+  const k = sessionStorage.getItem('board-srv-key');
+  return k ? { 'x-admin-key': k } : null;
+}
+async function doLogin(){
+  const pwEl = document.getElementById('loginPw');
+  const btn  = document.getElementById('loginBtn');
+  const msg  = document.getElementById('loginMsg');
+  const pw = pwEl.value;
+  if(!pw){ msg.textContent = '비밀번호를 입력하세요'; return; }
+  btn.disabled = true; msg.textContent = '확인 중…';
+  try{
+    const r = await fetch('/api/login', {
+      method:'POST', headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ pw })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok && j.token){
+      setToken(j.token);
+      sessionStorage.setItem('cms-auth','1');
+      pwEl.value = '';                    // 원문을 DOM 에 남기지 않는다
+      showApp();
+      return;
+    }
+    if(r.status === 503){
+      msg.innerHTML = '관리자 비밀번호가 아직 정해지지 않았습니다.<br>'
+        + 'Vercel → Settings → Environment Variables → <b>BOARD_ADMIN_KEY</b> 를 정한 뒤 재배포하세요.';
+    } else {
+      msg.textContent = j.error || ('로그인 실패 (' + r.status + ')');
+    }
+  }catch(e){
+    msg.textContent = '서버에 연결하지 못했습니다 : ' + e.message;
+  }finally{ btn.disabled = false; }
+}
+// 비밀번호 없이 진입 — 화면 확인과 임시저장(localStorage)만 된다.
+function enterReadonly(){
+  setToken('');
+  sessionStorage.setItem('cms-auth','1');
+  showApp();
 }
 function doLogout(){
   sessionStorage.removeItem('cms-auth');
+  setToken('');
+  sessionStorage.removeItem('board-srv-key');
   location.reload();
+}
+// 로그인 안 한 상태를 화면에 명시한다 — 「고쳤는데 반영이 안 되더라」의 재발 방지.
+// 토큰은 12시간짜리다. 만료 뒤 발행을 누르면 서버가 401 을 준다 — 그때 조용히 실패하지 말고
+// 임시저장 전용 모드로 내려앉히고 배너를 띄운다. (토큰을 남겨두면 계속 401 만 난다)
+function onAuthExpired(){
+  setToken('');
+  renderAuthBanner();
+  toast('로그인이 만료되었습니다 — 다시 로그인해 주세요', true);
+}
+function renderAuthBanner(){
+  const on = !!authHeaders();
+  // 발행 버튼은 권한이 없으면 눈으로도 잠긴 게 보여야 한다.
+  document.querySelectorAll('[data-needs-auth]').forEach(b => {
+    b.disabled = !on;
+    b.style.opacity = on ? '' : '.45';
+    b.style.cursor = on ? '' : 'not-allowed';
+    if(!on) b.title = '로그인해야 홈페이지에 발행할 수 있습니다';
+  });
+  let el = document.getElementById('roBanner');
+  if(on){ if(el) el.remove(); return; }
+  if(el) return;
+  el = document.createElement('div');
+  el.id = 'roBanner';
+  el.style.cssText = 'position:sticky;top:0;z-index:60;background:#7c2d12;color:#fed7aa;'
+    + 'padding:9px 14px;font-size:13px;font-weight:600;text-align:center;line-height:1.5';
+  el.innerHTML = '⚠ 임시저장 전용 모드 — 고친 내용이 이 브라우저에만 남고 홈페이지에는 반영되지 않습니다. '
+    + '<a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">로그인하기</a>';
+  const app = document.getElementById('appView');
+  if(app) app.insertBefore(el, app.firstChild);
 }
 function showApp(){
   document.getElementById('loginView').style.display='none';
   document.getElementById('appView').classList.add('active');
   loadLocal();
   R();
+  renderAuthBanner();   // r44) 권한 없으면 발행 버튼을 잠그고 배너를 띄운다
   pullBoard();
   pullCms();
 }
 
 // ============== 게시판 서버 동기화 (PPT slide6·7) ==============
 // localStorage 는 브라우저별이라 여기서 쓴 글이 방문자에게는 안 보인다.
-// 서버 키가 있으면 /api/board 로도 올려 홈페이지 공지게시판에 실제로 노출시킨다.
+// r44) 로그인했으면 /api/board 로도 올려 홈페이지 공지게시판에 실제로 노출시킨다.
 async function pullBoard(){
   try{
     const r = await fetch('/api/board', { cache:'no-store' });
@@ -775,16 +854,18 @@ async function pullBoard(){
   }catch(e){}
 }
 async function pushBoard(){
-  const key = sessionStorage.getItem('board-srv-key');
-  if(!key){ toast('서버 키 없이 저장했습니다 — 이 브라우저에만 보입니다', true); return; }
+  // r44) 로그인 토큰(또는 안전줄로 남긴 원문 키)이 없으면 로컬 저장까지만.
+  const h = authHeaders();
+  if(!h){ toast('로그인하지 않아 이 브라우저에만 저장했습니다', true); return; }
   try{
     const r = await fetch('/api/board', {
       method:'POST',
-      headers:{ 'Content-Type':'application/json', 'x-admin-key':key },
+      headers:{ 'Content-Type':'application/json', ...h },
       body: JSON.stringify({ posts: S.boards.board || [] })
     });
     const j = await r.json().catch(()=>({}));
     if(j.ok) toast(`홈페이지에 반영되었습니다 (${j.count}건)`);
+    else if(r.status===401){ onAuthExpired(); }
     else toast('서버 반영 실패 : ' + (j.error || r.status), true);
   }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
 }
@@ -826,22 +907,23 @@ async function pullCms(){
 }
 async function publishCms(){
   saveLocal();
-  const key = sessionStorage.getItem('board-srv-key');
-  if(!key){
-    toast('서버 키가 없어 발행할 수 없습니다 — 로그인 시 서버 키를 입력하세요', true);
+  // r44) 「서버 키」 칸을 없앴다 — 로그인 토큰이 곧 발행 권한이다.
+  const h = authHeaders();
+  if(!h){
+    toast('로그인해야 홈페이지에 발행할 수 있습니다', true);
     return;
   }
   toast('발행 중…');
   try{
     const r = await fetch('/api/cms', {
       method:'POST',
-      headers:{ 'Content-Type':'application/json', 'x-admin-key':key },
+      headers:{ 'Content-Type':'application/json', ...h },
       body: JSON.stringify({ content: S.content || {} })
     });
     const j = await r.json().catch(()=>({}));
     if(j.ok) toast(`홈페이지에 발행되었습니다 (${j.count}개 항목) — 최대 30초 뒤 반영됩니다`);
     else if(r.status===503) toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true);
-    else if(r.status===401) toast('서버 키가 일치하지 않습니다', true);
+    else if(r.status===401){ onAuthExpired(); }
     else toast('발행 실패 : ' + (j.error || r.status), true);
   }catch(e){ toast('발행 실패 : ' + e.message, true); }
 }
@@ -2549,8 +2631,23 @@ function fmtDate(ts){
 }
 
 // ============== INIT ==============
+// ★ 새로고침해도 다시 로그인시키지 않는다. 단 토큰이 12시간을 넘겼으면 authHeaders() 가
+//   그걸 버리므로 showApp() → renderAuthBanner() 에서 「임시저장 전용」 배너가 자동으로 뜬다.
 if(sessionStorage.getItem('cms-auth') === '1'){
   showApp();
+} else {
+  // 비밀번호가 아직 정해지지 않았으면 로그인 화면에서 미리 알려준다 — 틀린 값을 넣어보게
+  // 두면 원인을 못 찾는다. ★ 비밀번호 자체는 응답에 없다(configured 불린만).
+  fetch('/api/login', { cache:'no-store' })
+    .then(r => r.json())
+    .then(j => {
+      if(j && j.configured === false){
+        const msg = document.getElementById('loginMsg');
+        if(msg) msg.innerHTML = '관리자 비밀번호가 아직 정해지지 않았습니다.<br>'
+          + 'Vercel → Settings → Environment Variables → <b>BOARD_ADMIN_KEY</b>';
+      }
+    })
+    .catch(()=>{});
 }
 document.getElementById('loginPw').addEventListener('keypress', e=>{
   if(e.key === 'Enter') doLogin();

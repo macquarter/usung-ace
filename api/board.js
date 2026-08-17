@@ -14,7 +14,7 @@
  *   BOARD_ADMIN_KEY : 관리자 쓰기 키 (admin.html 의 admin/admin 과 무관한 별도 비밀)
  *   BOARD_REPO      : owner/repo (선택, 기본 macquarter/usung-ace)
  */
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { authed } from './_auth.js';
 
 // ★ 모듈 로드 시점에 읽지 말 것. 그러면 import 이후에 env 를 세팅하는 호출자(테스트 등)가
 // 조용히 기본값 main 을 쓰게 된다 — 실제로 테스트가 main 에 글을 써버렸다(2026-08-02).
@@ -74,18 +74,12 @@ function normalize(list) {
   })).filter(p => p.title);
 }
 
-// 길이까지 감추려고 양쪽을 해시한 뒤 비교한다.
-const digest = (s) => createHash('sha256').update(String(s == null ? '' : s)).digest();
-function authed(req) {
-  const key = process.env.BOARD_ADMIN_KEY;
-  if (!key) return false;
-  return timingSafeEqual(digest(req.headers['x-admin-key']), digest(key));
-}
+// r44) 인증은 api/_auth.js 한 곳으로 모았다 (cms.js 와 동일).
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, x-admin-token');
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const configured = !!(process.env.BOARD_TOKEN && process.env.BOARD_ADMIN_KEY);
