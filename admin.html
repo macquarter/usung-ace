@@ -822,12 +822,18 @@ function renderAuthBanner(){
   if(el) return;
   el = document.createElement('div');
   el.id = 'roBanner';
-  el.style.cssText = 'position:sticky;top:0;z-index:60;background:#7c2d12;color:#fed7aa;'
-    + 'padding:9px 14px;font-size:13px;font-weight:600;text-align:center;line-height:1.5';
+  // ★ position:sticky 를 쓰지 않는다 — .tb 가 이미 sticky top:0 이라 겹친다.
+  //   배너 높이는 393px 에서 줄바꿈으로 변하므로 .tb 의 top 을 맞춰 밀어줄 수도 없다.
+  el.style.cssText = 'background:#7c2d12;color:#fed7aa;padding:9px 14px;font-size:13px;'
+    + 'font-weight:600;text-align:center;line-height:1.5;flex:0 0 auto';
   el.innerHTML = '⚠ 임시저장 전용 모드 — 고친 내용이 이 브라우저에만 남고 홈페이지에는 반영되지 않습니다. '
     + '<a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">로그인하기</a>';
-  const app = document.getElementById('appView');
-  if(app) app.insertBefore(el, app.firstChild);
+  // ★★ #appView 에 넣으면 안 된다. .app 은 display:flex 의 **가로** 컨테이너라
+  //   (자식이 .sb 220px + .main flex:1) 배너가 세 번째 세로 칸이 되어 109x1615 짜리
+  //   띠로 서고 .main 을 284px 로 찌그러뜨린다 — 393px 실측으로 확인했다.
+  //   .main 은 flex-direction:column 이라 여기 넣어야 가로 띠가 된다.
+  const main = document.querySelector('#appView .main');
+  if(main) main.insertBefore(el, main.firstChild);
 }
 function showApp(){
   document.getElementById('loginView').style.display='none';
