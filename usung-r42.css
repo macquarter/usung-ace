@@ -1,4 +1,5 @@
 /* usung-r42.css — 260817 모바일 최적화 (승연 요청 3·4번)
+ * build-marker: r42-b2
  *
  * usung-r8.css 가 런타임 로드라 그쪽 선언을 덮으려면 선행 `html ` + !important 가
  * 필요하다(usung-r10-redesign.css·usung-r31.css 와 같은 이유).
