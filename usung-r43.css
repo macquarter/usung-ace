@@ -1,0 +1,76 @@
+/* usung-r43.css — 260817 승연 2건 (제품 모달 화살표 잘림 · 홈 카운터 3번 칸 복원)
+ * build-marker: r43-b1
+ *
+ * ★ 두 건 모두 「데스크톱에서도 이미 깨져 있던 것」이다. 모바일 전용 미디어쿼리에
+ *   넣지 않는 이유가 그것이다. 승연 요청의 「모든 변경에는 모바일도 최적화」는
+ *   각 항목의 @media 블록에서 따로 받는다.
+ *
+ * ════════════════════════════════════════════════════
+ * ① 제품 상세 모달 좌우 화살표가 모달 밖으로 잘린다
+ * ════════════════════════════════════════════════════
+ * 실측 (로컬 렌더, api/inject.js 를 통과시킨 실물):
+ *
+ *            모달 좌   모달 우   ‹ 좌표      › 좌표      잘림
+ *   1440px    220.0    1220.0    210.0~248   704~742.2   왼 10px / 오른 0
+ *    393px     16.0     377.0      6.0~44    349~387     왼 10px / 오른 10px
+ *
+ * 원인은 세 줄이 겹친 것이다.
+ *   usung-r8.css:330  .modal{overflow:hidden}      ← 라운드 모서리를 위해 필요
+ *   usung-r8.css:337  .m-img{position:relative}    ← 화살표의 기준 상자
+ *   usung-r8.css:256  .arrow.l{left:-10px}         ← 기준 상자 **밖으로** 10px
+ *
+ * .m-img 는 그리드 첫 칸이라 그 좌변이 곧 모달 좌변이다. 그래서 -10px 이 그대로
+ * overflow:hidden 에 잘린다. 오른쪽이 데스크톱에서 멀쩡했던 건 2단 그리드라
+ * .m-img 우변이 모달 **한가운데**였기 때문 — 즉 데스크톱은 우연히 가려졌을 뿐이고,
+ * 1단이 되는 모바일에서는 양쪽이 다 잘린다(위 표).
+ *
+ * ★ overflow 를 visible 로 푸는 방식은 쓰지 않는다. .modal 은 border-radius:18px 과
+ *   position:sticky 인 .m-top 을 함께 쓰고 있어서, overflow 를 풀면 상단 헤더가
+ *   둥근 모서리 밖으로 삐져나오고 sticky 기준 상자도 바뀐다. 화살표 두 개를 고치려고
+ *   모달 전체의 클리핑 규칙을 바꾸는 건 교환비가 나쁘다.
+ *   → 화살표를 상자 **안쪽**으로 넣는다. 좌우 대칭이 되어 오히려 의도적으로 보인다.
+ */
+html .r8x:not(#_r8_) .arrow.l { left: 10px !important; }
+html .r8x:not(#_r8_) .arrow.r { right: 10px !important; }
+
+/* 모바일 — 38px 은 손가락 타깃으로 작다(권장 44px). .m-img 가 1단 전체폭이 되면서
+   가로 여유가 생기므로 여기서 키운다. 안쪽 여백은 8px 로 줄여 사진을 덜 가린다. */
+@media (max-width: 560px) {
+  html .r8x:not(#_r8_) .arrow {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+  html .r8x:not(#_r8_) .arrow.l { left: 8px !important; }
+  html .r8x:not(#_r8_) .arrow.r { right: 8px !important; }
+}
+
+/* ════════════════════════════════════════════════════
+ * ② 홈 카운터 3번 칸 — 숫자 + 라벨 2단으로 복원
+ * ════════════════════════════════════════════════════
+ * 마크업 교체는 api/inject.js S01 이 한다(FOUC 때문에 JS 오버레이로 하지 않는다).
+ * 여기서는 라벨 조판만 맡는다.
+ *
+ * 실측 393px: 칸 하나가 100.2px. 라벨 기본값은 10px + letter-spacing 2.2px(0.22em) 라
+ * 「최초의 혁신적 후드」 11글자가 ≈134px → 넘친다. YEARS·PRODUCTS 는 한 단어라
+ * 이 문제가 없었다. 자간을 줄여 2줄(최초의 / 혁신적 후드)로 얌전히 접는다.
+ *
+ * ★ 외국어가 더 길다 — en "Korea's First Innovative Hood" 28자. 자간 0.22em 그대로면
+ *   100px 칸에서 3줄이 된다. 0.08em 으로 낮춰 2줄에 들어오게 한다.
+ * ★ 이 칸은 .r8x 밖(#page-home 본문)이라 .r8x 접두사를 쓰면 안 맞는다.
+ *   Tailwind CDN 이 런타임에 심는 규칙을 이기려고 html + !important 로만 건다.
+ */
+html .r43-stat3 {
+  letter-spacing: .08em !important;
+  line-height: 1.5 !important;
+  word-break: keep-all !important;
+  white-space: normal !important;
+}
+
+@media (max-width: 560px) {
+  html .r43-stat3 {
+    font-size: 9.5px !important;
+    letter-spacing: .02em !important;
+    line-height: 1.45 !important;
+  }
+}
