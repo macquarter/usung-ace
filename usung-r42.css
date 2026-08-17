@@ -185,10 +185,12 @@ html .r8x:not(#_r8_) .r42-gcta .r42-gbtn {
   box-shadow: 0 12px 28px rgba(0, 0, 0, .28);
 }
 @media (max-width: 560px) {
+  /* ★ 폭은 건드리지 않는다. 카드는 `.wrap` 안에서 width:100% 라 #gal-grid 와 좌우가
+     정확히 맞는다. 여기서 calc(100% - 32px) 같은 걸 주면 사진 그리드보다 32px 좁아져
+     가장자리가 어긋난다(초안의 잔재였다 — 그땐 카드가 .wrap 바깥에 있는 줄 알았다). */
   html .r8x:not(#_r8_) .r42-gcta {
-    width: calc(100% - 32px);
     padding: 24px 18px;
-    margin-top: 26px;
+    margin-bottom: 48px;
   }
   html .r8x:not(#_r8_) .r42-gcta h3 { font-size: 19px; }
   html .r8x:not(#_r8_) .r42-gcta p { font-size: 13.5px; }
