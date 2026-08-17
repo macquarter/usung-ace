@@ -10,7 +10,7 @@
     { "src": "/index", "dest": "/api/inject" },
     { "src": "/index.html", "dest": "/api/inject" },
     { "src": "/index_v6.html", "dest": "/api/inject" },
-    { "src": "/admin", "dest": "/admin.html" }
+    { "src": "/admin", "dest": "/admin.html", "headers": { "Cache-Control": "no-cache, no-store, must-revalidate" } }
   ],
   "headers": [
     {
@@ -21,12 +21,6 @@
     },
     {
       "source": "/",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/admin",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
