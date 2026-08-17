@@ -373,7 +373,8 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
       <div class="tb-sp"></div>
       <div class="tb-mo"><span class="dot"></span><span id="tbMode">로컬 모드</span></div>
       <button class="tb-btn" onclick="toggleTheme()">🌓 테마</button>
-      <button class="tb-btn pri" onclick="saveAll()">💾 저장</button>
+      <button class="tb-btn" onclick="saveAll()">💾 임시저장</button>
+      <button class="tb-btn pri" onclick="publishCms()" title="홈페이지에 실제로 반영합니다">🚀 홈페이지에 발행</button>
     </header>
     <div class="ct" id="ct"></div>
   </div>
@@ -756,6 +757,7 @@ function showApp(){
   loadLocal();
   R();
   pullBoard();
+  pullCms();
 }
 
 // ============== 게시판 서버 동기화 (PPT slide6·7) ==============
@@ -785,6 +787,43 @@ async function pushBoard(){
     if(j.ok) toast(`홈페이지에 반영되었습니다 (${j.count}건)`);
     else toast('서버 반영 실패 : ' + (j.error || r.status), true);
   }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
+}
+
+// ============== 홈페이지 내용 발행 (승연 지시「cms까지 걸어줘」) ==============
+// 💾 임시저장 = localStorage (이 브라우저에만). 🚀 발행 = /api/cms → 방문자 화면에 실제 반영.
+// 둘을 한 버튼으로 묶지 않은 이유: 글자 하나 고칠 때마다 GitHub 커밋이 나가면
+// 이력이 쓰레기가 되고 API 한도도 먹는다. 다 고치고 나서 한 번 누르는 구조가 맞다.
+async function pullCms(){
+  try{
+    const r = await fetch('/api/cms', { cache:'no-store' });
+    const j = await r.json();
+    if(!j || !j.configured || !j.content) return;
+    const keys = Object.keys(j.content);
+    if(!keys.length) return;   // 서버가 비어 있으면 로컬을 덮지 않는다(첫 이관 때 작업분 유실 방지)
+    S.content = { ...S.content, ...j.content };
+    saveLocal(); R();
+  }catch(e){}
+}
+async function publishCms(){
+  saveLocal();
+  const key = sessionStorage.getItem('board-srv-key');
+  if(!key){
+    toast('서버 키가 없어 발행할 수 없습니다 — 로그인 시 서버 키를 입력하세요', true);
+    return;
+  }
+  toast('발행 중…');
+  try{
+    const r = await fetch('/api/cms', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-admin-key':key },
+      body: JSON.stringify({ content: S.content || {} })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok) toast(`홈페이지에 발행되었습니다 (${j.count}개 항목) — 최대 30초 뒤 반영됩니다`);
+    else if(r.status===503) toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true);
+    else if(r.status===401) toast('서버 키가 일치하지 않습니다', true);
+    else toast('발행 실패 : ' + (j.error || r.status), true);
+  }catch(e){ toast('발행 실패 : ' + e.message, true); }
 }
 
 // ============== FIRESTORE REST ==============
@@ -851,7 +890,9 @@ function loadLocal(){
 }
 function saveAll(){
   saveLocal();
-  toast('저장되었습니다');
+  // ★ 문구를 바꾼 이유: 예전엔 '저장되었습니다' 라고만 떠서, 방문자에게도 반영된 줄 알았다.
+  // 실제로는 localStorage(이 브라우저)뿐이다 — 「고쳐도 반영이 안 되더라」의 원인.
+  toast('이 브라우저에 임시저장했습니다 — 방문자에게 반영하려면 🚀 발행');
   if(USE_FIREBASE){
     // fsPatch(`cms/content`, S.content);
   }
