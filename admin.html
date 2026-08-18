@@ -635,7 +635,7 @@ const D2 = {
   history: [
     { y:'2007', t:'유성에이스 창업 · 직화기 후드 사업 시작' },
     { y:'2010', t:'갤럭시 A·B·C 시리즈 첫 출시' },
-    { y:'2015', t:'F.V.D 방화담파 특허 획득' },
+    { y:'2015', t:'F.V.D 방화댐퍼 특허 획득' },
     { y:'2018', t:'갤럭시 D-Type 스윙텐션 출시' },
     { y:'2022', t:'누적 28개 제품 라인업 완성' },
     { y:'2026', t:'대한민국 덕트 No.1 20주년' }
@@ -661,7 +661,7 @@ const D2 = {
     { num:'STEP 01', tt:'현장 실측 / 상담', dd:'20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다' },
     { num:'STEP 02', tt:'맞춤 설계·견적',   dd:'갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다' },
     { num:'STEP 03', tt:'자체 공장 제작',   dd:'유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다' },
-    { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화담파 점검 + 부분 특허 부품 A/S 지원' }
+    { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화댐퍼 점검 + 부분 특허 부품 A/S 지원' }
   ],
   gallery: [
     { t:'강남 직화구이 전문점', c:'갤럭시 D-TYPE' },
@@ -679,7 +679,7 @@ const D2 = {
     { num:'STEP 01', tt:'현장 실측 / 상담', dd:'20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다.' },
     { num:'STEP 02', tt:'맞춤 설계·견적',   dd:'갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다.' },
     { num:'STEP 03', tt:'자체 공장 제작',   dd:'유성에이스 자체 공장에서 정밀 제작 후 현장으로 직배송합니다.' },
-    { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화담퍼 점검 + 부분 특허 부품 A/S 지원.' }
+    { num:'STEP 04', tt:'시공 및 사후관리',  dd:'전문 기사 시공 + F.V.D 방화댐퍼 점검 + 부분 특허 부품 A/S 지원.' }
   ],
   manual_feat: [
     { num:'01', tt:'기름유도장치', dd:'기름 흘림 ZERO' },
@@ -694,10 +694,12 @@ const D2 = {
 const BOARDS = {
   notice: {
     name:'공지사항', ic:'📢',
-    categories:['전체','공지','이벤트','업데이트'],
+    // r48) 분류는 홈페이지 공지 페이지가 실제로 쓰는 5종에 맞춘다.
+    //   예전 3종에는 '중요'·'A/S' 가 없어서, 사이트에 떠 있는 공지를 그대로 옮겨 적을 수조차 없었다.
+    categories:['전체','중요','공지','이벤트','업데이트','A/S'],
     fields:[
       { id:'title', label:'제목',  type:'text',     req:true },
-      { id:'cat',   label:'카테고리', type:'select',  opts:['공지','이벤트','업데이트'] },
+      { id:'cat',   label:'카테고리', type:'select',  opts:['중요','공지','이벤트','업데이트','A/S'] },
       { id:'body',  label:'내용',  type:'textarea', req:true },
       { id:'pin',   label:'상단고정', type:'check' }
     ]
@@ -737,31 +739,86 @@ let S = {
   arrays: JSON.parse(JSON.stringify(D2)),
   images: {},
   videos: {},
-  inquiries: [
-    { id:'q1', nm:'김철수', co:'(주)미래F&B', tel:'010-1111-2222', em:'kim@mr.co', msg:'후드 견적 문의드립니다', st:'new',      createdAt: Date.now()-86400000*1 },
-    { id:'q2', nm:'이영희', co:'동서호텔',    tel:'010-3333-4444', em:'lee@dsh.co', msg:'주방 전체 덕트 교체 상담',     st:'pending',  createdAt: Date.now()-86400000*3 },
-    { id:'q3', nm:'박민수', co:'한솥식당',    tel:'010-5555-6666', em:'park@hs.co', msg:'AS 문의드립니다',             st:'replied',  reply:'방문일정 조정하여 연락드렸습니다', createdAt: Date.now()-86400000*7 }
-  ],
+  // ============== r48 : 기준은 홈페이지다 ==============
+  // 예전엔 여기에 데모용 가짜 행 11개가 박혀 있었다(문의 3 · 공지 3 · 게시판 2 · 인증 3).
+  // 셋 다 홈페이지에는 존재하지 않는 내용이라, 관리자만 보면 사이트를 오해하게 된다.
+  // ★ 게시판 2건은 미관 문제가 아니라 사고 위험이었다 — pushBoard() 는 S.boards.board 를
+  //   통째로 /api/board 에 올린다. 승연이 로그인 후 발행을 누르면 '김○○·이○○' 가
+  //   방문자 화면(usung-board-sync.js 병합)에 실제로 떴다.
+  // 아래 값은 전부 2026-08-18 라이브 DOM 실측으로 맞춘 것이다(KNOWLEDGE 47 — 기준은 파일이 아니라 화면).
+  inquiries: [],   // 사이트에 문의 폼이 없다 → 수신 경로 자체가 없으므로 영구 0건 (QUESTIONS F1)
   boards: {
+    // 홈페이지 공지 페이지에 실제로 떠 있는 9건. 상단고정 2건 + 타임라인 7건.
+    // ⚠ 이 목록은 화면 표시용이다 — 서버 발행 경로가 없다(발행은 board 만: admin.html 의 `k==='board'`).
     notice: [
-      { id:'n1', title:'2026년 춘절 배송 안내', cat:'공지',    body:'2026년 2월 춘절 연휴 기간 배송 지연 안내입니다.', pin:true, views:342, createdAt: Date.now()-86400000*5 },
-      { id:'n2', title:'신제품 프리미엄 후드 출시', cat:'업데이트', body:'프리미엄 HD-2000 라인업이 출시되었습니다.',        views:521, createdAt: Date.now()-86400000*12 },
-      { id:'n3', title:'봄맞이 특별 프로모션',   cat:'이벤트', body:'3월 한 달간 설치비 20% 할인 이벤트 진행',         views:298, createdAt: Date.now()-86400000*20 }
+      { id:'n1', title:'2026 설 연휴 A/S 운영 안내', cat:'중요', pin:true,
+        body:'2026년 2월 16일(월) ~ 18일(수) 설 연휴 기간 중 긴급 A/S는 1588-9123으로 연락주시면 순차 대응합니다.',
+        createdAt: Date.parse('2026-02-10T00:00:00+09:00') },
+      { id:'n2', title:'창립 기념 감사 프로모션', cat:'이벤트', pin:true,
+        body:'갤럭시 A·B 타입 일괄 견적 시 최대 15% 할인 + F.V.D 방화댐퍼 무상 업그레이드. 5월 31일까지!',
+        createdAt: Date.parse('2026-04-01T00:00:00+09:00') },
+      { id:'n3', title:'2026 제품 카탈로그 v6 배포 안내', cat:'업데이트',
+        body:'갤럭시 A~D 타입 전면 개정된 최신 카탈로그가 자료실에 업로드되었습니다. 신규 F.V.D 방화댐퍼 라인업 포함.',
+        createdAt: Date.parse('2026-04-05T00:00:00+09:00') },
+      { id:'n4', title:'태엽감속기 빠찌링(베어링) 정품 교체 캠페인', cat:'A/S',
+        body:'5년 이상 사용 매장 대상으로 베어링 무상 점검 및 할인 교체를 진행합니다. 전화 접수만 받습니다.',
+        createdAt: Date.parse('2026-03-28T00:00:00+09:00') },
+      { id:'n5', title:'파주 본사 주차장 확장 공사 안내', cat:'공지',
+        body:'3월 25일 ~ 4월 10일까지 본사 주차장 확장 공사로 임시 주차 장소를 운영합니다.',
+        createdAt: Date.parse('2026-03-20T00:00:00+09:00') },
+      { id:'n6', title:'시공후기 리뷰 이벤트 — 스타벅스 기프티콘', cat:'이벤트',
+        body:'게시판에 실제 시공 사진과 후기를 남겨주시는 분들께 매주 5분 추첨하여 커피 기프티콘을 드립니다.',
+        createdAt: Date.parse('2026-03-12T00:00:00+09:00') },
+      { id:'n7', title:'F.V.D 방화댐퍼 2세대 정식 출시', cat:'업데이트',
+        body:'기존 대비 폐쇄 속도 40% 향상, 스프링 수명 2배 연장된 2세대 F.V.D가 전 제품군에 기본 탑재됩니다.',
+        createdAt: Date.parse('2026-02-28T00:00:00+09:00') },
+      { id:'n8', title:'설 연휴 기간 긴급 A/S 접수 안내', cat:'A/S',
+        body:'설 연휴 기간 긴급 상황 발생 시 1588-9123으로 연락 주시면 순차 대응해드립니다.',
+        createdAt: Date.parse('2026-02-15T00:00:00+09:00') },
+      { id:'n9', title:'유성에이스 공식 블로그 리뉴얼 완료', cat:'공지',
+        body:'네이버 공식 블로그가 새롭게 리뉴얼되었습니다. 시공 사례와 기술 정보를 확인하세요.',
+        createdAt: Date.parse('2026-01-20T00:00:00+09:00') }
     ],
-    board: [
-      { id:'b1', title:'강남 시공 정말 만족합니다', cat:'시공후기', author:'김○○', body:'깔끔하고 빠른 시공 감사합니다', views:87, createdAt: Date.now()-86400000*2 },
-      { id:'b2', title:'견적 재문의드립니다',       cat:'문의',   author:'이○○', body:'추가 견적 가능한지 궁금합니다',  views:34, createdAt: Date.now()-86400000*4 }
-    ],
-    certification: [
-      { id:'a1', title:'2026 제품 카탈로그',    cat:'카탈로그', desc:'전 제품 라인업 카탈로그',     ftype:'PDF',  size:'12.4MB', url:'#', createdAt: Date.now()-86400000*30 },
-      { id:'a2', title:'표준 후드 설계 도면',    cat:'도면',   desc:'HD-1000 시리즈 도면',     ftype:'DWG',  size:'3.2MB',  url:'#', createdAt: Date.now()-86400000*60 },
-      { id:'a3', title:'설치 가이드 영상',      cat:'영상',   desc:'전문 기사 설치 영상',        ftype:'MP4',  size:'340MB', url:'#', createdAt: Date.now()-86400000*90 }
-    ]
+    // 홈페이지 게시판은 네이버 블로그 RSS 60건을 보여준다 — 방문자가 쓴 글은 0건이다.
+    // ★ 여기에 넣은 글은 발행 시 실제로 방문자 화면에 병합된다. 가짜를 두면 안 된다.
+    board: [],
+    // 홈페이지 인증현황은 '보유 자료는 지식재산권 보호를 위해 세부 내용을 비공개합니다' 요약만
+    // 띄운다 — 개별 항목을 하나도 노출하지 않는다(index_v6.html 의 archiveItems 는 죽은 코드).
+    certification: []
   },
   theme: 'dark',
   sortBy: { notice:'latest', board:'latest', certification:'latest' },
   filterCat: { notice:'전체', board:'전체', certification:'전체' }
 };
+
+// ============== r48 : 데모 시드 퇴출 ==============
+// 소스에서 지우는 것만으로는 부족하다. 관리자를 한 번이라도 연 브라우저에는 옛 11행이
+// localStorage('usung-cms-state-v2') 에 그대로 남아 있어서, 배포해도 화면은 안 바뀐다.
+// ★ 배열을 통째로 비우지 않는다 — 그 사이 승연이 쓴 진짜 글까지 날아간다.
+//   id 와 제목이 「둘 다」 맞는 행만 지운다. 우연히 id 가 겹친 진짜 글은 제목이 다르므로 살아남는다.
+const R48_SEED = {
+  inquiries:     [['q1','김철수'], ['q2','이영희'], ['q3','박민수']],
+  notice:        [['n1','2026년 춘절 배송 안내'], ['n2','신제품 프리미엄 후드 출시'], ['n3','봄맞이 특별 프로모션']],
+  board:         [['b1','강남 시공 정말 만족합니다'], ['b2','견적 재문의드립니다']],
+  certification: [['a1','2026 제품 카탈로그'], ['a2','표준 후드 설계 도면'], ['a3','설치 가이드 영상']]
+};
+const R48_NOTICE_DEFAULT = JSON.parse(JSON.stringify(S.boards.notice));
+function r48DropSeed(rows, pairs, key){
+  if(!Array.isArray(rows)) return rows;
+  return rows.filter(function(r){
+    return !pairs.some(function(p){ return r && r.id === p[0] && r[key] === p[1]; });
+  });
+}
+function r48Purge(s){
+  s.inquiries = r48DropSeed(s.inquiries, R48_SEED.inquiries, 'nm');
+  if(s.boards){
+    s.boards.notice        = r48DropSeed(s.boards.notice,        R48_SEED.notice,        'title');
+    s.boards.board         = r48DropSeed(s.boards.board,         R48_SEED.board,         'title');
+    s.boards.certification = r48DropSeed(s.boards.certification, R48_SEED.certification, 'title');
+    // 공지는 홈페이지에 9건이 떠 있다. 가짜만 걷어내고 비워두면 관리자가 사이트보다 비어 보인다.
+    if(!s.boards.notice.length) s.boards.notice = JSON.parse(JSON.stringify(R48_NOTICE_DEFAULT));
+  }
+}
 
 // ============== AUTH (r44 — 서버 검증) ==============
 // 예전: admin/admin 을 이 파일 안에서 비교했다. 서버는 보지도 않았고 소스에 박혀 있었다.
@@ -1008,7 +1065,8 @@ function fromFd(d){
 function saveLocal(){
   localStorage.setItem('usung-cms-state-v2', JSON.stringify({
     content:S.content, arrays:S.arrays, images:S.images,
-    inquiries:S.inquiries, boards:S.boards, theme:S.theme
+    inquiries:S.inquiries, boards:S.boards, theme:S.theme,
+    seedVer: 48   // r48) 데모 시드 퇴출 완료 표식. 없으면 loadLocal 이 한 번 더 청소한다.
   }));
 }
 function loadLocal(){
@@ -1022,6 +1080,8 @@ function loadLocal(){
       S.boards = s.boards || S.boards;
       // migration: archive → certification
       if(S.boards.archive && !S.boards.certification){ S.boards.certification = S.boards.archive; delete S.boards.archive; }
+      // migration r48: 데모 시드 11행 퇴출 (한 번 지우면 seedVer 로 다시 안 돈다)
+      if(s.seedVer !== 48){ r48Purge(S); saveLocal(); }
       if(S.sortBy && S.sortBy.archive){ S.sortBy.certification = S.sortBy.archive; delete S.sortBy.archive; }
       if(S.filterCat && S.filterCat.archive){ S.filterCat.certification = S.filterCat.archive; delete S.filterCat.archive; }
       S.theme = s.theme || 'dark';
@@ -1545,7 +1605,7 @@ function rLive(k){
           <div style="width:28px;height:16px;margin-left:-11px;border-radius:0 0 8px 8px;background:linear-gradient(to bottom,#999,#666);clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%)"></div>
         </div>
       </div>`,
-      /* TECH 02: F.V.D 방화담파 — 댐퍼 닫힘 + 불꽃 */
+      /* TECH 02: F.V.D 방화댐퍼 — 댐퍼 닫힘 + 불꽃 */
       `<div style="position:relative;width:64px;height:56px">
         <div style="position:absolute;inset:8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(to bottom,rgba(139,105,20,.4),rgba(107,82,16,.2))"></div>
         <div style="position:absolute;top:50%;left:50%;width:48px;height:3px;border-radius:2px;background:linear-gradient(90deg,#f97316,#dc2626);box-shadow:0 0 10px rgba(234,88,12,.5);animation:damper-close 2.5s ease-in-out infinite"></div>
@@ -1726,7 +1786,7 @@ function rLive(k){
             <!-- 키워드 칩 -->
             <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px">
               <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">360° SWING</span>
-              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">F.V.D 방화담파</span>
+              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">F.V.D 방화댐퍼</span>
               <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">분리 청소</span>
               <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">상하 텐션</span>
             </div>
