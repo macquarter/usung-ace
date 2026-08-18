@@ -504,20 +504,32 @@ const PAGES = {
 };
 
 // ============== 기본 콘텐츠 D (실제 홈페이지 텍스트) ==============
-// ★★ r45(260818) — 승연 「이거 맞춰서 관리자페이지도 다시 체크」로 index_v6.html 과 전수 대조했다.
+// ★★ r45(260818) — 승연 「이거 맞춰서 관리자페이지도 다시 체크」로 전수 대조했다.
 //   D 는 「관리자가 아직 아무것도 안 고쳤을 때의 값」이면서 동시에 **발행 페이로드의 바탕**이다.
 //   publishCms() 는 S.content 를 통째로 보내고 S.content = {...D, ...저장분} 이라(loadLocal),
 //   여기 값이 틀리면 승연이 글자 하나 안 고치고 🚀 를 눌러도 **그 필드가 사이트에 덮어써진다.**
-//   실제로 83개 바인딩 중 18개가 틀려 있었다 — 대부분 첫 문장만 남기고 잘려 있었고,
-//   www_case1~3_desc 는 아예 다른 글(「갤럭시 시리즈 추천 →」 같은 CTA 라벨)이었으며,
-//   h_tag·vid_tag·c_name_en 세 곳은 회사 영문명이 **YUSUNG**(오타, 정답은 USUNG)이었다.
-//   → index_v6.html 에서 textContent 를 직접 읽어 18개를 갈아끼웠다(손으로 옮겨 적지 않았다).
-//   지금은 83개 중 77개가 「발행해도 무동작」이고, 나머지 6개는 앞뒤 공백만 다르다(렌더 동일).
-//   ★ 예외 g_title 은 <br/>+그라데이션 span 구조라 발행하면 구조가 깨진다 →
-//     usung-r37-cms.js 의 SKIP 에 넣었다. 그 파일 머리 주석에 근거가 있다.
-//   ★ 새 문구를 여기 적을 때는 index_v6.html 의 textContent 와 **글자 하나까지** 맞출 것.
+//   usung-r37-cms.js:44 가 el.textContent = val 로 쓰므로 되돌릴 방법도 없다.
+//
+//   ★★★ 기준값의 출처 — **index_v6.html 이 아니라 브라우저에 그려진 DOM 이다.**
+//   두 단계가 파일과 화면 사이에 끼어 있다:
+//     ① api/inject.js 가 **응답시점에 문자열을 치환**한다. r20 이 PPT 지시
+//        「USUNGACE → YUSUNGACE로 통일화」를 여기서 처리해 9곳을 바꿔 내보낸다.
+//        그래서 파일은 `USUNG ACE` 인데 화면은 `YUSUNG ACE` 다. 파일만 보고 맞추면
+//        h_tag·vid_tag·c_name_en 이 **고객이 지시한 표기를 되돌린다**(실제로 한 번 그랬다).
+//     ② usung-*.js 오버레이가 다시 덧그린다. www_case2_desc 는 파일이 「방화담파」인데
+//        화면은 「방화댐퍼」로 교정돼 나온다.
+//   → 값은 CDP 로 실제 DOM 의 textContent 를 읽어 넣었다(손으로 옮겨 적지 않았다).
+//
+//   실측: DOM 에 실제로 존재하는 바인딩 75개 중 **16개가 틀려 있었다.**
+//   대부분 첫 문장만 남기고 잘려 있었고, www_case1~3_desc 는 아예 다른 글
+//   (「갤럭시 시리즈 추천 →」 같은 CTA 라벨)이 들어 있었다. 14개를 고쳐 지금 남은 건 2개인데
+//   **둘 다 usung-r37-cms.js 의 SKIP 이라 발행이 건드리지 않는다** = 발행 위험 0.
+//     · a_ceo_name — DOM 은 회사명, 관리자는 대표자명. r5 가 100ms 로 회사명을 강제한다(r37 실측).
+//     · g_title    — <span><br/><span class=bg-clip-text> 구조라 쓰면 그라데이션·줄바꿈이 사라진다.
+//   ★ 새 문구를 여기 적을 때는 **라이브 화면의 textContent** 와 글자 하나까지 맞출 것.
+//     대조 스크립트는 _backup_20260818_pre-r45/README.md 에 적어 뒀다.
 const D = {
-  h_tag: 'SINCE 2007 · USUNG ACE',
+  h_tag: 'SINCE 2007 · YUSUNG ACE',
   h_title1: '대한민국 덕트',
   h_title2: 'No.1',
   h_sub: '오늘을 이끄는 원동력.',
@@ -542,7 +554,7 @@ const D = {
   a_ceo_p3: '유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다. 실제 현장에서 기기를 다루는 분들의 목소리에 귀를 기울여, 더 안전하고 효율적인 환기 환경을 만드는 것이 우리의 사명입니다.',
   a_ceo_p4: '앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다. 변함없는 믿음과 성원을 보내주시는 고객 여러분께 진심으로 감사의 말씀을 올립니다.',
   c_name: '유성에이스',
-  c_name_en: 'USUNG ACE',
+  c_name_en: 'YUSUNG ACE',
   c_ceo: '박진선',
   c_tel: '1588-9123',
   c_fax: 'FAX (031) 952-1706',
@@ -596,7 +608,7 @@ const D = {
   www_title_a:'대한민국의 ', www_title_b:'불 앞에서', www_title_c:'.',
   www_desc:'프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지. 유성에이스는 매일 수많은 전문가들의 작업 환경을 쾌적하게 지켜내고 있습니다.',
   www_case1_tag:'USE CASE 01', www_case1_title:'직화 고깃집', www_case1_desc:'테이블마다 떨어지는 기름을 방지하며 360도 스윙으로 자유롭게 연기 흡입 가능.',
-  www_case2_tag:'USE CASE 02', www_case2_title:'대형 프랜차이즈', www_case2_desc:'매장 전체 통일 규격 · 부품 교체 표준화. F.V.D 방화담파로 다점포 안전 일괄 관리.',
+  www_case2_tag:'USE CASE 02', www_case2_title:'대형 프랜차이즈', www_case2_desc:'매장 전체 통일 규격 · 부품 교체 표준화. F.V.D 방화댐퍼로 다점포 안전 일괄 관리.',
   www_case3_tag:'USE CASE 03', www_case3_title:'공장 / 연구실', www_case3_desc:'연기가 가득한 현장에서도, 정밀한 환기가 필요한 연구실에서도 환기 솔루션을 제공합니다.',
   // Statement
   stmt_tag:'A NEW STANDARD',
@@ -605,7 +617,7 @@ const D = {
   // Gallery Preview
   gp_tag:'REAL CONSTRUCTION', gp_title1:'20년 동안 쌓아온', gp_title2:'진짜 현장 사진.',
   // Video Showcase
-  vid_tag:'USUNG ACE IN ACTION', vid_title1:'유성에이스 후드,', vid_title2:'움직이는 모습 그대로.',
+  vid_tag:'YUSUNG ACE IN ACTION', vid_title1:'유성에이스 후드,', vid_title2:'움직이는 모습 그대로.',
   vid_desc:'360° 스윙, 상하 텐션, FVD 방화댐퍼의 작동을 영상으로 만나보세요. 20년 노하우가 만든 부드럽고 정확한 움직임.'
 };
 
