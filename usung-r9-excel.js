@@ -61,22 +61,21 @@
          .gal-tabs 는 flex 라 마지막 자식으로 넣으면 마지막 탭 바로 오른쪽에 붙는다.
          탭 높이(padding 9/18 · 14.5px)에 맞춰 크기를 낮춘다. */
       '.r9gcta{display:inline-flex;margin:0;}',
+      /* r47) 색은 usung-blue-standard 의 브랜드 블루(#2563EB→#3B82F6)를 그대로 쓴다.
+         이전 시작색 #1e40af 는 네이비에 가까워 옆 탭(#1D4ED8)과 계열이 어긋났다. */
       '.r9gcta a{display:inline-flex;align-items:center;gap:9px;text-decoration:none;' +
         'padding:9px 18px;border-radius:999px;font-weight:800;font-size:14px;color:#fff;' +
         'line-height:1.25;' +
-        'background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);' +
-        'box-shadow:0 6px 16px rgba(37,99,235,.26);transition:transform .18s ease;}',
+        'background:linear-gradient(135deg,#2563eb 0%,#3b82f6 100%);' +
+        'box-shadow:0 6px 16px rgba(37,99,235,.28);transition:transform .18s ease;}',
       '.r9gcta a:hover{transform:translateY(-2px);}',
-      /* 라벨·전화번호는 각각 통째로 유지한다. 393px 에서 "문의하/기", "1588-/9123" 처럼
-         낱글자가 끊기는 것을 막는다(실측). */
-      '.r9g-l,.r9g-t{white-space:nowrap;}',
-      '.r9g-l:after{content:"·";margin-left:9px;opacity:.55;}',
-      /* 좁은 화면에서는 sticky 탭 줄이 두꺼워지지 않도록 번호를 감춘다.
-         href="tel:" 은 그대로라 탭 한 번으로 전화가 걸린다. */
+      /* 전화번호는 통째로 유지한다. 393px 에서 "1588-/9123" 처럼 낱글자가 끊기는 것을
+         막는다(실측). */
+      '.r9g-t{white-space:nowrap;}',
+      /* r47) 라벨 줄이 사라져 남은 건 전화번호 한 줄뿐이다. 예전엔 좁은 화면에서 이걸
+         감췄는데(라벨이 남아 있었으므로), 이제 감추면 빈 알약만 남는다. */
       '@media (max-width:600px){',
       '.r9gcta a{font-size:12.5px;padding:8px 13px;gap:0;}',
-      '.r9g-l:after{display:none;}',
-      '.r9g-t{display:none;}',
       '}'
     ].join('');
     var st = document.createElement('style');
@@ -128,35 +127,18 @@
     }).observe(sec, { childList: true });
   }
 
-  /* ---------- E4 : 갤러리 스타일 단위 전화 CTA ---------- */
-  function curStyle() {
-    var on = document.querySelector('#gal-tabs .gal-tab.on');
-    if (!on) return '';
-    /* r16: the label is swapped by the i18n engine, so reading textContent
-     * yields a translated name and produces a mixed-language CTA. The onclick
-     * argument keeps the original Korean category value — read that instead. */
-    var m = (on.getAttribute('onclick') || '').match(/filterGallery\("([^"]+)"\)/);
-    if (m) return m[1];
-    // 버튼 라벨은 "클래식 26" 처럼 개수가 붙는다 → 숫자를 걷어낸다.
-    return (on.textContent || '').replace(/[\d\s]+$/, '').trim();
-  }
-
-  function ctaLabel() {
-    var s = curStyle();
-    if (!s || s === '전체') return '원하는 스타일로 문의하기';
-    return '‘' + s + '’ 스타일로 문의하기';
-  }
-
-  /* ★ CTA 가 #gal-tabs 안으로 들어가면서 관찰자(subtree:true)와 되울림이 생긴다.
-   *   라벨이 실제로 바뀔 때만 innerHTML 을 건드려 2회차에서 루프를 끊는다. */
+  /* ---------- E4 : 갤러리 전화 CTA ----------
+   * r47) 승연 지시로 앞줄 「원하는 스타일로 문의하기」를 뺐다. 남는 건 전화번호 한 줄뿐이라
+   *   탭에 따라 문구가 바뀔 일이 없다 → 스타일명을 읽던 curStyle()/ctaLabel() 을 함께 지운다.
+   *   같은 일을 하는 문구는 r42 전폭 카드(usung-r42.js galHead)에 그대로 살아 있다.
+   * ★ CTA 가 #gal-tabs 안에 있어 관찰자(subtree:true)와 되울림이 생긴다. 내용이 고정이므로
+   *   한 번 그린 앵커는 다시 건드리지 않는다. renderGalTabs() 가 탭을 통째로 갈아끼우면
+   *   앵커도 함께 사라지고 applyGallery() 가 새 노드를 만들므로 플래그도 같이 초기화된다. */
   function paintCta() {
     var a = document.querySelector('#usung-r9-gal-cta a');
-    if (!a) return;
-    var k = ctaLabel();
-    if (a.__r9Label === k) return;
-    a.__r9Label = k;
-    a.innerHTML = '<span class="r9g-l">' + k + '</span>' +
-      '<span class="r9g-t">대표전화 ' + TEL + ' &rarr;</span>';
+    if (!a || a.__r9Painted) return;
+    a.__r9Painted = 1;
+    a.innerHTML = '<span class="r9g-t">대표전화 ' + TEL + ' &rarr;</span>';
   }
 
   function applyGallery() {
