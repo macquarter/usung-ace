@@ -123,13 +123,25 @@ export default async function handler(req, res) {
     //   회사가 스스로 내세우는 「최초의 혁신적 후드」 그대로다. 되돌리려면 이 배열의
     //   두 번째 항 to 를 '' 로, 세 번째 항 to 를 r32 의 큰 문구 div 로 되돌리면 된다.
     // ★ 문구는 여전히 **텍스트 노드 1개**여야 한다(위 사전 결합). 클래스만 하나 더 얹는다.
+    //
+    // ── r45 — 세 칸 **전부**에 「+」 ──
+    // r3_라스트 덱 S01 「전체 뒤에 +넣기」. 빨간 사각형이 3개이고 좌표가 세 칸을 각각 덮는다
+    //   (slide1.xml: x=1086184 / 3725614 / 6280484, 폭 2093495 · 이미지 x=336719 폭 9545382).
+    //   즉 「전체」는 말 그대로 세 칸이고, 이미 + 가 있는 14+ 가 본보기다.
+    // ★ + 는 index_v6.html:1731 의 14+ 와 **같은 마크업**을 쓴다 — `<span class="text-blue-400">+</span>`.
+    //   따로 클래스를 만들면 파란색 기준(usung-blue-standard)에서 벗어난다.
+    // ★ 「1+」 는 승연에게 확인이 필요한 표기다(QUESTIONS.md G1). 되돌리려면 아래 S01
+    //   두 번째 항 to 에서 `<span class="text-blue-400">+</span>` 만 지우면 된다 — 한 줄이다.
     const S01 = [
       ['<div class="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[12px] font-bold tracking-wider text-white/70 hover:bg-white/10 hover:border-blue-400/40 transition" data-i18n="stmt_chip5">친환경 설계</div>',
        ''],
       ['<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">No.<span class="text-blue-400">1</span></div>',
-       '<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">1</div>'],
+       '<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">1<span class="text-blue-400">+</span></div>'],
       ['<div class="text-[10px] font-bold tracking-[0.22em] text-white/40 mt-2">IN KOREA</div>',
-       '<div class="text-[10px] font-bold tracking-[0.22em] text-white/40 mt-2 r43-stat3">최초의 혁신적 후드</div>']
+       '<div class="text-[10px] font-bold tracking-[0.22em] text-white/40 mt-2 r43-stat3">최초의 혁신적 후드</div>'],
+      // PRODUCTS 칸(index_v6.html:1735) — 원문에 + 가 없다.
+      ['<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">28</div>',
+       '<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">28<span class="text-blue-400">+</span></div>']
     ];
     for (const [from, to] of S01) html = html.split(from).join(to);
 

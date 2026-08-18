@@ -503,9 +503,21 @@ const PAGES = {
   }
 };
 
-// ============== 기본 콘텐츠 D (실제 홈페이지 텍스트 — 44 fields) ==============
+// ============== 기본 콘텐츠 D (실제 홈페이지 텍스트) ==============
+// ★★ r45(260818) — 승연 「이거 맞춰서 관리자페이지도 다시 체크」로 index_v6.html 과 전수 대조했다.
+//   D 는 「관리자가 아직 아무것도 안 고쳤을 때의 값」이면서 동시에 **발행 페이로드의 바탕**이다.
+//   publishCms() 는 S.content 를 통째로 보내고 S.content = {...D, ...저장분} 이라(loadLocal),
+//   여기 값이 틀리면 승연이 글자 하나 안 고치고 🚀 를 눌러도 **그 필드가 사이트에 덮어써진다.**
+//   실제로 83개 바인딩 중 18개가 틀려 있었다 — 대부분 첫 문장만 남기고 잘려 있었고,
+//   www_case1~3_desc 는 아예 다른 글(「갤럭시 시리즈 추천 →」 같은 CTA 라벨)이었으며,
+//   h_tag·vid_tag·c_name_en 세 곳은 회사 영문명이 **YUSUNG**(오타, 정답은 USUNG)이었다.
+//   → index_v6.html 에서 textContent 를 직접 읽어 18개를 갈아끼웠다(손으로 옮겨 적지 않았다).
+//   지금은 83개 중 77개가 「발행해도 무동작」이고, 나머지 6개는 앞뒤 공백만 다르다(렌더 동일).
+//   ★ 예외 g_title 은 <br/>+그라데이션 span 구조라 발행하면 구조가 깨진다 →
+//     usung-r37-cms.js 의 SKIP 에 넣었다. 그 파일 머리 주석에 근거가 있다.
+//   ★ 새 문구를 여기 적을 때는 index_v6.html 의 textContent 와 **글자 하나까지** 맞출 것.
 const D = {
-  h_tag: 'SINCE 2007 · YUSUNG ACE',
+  h_tag: 'SINCE 2007 · USUNG ACE',
   h_title1: '대한민국 덕트',
   h_title2: 'No.1',
   h_sub: '오늘을 이끄는 원동력.',
@@ -523,14 +535,14 @@ const D = {
   a_tag: 'SINCE 2007 · ABOUT US',
   a_title1: '신뢰와 나눔 속에',
   a_title2: '사랑받는 기업으로.',
-  a_desc: '업계가 뒤따라오는 혁신의 시작점, 그 중심에는 언제나 유성에이스가 있습니다.',
+  a_desc: '업계가 뒤따라오는 혁신의 시작점, 그 중심에는 언제나 유성에이스가 있습니다. 속도가 아닌 올바른 방향으로 세운 우리만의 기준은 모방할 수 없는 자부심이 되어 고객님의 신뢰에 보답합니다.',
   a_ceo_name: '박진선',
-  a_ceo_p1: '현장의 가치를 기술로 실현하는 환기 솔루션의 리더,',
-  a_ceo_p2: '설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다.',
-  a_ceo_p3: '유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다.',
-  a_ceo_p4: '앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다.',
+  a_ceo_p1: '현장의 가치를 기술로 실현하는 환기 솔루션의 리더, 유성에이스입니다. 저희는 창립 이래 \'현장 중심의 기술력\'과 \'고객 최우선의 가치\'를 바탕으로 주방 환기 시스템의 혁신을 이끌어왔습니다.',
+  a_ceo_p2: '설계부터 제조, 그리고 실제 현장 시공에 이르기까지 나사 하나, 피스 하나의 디테일도 놓치지 않는 정교함은 유성에이스가 지켜온 자부심입니다. 국내에서 직접 생산하는 제조사이며, 고객과 사용자의 입장에서 현장에서 발생하는 수많은 변수와 고충을 해결하는 \'파트너\'로서 고객사와 함께 성장해왔습니다.',
+  a_ceo_p3: '유성에이스의 모든 제품은 사용자의 편의성을 극대화한 사용자 중심 설계를 지향합니다. 실제 현장에서 기기를 다루는 분들의 목소리에 귀를 기울여, 더 안전하고 효율적인 환기 환경을 만드는 것이 우리의 사명입니다.',
+  a_ceo_p4: '앞으로도 유성에이스는 끊임없는 연구개발과 철저한 품질 관리를 통해 대한민국 주방 환기 문화를 선도하는 최고의 환기 솔루션을 제공할 것을 약속드립니다. 변함없는 믿음과 성원을 보내주시는 고객 여러분께 진심으로 감사의 말씀을 올립니다.',
   c_name: '유성에이스',
-  c_name_en: 'YUSUNG ACE',
+  c_name_en: 'USUNG ACE',
   c_ceo: '박진선',
   c_tel: '1588-9123',
   c_fax: 'FAX (031) 952-1706',
@@ -540,15 +552,15 @@ const D = {
   a_promise1: '최고의 기술과 품질로',
   a_promise2: 'SERVICE를 통한 고객만족 실현.',
   a_promise_desc: '친환경 도시개발에 앞장서가는 기업, 유성에이스는 2007년부터 한길만 걸어온 대한민국 덕트 No.1입니다.',
-  p_cta_title: '매장에 맞는 제품,',
+  p_cta_title: '매장에 맞는 제품, 직접 상담드립니다.',
   p_cta_desc: '20년 노하우로 매장 규모·화로 종류·천정고에 맞춤 최적의 제품을 추천해드립니다.',
   pt_title: '부품소개',
-  pt_desc: '유성에이스 후드를 구성하는 모든 부품을 한눈에.',
+  pt_desc: '유성에이스 후드를 구성하는 모든 부품을 한눈에. 각 부품의 실물 누끼 사진으로 확인하세요.',
   m_title: '사용방법',
   m_desc: '유성에이스 제품의 올바른 사용 및 유지보수 방법입니다.',
   g_tag: 'CONSTRUCTION GALLERY',
-  g_title: '20년의 시공,',
-  g_desc: '유성에이스가 시공한 직화기 후드 라인업.',
+  g_title: '20년의 시공, 전국 곳곳에 있습니다.',
+  g_desc: '유성에이스가 시공한 직화기 후드 라인업. 갤럭시 시리즈, 아크릴등, 우주선 후드, 외부태엽 등 다양한 현장 사진을 만나보세요.',
   // Tech 임팩트 & 스탯
   t_impact1: '대한민국의 기술 유성에이스',
   t_impact2: '세계로 나아갑니다.',
@@ -577,15 +589,15 @@ const D = {
   fim_desc:'4가지 핵심 기술이 실제로 어떻게 작동하는지, 가만히 보고만 있어도 느껴집니다.',
   fim_card1_tag:'01 / SWING', fim_card1_title:'360° 자유 스윙',
   fim_card2_tag:'02 / CLEAN', fim_card2_title:'원터치 분리청소',
-  fim_card3_tag:'03 / SAFETY', fim_card3_title:'안전·유지관리',
+  fim_card3_tag:'03 / SAFETY', fim_card3_title:'안전·유지관리 옵션',
   fim_card4_tag:'04 / CUSTOM', fim_card4_title:'맞춤형 제작',
   // Where We Work
   www_tag:'WHERE WE WORK',
   www_title_a:'대한민국의 ', www_title_b:'불 앞에서', www_title_c:'.',
-  www_desc:'프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지.',
-  www_case1_tag:'USE CASE 01', www_case1_title:'직화 고깃집', www_case1_desc:'갤럭시 시리즈 추천 →',
-  www_case2_tag:'USE CASE 02', www_case2_title:'대형 프랜차이즈', www_case2_desc:'스파이럴 패키지 →',
-  www_case3_tag:'USE CASE 03', www_case3_title:'공장 / 연구실', www_case3_desc:'맞춤형 환기 →',
+  www_desc:'프랜차이즈 주방부터 거친 공정의 제조 현장, 정밀한 연구소까지. 유성에이스는 매일 수많은 전문가들의 작업 환경을 쾌적하게 지켜내고 있습니다.',
+  www_case1_tag:'USE CASE 01', www_case1_title:'직화 고깃집', www_case1_desc:'테이블마다 떨어지는 기름을 방지하며 360도 스윙으로 자유롭게 연기 흡입 가능.',
+  www_case2_tag:'USE CASE 02', www_case2_title:'대형 프랜차이즈', www_case2_desc:'매장 전체 통일 규격 · 부품 교체 표준화. F.V.D 방화담파로 다점포 안전 일괄 관리.',
+  www_case3_tag:'USE CASE 03', www_case3_title:'공장 / 연구실', www_case3_desc:'연기가 가득한 현장에서도, 정밀한 환기가 필요한 연구실에서도 환기 솔루션을 제공합니다.',
   // Statement
   stmt_tag:'A NEW STANDARD',
   stmt_title1:'신개념 유성에이스,', stmt_title2:'식당의 미래', stmt_title3:'를 열다.',
@@ -593,8 +605,8 @@ const D = {
   // Gallery Preview
   gp_tag:'REAL CONSTRUCTION', gp_title1:'20년 동안 쌓아온', gp_title2:'진짜 현장 사진.',
   // Video Showcase
-  vid_tag:'YUSUNG ACE IN ACTION', vid_title1:'유성에이스 후드,', vid_title2:'움직이는 모습 그대로.',
-  vid_desc:'360° 스윙, 상하 텐션, FVD 방화댐퍼의 작동을 영상으로 만나보세요.'
+  vid_tag:'USUNG ACE IN ACTION', vid_title1:'유성에이스 후드,', vid_title2:'움직이는 모습 그대로.',
+  vid_desc:'360° 스윙, 상하 텐션, FVD 방화댐퍼의 작동을 영상으로 만나보세요. 20년 노하우가 만든 부드럽고 정확한 움직임.'
 };
 
 // ============== 기본 배열 데이터 D2 ==============
@@ -1698,10 +1710,14 @@ function rLive(k){
               <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">상하 텐션</span>
             </div>
             <!-- 큰 카운터 -->
+            <!-- ★ 이 블록은 실사이트를 흉내 낸 **정적 미리보기**다. 사이트를 고치면 여기도 같이 고쳐야
+                 「관리자가 옛날 기준」이 된다. 260818 실측: 3번 칸이 r32(No.1 삭제)·r43(1 + 라벨)
+                 두 리비전을 놓쳐 두 달치가 밀려 있었다. 현재 = r45 기준.
+                 실사이트 원본은 api/inject.js 의 S01 배열이다. -->
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:420px;margin:24px auto 0">
               <div><div style="font-size:36px;font-weight:900;color:#fff">14<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">YEARS</div></div>
-              <div style="border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)"><div style="font-size:36px;font-weight:900;color:#fff">28</div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">PRODUCTS</div></div>
-              <div><div style="font-size:36px;font-weight:900;color:#fff">No.<span style="color:#60a5fa">1</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">IN KOREA</div></div>
+              <div style="border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)"><div style="font-size:36px;font-weight:900;color:#fff">28<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">PRODUCTS</div></div>
+              <div><div style="font-size:36px;font-weight:900;color:#fff">1<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">최초의 혁신적 후드</div></div>
             </div>
           </div>
         </div>

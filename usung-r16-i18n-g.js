@@ -12,7 +12,11 @@ window.__R16D=(window.__R16D||[]).concat([
 ["형식","Type","形式","型式","Kiểu"],
 ["색상·마감","Color & Finish","カラー・仕上げ","颜色·饰面","Màu & hoàn thiện"],
 ["규격","Specification","規格","规格","Quy cách"],
-["색상 · 마감 {n}종","{n} colors & finishes","カラー・仕上げ {n}種","颜色·饰面 {n}种","{n} màu & hoàn thiện"],
+/* r45) 모달 스와치 머리말만 「대표」가 붙는다 — 바로 아래에 파이프 색상표가 따로 오기 때문에
+   이 몇 종이 전체가 아니라 대표 견본임을 밝힌다(r3_라스트 덱 S03~S10).
+   ★ 카드 메타의 `색상·마감 N종`(가운뎃점 붙임, usung-r16-i18n-d.js:62~)은 색상표가 없는
+     자리라 그대로 둔다. 이 행과 그 행은 **서로 다른 문자열**이다(공백 유무). */
+["색상 · 마감 대표 {n}종","{n} representative colors & finishes","代表カラー・仕上げ {n}種","代表颜色·饰面 {n}种","{n} màu & hoàn thiện tiêu biểu"],
 ["대표전화로 문의하기","Contact us on the main line","代表電話でお問い合わせ","拨打总机咨询","Liên hệ qua tổng đài"],
 ["FVD 방화","FVD Fire Guard","FVD 防火","FVD 防火","Chống cháy FVD"],
 ["코브라","Cobra","コブラ","眼镜蛇","Cobra"],

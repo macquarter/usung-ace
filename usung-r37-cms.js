@@ -21,6 +21,19 @@
  *   usung-r5-company.js:35 enforce() 가 100ms 인터벌로 회사명을 강제한다(법인명 정정 목적).
  *   여기서 CMS 가 맞서면 초당 10회 깜빡이는 싸움이 된다 → 건드리지 않는다.
  *
+ *   ★★ r45(260818) g_title 추가 — 이유가 위와 다르다. **구조를 잃는다.**
+ *   applyOne 은 아래처럼 textContent 로만 쓴다. 자식 요소가 있으면 통째로 사라진다.
+ *   83개 바인딩을 전수로 재보니 자식이 있는 건 딱 2개였다:
+ *     · a_ceo_p1 — <strong class="text-white">유성에이스</strong> 1개.
+ *       관리자 기본값을 실제 textContent 와 **글자 하나까지** 같게 맞춰(아래 r45 관리자 수정)
+ *       43번 줄 동등성 가드가 걸린다 → 발행해도 무동작 → <strong> 보존. 그래서 SKIP 불필요.
+ *     · g_title — <span>20년의 시공,</span><br/><span class="…bg-clip-text…">전국 곳곳에 있습니다.</span>
+ *       여긴 줄바꿈·들여쓰기가 섞인 여러 줄이라 실제 textContent 에 개행이 들어간다.
+ *       기본값을 아무리 맞춰도 동등성 가드가 안 걸리고, 쓰는 순간 <br/> 와
+ *       **그라데이션 span 이 사라지고 「전국 곳곳에 있습니다.」 가 통짜 글씨로 붙는다.**
+ *       갤러리 히어로 제목이라 눈에 바로 띈다 → 아예 손대지 않는다.
+ *   ★ 관리자 화면에서 g_title 은 CMS_LIVE 밖이라 이미 「⚠ 미반영」로 뜬다 — 표시와 동작이 일치한다.
+ *
  * ★ 되돌리기 = 이 파일 삭제 + api/inject.js 의 jsScript 링크 1줄 삭제.
  * ★ 미설정 상태(BOARD_TOKEN 등 없음)에서는 /api/cms 가 configured:false 를 주고
  *   이 파일은 아무것도 하지 않는다 — 라이브 화면이 오늘과 100% 동일하다.
@@ -28,7 +41,7 @@
 (function () {
   'use strict';
 
-  var SKIP = { a_ceo_name: 1 };   // 위 주석 참조 — 실측 근거 있음
+  var SKIP = { a_ceo_name: 1, g_title: 1 };   // 위 주석 참조 — 둘 다 실측 근거 있음
   var content = null;             // /api/cms 가 준 내용 (없으면 아무것도 안 한다)
   var timer = null;
   var applying = false;

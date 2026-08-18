@@ -17,8 +17,8 @@ window.__R16D=(window.__R16D||[]).concat([
 ["후드를 완성하는 부품 · 구성품","Parts & Components That Complete a Hood","フードを完成させる部品・構成品","成就完整油烟罩的零部件 · 配件","Linh kiện · phụ kiện hoàn thiện chụp hút"],
 /* r20 S13 — 「대표 4종을 먼저 확인해 보세요.」 삭제 지시에 맞춰 5개 언어 동시 절단.
    r16 은 완전일치 조회라 한국어 키를 안 자르면 조용히 미번역으로 남는다. */
-["태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지 — 후드에 들어가는 정품 부품 51종입니다.","Spring reducers, motors, dampers, grease filters, shades, Fresh Balls — 51 genuine parts that go into our hoods.","ゼンマイ減速機・モーター・ダンパー・グリスフィルター・シェード・フレッシュボールまで — フードに使われる純正部品51種。","从发条减速机、电机、风门、油网、灯罩到新鲜球 —— 油烟罩所用正品零部件共51种。","Từ hộp giảm tốc lò xo, mô-tơ, van gió, lưới lọc dầu, chụp đèn đến Quả cầu tươi — 51 loại linh kiện chính hãng dùng cho chụp hút."],
-["부품 전체 51종 보기","View All 51 Parts","部品全51種を見る","查看全部51种零部件","Xem toàn bộ 51 linh kiện"],
+["태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지 — 후드에 들어가는 정품 부품 50종입니다.","Spring reducers, motors, dampers, grease filters, shades, Fresh Balls — 50 genuine parts that go into our hoods.","ゼンマイ減速機・モーター・ダンパー・グリスフィルター・シェード・フレッシュボールまで — フードに使われる純正部品50種。","从发条减速机、电机、风门、油网、灯罩到新鲜球 —— 油烟罩所用正品零部件共50种。","Từ hộp giảm tốc lò xo, mô-tơ, van gió, lưới lọc dầu, chụp đèn đến Quả cầu tươi — 50 loại linh kiện chính hãng dùng cho chụp hút."],
+["부품 전체 50종 보기","View All 50 Parts","部品全50種を見る","查看全部50种零部件","Xem toàn bộ 50 linh kiện"],
 ["원하는 제품을 찾지 못하셨나요?","Didn't find what you were looking for?","お探しの製品が見つかりませんか？","没有找到想要的产品？","Chưa tìm được sản phẩm bạn cần?"],
 ["고객님의 공간에 맞춤형 후드를 제안해 드립니다. 대표전화로 문의해 주세요.","We design hoods tailored to your space. Just call our main line.","お客様の空間に合わせたオーダーメイドフードをご提案します。代表電話までお問い合わせください。","我们将为您的空间量身定制油烟罩方案。请拨打公司总机咨询。","Chúng tôi sẽ đề xuất chụp hút phù hợp với không gian của bạn. Vui lòng gọi tổng đài để được tư vấn."],
 ["대표전화 1588-9123 상담하기 →","Call 1588-9123 for a Consultation →","代表電話 1588-9123 で相談する →","拨打总机 1588-9123 咨询 →","Gọi tổng đài 1588-9123 để tư vấn →"],

@@ -4,7 +4,7 @@
  */
 window.__R16D=(window.__R16D||[]).concat([
 ["부품 · 구성품","Parts · Components","部品 · 構成品","零部件 · 组件","Linh kiện · Bộ phận"],
-["태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지, 유성에이스 후드에 들어가는 정품 부품 51종입니다.","From spring reducers, motors, dampers, grease filters and shades to Fresh Balls — 51 genuine parts that go into YUSUNG ACE hoods.","ゼンマイ減速機 · モーター · ダンパー · 油脂フィルター · 傘 · フレッシュボールまで、ユソンエースのフードに使われる純正部品51種です。","从发条减速机 · 电机 · 风门 · 油脂滤网 · 灯罩 到新鲜球，友盛ACE油烟罩所采用的51种正品零部件。","Từ hộp giảm tốc lò xo · mô tơ · van gió · lưới lọc dầu · chụp đèn đến Quả cầu tươi — 51 linh kiện chính hãng dùng trong chụp hút YUSUNG ACE."],
+["태엽감속기 · 모터 · 댐퍼 · 유지망 · 갓 · 후레쉬볼까지, 유성에이스 후드에 들어가는 정품 부품 50종입니다.","From spring reducers, motors, dampers, grease filters and shades to Fresh Balls — 50 genuine parts that go into YUSUNG ACE hoods.","ゼンマイ減速機 · モーター · ダンパー · 油脂フィルター · 傘 · フレッシュボールまで、ユソンエースのフードに使われる純正部品50種です。","从发条减速机 · 电机 · 风门 · 油脂滤网 · 灯罩 到新鲜球，友盛ACE油烟罩所采用的50种正品零部件。","Từ hộp giảm tốc lò xo · mô tơ · van gió · lưới lọc dầu · chụp đèn đến Quả cầu tươi — 50 linh kiện chính hãng dùng trong chụp hút YUSUNG ACE."],
 ["LED조명","LED Lighting","LED照明","LED照明","Đèn LED"],
 ["아크릴등","Acrylic Light","アクリル灯","亚克力灯","Đèn acrylic"],
 ["전체 보기","View All","すべて見る","查看全部","Xem tất cả"],

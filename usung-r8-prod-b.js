@@ -189,7 +189,9 @@ function renderModal(){
   const oc=document.getElementById('m-opts');
   if(n>1){
     oc.style.display='';
-    oc.innerHTML=`<h4>색상 · 마감 ${n}종</h4><p class="hint">클릭해 변경</p><div class="sw-grid">`+
+    // r45) 「대표」 — 이 아래에 파이프 색상표가 따로 붙는 자리라 전체가 아님을 밝힌다.
+    //   사전 키는 usung-r16-i18n-g.js 의 `색상 · 마감 대표 {n}종` 과 **글자 하나까지** 같아야 한다.
+    oc.innerHTML=`<h4>색상 · 마감 대표 ${n}종</h4><p class="hint">클릭해 변경</p><div class="sw-grid">`+
       m.items.map((o,i)=>`<div class="sw" data-sw="${i}" onclick="selectFinish(${i})">
         <div class="st"><img crossorigin="anonymous" onload="trimImg(this)" src="${o.img}"></div><div class="sc">${colorOf(o)||o.name}</div></div>`).join('')+`</div>`;
   }else{oc.style.display='none';}
