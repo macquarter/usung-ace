@@ -2229,6 +2229,14 @@ function rInquiries(){
   h += `<table class="tbl"><thead><tr>
     <th>상태</th><th>출처</th><th>이름</th><th>회사</th><th>연락처</th><th>내용</th><th>접수일</th><th style="text-align:right">관리</th>
   </tr></thead><tbody>`;
+  // r48) 데모 3건을 걷어내면서 「0건」이 처음으로 실제 화면이 됐다. 안내가 없으면 머리글만
+  //   덩그러니 남아 고장처럼 보인다. 게시판·인증의 「게시물이 없습니다」와 같은 자리에 맞춘다.
+  //   ★ 홈페이지에 문의 폼이 없어서 웹폼 접수는 구조적으로 0이다 — 그 사실까지 적어준다.
+  if(!S.inquiries.length){
+    h += `<tr><td colspan="8"><div class="sg">접수된 문의가 없습니다<br>
+      <span style="font-size:11px;opacity:.65">홈페이지는 문의 폼 없이 전화 상담(1588-9123)으로 안내하고 있어,
+      이 목록에는 챗봇으로 접수된 문의만 쌓입니다.</span></div></td></tr>`;
+  }
   S.inquiries.forEach(q=>{
     const src = q.source === 'chatbot'
       ? '<span style="display:inline-block;padding:3px 8px;background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;border-radius:999px;font-size:10px;font-weight:800">🤖 챗봇</span>'
