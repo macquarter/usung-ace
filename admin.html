@@ -262,9 +262,16 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 .bd-ct{padding:7px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:9px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer}
 .bd-ct.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 
+/* r46) 좁은 화면 메뉴 버튼. 아래 900px 미디어쿼리에 .sb.open 슬라이드가 원래부터 있었는데
+   open 을 붙이는 코드가 어디에도 없었다(grep 0건). 그래서 메뉴 12개가 화면 밖 x=-210 에 갇혀
+   900px 이하에서는 대시보드 말고 어느 화면에도 갈 수 없었다. 빠진 버튼만 채운다. */
+.sb-toggle{display:none;font-size:17px;line-height:1;padding:6px 11px}
+.sb-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20}
+.sb-bd.on{display:block}
 @media(max-width:900px){
-  .sb{transform:translateX(-100%);transition:transform .2s}
+  .sb{transform:translateX(-100%);transition:transform .2s;z-index:30;box-shadow:0 0 40px rgba(0,0,0,.55)}
   .sb.open{transform:translateX(0)}
+  .sb-toggle{display:inline-flex;align-items:center}
   .main{margin-left:0}
   .st-grid{grid-template-columns:repeat(2,1fr)}
   .db-grid{grid-template-columns:1fr}
@@ -361,10 +368,12 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
       <button class="lo" onclick="doLogout()">로그아웃</button>
     </div>
   </aside>
+  <div class="sb-bd" id="sbBackdrop" onclick="toggleSb(false)"></div>
 
   <!-- MAIN -->
   <div class="main">
     <header class="tb">
+      <button class="tb-btn sb-toggle" onclick="toggleSb()" aria-label="메뉴 열기">&#9776;</button>
       <div class="tb-ti" id="tbTitle">대시보드</div>
       <div class="tb-sp"></div>
       <div class="tb-mo"><span class="dot"></span><span id="tbMode">로컬 모드</span></div>
@@ -2698,5 +2707,24 @@ document.getElementById('loginPw').addEventListener('keypress', e=>{
      감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
 <script src="/usung-r41-live.js?v=r41"></script>
 <script src="/usung-r41-ui.js?v=r41"></script>
+<script>
+/* r46) 사이드바 토글. 메뉴를 고르면 바로 닫는다 — 안 닫으면 사이드바가 내용을 덮은 채로 남는다.
+   사이드바 항목은 sbItem() 이 매번 새로 그리므로 개별 바인딩 대신 위임으로 받는다. */
+function toggleSb(force){
+  var sb=document.getElementById('sidebar'), bd=document.getElementById('sbBackdrop');
+  if(!sb) return;
+  var on = (force===undefined) ? !sb.classList.contains('open') : !!force;
+  sb.classList.toggle('open', on);
+  if(bd) bd.classList.toggle('on', on);
+}
+(function(){
+  var sb=document.getElementById('sidebar');
+  if(!sb) return;
+  sb.addEventListener('click', function(e){
+    if(e.target.closest('.sb-item') && window.innerWidth<=900) toggleSb(false);
+  });
+  window.addEventListener('resize', function(){ if(window.innerWidth>900) toggleSb(false); });
+})();
+</script>
 </body>
 </html>
