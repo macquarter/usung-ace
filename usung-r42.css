@@ -1,5 +1,5 @@
 /* usung-r42.css — 260817 모바일 최적화 (승연 요청 3·4번)
- * build-marker: r42-b2
+ * build-marker: r42-b3
  *
  * usung-r8.css 가 런타임 로드라 그쪽 선언을 덮으려면 선행 `html ` + !important 가
  * 필요하다(usung-r10-redesign.css·usung-r31.css 와 같은 이유).
@@ -140,66 +140,23 @@
 }
 
 /* ════════════════════════════════════════════════════════════════
- * ④ 시공갤러리 — 문의 진입점을 그리드 아래 전폭 카드로
+ * ④ 시공갤러리 전폭 문의 카드 — r50 에서 제거 (승연 지시)
  *
- * 지금은 sticky 탭바 안 150x32 칩 하나뿐이고, 그 칩은 스크롤하면 탭바와 함께
- * 계속 붙어 있지만 너무 작아 눈에 띄지 않는다. 사진을 다 본 직후가 문의 시점이므로
- * 그리드 끝에 전폭 카드를 놓는다. 마크업은 usung-r42.js 가 심는다.
- * ★ 탭바 자체는 건드리지 않는다 — r31fix 가 여기서 회귀를 냈다(고정 영역 44%).
+ * 카드(.r42-gcta)와 그 부속 규칙을 전부 뺐다. 같이 뺀 것이 두 개 있는데
+ * 둘 다 「카드가 있다」는 전제로만 존재하던 것이라 남기면 회귀가 난다:
+ *
+ *   1. `html body.r42-gcta-on … #usung-r9-gal-cta { display:none }`
+ *      — 카드가 생겼으니 중복이라며 sticky 탭바 안 알약을 ≤560px 에서 감추던 규칙.
+ *        카드가 사라진 지금 이게 남아 있으면 모바일 갤러리 전화 진입점이 0개가 된다.
+ *        (실제로는 `body.r42-gcta-on` 을 아무도 안 달아 무해하지만, 죽은 규칙을
+ *         남기면 다음 사람이 클래스를 되살렸을 때 조용히 알약이 사라진다.)
+ *   2. `#gal-grid { padding-bottom:24px }`
+ *      — r8.css:770 의 80px 을 줄여 카드를 그리드에 붙이던 보정. 그리드가 다시
+ *        마지막 요소가 됐으므로 r8 원래 값(80px)으로 되돌린다.
+ *
+ * 갤러리 전화 진입점은 이제 #usung-r9-gal-cta 알약이 맡는다(r47 이 앞줄 라벨을 빼고
+ * 브랜드 블루 #2563eb 로 정리해 둔 것). 탭바는 sticky 라 스크롤 내내 화면에 남는다.
  * ════════════════════════════════════════════════════════════════ */
-/* ★ 카드는 `.wrap`(max-width:1200px · padding:0 24px) 안, #gal-grid 바로 뒤에 들어간다.
- *   그래서 여기서 다시 폭을 계산하면 24px 이 두 번 먹는다 → width:100% 로 둔다.
- *   #gal-grid 의 `padding-bottom:80px`(r8.css:770)은 그리드가 마지막이라는 전제였다.
- *   뒤에 카드가 붙었으니 그만큼 줄여야 카드가 붕 뜨지 않는다. */
-html .r8x:not(#_r8_) #gal-grid { padding-bottom: 24px !important; }
-html .r8x:not(#_r8_) .r42-gcta {
-  margin: 0 auto 64px;
-  width: 100%;
-  border-radius: 20px;
-  padding: 30px 28px;
-  background: linear-gradient(135deg, #16294d 0%, #223f74 100%);
-  color: #fff;
-  text-align: center;
-}
-html .r8x:not(#_r8_) .r42-gcta p {
-  margin: 0;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: #c2cee2;
-}
-html .r8x:not(#_r8_) .r42-gcta .r42-gbtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  margin-top: 20px;
-  padding: 16px 34px;
-  border-radius: 999px;
-  background: #fff;
-  color: #16294d;
-  font-weight: 900;
-  font-size: 17px;
-  letter-spacing: -.3px;
-  text-decoration: none;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .28);
-}
-@media (max-width: 560px) {
-  /* ★ 폭은 건드리지 않는다. 카드는 `.wrap` 안에서 width:100% 라 #gal-grid 와 좌우가
-     정확히 맞는다. 여기서 calc(100% - 32px) 같은 걸 주면 사진 그리드보다 32px 좁아져
-     가장자리가 어긋난다(초안의 잔재였다 — 그땐 카드가 .wrap 바깥에 있는 줄 알았다). */
-  html .r8x:not(#_r8_) .r42-gcta {
-    padding: 24px 18px;
-    margin-bottom: 48px;
-  }
-  html .r8x:not(#_r8_) .r42-gcta p { font-size: 13.5px; }
-  html .r8x:not(#_r8_) .r42-gcta .r42-gbtn { width: 100%; padding: 16px 14px; font-size: 16px; }
-  /* 작은 칩(usung-r9-excel.js E4 의 #usung-r9-gal-cta)은 전폭 카드가 생겼으니 중복이다.
-     sticky 탭바 높이도 그만큼 돌려받는다.
-     ★ `body.r42-gcta-on` 이 붙었을 때만 감춘다 — 이 클래스는 usung-r42.js 가 카드를
-       실제로 붙인 뒤에만 단다. 무조건 감추면 카드 주입이 실패했을 때(스크립트 로드 실패,
-       #gal-grid 부재) 갤러리 문의 진입점이 0개가 된다. */
-  html body.r42-gcta-on .r8x:not(#_r8_) #gal-tabs #usung-r9-gal-cta { display: none !important; }
-}
 
 /* ════════════════════════════════════════════════════════════════
  * ⑤ 모바일 하단 고정 전화 바

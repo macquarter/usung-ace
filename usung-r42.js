@@ -1,8 +1,12 @@
 /* usung-r42.js — 260817 모바일 최적화 (승연 요청 4번 + F1 상시 전화 진입점)
  *
- * 마크업이 필요한 두 가지만 여기서 심는다. 나머지(①②③)는 usung-r42.css 가 전부 처리한다.
- *   ④ 시공갤러리 그리드 끝의 전폭 문의 카드  .r42-gcta
+ * 마크업이 필요한 것만 여기서 심는다. 나머지(①②③)는 usung-r42.css 가 전부 처리한다.
  *   ⑤ 모바일 하단 고정 전화 바              #r42-telbar
+ *
+ * ★ ④ 시공갤러리 전폭 문의 카드(.r42-gcta)는 r50 에서 제거했다(승연 지시).
+ *   대신 sticky 탭바 안의 #usung-r9-gal-cta 알약이 갤러리 전화 진입점을 맡는다 —
+ *   r47 이 앞줄 라벨을 빼고 브랜드 블루로 정리해 둔 그것이다. 카드를 감추던
+ *   `body.r42-gcta-on` 규칙도 usung-r42.css 에서 같이 뺐다.
  *
  * 실측 근거 (라이브 393x852, 2026-08-17):
  *   · 갤러리 문의 진입점이 sticky 탭바 안 150x32 칩(#usung-r9-gal-cta) 하나뿐
@@ -23,58 +27,6 @@
   /* 모달이 열려 있으면 하단 바를 접는다 — 모달 안에 이미 「대표전화 문의하기」가 있고,
      56px 바가 모달 하단 버튼을 가린다. 네 종류가 전부 .on 으로 열린다(실측). */
   var MODAL_SEL = '#mask.on,#pmask.on,#fmask.on,#lbox.on';
-
-  /* ════════════════════════════════════════════════════
-   * ④ 시공갤러리 — 그리드 끝 전폭 문의 카드
-   * ════════════════════════════════════════════════════ */
-
-  function applyGcta() {
-    var grid = document.getElementById('gal-grid');
-    if (!grid || !grid.parentNode) return false;
-
-    var card = document.getElementById('r42-gcta');
-    if (!card) {
-      card = document.createElement('div');
-      card.id = 'r42-gcta';
-      card.className = 'r42-gcta';
-      card.innerHTML =
-        '<p>현장 사진을 보시고 궁금한 점이 있으면 바로 전화 주세요.<br>' +
-        '주방 크기와 후드 위치만 알려주시면 가능한 사양을 안내해 드립니다.</p>' +
-        '<a class="r42-gbtn" href="' + TEL_HREF + '">📞 대표전화 ' + TEL + '</a>';
-    }
-    /* 그리드 「뒤」 형제로 넣는다. 안에 넣으면 renderGallery() 의 innerHTML='' 에
-       지워지고, .gal-grid 는 grid-auto-rows 가 걸려 있어 카드가 사진 칸으로 취급된다. */
-    if (card.previousElementSibling !== grid) {
-      grid.parentNode.insertBefore(card, grid.nextSibling);
-    }
-
-    /* ★ 카드가 실제로 붙은 뒤에만 sticky 탭 안의 작은 칩을 감춘다(CSS가 이 클래스를 본다).
-       무조건 감추면 카드 주입이 실패했을 때 갤러리 문의 진입점이 0개가 된다. */
-    document.body.classList.add('r42-gcta-on');
-    return true;
-  }
-
-  /* renderGalTabs() 는 #gal-tabs.innerHTML 을 통째로 갈아끼운다. 내 카드는 #gal-tabs
-     바깥(그리드 뒤)이라 r9 가 겪은 되울림은 없다. 그래도 탭 교체를 감지해 applyGcta() 를
-     다시 부른다 — 카드가 「존재하지만 그리드 뒤가 아닌」 상태는 아래 host 감시자가
-     (조건이 `카드 없음`이라) 못 잡기 때문이다. */
-  function observeGallery() {
-    var grid = document.getElementById('gal-grid');
-    if (!grid) return;
-    var host = grid.parentNode;
-    if (host && !host.__r42Observed) {
-      host.__r42Observed = true;
-      new MutationObserver(function () {
-        if (!document.getElementById('r42-gcta')) applyGcta();
-      }).observe(host, { childList: true });
-    }
-    var tabs = document.getElementById('gal-tabs');
-    if (tabs && !tabs.__r42Observed) {
-      tabs.__r42Observed = true;
-      new MutationObserver(function () { applyGcta(); })
-        .observe(tabs, { childList: true, attributes: true, attributeFilter: ['class'], subtree: true });
-    }
-  }
 
   /* ════════════════════════════════════════════════════
    * ⑤ 모바일 하단 고정 전화 바
@@ -125,7 +77,7 @@
        늘어도 이 목록을 고칠 필요가 없다.
        ★ #r42-telbar 는 반드시 제외한다. 자신은 position:fixed 라 항상 교차하므로
          visibleCta 가 0 이 될 수 없고, 숨었다 보였다를 무한 반복하게 된다. */
-    var t = document.querySelectorAll('a[href^="tel:"], #usung-r9-tel, #r42-gcta, #usung-r9-gal-cta');
+    var t = document.querySelectorAll('a[href^="tel:"], #usung-r9-tel, #usung-r9-gal-cta');
     for (var i = 0; i < t.length; i++) {
       if (t[i].id === 'r42-telbar' || t[i].closest('#r42-telbar')) continue;
       if (!t[i].__r42Watched) { t[i].__r42Watched = 1; io.observe(t[i]); }
@@ -169,13 +121,11 @@
   /* ════════════════════════════════════════════════════
    * 마운트
    *
-   * ★ r8 오버레이가 뷰를 그린 「뒤」라야 #gal-grid 가 존재한다. r8 부트와의 경쟁을 피하려고
-   *   즉시 1회 + body 감시로 늦게 생긴 노드까지 잡는다(r9 와 같은 방식).
+   * ★ 관찰 대상(tel: 링크·갤러리 알약·모달)은 r8 오버레이가 뷰를 그린 「뒤」에 생긴다.
+   *   r8 부트와의 경쟁을 피하려고 즉시 1회 + body 감시로 늦게 생긴 노드까지 잡는다(r9 와 같은 방식).
    * ════════════════════════════════════════════════════ */
   function boot() {
     buildTelbar();
-    applyGcta();
-    observeGallery();
     watchCta();
     watchModals();
     guardInquiry();
@@ -190,8 +140,6 @@
     queued = 1;
     requestAnimationFrame(function () {
       queued = 0;
-      applyGcta();
-      observeGallery();
       watchCta();
       watchModals();
       guardInquiry();
