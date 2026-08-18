@@ -28,22 +28,6 @@
    * ④ 시공갤러리 — 그리드 끝 전폭 문의 카드
    * ════════════════════════════════════════════════════ */
 
-  /* 현재 선택된 스타일. usung-r9-excel.js 의 curStyle() 과 같은 방식으로 읽는다 —
-     탭 라벨은 i18n 이 번역해버리므로 onclick 인자(원본 한국어)를 봐야 한다. */
-  function curStyle() {
-    var on = document.querySelector('#gal-tabs .gal-tab.on');
-    if (!on) return '';
-    var m = (on.getAttribute('onclick') || '').match(/filterGallery\("([^"]+)"\)/);
-    if (m) return m[1];
-    return (on.textContent || '').replace(/[\d\s]+$/, '').trim();
-  }
-
-  function galHead() {
-    var s = curStyle();
-    if (!s || s === '전체') return '이런 시공, 우리 매장에도 가능할까요?';
-    return '‘' + s + '’ 스타일, 우리 매장에도 가능할까요?';
-  }
-
   function applyGcta() {
     var grid = document.getElementById('gal-grid');
     if (!grid || !grid.parentNode) return false;
@@ -54,7 +38,6 @@
       card.id = 'r42-gcta';
       card.className = 'r42-gcta';
       card.innerHTML =
-        '<h3></h3>' +
         '<p>현장 사진을 보시고 궁금한 점이 있으면 바로 전화 주세요.<br>' +
         '주방 크기와 후드 위치만 알려주시면 가능한 사양을 안내해 드립니다.</p>' +
         '<a class="r42-gbtn" href="' + TEL_HREF + '">📞 대표전화 ' + TEL + '</a>';
@@ -65,11 +48,6 @@
       grid.parentNode.insertBefore(card, grid.nextSibling);
     }
 
-    /* 제목은 탭을 바꿀 때마다 갱신. 값이 실제로 변할 때만 써서 되울림을 끊는다. */
-    var h = card.querySelector('h3');
-    var k = galHead();
-    if (h && h.__r42Label !== k) { h.__r42Label = k; h.textContent = k; }
-
     /* ★ 카드가 실제로 붙은 뒤에만 sticky 탭 안의 작은 칩을 감춘다(CSS가 이 클래스를 본다).
        무조건 감추면 카드 주입이 실패했을 때 갤러리 문의 진입점이 0개가 된다. */
     document.body.classList.add('r42-gcta-on');
@@ -77,7 +55,9 @@
   }
 
   /* renderGalTabs() 는 #gal-tabs.innerHTML 을 통째로 갈아끼운다. 내 카드는 #gal-tabs
-     바깥(그리드 뒤)이라 r9 가 겪은 되울림은 없지만, 탭 교체는 감지해야 제목이 따라간다. */
+     바깥(그리드 뒤)이라 r9 가 겪은 되울림은 없다. 그래도 탭 교체를 감지해 applyGcta() 를
+     다시 부른다 — 카드가 「존재하지만 그리드 뒤가 아닌」 상태는 아래 host 감시자가
+     (조건이 `카드 없음`이라) 못 잡기 때문이다. */
   function observeGallery() {
     var grid = document.getElementById('gal-grid');
     if (!grid) return;
