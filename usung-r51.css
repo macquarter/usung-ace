@@ -1,5 +1,5 @@
 /* usung-r51.css — r51 헤더 전역 검색
- * build-marker: r51-b4
+ * build-marker: r52-b1
  *
  * ★ 배포 판정은 sha 가 아니라 이 마커로 한다 (CLAUDE.md §4 — r42 때 옛 트리를 빌드한 적이 있다).
  * ★ 미디어쿼리 폭 767/768 은 Tailwind md 경계 그대로다. 새 폭을 만들지 않는다 (KNOWLEDGE 31).
@@ -31,10 +31,21 @@
 }
 #navbar .r51-btn:focus-visible{ outline:2px solid #2563eb; outline-offset:2px; }
 
-/* ≤767px = Tailwind md 미만. 로고·햄버거만 남는 구간이라 그대로 두면
- * space-between 이 버튼을 한가운데로 밀어낸다. auto 마진으로 햄버거 옆에 붙인다. */
+/* ── r52: 돋보기 + Contact Us 묶음 ──────────────────────────────────
+ * 승연 「돋보기는 contact us 왼쪽으로」. 형제로 앞에 꽂으면 안 된다 —
+ * 헤더 행이 justify-between 이라 자식 사이 여백이 균등 분배되고(1440px 실측 114px)
+ * 돋보기와 Contact Us 가 114px 벌어져 따로 논다. 묶어야 붙는다.
+ * 근거·주의는 usung-r51-search.js mountBtn() 주석. */
+#navbar .r51-grp{ display:flex; align-items:center; gap:10px; flex:0 0 auto; }
+
+/* ≤1023px(Tailwind lg 미만)은 #cta-contact 가 hidden 이라 묶음에 돋보기만 남는다.
+ * ≤767px 은 로고·햄버거만 남는 구간이라 그대로 두면 space-between 이 묶음을
+ * 한가운데로 밀어낸다. auto 마진으로 햄버거 옆에 붙인다.
+ * ★ 마진을 받는 주체가 버튼 → 묶음으로 바뀌었다. 버튼은 이제 행의 자식이 아니라서
+ *   버튼에 auto 를 걸면 행의 여백을 못 먹는다(묶음 안 여백만 먹어 아무 효과가 없다). */
 @media (max-width:767px){
-  #navbar .r51-btn{ margin-left:auto; margin-right:-2px; }
+  #navbar .r51-grp{ margin-left:auto; margin-right:-2px; }
+  #navbar .r51-btn{ margin-left:0; margin-right:0; }
 }
 
 /* ── 오버레이 ─────────────────────────────────────────────────────── */

@@ -1,11 +1,15 @@
 /* usung-r51-search.js — r51 헤더 전역 검색 · UI 와 착지
+ * build-marker: r52-b1
  *
- * ★ 마운트 위치: #lang-selector 앞 (= #navbar 안쪽 flex 행의 형제).
+ * ★ 마운트 위치(r52 에서 바뀜): #cta-contact 과 **한 묶음**(.r51-grp) — 돋보기가 왼쪽.
+ *   r51 은 #lang-selector 앞에 형제로 꽂았는데, 승연 「돋보기는 contact us 왼쪽으로」.
+ *   ★ 형제로 앞에 꽂는 것만으론 안 된다 — 부모가 `justify-between` 이라 자식 사이
+ *     여백이 균등 분배돼(1440px 실측 114px) 돋보기와 Contact Us 가 따로 논다.
+ *     묶으면 행 입장에선 자식 1개라 여백이 바깥에만 생기고 안쪽은 gap 10px 로 붙는다.
  *   #primary-nav 안에는 넣지 않는다 — usung-r10-fix.css:45 가 그 nav 를 0.7초간
  *   visibility:hidden 으로 덮어두기 때문에 자식으로 넣으면 검색 버튼도 같이 사라진다.
- *   부모는 `display:flex; justify-content:space-between` (측정값, gap 없음)이라
- *   6번째 자식이 되면 데스크톱 간격만 조금 좁아지고 세로로 서지 않는다 (KNOWLEDGE 46).
  *   ≤767px 에선 로고·햄버거만 남으므로 `margin-left:auto` 로 햄버거 옆에 붙인다.
+ *   ★ 그 auto 마진은 이제 **버튼이 아니라 묶음**이 받는다 (usung-r51.css:47).
  *   767/768 은 Tailwind 의 md 경계 그대로다 — 새 폭을 만들지 않는다 (KNOWLEDGE 31).
  *
  * ★ 패널은 body 직속에 붙인다. id 는 전부 `r51-` 접두사라 라이브 id 와 겹치지 않는다.
@@ -36,14 +40,7 @@
   /* ── 헤더 버튼 ──────────────────────────────────────────────────── */
   function mountBtn() {
     if (document.getElementById('r51-btn')) return true;
-    var lang = document.getElementById('lang-selector');
-    var row = lang && lang.parentNode;
-    if (!row) {                                  // 최후 수단 — 햄버거 앞
-      var tg = document.getElementById('mobile-toggle');
-      row = tg && tg.parentNode;
-      if (!row) return false;
-      lang = tg;
-    }
+
     var b = document.createElement('button');
     b.id = 'r51-btn';
     b.type = 'button';
@@ -52,7 +49,35 @@
     b.title = '검색 (Ctrl+K)';
     b.innerHTML = icon();
     b.addEventListener('click', function (e) { e.preventDefault(); openPanel(); });
-    row.insertBefore(b, lang);
+
+    /* ★ 「Contact Us 왼쪽」 — 그냥 앞에 꽂으면 안 된다.
+     * 헤더 행은 `justify-between` 이라 자식 사이 여백이 균등 분배된다(1440px 실측 114px).
+     * 형제로 넣으면 돋보기와 Contact Us 사이에도 114px 이 벌어져 따로 노는 것처럼 보인다.
+     * 둘을 한 묶음(.r51-grp)으로 감싸면 행 입장에선 자식 1개라 여백이 바깥에만 생기고,
+     * 묶음 안에서는 gap 10px 로 붙는다. `#cta-contact` 은 clone 이 아니라 노드를 그대로
+     * 옮기므로 onclick·data-i18n·Tailwind `hidden lg:inline-flex` 가 전부 살아 있다.
+     * (오버레이 어디에서도 `#cta-contact` 를 참조하지 않는 것 확인함 — grep 0건) */
+    var cta = document.getElementById('cta-contact');
+    if (cta && cta.parentNode) {
+      var g = document.createElement('div');
+      g.id = 'r51-grp';
+      g.className = 'r51-grp';
+      cta.parentNode.insertBefore(g, cta);
+      g.appendChild(b);
+      g.appendChild(cta);                        // 돋보기 → Contact Us 순서
+      return true;
+    }
+
+    /* 대비책 — Contact Us 가 없으면 예전 자리(언어선택 앞), 그것도 없으면 햄버거 앞 */
+    var anchor = document.getElementById('lang-selector');
+    var row = anchor && anchor.parentNode;
+    if (!row) {
+      var tg = document.getElementById('mobile-toggle');
+      row = tg && tg.parentNode;
+      if (!row) return false;
+      anchor = tg;
+    }
+    row.insertBefore(b, anchor);
     return true;
   }
 
