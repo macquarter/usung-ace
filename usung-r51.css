@@ -1,0 +1,111 @@
+/* usung-r51.css — r51 헤더 전역 검색
+ * build-marker: r51-b1
+ *
+ * ★ 배포 판정은 sha 가 아니라 이 마커로 한다 (CLAUDE.md §4 — r42 때 옛 트리를 빌드한 적이 있다).
+ * ★ 미디어쿼리 폭 767/768 은 Tailwind md 경계 그대로다. 새 폭을 만들지 않는다 (KNOWLEDGE 31).
+ * ★ 파란색은 r47 에서 확정한 브랜드 블루 #2563eb (근거 usung-blue-standard.css:2).
+ */
+
+/* ── 헤더 돋보기 버튼 ─────────────────────────────────────────────── */
+#navbar .r51-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; padding:0; flex:0 0 auto;
+  background:transparent; border:0; border-radius:9999px; cursor:pointer;
+  color:rgba(255,255,255,.72);
+  transition:color .2s ease, background-color .2s ease;
+}
+#navbar .r51-btn svg{ width:19px; height:19px; display:block; }
+#navbar .r51-btn:hover{ color:#fff; background:rgba(255,255,255,.1); }
+#navbar .r51-btn:focus-visible{ outline:2px solid #2563eb; outline-offset:2px; }
+
+/* ≤767px = Tailwind md 미만. 로고·햄버거만 남는 구간이라 그대로 두면
+ * space-between 이 버튼을 한가운데로 밀어낸다. auto 마진으로 햄버거 옆에 붙인다. */
+@media (max-width:767px){
+  #navbar .r51-btn{ margin-left:auto; margin-right:-2px; }
+}
+
+/* ── 오버레이 ─────────────────────────────────────────────────────── */
+html.r51-lock{ overflow:hidden; }
+
+.r51-wrap{ display:none; }
+.r51-wrap.r51-on{
+  display:block; position:fixed; inset:0;
+  z-index:10000;                       /* #navbar 은 z-50, r42 하단 전화바는 9500 */
+}
+.r51-dim{
+  position:absolute; inset:0;
+  background:rgba(3,7,18,.72);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+  animation:r51-fade .16s ease;
+}
+@keyframes r51-fade{ from{opacity:0} to{opacity:1} }
+
+.r51-card{
+  position:relative; margin:10vh auto 0; width:min(680px,calc(100vw - 32px));
+  background:#fff; border-radius:20px; overflow:hidden;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.55);
+  animation:r51-rise .18s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes r51-rise{ from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:none} }
+
+.r51-bar{
+  display:flex; align-items:center; gap:10px;
+  padding:14px 14px 14px 18px; border-bottom:1px solid rgba(0,0,0,.08);
+}
+.r51-bar > svg{ width:20px; height:20px; flex:0 0 auto; color:#2563eb; }
+#r51-q{
+  flex:1 1 auto; min-width:0; border:0; outline:0; background:transparent;
+  font-size:16px;                      /* 16px 미만이면 iOS 가 초점 시 확대한다 */
+  font-weight:600; color:#0b1220; padding:4px 0;
+}
+#r51-q::placeholder{ color:rgba(11,18,32,.38); font-weight:500; }
+.r51-x{
+  flex:0 0 auto; border:1px solid rgba(0,0,0,.12); background:#fff;
+  border-radius:8px; padding:4px 8px; cursor:pointer;
+  font-size:10px; font-weight:800; letter-spacing:.06em; color:rgba(11,18,32,.45);
+}
+.r51-x:hover{ background:#f3f4f6; color:#0b1220; }
+
+/* ── 결과 ─────────────────────────────────────────────────────────── */
+.r51-list{ max-height:min(56vh,460px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+.r51-empty{
+  padding:26px 20px; text-align:center; line-height:1.75;
+  font-size:13px; color:rgba(11,18,32,.5);
+}
+.r51-empty b{ color:#2563eb; font-weight:800; }
+
+.r51-h{
+  display:flex; align-items:center; gap:7px;
+  padding:12px 18px 6px; font-size:11px; font-weight:800;
+  letter-spacing:.1em; color:rgba(11,18,32,.42);
+}
+.r51-h span{
+  background:#eef2ff; color:#2563eb; border-radius:9999px;
+  padding:1px 7px; font-size:10px; font-weight:800; letter-spacing:0;
+}
+.r51-h em{ margin-left:auto; font-style:normal; font-size:10px; font-weight:600; opacity:.7; }
+
+.r51-row{
+  display:flex; align-items:center; gap:12px; width:100%;
+  padding:9px 18px; border:0; background:transparent; cursor:pointer; text-align:left;
+}
+.r51-row:hover, .r51-row.r51-cur{ background:#f2f6ff; }
+.r51-row img, .r51-noimg{
+  width:44px; height:44px; flex:0 0 auto; border-radius:10px;
+  background:#f1f3f7; object-fit:contain; padding:3px;
+}
+.r51-tx{ min-width:0; display:flex; flex-direction:column; gap:2px; }
+.r51-tx b{
+  font-size:14px; font-weight:700; color:#0b1220; line-height:1.35;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.r51-tx i{ font-style:normal; font-size:11.5px; color:rgba(11,18,32,.5); }
+
+/* ── 좁은 화면 ────────────────────────────────────────────────────── */
+@media (max-width:767px){
+  .r51-card{ margin:0; width:100vw; border-radius:0 0 20px 20px; }
+  .r51-bar{ padding:12px 12px 12px 14px; }
+  .r51-list{ max-height:calc(100vh - 74px); }
+  .r51-row{ padding:9px 14px; }
+}
