@@ -6,11 +6,10 @@ export const config = { runtime: 'nodejs' };
 // r39 — 검색엔진/생성형엔진 노출용 head 블록. 별도 모듈인 이유는 api/_seo.js 머리말 참조.
 import { seoHead, SEO_MARK } from './_seo.js';
 
-const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
+// r55 — 관리자 발행분(add/edit/del) 로더. 별도 모듈인 이유·raw 5분 지연 실측은 _patch.js 머리말.
+import { loadPatch } from './_patch.js';
 
-// r55 — 관리자가 발행한 제품 차이분(add/edit/del). api/products.js 가 [skip ci] 로 커밋하므로
-// 배포본의 정적 파일은 낡는다 → 반드시 raw 에서 읽는다. 파일이 없으면 404 라 조용히 건너뛴다.
-const PATCH_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/data/products.json';
+const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
 
 // ★ 캐시버스팅 값(?v=)은 반드시 **배포**를 가리켜야 한다. 원래 `Date.now()` 였는데
 //   그건 배포 시각이 아니라 **서버리스 인스턴스가 시작한 시각**이라 배포와 무관하다.
@@ -219,10 +218,12 @@ export default async function handler(req, res) {
        ★ 왜 서빙 시점인가 — 클라이언트에서 /api/products 를 부르면 응답 전에 r8 부트가
          먼저 끝나 제품이 두 번 그려진다(r53 지도에서 겪은 것과 같은 번쩍임).
          여기서 심으면 첫 페인트부터 옳고 브라우저 왕복이 0이다.
-       ★ 왜 raw.githubusercontent 인가 — api/products.js 는 [skip ci] 로 커밋한다.
-         재배포가 안 도니 **배포본의 정적 data/products.json 은 낡는다.** raw 는 리포를
-         그대로 주므로 발행 직후 값이 나온다(RAW_URL 이 index_v6.html 에 쓰는 것과 같은 이유).
-       ★ 실패해도 페이지가 죽으면 안 된다 — catch 에서 조용히 건너뛰면 정적 215종이 그대로 뜬다.
+       ★ 왜 배포본의 파일을 안 읽나 — api/products.js 는 [skip ci] 로 커밋한다.
+         재배포가 안 도니 **배포본의 정적 data/products.json 은 낡는다.** 리포를 직접 읽어야 한다.
+       ★★ 그런데 raw 로 읽으면 **최대 5분 늦다**(max-age=300 · 쿼리스트링으로 못 깬다 · 실측).
+         그래서 Contents API 1차 · raw 폴백으로 간다 → `_patch.js`. 이건 미관 문제가 아니다.
+         발행하고 새로고침했는데 5분간 그대로면 「유기적」이 아니라 「고장」으로 보인다.
+       ★ 실패해도 페이지가 죽으면 안 된다 — loadPatch() 는 절대 던지지 않고 빈 패치를 준다.
        ★ `<` 를 이스케이프하는 이유: 제품명에 우연히 '</script' 가 들어가면 인라인 블록이
          거기서 끊긴다. JSON 안의 꺾쇠는 < 로 바꿔도 파싱 결과가 같다.
        되돌리기: 이 블록 + usung-r55-products.js. 둘은 짝이다.
@@ -240,19 +241,10 @@ export default async function handler(req, res) {
               그건 패치 유무와 **무관하게** 있어야 한다(사진만 교체하는 경우가 있다).
          빈 패치를 넣는 것과 아예 안 넣는 것은 방문자 화면이 완전히 같다 — 정적 215종.
          그러니 넣는 쪽이 순수하게 이득이다. */
-      let patch = { add: [], edit: {}, del: [] };
-      try {
-        const pr = await fetch(PATCH_URL, { cache: 'no-store' });
-        // 404 는 오류가 아니라 「아직 발행 전」이다. 빈 패치 그대로 간다.
-        if (pr.ok) {
-          const raw = await pr.json();
-          patch = {
-            add: Array.isArray(raw.add) ? raw.add : [],
-            edit: (raw.edit && typeof raw.edit === 'object') ? raw.edit : {},
-            del: Array.isArray(raw.del) ? raw.del : []
-          };
-        }
-      } catch (e) { /* raw 가 죽어도 빈 패치로 진행 — 정적 215종이 그대로 뜬다 */ }
+      /* ★★★ 읽는 곳이 raw 에서 **Contents API** 로 바뀌었다 — raw 는 최대 5분 늦다.
+           `cache-control: max-age=300` 이고 쿼리스트링으로도 안 깨진다(실측).
+           발행하고 새로고침했는데 5분간 안 바뀌면 「안 되네」로 끝난다. 경위·폴백은 _patch.js. */
+      const patch = await loadPatch();
 
       const anchor = '<script src="/usung-catalog-data.js?v=' + V + '" defer></script>';
       if (html.includes(anchor)) {
