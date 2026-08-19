@@ -168,6 +168,26 @@ export default async function handler(req, res) {
     ];
     for (const [from, to] of R46) html = html.split(from).join(to);
 
+    // ── r53 — 회사소개 > 찾아오시는 길 지도의 중심·축척 교정 ──
+    // 승연 「우리 찾아오시는길 지도 내가 첨부한 크기과 위치로 적용부탁해」
+    // 증상: 라이브에서 유성에이스 핀이 지도 아래 모서리에 반쯤 잘려 있었다.
+    // 원인: q= 주소검색이 「센트럴산단1로 103」이 아니라 이웃 업체에 매칭된다.
+    //   실측 — ll 없이 주소만 넘기면 중심이 「올소앤올랜드 / 센트럴산단1로 8」에 잡힌다.
+    //   그래서 축척만 올려도 안 되고, 중심을 좌표로 못박아야 한다.
+    // 조치: 상호 검색 + ll 좌표 중심 고정 + z 16 -> 17.
+    // ★ 좌표는 지어낸 값이 아니다. 구글이 확정한 「유성에이스」 장소 레코드에서 읽었고
+    //   (place 0x357c9aa127ed9985:0xe9307f8ae808a9f2), 그 장소 주소가
+    //   「경기도 파주시 파주읍 센트럴산단1로 103」로 사이트 표기와 일치함을 화면으로 확인했다.
+    // ★ iwloc= 는 반드시 유지한다. 빼면 좌상단에 place 카드가 떠서
+    //   「지도에서 열기」 버튼을 통째로 가린다(변형 D 실측).
+    // ★ JS 오버레이가 아니라 여기서 치환하는 이유: 런타임에 iframe.src 를 갈아끼우면
+    //   지도가 두 번 로드되고 옛 화면이 한 번 번쩍인다. 서빙 시점이라야 첫 페인트부터 옳다.
+    // ★ 앵커는 index_v6.html 안에서 유일하다(grep -c -> 1).
+    // 되돌리기: 이 블록 삭제. 신규 파일 없음 = 스냅샷 복원이 곧 원상복구.
+    // 배포 판정: 서빙된 HTML 에 'll=37.8059882' 가 있으면 반영된 것.
+    html = html.split('https://maps.google.com/maps?q=%EA%B2%BD%EA%B8%B0+%ED%8C%8C%EC%A3%BC%EC%8B%9C+%ED%8C%8C%EC%A3%BC%EC%9D%8D+%EC%84%BC%ED%8A%B8%EB%9F%B4%EC%82%B0%EB%8B%A81%EB%A1%9C+103&t=&z=16&ie=UTF8&iwloc=&output=embed')
+               .join('https://maps.google.com/maps?q=%EC%9C%A0%EC%84%B1%EC%97%90%EC%9D%B4%EC%8A%A4&ll=37.8059882,126.7970791&z=17&hl=ko&ie=UTF8&iwloc=&output=embed');
+
     // 3) 게시판 필터 탭 3종 — usung-review.js:155 boardFilters() 가 PPT slide26 지시로 숨기는 것과
     //    같은 결과를 첫 페인트에 만든다. 탭은 renderBoard() 가 innerHTML 로 매번 새로 만들기 때문에
     //    인라인 style 로는 못 막는다 → CSS 속성 선택자라야 재생성돼도 계속 먹는다.
