@@ -229,25 +229,41 @@ export default async function handler(req, res) {
        배포 판정: 서빙된 HTML 에 `usung-r55-products.js` 가 있는지로 본다
                  (서버리스 함수라 api/inject.js 자체는 HTTP 로 못 받아 md5 대조가 불가능하다). */
     try {
-      const pr = await fetch(PATCH_URL, { cache: 'no-store' });
-      if (pr.ok) {
-        const raw = await pr.json();
-        const patch = {
-          add: Array.isArray(raw.add) ? raw.add : [],
-          edit: (raw.edit && typeof raw.edit === 'object') ? raw.edit : {},
-          del: Array.isArray(raw.del) ? raw.del : []
-        };
-        const anchor = '<script src="/usung-catalog-data.js?v=' + V + '" defer></script>';
-        if (html.includes(anchor)) {
-          const inline = '<script>window.UP_PATCH='
-            + JSON.stringify(patch).split('<').join('\\u003c')
-            + ';</script>';
-          const applier = '<script src="/usung-r55-products.js?v=' + V + '" defer></script>';
-          // 인라인(즉시 실행 · 데이터만) → 적용기(defer · 카탈로그 바로 다음 차례)
-          html = html.split(anchor).join(anchor + inline + applier);
+      /* ★★ 패치를 못 읽어도 적용기는 **반드시** 넣는다. 처음엔 fetch 가 실패하면 블록 전체를
+           건너뛰게 짰는데, 프리뷰 실측에서 그게 틀렸다는 걸 봤다. 이유 둘:
+           ① 아직 아무것도 발행하지 않으면 data/products.json 이 **없다**(raw 404 실측).
+              그러면 서빙된 HTML 에 usung-r55-products.js 가 없다 → **배포 판정이 불가능**해진다.
+              「제대로 배포됐는데 발행이 없다」와 「배포가 안 됐다」가 똑같이 보인다.
+              적용기 파일 스스로 UP_DATA 유무를 로그로 구분하게 만들어 놓고
+              정작 여기서 그 안전장치를 무력화하고 있었다.
+           ② 적용기에는 사진 404 를 「사진 준비 중」으로 받는 핸들러가 같이 들어 있다.
+              그건 패치 유무와 **무관하게** 있어야 한다(사진만 교체하는 경우가 있다).
+         빈 패치를 넣는 것과 아예 안 넣는 것은 방문자 화면이 완전히 같다 — 정적 215종.
+         그러니 넣는 쪽이 순수하게 이득이다. */
+      let patch = { add: [], edit: {}, del: [] };
+      try {
+        const pr = await fetch(PATCH_URL, { cache: 'no-store' });
+        // 404 는 오류가 아니라 「아직 발행 전」이다. 빈 패치 그대로 간다.
+        if (pr.ok) {
+          const raw = await pr.json();
+          patch = {
+            add: Array.isArray(raw.add) ? raw.add : [],
+            edit: (raw.edit && typeof raw.edit === 'object') ? raw.edit : {},
+            del: Array.isArray(raw.del) ? raw.del : []
+          };
         }
+      } catch (e) { /* raw 가 죽어도 빈 패치로 진행 — 정적 215종이 그대로 뜬다 */ }
+
+      const anchor = '<script src="/usung-catalog-data.js?v=' + V + '" defer></script>';
+      if (html.includes(anchor)) {
+        const inline = '<script>window.UP_PATCH='
+          + JSON.stringify(patch).split('<').join('\\u003c')
+          + ';</script>';
+        const applier = '<script src="/usung-r55-products.js?v=' + V + '" defer></script>';
+        // 인라인(즉시 실행 · 데이터만) → 적용기(defer · 카탈로그 바로 다음 차례)
+        html = html.split(anchor).join(anchor + inline + applier);
       }
-    } catch (e) { /* 패치를 못 읽으면 정적 카탈로그 그대로 — 화면은 오늘과 동일하다 */ }
+    } catch (e) { /* 여기까지 실패하면 정적 카탈로그 그대로 — 화면은 오늘과 동일하다 */ }
     if (!html.includes('usung-r27-prepaint')) {
       html = html.replace('</head>', preStyle + '</head>');
     }

@@ -35,9 +35,42 @@
 
   function log(m) { try { console.info('[r55] ' + m); } catch (e) { } }
 
+  /* ── 새 제품의 사진이 아직 없을 때 ──────────────────────────────────
+     stem 이 곧 파일명이라(R8_IMG + stem + '.png') 사진을 아직 안 올린 신규 제품은
+     이미지가 404 다. 그대로 두면 깨진 아이콘이 카드에 박힌다.
+     ★ 카드 렌더러(usung-r8-prod-b.js 의 mcardHTML)는 frozen 인 원본이 아니라 오버레이지만,
+       거기 손대면 r8 렌더 경로 전체가 회귀 위험에 들어간다. 대신 **캡처 단계에서** 잡는다
+       — error 이벤트는 버블링하지 않으므로 캡처(3번째 인자 true)여야 걸린다.
+
+     ★★ 이 핸들러는 패치 적용보다 **먼저, 무조건** 단다.
+       처음엔 파일 맨 아래(패치 적용 뒤)에 뒀는데 그건 틀렸다 — 아래 패치 로직은
+       발행분이 없으면 일찍 return 한다. 그러면 「제품 목록은 안 건드리고 **사진만**
+       교체한」 경우에 자리표시가 없어 빌드 1~2분 동안 깨진 아이콘이 그대로 남는다.
+       사진 경로(api/product-image.js)와 패치 경로(api/products.js)는 **별개**다.
+       README 에 「자리표시와 pending 안내는 둘 다 있어야 한다」고 적어 놓고
+       정작 한쪽을 패치 유무에 묶어 두고 있었다. */
+  var PLACEHOLDER =
+    'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240">' +
+      '<rect width="240" height="240" fill="#f1f5f9"/>' +
+      '<text x="120" y="126" font-family="sans-serif" font-size="15" fill="#94a3b8" ' +
+      'text-anchor="middle">사진 준비 중</text></svg>');
+
+  document.addEventListener('error', function (ev) {
+    var t = ev && ev.target;
+    if (!t || t.tagName !== 'IMG') return;
+    if (t.dataset && t.dataset.r55ph === '1') return;      // 자리표시가 또 실패하는 무한루프 차단
+    var src = t.getAttribute('src') || '';
+    if (src.indexOf('/products/final/') < 0) return;        // 제품 사진만 건드린다
+    if (t.dataset) t.dataset.r55ph = '1';
+    t.src = PLACEHOLDER;
+  }, true);
+
   var P = window.UP_PATCH;
   var D = window.UP_DATA;
 
+  // ★ 아래 return 들은 전부 「패치를 적용하지 않는다」는 뜻일 뿐이다.
+  //   위 자리표시 핸들러는 이미 달렸다 — 그게 이 순서의 이유다.
   if (!Array.isArray(D)) { log('UP_DATA 없음 — 순서가 어긋났다. 적용하지 않는다'); return; }
   // 패치가 없는 건 정상이다(아직 아무것도 발행하지 않은 상태). 조용히 끝낸다.
   if (!P || typeof P !== 'object') return;
@@ -125,27 +158,4 @@
   window.UP_DATA = out;
   log('적용 ' + before + ' → ' + out.length
     + ' (추가 ' + add.length + ' · 수정 ' + editKeys.length + ' · 삭제 ' + del.length + ')');
-
-  /* ── 새 제품의 사진이 아직 없을 때 ──────────────────────────────────
-     stem 이 곧 파일명이라(R8_IMG + stem + '.png') 사진을 아직 안 올린 신규 제품은
-     이미지가 404 다. 그대로 두면 깨진 아이콘이 카드에 박힌다.
-     ★ 카드 렌더러(usung-r8-prod-b.js 의 mcardHTML)는 frozen 인 원본이 아니라 오버레이지만,
-       거기 손대면 r8 렌더 경로 전체가 회귀 위험에 들어간다. 대신 **캡처 단계에서** 잡는다
-       — error 이벤트는 버블링하지 않으므로 캡처(3번째 인자 true)여야 걸린다. */
-  var PLACEHOLDER =
-    'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240">' +
-      '<rect width="240" height="240" fill="#f1f5f9"/>' +
-      '<text x="120" y="126" font-family="sans-serif" font-size="15" fill="#94a3b8" ' +
-      'text-anchor="middle">사진 준비 중</text></svg>');
-
-  document.addEventListener('error', function (ev) {
-    var t = ev && ev.target;
-    if (!t || t.tagName !== 'IMG') return;
-    if (t.dataset && t.dataset.r55ph === '1') return;      // 자리표시가 또 실패하는 무한루프 차단
-    var src = t.getAttribute('src') || '';
-    if (src.indexOf('/products/final/') < 0) return;        // 제품 사진만 건드린다
-    if (t.dataset) t.dataset.r55ph = '1';
-    t.src = PLACEHOLDER;
-  }, true);
 })();
