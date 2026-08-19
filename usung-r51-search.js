@@ -165,6 +165,21 @@
     } catch (err) { if (window.console) console.warn('[r51] 착지 실패', err); }
   }
 
+  /* ★ upGoModel() 은 안에서 upScrollTop() 을 불러 「제품 페이지 맨 위」로 보낸다
+   *   (usung-review.js:725 — `#page-products` 상단 −88). 카드에서 눌렀을 땐 맞는 동작이다.
+   *   목록을 보다 아래에서 눌렀으니 위로 올라오는 게 자연스럽다.
+   *   그런데 검색에서 오면 거기가 히어로 배너(「국내 최대 HOOD LINEUP」)라서,
+   *   방문자가 고른 제품은 한참 아래에 있고 화면엔 아무 일도 안 일어난 것처럼 보인다.
+   *   393px 프리뷰 실측에서 잡았다. 상세 컨테이너로 다시 맞춘다.
+   * ★ 380ms 는 upScrollTop 의 smooth 애니메이션이 끝나기를 기다리는 시간이다.
+   *   더 일찍 쏘면 두 스크롤이 겹쳐 중간에서 멎는다. */
+  function scrollToDetail() {
+    var el = document.getElementById('up-main');
+    if (!el) return;
+    var y = el.getBoundingClientRect().top + window.scrollY - 88;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+
   function goProduct(row) {
     window.navigate('products');
     var idx = window.R51.build();
@@ -178,6 +193,7 @@
       if (row.k > 0 && typeof window.upDetailVar === 'function') {
         later(function () { window.upDetailVar(row.k); }, 40);
       }
+      later(scrollToDetail, 380);
     });
   }
 
