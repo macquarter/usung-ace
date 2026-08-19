@@ -7,13 +7,26 @@
  *     edit : stem 의 일부 칸을 덮어쓴다
  *     add  : 새 레코드를 뒤에 붙인다
  *
- * ── ★ 실행 순서가 전부다 ─────────────────────────────────────────────
- *   api/inject.js 가 이 파일을 **usung-catalog-data.js 바로 다음**에 꽂는다.
- *   둘 다 defer 라 문서 순서대로 실행된다 → UP_DATA 가 이미 있고, r8 부트는 아직이다.
- *   ★ 순서가 어긋나면 조용히 아무 일도 안 일어난다(에러도 안 난다). 그래서 이 파일은
- *     UP_DATA 가 없으면 로그를 남긴다 — 무동작과 정상을 구분할 수 있어야 한다.
- *   ★ r8 부트는 usung-r8-mount.js 의 boot() 가 `window.UP_DATA` 를 읽어 r8Build() 를
- *     부르는 시점이다. 그때는 이미 이 파일이 UP_DATA 를 갈아끼운 뒤다.
+ * ── ★★ 한 번 대입하고 끝내면 안 된다 — 카탈로그가 **두 번** 실린다 ────────
+ *   api/inject.js 가 이 파일을 usung-catalog-data.js 바로 다음에 꽂는다(둘 다 defer).
+ *   거기까지는 맞다. 그런데 그것만으로는 부족하다는 걸 프리뷰 실측에서 봤다:
+ *   적용기가 「적용 215 → 215」를 찍고 끝났는데 화면의 UP_DATA 는 **원본 그대로**였다.
+ *
+ *   범인은 usung-review.js:795 `upLoadData()` 다.
+ *     if (window.UP_DATA) { ... return; }              ← 아직 없다(review 가 먼저 돈다)
+ *     var s = document.createElement('script');
+ *     s.src = '/usung-catalog-data.js';                ← **동적 삽입 = async**
+ *     document.head.appendChild(s);
+ *   review.js 는 주입 목록에서 카탈로그보다 **앞**이라 그때 UP_DATA 가 없고, 그래서
+ *   카탈로그를 **직접 한 벌 더** 끌어온다. 동적 삽입 스크립트는 async 라 도착 순서가
+ *   보장되지 않는다 — 그게 이 적용기 **뒤에** 도착하면 `window.UP_DATA=[…215종]` 이
+ *   다시 실행되면서 패치가 통째로 지워진다. 순서로는 절대 못 이기는 경쟁이다.
+ *
+ *   ★ 그래서 대입이 아니라 **접근자(accessor)로 방어한다.** 누가 언제 몇 번을
+ *     UP_DATA 에 다시 대입하든, 세터가 그 배열에 패치를 다시 얹어서 보관한다.
+ *     읽는 쪽(r8 부트·review·r51 검색)은 항상 패치된 배열을 본다.
+ *   ★ 이 파일이 카탈로그보다 **먼저** 실행돼도 이제 괜찮다 — 그때는 세터만 걸어 두고
+ *     카탈로그가 도착하는 순간 적용된다.
  *
  * ── ★ 왜 여기서 fetch 하지 않나 ──────────────────────────────────────
  *   클라이언트에서 /api/products 를 부르면 응답이 오기 전에 r8 부트가 먼저 끝난다.
@@ -67,20 +80,22 @@
   }, true);
 
   var P = window.UP_PATCH;
-  var D = window.UP_DATA;
 
   // ★ 아래 return 들은 전부 「패치를 적용하지 않는다」는 뜻일 뿐이다.
   //   위 자리표시 핸들러는 이미 달렸다 — 그게 이 순서의 이유다.
-  if (!Array.isArray(D)) { log('UP_DATA 없음 — 순서가 어긋났다. 적용하지 않는다'); return; }
   // 패치가 없는 건 정상이다(아직 아무것도 발행하지 않은 상태). 조용히 끝낸다.
   if (!P || typeof P !== 'object') return;
 
   var add = Array.isArray(P.add) ? P.add : [];
   var del = Array.isArray(P.del) ? P.del : [];
   var edit = (P.edit && typeof P.edit === 'object') ? P.edit : {};
+  var editKeys = Object.keys(edit);
 
-  if (!add.length && !del.length && !Object.keys(edit).length) return;
+  if (!add.length && !del.length && !editKeys.length) return;
 
+  /* 순수 함수다 — 받은 배열을 건드리지 않고 패치를 얹은 **새 배열**을 돌려준다.
+     세터가 이걸 몇 번을 부르든 결과가 같아야 한다(멱등). */
+  function applyPatch(D) {
   var before = D.length;
   var out = D;
 
@@ -96,7 +111,6 @@
   /* ── 수정 ──
      ★ 행을 제자리에서 고치지 않고 복사본을 만든다(slice). UP_DATA 를 다른 모듈이
        이미 참조하고 있어도 그쪽이 보는 값이 몰래 바뀌지 않는다. */
-  var editKeys = Object.keys(edit);
   if (editKeys.length) {
     out = out.map(function (r) {
       if (!r || !r[0]) return r;
@@ -155,7 +169,32 @@
     }
   }
 
-  window.UP_DATA = out;
-  log('적용 ' + before + ' → ' + out.length
-    + ' (추가 ' + add.length + ' · 수정 ' + editKeys.length + ' · 삭제 ' + del.length + ')');
+    log('적용 ' + before + ' → ' + out.length
+      + ' (추가 ' + add.length + ' · 수정 ' + editKeys.length + ' · 삭제 ' + del.length + ')');
+    return out;
+  }
+
+  /* ── ★★ 대입이 아니라 접근자로 건다 ────────────────────────────────────
+     usung-review.js 가 카탈로그를 async 로 한 벌 더 끌어온다(파일 머리말 참고).
+     그게 이 파일 **뒤에** 도착하면 window.UP_DATA 가 원본으로 되돌아가 패치가 사라진다.
+     세터를 걸어 두면 **누가 언제 다시 대입하든** 그 배열에 패치를 다시 얹는다.
+     ★ 원본(raw)을 따로 들고 있는 이유: 세터는 항상 **방금 받은 원본**에 패치를 얹는다.
+       이미 패치된 배열에 또 얹어도 결과가 같도록 applyPatch 를 멱등하게 짰지만
+       (del 은 이미 없고 add 는 have[] 로 걸린다), 굳이 두 번 돌리지 않는다. */
+  var cur = Array.isArray(window.UP_DATA) ? applyPatch(window.UP_DATA) : window.UP_DATA;
+  try {
+    Object.defineProperty(window, 'UP_DATA', {
+      configurable: true,
+      enumerable: true,
+      get: function () { return cur; },
+      set: function (v) {
+        cur = Array.isArray(v) ? applyPatch(v) : v;
+      }
+    });
+    if (!Array.isArray(cur)) log('UP_DATA 아직 없음 — 세터만 걸어 둔다. 카탈로그 도착 시 적용된다');
+  } catch (e) {
+    // 접근자를 못 걸면(구형 브라우저 등) 최소한 한 번은 적용해 둔다 — 경쟁에서 질 수 있다.
+    log('접근자 실패 — 1회 대입으로 물러난다: ' + e.message);
+    if (Array.isArray(cur)) window.UP_DATA = cur;
+  }
 })();
