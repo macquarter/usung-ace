@@ -1454,22 +1454,80 @@ function effectiveProducts(){
            grp='r55검증그룹' 으로 넣으니 카드가 18개가 됐다(281x363 신규 카드).
      둘 다 정상 동작이지만 **어느 쪽인지 모르고 쓰면 「추가했는데 안 보인다」가 된다.**
      KNOWLEDGE 32(화면 소유권)가 이 탭에서 재발하는 형태다. 그래서 입력칸 밑에 실시간으로 알린다. */
-const grpKey = p => (p.cat||'')+'|'+(p.mid||'')+'|'+(p.grp||'');
+/* ★★ 예외가 하나 더 있다 — usung-r8-prod-a.js:32. 중분류가 「기타옵션」이거나
+     (LED조명 > 디자인등) 이면 r8 은 **제품그룹을 아예 안 쓴다.** 대신
+     baseOf = 제품명에서 마감 문자열을 뺀 것(usung-r8-data.js:188)으로 카드를 가른다.
+     모양이 제각각인 잡동사니를 한 카드의 「마감」으로 뭉치면 안 되기 때문이다.
+   ★ 기준선 215종 중 **18종**이 여기 해당한다(파이프|기타옵션 14 · LED조명|디자인등 4).
+     처음엔 「관리자 안내는 이 예외를 안 다룬다, 의도한 것」이라고 회귀 테스트 주석에
+     적어 뒀었다. 그건 결정이 아니라 재 보지 않고 넘긴 것이었다. 세어 보니 8%고,
+     하필 「기타옵션」은 분류가 애매한 새 제품이 들어갈 바로 그 자리다 —
+     제일 그럴듯한 상황에서 안내가 거짓말을 하게 된다. 그래서 규칙을 그대로 옮긴다. */
+const isHetero = p => (p.mid === '기타옵션') || (p.cat === 'LED조명' && p.mid === '디자인등');
+const baseOfP = p => {
+  const n = String(p.name || ''), f = String(p.finish || '');
+  return (f ? n.split(f).join('') : n).replace(/\s+/g,' ').trim();
+};
+const grpTok = p => isHetero(p) ? baseOfP(p) : (p.grp || '');
+const grpKey = p => (p.cat||'')+'|'+(p.mid||'')+'|'+grpTok(p);
+/* ★ 칸 이름표도 행마다 달라야 한다. 「제품명은 카드 제목이 아니다」는 197종에서는 맞지만
+     heterog 18종에서는 **정반대**다 — 거기선 제품명이 곧 제목이고 제품그룹은 무시된다.
+     한 문장을 모든 행에 박아 두면 그 18행에서 이름표가 적극적으로 거짓말을 한다. */
+function nameLabHTML(p){
+  return isHetero(p)
+    ? `제품명 <span style="opacity:.7">(← <b>이 중분류에서는 이게 카드 제목</b>입니다)</span>`
+    : `제품명 <span style="opacity:.7">(검색어·색상 이름표 — 카드 제목은 아래 「제품그룹」입니다)</span>`;
+}
+function grpLabHTML(p){
+  return isHetero(p)
+    ? `제품그룹 <span style="opacity:.7">(「${escHtml(p.mid)}」에서는 <b>쓰이지 않습니다</b>)</span>`
+    : `제품그룹 <span style="opacity:.7">(← 화면 카드 제목)</span>`;
+}
 function grpHintHTML(me, all){
   if(!me || me._status === 'deleted') return '';
   const mates = all.filter(p => p._status !== 'deleted' && p.stem !== me.stem && grpKey(p) === grpKey(me));
-  /* ★ 비어 있을 때가 제일 위험하다. 그룹도 중분류도 비면 키가 `대분류||` 라서
-       **그 대분류에 새로 넣은 제품들이 전부 한 카드로 뭉친다.** 두 번째부터는
+  /* ★★ 빨간불의 조건을 「그룹이 비었다」로 잡으면 안 된다 — 실측에서 46개가 켜졌다.
+       기준선에는 **그룹은 비었지만 중분류가 있는** 제품이 44종 있고, 그건 제목이
+       중분류로 떨어지는 **정상 구조**다(modelName 의 둘째 갈래). 정상인 것에 경고를
+       띄우면 46개 중 진짜 2개를 못 찾는다 — 경고가 많으면 경고가 아니다.
+     ★ 진짜 함정은 **그룹도 중분류도 빈** 경우다. 키가 `대분류||` 가 되어
+       그 대분류에 새로 넣은 제품이 전부 한 카드로 뭉치고, 두 번째부터는
        카드가 아니라 첫 제품의 「마감」으로 들어가 사실상 안 보인다.
-       「추가했는데 화면에 없다」의 가장 그럴듯한 경로라 빨간불로 잡는다. */
-  if(!me.grp){
+       prodAddNew() 가 정확히 그 상태로 행을 만든다. 여기만 빨간불이다. */
+  const label = grpTok(me) || me.mid;   // 카드 제목이 될 값 (modelName 의 첫째·둘째 갈래)
+  if(!label){
+    /* ★★★ 여기서 한 번 더 좁혔다 — 위 기준(둘 다 빔)만으로도 기준선에서 **9개**가 켜졌다.
+         전부 대분류 「코브라후드」다(KNOWLEDGE 36 — 이 계열은 원래 모델 칸이 비어 있다).
+         셋이 아니라 아홉이 한 카드로 뭉쳐 있는데, 그게 **지금 라이브 화면의 모습**이고
+         승연은 아무것도 안 했다. 손대지 않은 것에 경고를 띄우면 탭을 여는 순간
+         빨간 글씨 9줄이 먼저 보인다 — 그건 「고칠 것이 아홉 개 있다」는 거짓말이다.
+       ★ 그래서 판정 기준을 **데이터 모양이 아니라 「승연이 건드렸는가」**로 옮긴다.
+         빨간불은 방금 추가·수정한 행에만 켠다. 기준선 그대로인 행은 사실만 회색으로 적는다. */
+    /* ★ 카드 제목은 r8 이 `m.items[0]` 을 대표로 잡아 그 이름을 쓴다(usung-r8-prod-a.js:37).
+         mates 는 원래 순서를 보존하고 새로 추가한 행은 항상 뒤에 붙으므로 mates[0] 이 대표다.
+       ★ 대표조차 이름이 없을 수 있다 — 「+ 새 제품 추가」를 두 번 누른 직후가 그렇다.
+         그때 「이름 없음」 카드라고 적으면 있지도 않은 이름을 가리키는 꼴이라 이름을 뺀다. */
+    const rep = mates.length ? (grpTok(mates[0]) || mates[0].mid || mates[0].name || '') : '';
+    const where = (rep ? `「${escHtml(rep)}」 카드에` : '먼저 추가한 제품과 한 카드로');
+    if(me._status === 'base')
+      return mates.length
+        ? `<span style="color:var(--tx4)">${where} 함께 묶여 있습니다 — 지금 ${mates.length+1}종 <span style="opacity:.75">(제품그룹·중분류가 비어 있어서입니다)</span></span>`
+        : `<span style="color:var(--tx4)">제품그룹·중분류가 비어 <b>제품명</b>이 카드 제목입니다</span>`;
     return mates.length
-      ? `<span style="color:var(--rd)">⚠ 제품그룹이 비어 「${escHtml(mates[0].grp || mates[0].mid || mates[0].name || '이름 없음')}」 카드에 <b>묶입니다</b> — 따로 나오게 하려면 제품그룹을 적으세요</span>`
-      : `<span style="color:#fbbf24">제품그룹이 비면 <b>제품명</b>이 카드 제목이 됩니다</span>`;
+      ? `<span style="color:var(--rd)">⚠ 제품그룹·중분류가 모두 비어 ${where} <b>묶입니다</b> — 따로 나오게 하려면 제품그룹을 적으세요</span>`
+      : `<span style="color:#fbbf24">제품그룹·중분류가 비면 <b>제품명</b>이 카드 제목이 됩니다</span>`;
   }
+  /* 왜 그 제목이 됐는지 한 줄로 붙인다 — 안 붙이면 「내가 적은 그룹이 왜 안 뜨지」가 된다.
+     ★ 기타옵션·디자인등은 그룹을 적어도 무시되므로 그 사실을 명시해야 한다.
+     ★ 393px 실측에서 이 줄이 **65px(5줄)** 를 먹었다. 폭이 125px 인 칸이라 설명을 길게 쓰면
+       행 전체가 안내에 잡아먹힌다. 「마감을 뺀 것」은 마감이 실제로 있을 때만 붙인다 —
+       마감이 비면 제품명이 곧 제목이라 그 설명은 아무것도 안 알려주면서 두 줄만 쓴다. */
+  const via = isHetero(me) && grpTok(me)
+    ? ` <span style="opacity:.75">(「${escHtml(me.mid)}」은 제품그룹 대신 <b>제품명</b>${me.finish ? '에서 마감을 뺀 것' : ''}으로 카드를 가릅니다)</span>`
+    : (grpTok(me) ? '' : ' <span style="opacity:.75">(제품그룹이 비어 중분류가 제목이 됩니다)</span>');
   return mates.length
-    ? `<span style="color:var(--tx4)">기존 카드 「<b>${escHtml(me.grp)}</b>」에 <b>마감으로 합류</b> — 지금 ${mates.length+1}종</span>`
-    : `<span style="color:#22c55e"><b>새 카드</b> 「${escHtml(me.grp)}」가 생깁니다</span>`;
+    ? `<span style="color:var(--tx4)">기존 카드 「<b>${escHtml(label)}</b>」에 <b>마감으로 합류</b> — 지금 ${mates.length+1}종${via}</span>`
+    : `<span style="color:#22c55e"><b>새 카드</b> 「${escHtml(label)}」가 생깁니다${via}</span>`;
 }
 /* 입력 중에는 R() 을 못 부른다(포커스가 날아간다) → 안내 div 만 갈아 끼운다.
    ★ 편집한 행 하나만 갈면 **틀린다.** 안내는 다른 행에 달려 있기 때문이다 —
@@ -1490,6 +1548,17 @@ function grpHint(){
   document.querySelectorAll('[id^="gh-"]').forEach(el => {
     const me = byStem.get(el.id.slice(3));
     el.innerHTML = me ? grpHintHTML(me, byKey.get(grpKey(me)) || []) : '';
+  });
+  /* ★ 이름표도 같이 간다. 중분류를 「기타옵션」으로 바꾸면 규칙이 통째로 뒤집히는데
+       이름표만 옛 문장으로 남으면 **안내와 이름표가 서로 반대말을 한다.**
+       그러면 승연은 둘 중 뭘 믿을지 고르게 되고, 그 순간 이 기능은 없느니만 못하다. */
+  document.querySelectorAll('[id^="nl-"]').forEach(el => {
+    const me = byStem.get(el.id.slice(3));
+    if(me) el.innerHTML = nameLabHTML(me);
+  });
+  document.querySelectorAll('[id^="gl-"]').forEach(el => {
+    const me = byStem.get(el.id.slice(3));
+    if(me) el.innerHTML = grpLabHTML(me);
   });
 }
 
@@ -1748,7 +1817,7 @@ function rProductsTab(){
     //   그때 option 을 안 넣으면 select 가 첫 항목으로 **조용히 바뀐다** — 값이 유실된다.
     const catList = CATS.indexOf(p.cat) < 0 && p.cat ? CATS.concat([p.cat]) : CATS;
     const catSelect = catList.map(c =>
-      `<option value="${esc(c)}"${p.cat===c?' selected':''}>${esc(c)}</option>`
+      `<option value="${escAttr(c)}"${p.cat===c?' selected':''}>${escHtml(c)}</option>`
     ).join('');
     const editFn = isAdd ? `addProdEdit` : `prodEdit`;
     return `<div style="display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 12px;background:var(--cd);border-radius:10px;border:1px solid var(--bd);${stripColor(p._status)};position:relative">
@@ -1777,7 +1846,7 @@ function rProductsTab(){
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
           <div style="grid-column:1/-1">
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품명 <span style="opacity:.7">(검색어·색상 이름표 — 카드 제목은 아래 「제품그룹」입니다)</span></div>
+            <div id="nl-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${nameLabHTML(p)}</div>
             <input type="text" value="${escAttr(p.name)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','name',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
@@ -1795,7 +1864,7 @@ function rProductsTab(){
             <input type="text" list="r55-mids" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품그룹 <span style="opacity:.7">(← 화면 카드 제목)</span></div>
+            <div id="gl-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${grpLabHTML(p)}</div>
             <input type="text" list="r55-grps" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
             <div id="gh-${escAttr(p.stem)}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, eff)}</div>
           </div>
@@ -1863,10 +1932,12 @@ function rProductsTab(){
         🎨 <b style="color:var(--tx3)">마감</b>은 홈페이지 <b style="color:var(--tx3)">스타일 탭(모던·클래식·프리미엄·레트로)</b>의 기준입니다.
         아래 목록에 있는 값을 쓰면 해당 탭에 함께 나오고, 새로 지어 쓰면 「전체」와 대분류에만 나옵니다.
         <br>
-        🧩 <b style="color:var(--tx3)">제품그룹이 곧 화면의 카드 제목</b>입니다(제품명이 아닙니다).
+        🧩 <b style="color:var(--tx3)">화면의 카드 제목은 제품명이 아니라 제품그룹</b>입니다.
+        (제품그룹이 비면 중분류, 그것도 비면 제품명 순서로 내려갑니다.)
         <b style="color:var(--tx3)">이미 있는 그룹</b>을 쓰면 그 카드에 색상·마감으로 <b style="color:var(--tx3)">합류</b>하고,
         <b style="color:var(--tx3)">새 이름</b>을 쓰면 <b style="color:var(--tx3)">카드가 새로 생깁니다</b>.
-        각 칸 아래에 어느 쪽인지 바로 표시됩니다.
+        각 칸 아래에 어느 쪽인지 바로 표시됩니다 — <b style="color:var(--rd)">빨간 글씨</b>가 뜨면
+        그 제품은 다른 제품 카드 안에 숨어 화면에서 안 보입니다.
       </div>
       <!-- ★ 목록은 박지 않고 기준선에서 뽑는다(KNOWLEDGE 41). 실제 쓰이는 값이 곧 선택지다.
            ★ 중분류·제품그룹에도 같은 목록을 붙인 이유: 이 둘은 대분류와 함께 **카드를 묶는 키**다.
