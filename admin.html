@@ -1443,7 +1443,8 @@ function effectiveProducts(){
   return result;
 }
 
-/* ★★★ 「제품그룹」이 곧 화면 카드 제목이다 — 프리뷰 실측으로 확인한 것.
+/* ★★★ 「제품그룹」이 곧 화면 카드 제목이다 — **215행 중 122행에서만 맞는 말이다.**
+     (아래 ★★★ 블록이 나머지 93행을 정정한다. 이 문단은 그 정정 전의 이해다.)
      usung-r8-prod-a.js:33 은 제품을 `cat|mid|grp` 로 묶고, 56행의
      `modelName = m.grp || m.mid || m.rep.name` 로 **그룹**을 카드·상세 제목에 쓴다.
      즉 관리자에서 「제품명」을 아무리 예쁘게 지어도 화면 제목은 그게 아니다
@@ -1458,34 +1459,134 @@ function effectiveProducts(){
      (LED조명 > 디자인등) 이면 r8 은 **제품그룹을 아예 안 쓴다.** 대신
      baseOf = 제품명에서 마감 문자열을 뺀 것(usung-r8-data.js:188)으로 카드를 가른다.
      모양이 제각각인 잡동사니를 한 카드의 「마감」으로 뭉치면 안 되기 때문이다.
-   ★ 기준선 215종 중 **18종**이 여기 해당한다(파이프|기타옵션 14 · LED조명|디자인등 4).
-     처음엔 「관리자 안내는 이 예외를 안 다룬다, 의도한 것」이라고 회귀 테스트 주석에
-     적어 뒀었다. 그건 결정이 아니라 재 보지 않고 넘긴 것이었다. 세어 보니 8%고,
-     하필 「기타옵션」은 분류가 애매한 새 제품이 들어갈 바로 그 자리다 —
-     제일 그럴듯한 상황에서 안내가 거짓말을 하게 된다. 그래서 규칙을 그대로 옮긴다. */
+
+   ★★★ 그런데 그것보다 훨씬 큰 것을 빼먹고 있었다 — r8 은 UP_DATA 를 **그대로 묶지 않는다.**
+     r8Build()(usung-r8-prod-a.js:7~24)는 묶기 **전에** 원본을 두 번 갈아엎는다.
+     나는 그 18줄을 안 읽고 26행의 묶음 루프만 옮겼다. 그래서 이 탭의 안내가
+     **215종 중 93종에서 정반대**를 말하고 있었다.
+     내 재구현끼리 대조해서는 영영 안 나온다 — 양쪽이 똑같이 틀렸기 때문이다.
+     프리뷰에서 화면이 만든 `MODELS` 를 직접 읽고서야 드러났다(내 55장 vs 화면 **62장**).
+     ★ 그 고정점을 `/tmp/r55fixture.json` 으로 떠 놨다 — 키 62개 + 카드별 제품 수.
+       회귀 테스트(`/tmp/_r55grp.mjs` §A)가 그것과 한 장씩 대조한다.
+       **오라클은 화면이다. 내가 다시 쓴 규칙이 아니다.**
+
+     ① **코브라후드** — 제품명이 같은 행은 **첫 하나만 남기고 버린다.**
+        남은 행은 중분류를 비우고 **제품그룹 자리에 제품명을 넣는다.**
+        즉 기준선 18행 중 **9행이 화면에 아예 안 나온다**(260729 회의: 이 계열은 중분류가 없다).
+        「고쳤는데 아무 일도 안 일어난다」의 가장 확실한 원인인데 여태 아무 말도 안 했다.
+     ② **파이프**(기타옵션 제외) — **중분류와 제품그룹을 맞바꾼다.**
+        원본은 중분류=마감(스텐도금·스텐도장·스파이얼)·그룹=동작(양옆태엽·텐션·내부태엽)인데
+        화면은 그 반대다. 그래서 이 75행에서는 **「중분류」 칸에 적은 값이 카드 제목**이고
+        「제품그룹」 칸은 화면에서 중분류(띠 제목)로 쓰인다. 이름표가 정확히 거꾸로였다.
+     ③ 그 다음에야 heterog 예외가 걸린다(파이프|기타옵션 14 · LED조명|디자인등 4). */
 const isHetero = p => (p.mid === '기타옵션') || (p.cat === 'LED조명' && p.mid === '디자인등');
 const baseOfP = p => {
   const n = String(p.name || ''), f = String(p.finish || '');
   return (f ? n.split(f).join('') : n).replace(/\s+/g,' ').trim();
 };
+
+/* r8Build 의 전처리를 한 줄씩 그대로 옮긴다. 순서까지 같아야 한다 —
+   코브라후드 중복 판정이 **UP_DATA 순서에서 앞선 것**을 남기기 때문이다.
+   effectiveProducts() 는 새로 추가한 행을 뒤에 붙이므로, 이름이 겹치면
+   새 행이 버려지는 쪽이 된다. 그게 화면의 실제 동작이다. */
+function r8Rewrite(list){
+  const seenCob = {};
+  return list.map(p => {
+    if(p._status === 'deleted') return { ...p, _drop:'del' };
+    if(p.cat === '코브라후드'){
+      if(seenCob[p.name]) return { ...p, _drop:'dup' };
+      seenCob[p.name] = 1;
+      return { ...p, mid:'', grp: p.name };
+    }
+    if(p.cat === '파이프' && p.mid !== '기타옵션')
+      return { ...p, mid: p.grp, grp: p.mid };
+    return { ...p };
+  });
+}
 const grpTok = p => isHetero(p) ? baseOfP(p) : (p.grp || '');
 const grpKey = p => (p.cat||'')+'|'+(p.mid||'')+'|'+grpTok(p);
+
+/* 화면이 실제로 만들 카드 지도. 안내·이름표는 전부 이것만 보고 판단한다. */
+function r8View(list){
+  const rows = r8Rewrite(list || effectiveProducts());
+  const byStem = new Map(), byKey = new Map();
+  rows.forEach(n => {
+    byStem.set(n.stem, n);
+    if(n._drop) return;
+    const k = grpKey(n);
+    if(!byKey.has(k)) byKey.set(k, []);
+    byKey.get(k).push(n);
+  });
+  /* ★★ 고정점과 대조하다 새로 드러난 것 — **제목이 겹치는 카드가 62장 중 13장**이다.
+       파이프 「스텐도금」은 카드가 셋(양옆태엽·텐션·내부태엽), 「스텐도장」·「스파이얼」도 셋씩,
+       갤럭시 「양옆태엽」·「내부태엽」은 둘씩. 제목만 대면 승연은 **어느 카드인지 못 고른다** —
+       「기존 카드 스텐도금에 합류」라고 적어 놓고 정작 화면엔 스텐도금이 셋 있는 꼴이다.
+       그래서 겹치는 제목에만 묶음 이름(= 화면의 띠 제목 = n.mid)을 덧댄다.
+       전부에 붙이면 393px 에서 안내가 행을 잡아먹는다 — 겹칠 때만이다. */
+  const seenT = new Map(), dupTitle = new Set();
+  byKey.forEach(v => {
+    const n = v[0], t = n.cat + '|' + (grpTok(n) || n.mid);
+    if(seenT.has(t)) dupTitle.add(t); else seenT.set(t, 1);
+  });
+  return { byStem, byKey, dupTitle, cards: byKey.size,
+           dropped: rows.filter(r => r._drop === 'dup').length };
+}
+
+/* ★ 승연이 보는 것은 **입력칸**이다. 그러니 「카드 제목이 어느 칸에서 오는가」를
+     반드시 **원본 칸 이름**으로 답해야 한다. 정규화 뒤의 이름으로 답하면
+     파이프 75행에서 정확히 반대 칸을 가리키게 된다. */
+function titleBox(raw){          // 'name' | 'mid' | 'grp'
+  if(!raw) return 'grp';
+  if(raw.cat === '코브라후드') return 'name';            // r8 이 제품그룹에 제품명을 넣는다
+  if(isHetero(raw)) return 'name';                       // baseOf(제품명 − 마감)
+  if(raw.cat === '파이프') return raw.mid ? 'mid' : (raw.grp ? 'grp' : 'name');
+  return raw.grp ? 'grp' : (raw.mid ? 'mid' : 'name');
+}
+const BOXNAME = { name:'제품명', mid:'중분류', grp:'제품그룹' };
 /* ★ 칸 이름표도 행마다 달라야 한다. 「제품명은 카드 제목이 아니다」는 197종에서는 맞지만
      heterog 18종에서는 **정반대**다 — 거기선 제품명이 곧 제목이고 제품그룹은 무시된다.
      한 문장을 모든 행에 박아 두면 그 18행에서 이름표가 적극적으로 거짓말을 한다. */
 function nameLabHTML(p){
-  return isHetero(p)
-    ? `제품명 <span style="opacity:.7">(← <b>이 중분류에서는 이게 카드 제목</b>입니다)</span>`
-    : `제품명 <span style="opacity:.7">(검색어·색상 이름표 — 카드 제목은 아래 「제품그룹」입니다)</span>`;
+  const t = titleBox(p);
+  return t === 'name'
+    ? `제품명 <span style="opacity:.7">(← <b>이게 화면 카드 제목</b>입니다)</span>`
+    : `제품명 <span style="opacity:.7">(검색어·색상 이름표 — 카드 제목은 「${BOXNAME[t]}」입니다)</span>`;
+}
+/* ★ 중분류에도 이름표가 필요해졌다. 파이프에서는 이 칸이 카드 제목이 되기 때문이다.
+     여태 이 칸엔 아무 설명이 없어서 승연이 제목을 바꾸려면 어디를 만져야 하는지
+     알 길이 없었다 — 그리고 「제품그룹」 이름표는 반대편을 가리키고 있었다. */
+function midLabHTML(p){
+  if(titleBox(p) === 'mid')
+    return `중분류 <span style="opacity:.7">(← <b>화면 카드 제목</b>)</span>`;
+  if(p.cat === '파이프')
+    return `중분류 <span style="opacity:.7">(화면에서는 제품그룹 자리로 갑니다)</span>`;
+  if(p.cat === '코브라후드')
+    return `중분류 <span style="opacity:.7">(코브라후드는 중분류를 <b>안 씁니다</b>)</span>`;
+  return `중분류`;
 }
 function grpLabHTML(p){
-  return isHetero(p)
-    ? `제품그룹 <span style="opacity:.7">(「${escHtml(p.mid)}」에서는 <b>쓰이지 않습니다</b>)</span>`
-    : `제품그룹 <span style="opacity:.7">(← 화면 카드 제목)</span>`;
+  if(titleBox(p) === 'grp')
+    return `제품그룹 <span style="opacity:.7">(← 화면 카드 제목)</span>`;
+  if(p.cat === '파이프')
+    return `제품그룹 <span style="opacity:.7">(화면에서는 <b>중분류</b>로 쓰입니다)</span>`;
+  if(p.cat === '코브라후드')
+    return `제품그룹 <span style="opacity:.7">(코브라후드에서는 <b>쓰이지 않습니다</b>)</span>`;
+  return `제품그룹 <span style="opacity:.7">(「${escHtml(p.mid)}」에서는 <b>쓰이지 않습니다</b>)</span>`;
 }
-function grpHintHTML(me, all){
+function grpHintHTML(me, view){
   if(!me || me._status === 'deleted') return '';
-  const mates = all.filter(p => p._status !== 'deleted' && p.stem !== me.stem && grpKey(p) === grpKey(me));
+  const n = view && view.byStem ? view.byStem.get(me.stem) : null;
+  if(!n) return '';
+  /* ★★★ 「어느 카드에 묶인다」보다 먼저 말해야 할 것이 있다 — **아예 안 나오는 행.**
+       코브라후드는 제품명이 같으면 앞의 하나만 살아남는다(r8Build 12~18행).
+       기준선 18행 중 9행이 여기 걸린다. 이걸 안 알리면 승연은 그 9행을 고치고
+       화면을 보고 「반영이 안 된다」고 하게 된다 — KNOWLEDGE 32 가 이 탭에서
+       재발하는 가장 지독한 형태다. 화면 소유권이 아니라 아예 존재하지 않는다. */
+  if(n._drop === 'dup')
+    return me._status === 'base'
+      ? `<span style="color:var(--tx4)">제품명이 같은 앞 행이 있어 <b>화면에는 안 나옵니다</b> <span style="opacity:.75">(코브라후드는 같은 제품명을 하나만 씁니다)</span></span>`
+      : `<span style="color:var(--rd)">⚠ 같은 제품명이 이미 있어 <b>화면에 안 나옵니다</b> — 제품명을 다르게 적으세요</span>`;
+  const mates = (view.byKey.get(grpKey(n)) || []).filter(p => p.stem !== n.stem);
   /* ★★ 빨간불의 조건을 「그룹이 비었다」로 잡으면 안 된다 — 실측에서 46개가 켜졌다.
        기준선에는 **그룹은 비었지만 중분류가 있는** 제품이 44종 있고, 그건 제목이
        중분류로 떨어지는 **정상 구조**다(modelName 의 둘째 갈래). 정상인 것에 경고를
@@ -1494,7 +1595,12 @@ function grpHintHTML(me, all){
        그 대분류에 새로 넣은 제품이 전부 한 카드로 뭉치고, 두 번째부터는
        카드가 아니라 첫 제품의 「마감」으로 들어가 사실상 안 보인다.
        prodAddNew() 가 정확히 그 상태로 행을 만든다. 여기만 빨간불이다. */
-  const label = grpTok(me) || me.mid;   // 카드 제목이 될 값 (modelName 의 첫째·둘째 갈래)
+  const label = grpTok(n) || n.mid;   // 카드 제목이 될 값 (modelName 의 첫째·둘째 갈래)
+  /* ★ 「비었으니 여기를 적으세요」의 **여기**는 대분류마다 다르다. 파이프는 중분류가
+       화면 제목이 되고, 코브라후드·기타옵션은 제품명이 제목이다. 한 문장으로 뭉뚱그려
+       「제품그룹을 적으세요」라고 하면 그 93행에서는 적어도 아무 일이 안 일어난다. */
+  const fill = (n.cat === '코브라후드' || isHetero(n)) ? 'name'
+             : (n.cat === '파이프') ? 'mid' : 'grp';
   if(!label){
     /* ★★★ 여기서 한 번 더 좁혔다 — 위 기준(둘 다 빔)만으로도 기준선에서 **9개**가 켜졌다.
          전부 대분류 「코브라후드」다(KNOWLEDGE 36 — 이 계열은 원래 모델 칸이 비어 있다).
@@ -1514,7 +1620,7 @@ function grpHintHTML(me, all){
         ? `<span style="color:var(--tx4)">${where} 함께 묶여 있습니다 — 지금 ${mates.length+1}종 <span style="opacity:.75">(제품그룹·중분류가 비어 있어서입니다)</span></span>`
         : `<span style="color:var(--tx4)">제품그룹·중분류가 비어 <b>제품명</b>이 카드 제목입니다</span>`;
     return mates.length
-      ? `<span style="color:var(--rd)">⚠ 제품그룹·중분류가 모두 비어 ${where} <b>묶입니다</b> — 따로 나오게 하려면 제품그룹을 적으세요</span>`
+      ? `<span style="color:var(--rd)">⚠ 제품그룹·중분류가 모두 비어 ${where} <b>묶입니다</b> — 따로 나오게 하려면 「${BOXNAME[fill]}」을 적으세요</span>`
       : `<span style="color:#fbbf24">제품그룹·중분류가 비면 <b>제품명</b>이 카드 제목이 됩니다</span>`;
   }
   /* 왜 그 제목이 됐는지 한 줄로 붙인다 — 안 붙이면 「내가 적은 그룹이 왜 안 뜨지」가 된다.
@@ -1522,42 +1628,57 @@ function grpHintHTML(me, all){
      ★ 393px 실측에서 이 줄이 **65px(5줄)** 를 먹었다. 폭이 125px 인 칸이라 설명을 길게 쓰면
        행 전체가 안내에 잡아먹힌다. 「마감을 뺀 것」은 마감이 실제로 있을 때만 붙인다 —
        마감이 비면 제품명이 곧 제목이라 그 설명은 아무것도 안 알려주면서 두 줄만 쓴다. */
-  const via = isHetero(me) && grpTok(me)
-    ? ` <span style="opacity:.75">(「${escHtml(me.mid)}」은 제품그룹 대신 <b>제품명</b>${me.finish ? '에서 마감을 뺀 것' : ''}으로 카드를 가릅니다)</span>`
-    : (grpTok(me) ? '' : ' <span style="opacity:.75">(제품그룹이 비어 중분류가 제목이 됩니다)</span>');
+  const via = isHetero(n) && grpTok(n)
+    ? ` <span style="opacity:.75">(「${escHtml(n.mid)}」은 제품그룹 대신 <b>제품명</b>${n.finish ? '에서 마감을 뺀 것' : ''}으로 카드를 가릅니다)</span>`
+    : n.cat === '코브라후드'
+      ? ` <span style="opacity:.75">(코브라후드는 <b>제품명</b>이 곧 카드 제목입니다)</span>`
+      : n.cat === '파이프'
+        ? ` <span style="opacity:.75">(파이프는 화면에서 <b>중분류가 카드 제목</b>이 됩니다)</span>`
+        : (grpTok(n) ? '' : ' <span style="opacity:.75">(제품그룹이 비어 중분류가 제목이 됩니다)</span>');
+  /* 제목이 겹치는 카드가 있을 때만 묶음 이름을 덧댄다 — 겹치지 않으면 군더더기다. */
+  const band = (view.dupTitle && view.dupTitle.has(n.cat + '|' + label) && n.mid)
+    ? `<span style="opacity:.75">(${escHtml(n.mid)} 묶음)</span>` : '';
   return mates.length
-    ? `<span style="color:var(--tx4)">기존 카드 「<b>${escHtml(label)}</b>」에 <b>마감으로 합류</b> — 지금 ${mates.length+1}종${via}</span>`
-    : `<span style="color:#22c55e"><b>새 카드</b> 「${escHtml(label)}」가 생깁니다${via}</span>`;
+    ? `<span style="color:var(--tx4)">기존 카드 「<b>${escHtml(label)}</b>」${band}에 <b>마감으로 합류</b> — 지금 ${mates.length+1}종${via}</span>`
+    : `<span style="color:#22c55e"><b>새 카드</b> 「${escHtml(label)}」${band}가 생깁니다${via}</span>`;
 }
 /* 입력 중에는 R() 을 못 부른다(포커스가 날아간다) → 안내 div 만 갈아 끼운다.
    ★ 편집한 행 하나만 갈면 **틀린다.** 안내는 다른 행에 달려 있기 때문이다 —
      두 행이 다 그룹이 비면 둘 다 빨간불이어야 하는데, 편집한 행만 갈면
      나머지는 노란불(「제품명이 제목」)로 남는다. 잡으려던 함정이 반만 뜨는 셈이다.
    ★ 그래서 화면의 안내를 전부 다시 그린다. 215행이라 O(n²) 는 타이핑이 뻑뻑해지므로
-     키로 한 번 버킷팅해서 **같은 키의 행만** 넘긴다 — grpHintHTML 이 어차피 같은 키로
-     거르니 결과는 전체를 넘긴 것과 같다(순서도 보존되므로 mates[0] 도 같다). */
+     **r8View() 를 한 번만** 만들어 돌려 쓴다(전처리 1회 + Map 조회 O(1)).
+     예전엔 키로 버킷팅해 같은 키의 행만 넘겼는데, 그러면 코브라후드 중복 판정이
+     **버킷 안에서만** 돌아 「앞 행이 있어 안 나옴」을 못 본다 — 중복은 전체 순서에서
+     결정되기 때문이다. 지도는 반드시 **전체로 한 번** 만들어야 한다. */
 function grpHint(){
   const all = effectiveProducts();
-  const byKey = new Map(), byStem = new Map();
-  all.forEach(p => {
-    byStem.set(p.stem, p);
-    const k = grpKey(p);
-    if(!byKey.has(k)) byKey.set(k, []);
-    byKey.get(k).push(p);
-  });
+  const raw = new Map();
+  all.forEach(p => raw.set(p.stem, p));
+  const view = r8View(all);
   document.querySelectorAll('[id^="gh-"]').forEach(el => {
-    const me = byStem.get(el.id.slice(3));
-    el.innerHTML = me ? grpHintHTML(me, byKey.get(grpKey(me)) || []) : '';
+    const me = raw.get(el.id.slice(3));
+    el.innerHTML = me ? grpHintHTML(me, view) : '';
   });
+  /* 헤더의 「화면 카드 N장」도 같이 간다 — 안 그러면 그룹을 바꿔 카드가 늘었는데
+     위쪽 숫자만 옛것으로 남는다. 이 탭의 요구가 「유기적으로」이므로 숫자도 살아야 한다. */
+  const cw = document.getElementById('r55-cards');
+  if(cw) cw.textContent = view.cards;
+  const dw = document.getElementById('r55-drop');
+  if(dw) dw.textContent = view.dropped;
   /* ★ 이름표도 같이 간다. 중분류를 「기타옵션」으로 바꾸면 규칙이 통째로 뒤집히는데
        이름표만 옛 문장으로 남으면 **안내와 이름표가 서로 반대말을 한다.**
        그러면 승연은 둘 중 뭘 믿을지 고르게 되고, 그 순간 이 기능은 없느니만 못하다. */
   document.querySelectorAll('[id^="nl-"]').forEach(el => {
-    const me = byStem.get(el.id.slice(3));
+    const me = raw.get(el.id.slice(3));
     if(me) el.innerHTML = nameLabHTML(me);
   });
+  document.querySelectorAll('[id^="ml-"]').forEach(el => {
+    const me = raw.get(el.id.slice(3));
+    if(me) el.innerHTML = midLabHTML(me);
+  });
   document.querySelectorAll('[id^="gl-"]').forEach(el => {
-    const me = byStem.get(el.id.slice(3));
+    const me = raw.get(el.id.slice(3));
     if(me) el.innerHTML = grpLabHTML(me);
   });
 }
@@ -1765,6 +1886,9 @@ function rProductsTab(){
   }
 
   const eff = effectiveProducts();
+  /* ★ 안내는 「행 목록」이 아니라 **화면이 만들 카드 지도**를 봐야 한다.
+       필터로 화면에 몇 행만 남아도 카드 계산은 전체 기준이어야 하므로 eff 로 만든다. */
+  const view = r8View(eff);
   const patch = S.productPatch;
   const totalAdd = (patch.add||[]).length;
   const totalEdit = Object.keys(patch.edit||{}).length;
@@ -1860,13 +1984,13 @@ function rProductsTab(){
             <input type="text" list="r55-finishes" value="${escAttr(p.finish)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','finish',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">중분류</div>
+            <div id="ml-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${midLabHTML(p)}</div>
             <input type="text" list="r55-mids" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
             <div id="gl-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${grpLabHTML(p)}</div>
             <input type="text" list="r55-grps" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-            <div id="gh-${escAttr(p.stem)}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, eff)}</div>
+            <div id="gh-${escAttr(p.stem)}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, view)}</div>
           </div>
           <div>
             <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">태그 (| 구분)</div>
@@ -1884,6 +2008,13 @@ function rProductsTab(){
         <div>
           <div style="font-size:11px;color:var(--tx4);margin-bottom:2px">PRODUCTS CATALOG</div>
           <div style="font-size:18px;font-weight:800;color:var(--tx)">${PRODUCTS_BASE.length}종 제품 <span style="font-size:12px;font-weight:400;color:var(--tx3)">기준선</span></div>
+          <!-- ★ 「몇 종」과 「카드 몇 장」은 다른 수다(215종 → 63장). 승연이 제일 알고 싶은 것은
+                 화면이 어떻게 되느냐이므로 카드 수를 같이 적고, 편집할 때마다 갱신한다.
+               ★ 「안 나오는 행」은 코브라후드 이름 중복이다 — 여기 안 적으면 영영 안 보인다. -->
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">
+            화면 카드 <b id="r55-cards" style="color:var(--tx2)">${view.cards}</b>장
+            · 화면에 안 나오는 행 <b id="r55-drop" style="color:var(--tx2)">${view.dropped}</b>
+          </div>
         </div>
         <div style="flex:1"></div>
         ${hasChanges ? `

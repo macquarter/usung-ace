@@ -151,15 +151,47 @@
     var posts = (b.posts || []).length;
     var cmsN = c.content ? Object.keys(c.content).length : 0;
     var inq = localInq();
-    // ★ productCatalog 는 분류 배열이 아니라 **제품 낱개의 평평한 배열**이다.
-    //   분류는 각 항목의 cat 필드에 들어 있어서 중복을 걷어내야 나온다.
+    /* ★ productCatalog 는 분류 배열이 아니라 **제품 낱개의 평평한 배열**이다.
+         분류는 각 항목의 cat 필드에 들어 있어서 중복을 걷어내야 나온다.
+       ★★ r55) 그런데 여기서 읽던 productCatalog(`products/catalog.js` · 148종)는
+         **방문자 화면이 안 쓰는 목록**이다 — admin.html 만 로드한다(이미지 관리 탭 전용).
+         화면이 실제로 그리는 건 UP_DATA 215행이고 그 중 206종이 실린다.
+         즉 이 줄이 여태 **58종 적게** 말하고 있었다. 관리자가 화면과 다른 말을 하는
+         KNOWLEDGE 32 의 또 다른 얼굴이다. UP_DATA 가 있으면 그쪽이 기준이다. */
     var prods = 0, cats = 0;
     try {
-      prods = productCatalog.length;
-      var seen = {};
-      productCatalog.forEach(function (p) { if (p && p.cat) seen[p.cat] = 1; });
-      cats = Object.keys(seen).length;
+      var up = window.UP_DATA;
+      if (up && up.length) {
+        // [stem,대분류,중분류,제품그룹,제품명,마감,태그] — 대분류는 둘째 칸
+        var seenU = {};
+        up.forEach(function (r) { if (r && r[1]) seenU[r[1]] = 1; });
+        prods = up.length;
+        cats = Object.keys(seenU).length;
+      } else {
+        prods = productCatalog.length;
+        var seen = {};
+        productCatalog.forEach(function (p) { if (p && p.cat) seen[p.cat] = 1; });
+        cats = Object.keys(seen).length;
+      }
     } catch (e) { prods = 0; cats = 0; }
+
+    /* ★★ 「등록 215종」만 적으면 그것도 절반만 참이다 — 그 중 9종은 제품명이 겹쳐
+         화면에 아예 안 나오고, 실제 카드(레이아웃)는 62장뿐이다. 승연이 물은 것이
+         「추가하면 레이아웃도 생기느냐」이므로 **카드 수까지** 말해야 답이 된다.
+       ★ 세는 규칙을 여기서 다시 쓰지 않는다 — 그게 이번 리비전에서 93행을 틀리게 만든 짓이다.
+         admin.html 의 r8View() 를 그대로 부른다(함수 선언이라 전역에 있다).
+         없으면 조용히 뺀다 — 대시보드가 제품 수 하나 때문에 죽으면 안 된다. */
+    function shown() {
+      try {
+        if (typeof window.r8View !== 'function') return '';
+        var v = window.r8View();
+        var items = 0;
+        v.byKey.forEach(function (arr) { items += arr.length; });
+        return ' <span style="color:var(--tx4);font-weight:400">— 화면 ' + num(items)
+             + '종 · 카드 ' + num(v.cards) + '장'
+             + (v.dropped ? ' · 안 나옴 ' + num(v.dropped) : '') + '</span>';
+      } catch (e) { return ''; }
+    }
 
     var srvOk = b.configured && c.configured;
 
@@ -186,7 +218,7 @@
     var seoOk = seo.robots === 200 && seo.sitemap === 200 && seo.jsonld > 0;
     var siteBody =
       row('배포 커밋', D.deploy ? '<code>' + esc(D.deploy) + '</code>' : '확인 실패', D.deploy ? 'ok' : 'bad')
-      + row('제품 카탈로그', prods ? num(prods) + '종 · ' + num(cats) + '개 분류' : '읽지 못함', prods ? 'ok' : 'bad')
+      + row('제품 카탈로그', prods ? num(prods) + '종 · ' + num(cats) + '개 분류' + shown() : '읽지 못함', prods ? 'ok' : 'bad')
       + row('공지사항 · 인증현황',
         num((lb.notice || []).length) + '건 · ' + num((lb.certification || []).length) + '건'
         + ' <span style="color:var(--tx4);font-weight:400">(이 브라우저에만)</span>', 'warn')
