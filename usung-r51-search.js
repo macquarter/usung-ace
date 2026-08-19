@@ -11,10 +11,16 @@
  * ★ 패널은 body 직속에 붙인다. id 는 전부 `r51-` 접두사라 라이브 id 와 겹치지 않는다.
  *   z-index 는 10000 — #navbar(z-50) 와 r42 하단 전화바(9500) 위다.
  *
- * ★ 착지 경로는 전부 라이브에서 실측한 것들이다 (2026-08-19):
- *     제품   navigate('products') → upGoModel(id) → upDetailVar(k)
- *     갤러리 navigate('gallery')  → (전체 탭 확인) → openLbox(i)
- *     부품   navigate('parts')    → openPartModal(i)
+ * ★★ 착지는 전부 r8 카탈로그(DIV.r8x)에 한다. 같은 #page-products 안의
+ *   DIV.r8-original(index_v6 원본)은 display:none 이라, 거기 대고 upGoModel() ·
+ *   openPartModal() 을 불러 봐야 화면에 아무 일도 안 일어난다. r51 첫 판이 그쪽을
+ *   불렀고 393px 실측에서 「스크롤Y:0 · 상세top:0」으로 잡혔다 (usung-r51-data.js 머리말).
+ *
+ * ★ 착지 경로 — 전부 프리뷰에서 실측 (2026-08-19):
+ *     제품   navigate('products') → goMain()  → openModel(key, k)   … #mask
+ *     부품   navigate('products') → goParts() → openPart(id)        … #pmask
+ *     갤러리 navigate('gallery')  → (전체 탭 확인) → openLbox(i)     … #lbox
+ *   제품 key 는 'cat|mid|grp' 문자열이라 데이터가 늘어도 순번처럼 어긋나지 않는다.
  */
 (function () {
   'use strict';
@@ -165,43 +171,44 @@
     } catch (err) { if (window.console) console.warn('[r51] 착지 실패', err); }
   }
 
-  /* ★ upGoModel() 은 안에서 upScrollTop() 을 불러 「제품 페이지 맨 위」로 보낸다
-   *   (usung-review.js:725 — `#page-products` 상단 −88). 카드에서 눌렀을 땐 맞는 동작이다.
-   *   목록을 보다 아래에서 눌렀으니 위로 올라오는 게 자연스럽다.
-   *   그런데 검색에서 오면 거기가 히어로 배너(「국내 최대 HOOD LINEUP」)라서,
-   *   방문자가 고른 제품은 한참 아래에 있고 화면엔 아무 일도 안 일어난 것처럼 보인다.
-   *   393px 프리뷰 실측에서 잡았다. 상세 컨테이너로 다시 맞춘다.
-   * ★ 380ms 는 upScrollTop 의 smooth 애니메이션이 끝나기를 기다리는 시간이다.
-   *   더 일찍 쏘면 두 스크롤이 겹쳐 중간에서 멎는다. */
-  function scrollToDetail() {
-    var el = document.getElementById('up-main');
-    if (!el) return;
-    var y = el.getBoundingClientRect().top + window.scrollY - 88;
-    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  /* 페이지 전환 직후엔 대상 뷰가 아직 안 붙어 있을 수 있다 — 100ms 씩 최대 3초 기다린다.
+     (goGal 이 #gal-grid 를 기다리는 것과 같은 수법을 셋이 공유한다) */
+  function whenReady(ready, run, tries) {
+    var n = 0, max = tries || 30;
+    (function w() {
+      var ok = false;
+      try { ok = !!ready(); } catch (e) { ok = false; }
+      if (ok) { try { run(); } catch (e) { if (window.console) console.warn('[r51] 착지', e); } return; }
+      if (++n < max) later(w, 100);
+    })();
   }
 
+  /* 제품 — 모달이 곧 상세다. 카드에서 누른 것과 **완전히 같은 경로**를 탄다.
+     goMain() 을 먼저 부르는 이유: 직전 검색이 부품이었으면 배경이 v-parts 로 남아
+     모달을 닫는 순간 엉뚱한 화면이 드러난다. 배경을 제품 메인으로 되돌려 둔다. */
   function goProduct(row) {
     window.navigate('products');
-    var idx = window.R51.build();
-    // 재현한 id 가 라이브와 어긋나면(검산 실패) 정확 착지를 포기하고 대분류까지만 간다.
-    if (!idx.idsOk || typeof window.upGoModel !== 'function') {
-      if (typeof window.filterProducts === 'function') later(function () { window.filterProducts(row.cat); });
-      return;
-    }
-    later(function () {
-      window.upGoModel(row.id);
-      if (row.k > 0 && typeof window.upDetailVar === 'function') {
-        later(function () { window.upDetailVar(row.k); }, 40);
-      }
-      later(scrollToDetail, 380);
-    });
+    whenReady(
+      function () { return typeof window.openModel === 'function' && document.getElementById('mask'); },
+      function () {
+        if (typeof window.goMain === 'function') window.goMain();
+        window.openModel(row.mk, row.k);          // 둘째 인자가 곧 마감 변형 선택이다
+      });
   }
 
+  /* 부품 — 부품소개는 별도 페이지가 아니라 제품 페이지 안의 뷰(v-parts)다.
+     ★ 부품 타일 자체에는 클릭 핸들러가 없다(usung-r8-prod-a.js:119 「클릭 모달 없음」).
+       하지만 openPart() 와 #pmask 마크업은 살아 있고, 분류·그룹 설명·사용 제품군까지
+       보여 준다(PART_GROUP_OF / PART_GROUP_DESC / PART_USEDBY 는 전부 채워져 있다).
+       검색 결과 셋(제품·갤러리·부품)이 모두 「고르면 상세가 열린다」로 일치한다. */
   function goPart(row) {
-    window.navigate('parts');
-    later(function () {
-      if (typeof window.openPartModal === 'function') window.openPartModal(row.i);
-    }, 220);
+    window.navigate('products');
+    whenReady(
+      function () { return typeof window.goParts === 'function' && document.getElementById('pmask'); },
+      function () {
+        window.goParts();
+        if (typeof window.openPart === 'function') window.openPart(row.id);
+      });
   }
 
   function goGal(row) {
