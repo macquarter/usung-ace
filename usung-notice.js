@@ -8,7 +8,7 @@
  *   #notice-timeline에서 그대로 추출(→ CMS로 추가된 공지도 보존). 원본 index_v6.html 불변.
  * 되돌리기: inject.js(api/inject.js)의 usung-notice.js 주입 1줄 제거.
  *
- * r52 — build-marker: r52-b1. 승연 「더미값이면 당연히 없는게 맞아」 →
+ * r52 — build-marker: r52-b2. 승연 「더미값이면 당연히 없는게 맞아」 →
  *   고정카드 2건 삭제 + 타임라인 더미 7건 날짜로 필터. 근거는 DUMMY_DATES 주석.
  */
 (function () {
