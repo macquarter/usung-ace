@@ -1443,6 +1443,56 @@ function effectiveProducts(){
   return result;
 }
 
+/* ★★★ 「제품그룹」이 곧 화면 카드 제목이다 — 프리뷰 실측으로 확인한 것.
+     usung-r8-prod-a.js:33 은 제품을 `cat|mid|grp` 로 묶고, 56행의
+     `modelName = m.grp || m.mid || m.rep.name` 로 **그룹**을 카드·상세 제목에 쓴다.
+     즉 관리자에서 「제품명」을 아무리 예쁘게 지어도 화면 제목은 그게 아니다
+     (제품명은 검색어와 색상 이름표로 쓰인다 — 그것도 중요하지만 제목은 아니다).
+
+   ★ 그래서 같은 그룹을 쓰면 카드가 안 생기고 **기존 카드에 마감으로 합류**한다.
+     실측: grp='양옆태엽' 로 넣었더니 카드 17개 그대로 · 「색상·마감 4종」으로만 늘었고,
+           grp='r55검증그룹' 으로 넣으니 카드가 18개가 됐다(281x363 신규 카드).
+     둘 다 정상 동작이지만 **어느 쪽인지 모르고 쓰면 「추가했는데 안 보인다」가 된다.**
+     KNOWLEDGE 32(화면 소유권)가 이 탭에서 재발하는 형태다. 그래서 입력칸 밑에 실시간으로 알린다. */
+const grpKey = p => (p.cat||'')+'|'+(p.mid||'')+'|'+(p.grp||'');
+function grpHintHTML(me, all){
+  if(!me || me._status === 'deleted') return '';
+  const mates = all.filter(p => p._status !== 'deleted' && p.stem !== me.stem && grpKey(p) === grpKey(me));
+  /* ★ 비어 있을 때가 제일 위험하다. 그룹도 중분류도 비면 키가 `대분류||` 라서
+       **그 대분류에 새로 넣은 제품들이 전부 한 카드로 뭉친다.** 두 번째부터는
+       카드가 아니라 첫 제품의 「마감」으로 들어가 사실상 안 보인다.
+       「추가했는데 화면에 없다」의 가장 그럴듯한 경로라 빨간불로 잡는다. */
+  if(!me.grp){
+    return mates.length
+      ? `<span style="color:var(--rd)">⚠ 제품그룹이 비어 「${escHtml(mates[0].grp || mates[0].mid || mates[0].name || '이름 없음')}」 카드에 <b>묶입니다</b> — 따로 나오게 하려면 제품그룹을 적으세요</span>`
+      : `<span style="color:#fbbf24">제품그룹이 비면 <b>제품명</b>이 카드 제목이 됩니다</span>`;
+  }
+  return mates.length
+    ? `<span style="color:var(--tx4)">기존 카드 「<b>${escHtml(me.grp)}</b>」에 <b>마감으로 합류</b> — 지금 ${mates.length+1}종</span>`
+    : `<span style="color:#22c55e"><b>새 카드</b> 「${escHtml(me.grp)}」가 생깁니다</span>`;
+}
+/* 입력 중에는 R() 을 못 부른다(포커스가 날아간다) → 안내 div 만 갈아 끼운다.
+   ★ 편집한 행 하나만 갈면 **틀린다.** 안내는 다른 행에 달려 있기 때문이다 —
+     두 행이 다 그룹이 비면 둘 다 빨간불이어야 하는데, 편집한 행만 갈면
+     나머지는 노란불(「제품명이 제목」)로 남는다. 잡으려던 함정이 반만 뜨는 셈이다.
+   ★ 그래서 화면의 안내를 전부 다시 그린다. 215행이라 O(n²) 는 타이핑이 뻑뻑해지므로
+     키로 한 번 버킷팅해서 **같은 키의 행만** 넘긴다 — grpHintHTML 이 어차피 같은 키로
+     거르니 결과는 전체를 넘긴 것과 같다(순서도 보존되므로 mates[0] 도 같다). */
+function grpHint(){
+  const all = effectiveProducts();
+  const byKey = new Map(), byStem = new Map();
+  all.forEach(p => {
+    byStem.set(p.stem, p);
+    const k = grpKey(p);
+    if(!byKey.has(k)) byKey.set(k, []);
+    byKey.get(k).push(p);
+  });
+  document.querySelectorAll('[id^="gh-"]').forEach(el => {
+    const me = byStem.get(el.id.slice(3));
+    el.innerHTML = me ? grpHintHTML(me, byKey.get(grpKey(me)) || []) : '';
+  });
+}
+
 // 제품 필드를 인라인 수정 → S.productPatch.edit 에 적는다.
 function prodEdit(stem, field, val){
   const base = PRODUCTS_BASE.find(p => p.stem === stem);
@@ -1511,7 +1561,7 @@ function prodAddNew(){
   if(!S.productPatch.add) S.productPatch.add = [];
   S.productPatch.add.push({ stem, cat: cats[0] || '갤럭시', mid:'', grp:'', name:'', finish:'', tags:'' });
   saveLocal(); R();
-  toast('새 제품이 추가되었습니다 — 제품명을 입력하고 사진을 올리세요');
+  toast('새 제품이 추가되었습니다 — 제품명·제품그룹을 넣고 사진을 올리세요');
 }
 
 /* ── 사진 업로드 ────────────────────────────────────────────────────
@@ -1727,12 +1777,12 @@ function rProductsTab(){
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
           <div style="grid-column:1/-1">
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품명</div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품명 <span style="opacity:.7">(검색어·색상 이름표 — 카드 제목은 아래 「제품그룹」입니다)</span></div>
             <input type="text" value="${escAttr(p.name)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','name',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
             <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">대분류</div>
-            <select onchange="${editFn}('${escJs(p.stem)}','cat',this.value)" ${isDel?'disabled':''} style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+            <select onchange="${editFn}('${escJs(p.stem)}','cat',this.value);grpHint()" ${isDel?'disabled':''} style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
               ${catSelect}
             </select>
           </div>
@@ -1742,11 +1792,12 @@ function rProductsTab(){
           </div>
           <div>
             <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">중분류</div>
-            <input type="text" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+            <input type="text" list="r55-mids" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
           </div>
           <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품그룹</div>
-            <input type="text" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품그룹 <span style="opacity:.7">(← 화면 카드 제목)</span></div>
+            <input type="text" list="r55-grps" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+            <div id="gh-${escAttr(p.stem)}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, eff)}</div>
           </div>
           <div>
             <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">태그 (| 구분)</div>
@@ -1811,10 +1862,25 @@ function rProductsTab(){
         <br>
         🎨 <b style="color:var(--tx3)">마감</b>은 홈페이지 <b style="color:var(--tx3)">스타일 탭(모던·클래식·프리미엄·레트로)</b>의 기준입니다.
         아래 목록에 있는 값을 쓰면 해당 탭에 함께 나오고, 새로 지어 쓰면 「전체」와 대분류에만 나옵니다.
+        <br>
+        🧩 <b style="color:var(--tx3)">제품그룹이 곧 화면의 카드 제목</b>입니다(제품명이 아닙니다).
+        <b style="color:var(--tx3)">이미 있는 그룹</b>을 쓰면 그 카드에 색상·마감으로 <b style="color:var(--tx3)">합류</b>하고,
+        <b style="color:var(--tx3)">새 이름</b>을 쓰면 <b style="color:var(--tx3)">카드가 새로 생깁니다</b>.
+        각 칸 아래에 어느 쪽인지 바로 표시됩니다.
       </div>
-      <!-- ★ 목록은 박지 않고 기준선에서 뽑는다(KNOWLEDGE 41). 실제 쓰이는 마감이 곧 선택지다. -->
+      <!-- ★ 목록은 박지 않고 기준선에서 뽑는다(KNOWLEDGE 41). 실제 쓰이는 값이 곧 선택지다.
+           ★ 중분류·제품그룹에도 같은 목록을 붙인 이유: 이 둘은 대분류와 함께 **카드를 묶는 키**다.
+             한 글자만 달라도 카드가 따로 생긴다(「양옆태엽」 vs 「양옆 태엽」). 고르게 하면 오타가 준다. -->
       <datalist id="r55-finishes">${
         [...new Set(PRODUCTS_BASE.map(p=>p.finish).filter(Boolean))]
+          .sort().map(f=>`<option value="${escAttr(f)}">`).join('')
+      }</datalist>
+      <datalist id="r55-mids">${
+        [...new Set(eff.filter(p=>p._status!=='deleted').map(p=>p.mid).filter(Boolean))]
+          .sort().map(f=>`<option value="${escAttr(f)}">`).join('')
+      }</datalist>
+      <datalist id="r55-grps">${
+        [...new Set(eff.filter(p=>p._status!=='deleted').map(p=>p.grp).filter(Boolean))]
           .sort().map(f=>`<option value="${escAttr(f)}">`).join('')
       }</datalist>
     </div>`;
