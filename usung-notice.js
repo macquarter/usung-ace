@@ -77,12 +77,18 @@
     return out;
   }
 
-  // 공지 0건일 때 — 타임라인 자리를 빈 채로 두지 않는다
+  /* 공지 0건일 때 — 타임라인 자리를 빈 채로 두지 않는다
+   * ★ 여기 문구는 반드시 **한 요소에 텍스트 노드 하나**로 둔다. <br> 로 두 줄을 이으면
+   *   usung-r16-i18n.js 의 applyHtml() 이 innerHTML 통째로 매칭하는 경로에 걸려
+   *   `…표시됩니다.<br>급한…` 이라는 키를 찾게 되고, 텍스트 노드 경로에도 안 맞아
+   *   **영문 화면에서 이 블록만 한국어로 남는다**(프리뷰 실측으로 잡았다).
+   *   사전 3줄은 usung-r16-i18n-i.js 「r52」 주석 자리에 있다. */
   function emptyState() {
     return '<div style="border-radius:20px;border:1px dashed rgba(12,30,90,.18);background:rgba(12,30,90,.02);padding:44px 24px;text-align:center">' +
       '<div style="font-size:26px;line-height:1;margin-bottom:14px">📭</div>' +
       '<div style="font-size:15px;font-weight:800;color:' + INK + ';margin-bottom:8px">등록된 공지가 없습니다</div>' +
-      '<p style="font-size:13.5px;color:' + SUB + ';line-height:1.7;margin:0">새로운 소식이 등록되면 이곳에 표시됩니다.<br>급한 문의는 아래 대표전화로 연락해 주세요.</p>' +
+      '<p style="font-size:13.5px;color:' + SUB + ';line-height:1.7;margin:0">새로운 소식이 등록되면 이곳에 표시됩니다.</p>' +
+      '<p style="font-size:13.5px;color:' + SUB + ';line-height:1.7;margin:2px 0 0">급한 문의는 아래 대표전화로 연락해 주세요.</p>' +
     '</div>';
   }
 
