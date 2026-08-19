@@ -402,8 +402,10 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 
 <!-- 챗봇 엔진 (데이터/KB 공유) -->
 <script src="chatbot.js"></script>
-<!-- 제품 카탈로그 데이터 -->
+<!-- 제품 카탈로그 데이터 (이미지 관리용) -->
 <script src="products/catalog.js"></script>
+<!-- r55) UP_DATA 215종 — 제품소개 탭 기준선. 로드 실패 시 PRODUCTS_BASE=[] 로 물러난다 -->
+<script src="usung-catalog-data.js?v=r55"></script>
 
 <script>
 // ============== FIREBASE CONFIG ==============
@@ -462,7 +464,7 @@ const PAGES = {
       { title: '제품 히어로', fields: ['p_tag','p_title1','p_title2','p_sub'] },
       { title: '제품 CTA', fields: ['p_cta_title','p_cta_desc'] }
     ],
-    arrays: ['products']
+    arrays: []   // r55) products 는 UP_DATA 기반으로 별도 관리 — 더미 루프 사용 안 함
   },
   parts: {
     name: '부품소개',
@@ -640,23 +642,8 @@ const D2 = {
     { y:'2022', t:'누적 28개 제품 라인업 완성' },
     { y:'2026', t:'대한민국 덕트 No.1 20주년' }
   ],
-  products: [
-    { no:1,  n:'갤럭시 A 타입',           sp:'스윙태엽 / FVD / 유지망 / 520갓등', cat:'갤럭시' },
-    { no:2,  n:'갤럭시 B 타입',           sp:'스윙태엽 / FVD / 유지망',          cat:'갤럭시' },
-    { no:3,  n:'갤럭시 B 타입 (스텐)',     sp:'스윙태엽 / FVD / 유지망 / 스텐',      cat:'갤럭시' },
-    { no:4,  n:'갤럭시 C 타입',           sp:'스윙태엽 / FVD / 유지망 / 520갓',    cat:'갤럭시' },
-    { no:5,  n:'갤럭시 D 타입',           sp:'스윙텐션 / FVD / 유지망 / 520갓등',   cat:'갤럭시' },
-    { no:6,  n:'갤럭시 D 타입 (스텐)',     sp:'스윙텐션 / FVD / 유지망 / 스텐',      cat:'갤럭시' },
-    { no:7,  n:'스윙텐션 등제품 I',        sp:'FVD / LED / 할로겐',             cat:'등제품' },
-    { no:8,  n:'스윙텐션 등제품 II',       sp:'FVD / LED / 할로겐',             cat:'등제품' },
-    { no:9,  n:'스윙텐션 아크릴등',        sp:'FVD / 삼파장 / LED',             cat:'등제품' },
-    { no:10, n:'스윙텐션 아크릴 한지등',     sp:'FVD / 필름등 / LED',             cat:'등제품' },
-    { no:11, n:'150 스윙텐션 스텐파이프(도금)', sp:'FVD / 150Ø',                cat:'스텐파이프' },
-    { no:12, n:'125 스윙텐션 스텐파이프(도금)', sp:'FVD / 125Ø',                cat:'스텐파이프' },
-    { no:13, n:'150 스윙텐션 스텐파이프(도장)', sp:'FVD / 150Ø',                cat:'스텐파이프' },
-    { no:14, n:'125 스윙텐션 스텐파이프(도장)', sp:'FVD / 125Ø',                cat:'스텐파이프' },
-    { no:15, n:'150 스윙텐션 스파이얼',     sp:'FVD / 150Ø',                  cat:'스파이얼' }
-  ],
+  // r55) D2.products 더미 15개 제거. 제품은 UP_DATA(215종) 기반으로 관리.
+  //   KNOWLEDGE 41 「하드코딩 목록은 반드시 썩는다 — 갱신하지 말고 없애라」
   steps: [
     { num:'STEP 01', tt:'현장 실측 / 상담', dd:'20년 노하우의 전문가가 직접 방문해 매장 규모·화로 종류·천정고를 측정합니다' },
     { num:'STEP 02', tt:'맞춤 설계·견적',   dd:'갤럭시 A~D 중 매장에 최적인 모델을 추천하고 도면·견적서를 제공합니다' },
@@ -739,6 +726,12 @@ let S = {
   arrays: JSON.parse(JSON.stringify(D2)),
   images: {},
   videos: {},
+  // r55) 제품 패치 상태 — 기준선(UP_DATA 215종) 대비 변경분만 보관한다.
+  //   add: [{stem,cat,mid,grp,name,finish,tags}]  신규 제품
+  //   edit: {stem: {변경된 필드만}}               기존 제품 수정
+  //   del: [stem, ...]                            삭제된 제품
+  // 이 값만 /api/products 로 POST 한다. 전체 215종은 보내지 않는다.
+  productPatch: { add:[], edit:{}, del:[] },
   // ============== r48 : 기준은 홈페이지다 ==============
   // 예전엔 여기에 데모용 가짜 행 11개가 박혀 있었다(문의 3 · 공지 3 · 게시판 2 · 인증 3).
   // 셋 다 홈페이지에는 존재하지 않는 내용이라, 관리자만 보면 사이트를 오해하게 된다.
@@ -933,6 +926,7 @@ function showApp(){
   renderAuthBanner();   // r44) 권한 없으면 발행 버튼을 잠그고 배너를 띄운다
   pullBoard();
   pullCms();
+  loadProductPatch();   // r55) 서버 제품 패치 동기화 (비동기 — 실패해도 로컬 패치로 계속)
 }
 
 // ============== 게시판 서버 동기화 (PPT slide6·7) ==============
@@ -1066,7 +1060,8 @@ function saveLocal(){
   localStorage.setItem('usung-cms-state-v2', JSON.stringify({
     content:S.content, arrays:S.arrays, images:S.images,
     inquiries:S.inquiries, boards:S.boards, theme:S.theme,
-    seedVer: 48   // r48) 데모 시드 퇴출 완료 표식. 없으면 loadLocal 이 한 번 더 청소한다.
+    productPatch: S.productPatch,   // r55) 제품 패치 상태 보존
+    seedVer: 49   // r55) UP_DATA 기반 전환. 48→49 로 올려 이전 더미 arrays.products 를 정리한다.
   }));
 }
 function loadLocal(){
@@ -1081,7 +1076,15 @@ function loadLocal(){
       // migration: archive → certification
       if(S.boards.archive && !S.boards.certification){ S.boards.certification = S.boards.archive; delete S.boards.archive; }
       // migration r48: 데모 시드 11행 퇴출 (한 번 지우면 seedVer 로 다시 안 돈다)
-      if(s.seedVer !== 48){ r48Purge(S); saveLocal(); }
+      if(!s.seedVer || s.seedVer < 48){ r48Purge(S); }
+      // migration r55: 구형 D2.products 더미 15개 제거 (arrays.products 는 이제 사용 안 함)
+      if(!s.seedVer || s.seedVer < 49){ delete S.arrays.products; }
+      // r55) 제품 패치 복원
+      // ★ 복원이 saveLocal() 보다 **먼저**여야 한다. 뒤집히면 마이그레이션이 도는 로드에서
+      //   아직 비어 있는 기본 패치가 저장돼 편집분을 덮어쓴다. 48→49 에서는 s.productPatch 가
+      //   애초에 없어 손해가 없지만, 다음에 seedVer 를 또 올리면 그때 조용히 터진다.
+      if(s.productPatch) S.productPatch = s.productPatch;
+      if(s.seedVer < 49 || !s.seedVer) saveLocal();
       if(S.sortBy && S.sortBy.archive){ S.sortBy.certification = S.sortBy.archive; delete S.sortBy.archive; }
       if(S.filterCat && S.filterCat.archive){ S.filterCat.certification = S.filterCat.archive; delete S.filterCat.archive; }
       S.theme = s.theme || 'dark';
@@ -1320,8 +1323,7 @@ function rPageEdit(k){
     });
     // 필드 모드에서도 이미지 관리 표시 (제품/부품/갤러리)
     if(k === 'products'){
-      const catCatalog = [...new Set(CATALOG.map(p=>p.cat))];
-      h += rImgGrid('products', CATALOG, catCatalog, {compact:true});
+      h += rProductsTab();   // r55) UP_DATA 기반 제품 관리 UI
     }
     if(k === 'parts') h += rImgGrid('parts', PARTS_IMGS, ['부품']);
     if(k === 'gallery') h += rImgGrid('gallery', GALLERY_IMGS, ['시공갤러리']);
@@ -1362,8 +1364,462 @@ function sImgUp(iid, inp){
 }
 
 // ============== 이미지 관리 시스템 ==============
-// 제품 카탈로그 (catalog.js에서 로드)
+// 제품 카탈로그 (catalog.js에서 로드) — 이미지 관리 탭 전용으로 유지
 const CATALOG = typeof productCatalog !== 'undefined' ? productCatalog : [];
+
+// ============== r55: UP_DATA 기반 제품 관리 ==============
+// usung-catalog-data.js 의 window.UP_DATA 를 {stem,cat,mid,grp,name,finish,tags,img} 객체로 변환.
+// CATALOG(products/catalog.js) 와는 별개 — 이쪽이 방문자 화면의 실제 215종이다.
+const PRODUCTS_BASE = (() => {
+  if(typeof window === 'undefined' || !window.UP_DATA) return [];
+  return window.UP_DATA.map(r => ({
+    stem: r[0], cat: r[1], mid: r[2], grp: r[3],
+    name: r[4], finish: r[5], tags: r[6],
+    img: `products/final/${r[0]}.png`
+  }));
+})();
+
+/* 대분류 목록 — ★ 박아 두지 않고 데이터에서 뽑는다.
+   KNOWLEDGE 41 「관리자 하드코딩 목록은 반드시 썩는다 — 갱신하지 말고 없애라」.
+   박아 두면 UP_DATA 에 분류가 하나 늘 때마다 관리자만 옛 세상을 보게 된다 —
+   r55 가 고치려던 병(관리자 15개 vs 화면 215종)이 작은 규모로 재발한다.
+   ★ 기준선뿐 아니라 **관리자가 방금 추가한 제품의 분류까지** 포함한다.
+     안 그러면 새 분류를 만든 순간 그 제품이 필터 어디에도 안 걸린다.
+   함수인 이유: add 가 실시간으로 늘어나므로 렌더할 때마다 다시 계산해야 한다. */
+/* 속성값 이스케이프.
+   ★ 기존 escHtml() 은 &<> 만 바꾼다 — 따옴표를 안 막아서 value="..." 안에서는 못 쓴다.
+   제품명에 큰따옴표가 하나만 들어가도 input 이 거기서 끊겨 폼이 깨진다(관리자가 제일 먼저 만난다).
+   서버(api/products.js clean())가 <> 는 걷어내지만 따옴표는 통과시키므로
+   value="a" onfocus="..." 같은 속성 주입도 여기서 막아야 완결된다. */
+function escAttr(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+// onclick="fn('...')" 안에 들어가는 stem 용. stem 은 서버·화면 양쪽에서
+// /^[A-Za-z0-9_-]+$/ 로 검증되지만, 검증 전 상태로 렌더되는 순간이 있어 한 겹 더 둔다.
+function escJs(s){ return String(s == null ? '' : s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+/* 썸네일에 무엇을 걸까.
+   ① 방금 올린 사진(S.photoPreview)이 있으면 그걸 — 배포 빌드 1~2분을 기다리지 않고 바로 보인다
+   ② 없으면 리포의 실제 파일. ★ 쿼리스트링을 붙이지 않는다 —
+     붙이면 215장이 매번 캐시를 비껴가 관리자 탭이 열릴 때마다 47MB 를 새로 받는다. */
+function photoSrc(p){
+  const pv = S.photoPreview && S.photoPreview[p.stem];
+  return pv || p.img;
+}
+
+function productCats(){
+  const seen = [];
+  const push = (c) => { c = String(c || '').trim(); if (c && seen.indexOf(c) < 0) seen.push(c); };
+  PRODUCTS_BASE.forEach(p => push(p.cat));
+  (S.productPatch && S.productPatch.add || []).forEach(a => push(a.cat));
+  Object.keys(S.productPatch && S.productPatch.edit || {}).forEach(k => push(S.productPatch.edit[k].cat));
+  return seen;
+}
+
+// 제품 검색/필터 상태 (products 탭 전용)
+let prodFilter = '전체';
+let prodSearch = '';
+
+// 기준선(PRODUCTS_BASE)에 S.productPatch 를 얹어 현재 목록을 계산한다.
+// 반환: [{stem,..., _status:'base'|'edited'|'added'|'deleted'}]
+function effectiveProducts(){
+  const p = S.productPatch;
+  const delSet = new Set(p.del || []);
+  const editMap = p.edit || {};
+  const adds = p.add || [];
+
+  const result = PRODUCTS_BASE.map(item => {
+    if(delSet.has(item.stem)) return { ...item, _status:'deleted' };
+    if(editMap[item.stem]) return { ...item, ...editMap[item.stem], img: item.img, stem: item.stem, _status:'edited' };
+    return { ...item, _status:'base' };
+  });
+
+  // 신규 추가 제품
+  for(const a of adds){
+    result.push({ ...a, img:`products/final/${a.stem}.png`, _status:'added' });
+  }
+  return result;
+}
+
+// 제품 필드를 인라인 수정 → S.productPatch.edit 에 적는다.
+function prodEdit(stem, field, val){
+  const base = PRODUCTS_BASE.find(p => p.stem === stem);
+  if(!base) return;   // 신규 추가 제품은 addProdEdit() 로 처리
+  const isAdd = (S.productPatch.add || []).some(a => a.stem === stem);
+  if(isAdd){ addProdEdit(stem, field, val); return; }
+  if(!S.productPatch.edit) S.productPatch.edit = {};
+  if(!S.productPatch.edit[stem]) S.productPatch.edit[stem] = {};
+  S.productPatch.edit[stem][field] = val;
+  // 수정 후 기준선과 동일하면 edit 항목을 지운다
+  const cur = S.productPatch.edit[stem];
+  const allSame = Object.keys(cur).every(f => cur[f] === base[f]);
+  if(allSame) delete S.productPatch.edit[stem];
+  saveLocal();
+}
+
+// 신규 추가 제품 필드 수정
+function addProdEdit(stem, field, val){
+  const idx = (S.productPatch.add || []).findIndex(a => a.stem === stem);
+  if(idx < 0) return;
+  S.productPatch.add[idx][field] = val;
+  saveLocal();
+}
+
+// 제품 삭제 (기준선 제품)
+function prodDel(stem){
+  if(!confirm(`「${stem}」 제품을 삭제하시겠습니까?\n방문자 화면에서 이 제품 카드가 사라집니다.`)) return;
+  if(!S.productPatch.del) S.productPatch.del = [];
+  if(!S.productPatch.del.includes(stem)) S.productPatch.del.push(stem);
+  // edit 항목도 정리
+  if(S.productPatch.edit && S.productPatch.edit[stem]) delete S.productPatch.edit[stem];
+  saveLocal(); R(); toast('삭제 표시됨 — 발행해야 반영됩니다');
+}
+
+// 제품 삭제 취소 (복원)
+function prodRestore(stem){
+  S.productPatch.del = (S.productPatch.del || []).filter(s => s !== stem);
+  saveLocal(); R(); toast('복원되었습니다');
+}
+
+// 신규 추가 제품 행 제거 (add 배열에서 빼기)
+function prodAddDel(stem){
+  if(!confirm('추가 중인 제품을 취소하시겠습니까?')) return;
+  S.productPatch.add = (S.productPatch.add || []).filter(a => a.stem !== stem);
+  saveLocal(); R(); toast('취소되었습니다');
+}
+
+/* 새 제품 추가.
+   ★ stem(=사진 파일명)은 **자동으로 짓는다. 관리자에게 묻지 않는다.**
+     stem 은 R8_IMG + stem + '.png' 로 이미지 URL 이 만들어지는 내부 식별자일 뿐인데
+     ① 방문자에게 안 보이는 값을 사람이 고민해야 하고
+     ② 사진을 올린 뒤 stem 을 바꾸면 사진이 **고아가 된다**.
+     승연 지시가 「알아서 기입이되고」이므로 물어보지 않는 쪽이 맞다.
+     (예전 문구는 "stem 을 먼저 입력하세요" 였는데 **입력칸이 아예 없었다** — 지킬 수 없는 안내였다)
+   ★ 분류 기본값도 박지 않는다 — 데이터에 있는 첫 분류를 쓴다(KNOWLEDGE 41). */
+function prodAddNew(){
+  // p20260819-143052 형태. 리포에서 사진을 찾을 때 언제 올린 것인지 바로 보인다.
+  // 같은 초에 둘을 만들면 뒤에 -2, -3 이 붙는다.
+  const d = new Date(), z = n => String(n).padStart(2,'0');
+  const base = `p${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}-${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`;
+  const taken = new Set([...PRODUCTS_BASE.map(p=>p.stem), ...(S.productPatch.add||[]).map(a=>a.stem)]);
+  let stem = base, n = 2;
+  while(taken.has(stem)) stem = `${base}-${n++}`;
+
+  const cats = productCats();
+  if(!S.productPatch.add) S.productPatch.add = [];
+  S.productPatch.add.push({ stem, cat: cats[0] || '갤럭시', mid:'', grp:'', name:'', finish:'', tags:'' });
+  saveLocal(); R();
+  toast('새 제품이 추가되었습니다 — 제품명을 입력하고 사진을 올리세요');
+}
+
+/* ── 사진 업로드 ────────────────────────────────────────────────────
+   서버(api/product-image.js)는 **PNG 만** 받는다 — 이미지 URL 이 항상 '.png' 로
+   만들어지기 때문이다(usung-r8-data.js:7). 그래서 여기서 캔버스로 PNG 로 바꿔 보낸다.
+   관리자가 휴대폰으로 찍은 JPEG 를 그대로 올려도 통과하게 하려는 것이다.
+   ★ 동시에 긴 변 1600px 으로 줄인다. 원본 그대로 보내면 큰 사진이 413 으로 튕기는데,
+     제품 카드는 240px 로 그려지므로 1600px 이면 확대해서 봐도 남는다.
+     (현재 215장 실측: 평균 224KB · 최대 1.24MB) */
+const IMG_MAX_EDGE = 1600;
+
+function pickProductPhoto(stem){
+  if(!/^[A-Za-z0-9_-]{1,40}$/.test(stem)){
+    toast('제품 코드가 올바르지 않아 사진을 올릴 수 없습니다', true); return;
+  }
+  if(!authHeaders()){ toast('로그인해야 사진을 올릴 수 있습니다', true); return; }
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/png,image/jpeg,image/webp';
+  inp.onchange = () => { const f = inp.files && inp.files[0]; if(f) uploadProductPhoto(stem, f); };
+  inp.click();
+}
+
+function toPngDataUrl(file){
+  return new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('파일을 읽지 못했습니다'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('이미지를 열지 못했습니다'));
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(!w || !h) return reject(new Error('이미지 크기를 알 수 없습니다'));
+        const sc = Math.min(1, IMG_MAX_EDGE / Math.max(w, h));
+        w = Math.round(w * sc); h = Math.round(h * sc);
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        // ★ 투명 배경을 흰색으로 깔지 않는다 — 제품 사진에 배경 없는 PNG 가 섞여 있어서
+        //   흰 배경을 깔면 카드에서 흰 네모가 된다.
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(cv.toDataURL('image/png'));
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
+async function uploadProductPhoto(stem, file){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 사진을 올릴 수 있습니다', true); return; }
+  toast('사진 변환 중…');
+  let dataUrl;
+  try { dataUrl = await toPngDataUrl(file); }
+  catch(e){ toast('사진 처리 실패 : ' + e.message, true); return; }
+
+  toast('사진 올리는 중…');
+  try{
+    const r = await fetch('/api/product-image', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', ...h },
+      body: JSON.stringify({ stem, data: dataUrl })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok){
+      /* ★ 낙관적 갱신 — 방금 만든 dataURL 을 그 자리에 건다.
+         사진은 정적 파일이라 배포 빌드(1~2분)를 기다려야 실제로 바뀐다. 이걸 안 하면
+         올린 사람이 옛 사진을 그대로 보고 「안 올라갔다」고 판단한다.
+         ★ 저장하지 않는다(saveLocal 안 부름) — dataURL 은 수백 KB 라
+           localStorage 5MB 한도를 몇 장 만에 깨뜨린다. 새로고침하면 사라지고,
+           그때는 이미 배포본이 올라와 있다. */
+      S.photoPreview = S.photoPreview || {};
+      S.photoPreview[stem] = dataUrl;
+      R();
+      toast(`사진을 ${j.replaced?'교체':'등록'}했습니다 — 사이트 반영까지 1~2분 걸립니다`);
+    }
+    else if(r.status === 401){ onAuthExpired(); }
+    else if(r.status === 503){ toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true); }
+    else { toast('사진 올리기 실패 : ' + (j.error || r.status), true); }
+  }catch(e){ toast('사진 올리기 실패 : ' + e.message, true); }
+}
+
+// GET /api/products → S.productPatch 에 반영 (페이지 로드 시 1회)
+async function loadProductPatch(){
+  try{
+    const r = await fetch('/api/products', { cache:'no-store' });
+    const j = await r.json().catch(()=>({}));
+    if(!j.ok && !j.configured) return;   // 서버 미설정 — 로컬 패치만 쓴다
+    // 서버 패치를 기준으로, 로컬에 편집 중인 내용이 없으면 서버 값으로 덮는다.
+    // 로컬에 이미 edit/del/add 가 있으면 작업 중으로 판단해 병합하지 않는다.
+    const localHasWork = (S.productPatch.add||[]).length > 0
+      || Object.keys(S.productPatch.edit||{}).length > 0
+      || (S.productPatch.del||[]).length > 0;
+    if(!localHasWork){
+      S.productPatch = { add: j.add||[], edit: j.edit||{}, del: j.del||[] };
+      saveLocal();
+      R();
+    }
+  }catch(e){ /* 네트워크 오류 — 로컬 패치로 계속 */ }
+}
+
+// 발행: 현재 S.productPatch 를 POST /api/products
+async function publishProducts(){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 제품을 발행할 수 있습니다', true); return; }
+  const patch = S.productPatch;
+  const totalChanges = (patch.add||[]).length + Object.keys(patch.edit||{}).length + (patch.del||[]).length;
+  if(totalChanges === 0){ toast('변경된 제품이 없습니다', true); return; }
+  toast('제품 발행 중…');
+  try{
+    const r = await fetch('/api/products', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', ...h },
+      body: JSON.stringify(patch)
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok){
+      toast(`제품이 발행되었습니다 (추가 ${j.added} · 수정 ${j.edited} · 삭제 ${j.deleted}) — 최대 30초 뒤 반영됩니다`);
+    } else if(r.status === 401){ onAuthExpired(); }
+    else if(r.status === 503){ toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true); }
+    else { toast('발행 실패 : ' + (j.error || r.status), true); }
+  }catch(e){ toast('발행 실패 : ' + e.message, true); }
+}
+
+// ============== r55: 제품소개 탭 렌더 ==============
+function rProductsTab(){
+  if(PRODUCTS_BASE.length === 0){
+    return `<div style="padding:40px;text-align:center;color:var(--tx4);font-size:13px">
+      ⚠ 카탈로그를 불러오지 못했습니다<br>
+      <span style="font-size:11px;opacity:.6">usung-catalog-data.js 가 로드됐는지 확인하세요</span>
+    </div>`;
+  }
+
+  const eff = effectiveProducts();
+  const patch = S.productPatch;
+  const totalAdd = (patch.add||[]).length;
+  const totalEdit = Object.keys(patch.edit||{}).length;
+  const totalDel = (patch.del||[]).length;
+  const hasChanges = totalAdd + totalEdit + totalDel > 0;
+
+  // 필터 적용
+  let shown = eff;
+  if(prodFilter !== '전체') shown = shown.filter(p => p.cat === prodFilter);
+  if(prodSearch){
+    const q = prodSearch.toLowerCase();
+    shown = shown.filter(p =>
+      (p.name||'').toLowerCase().includes(q) ||
+      (p.cat||'').toLowerCase().includes(q) ||
+      (p.mid||'').toLowerCase().includes(q) ||
+      (p.stem||'').toLowerCase().includes(q)
+    );
+  }
+
+  // 상태 배지
+  const badge = (status) => {
+    if(status === 'edited')  return `<span style="font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;border:1px solid rgba(251,191,36,.3)">수정됨</span>`;
+    if(status === 'added')   return `<span style="font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(34,197,94,.15);color:#22c55e;font-weight:700;border:1px solid rgba(34,197,94,.3)">신규</span>`;
+    if(status === 'deleted') return `<span style="font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(239,68,68,.15);color:#ef4444;font-weight:700;border:1px solid rgba(239,68,68,.3)">삭제됨</span>`;
+    return '';
+  };
+
+  // 좌측 띠 색
+  const stripColor = (status) => {
+    if(status === 'edited')  return 'border-left:3px solid #fbbf24';
+    if(status === 'added')   return 'border-left:3px solid #22c55e';
+    if(status === 'deleted') return 'border-left:3px solid #ef4444;opacity:.55';
+    return 'border-left:3px solid transparent';
+  };
+
+  // 카테고리 필터 버튼
+  const CATS = productCats();
+  const allCats = ['전체', ...CATS];
+  const filterBtns = allCats.map(c => {
+    const cnt = c === '전체' ? eff.length : eff.filter(p=>p.cat===c).length;
+    const act = prodFilter === c;
+    return `<button style="padding:5px 12px;border-radius:20px;border:1px solid ${act?'var(--ac)':'var(--bd)'};background:${act?'rgba(96,165,250,.15)':'transparent'};color:${act?'var(--ac)':'var(--tx3)'};font-size:11px;cursor:pointer;font-weight:${act?'700':'400'}" onclick="prodFilter='${c}';R()">${c} (${cnt})</button>`;
+  }).join('');
+
+  // 제품 행 렌더 (썸네일 + 인라인 편집)
+  const rows = shown.map(p => {
+    const isDel = p._status === 'deleted';
+    const isAdd = p._status === 'added';
+    // ★ 현재 값이 목록에 없을 수도 있다(관리자가 새 분류를 직접 타이핑한 경우).
+    //   그때 option 을 안 넣으면 select 가 첫 항목으로 **조용히 바뀐다** — 값이 유실된다.
+    const catList = CATS.indexOf(p.cat) < 0 && p.cat ? CATS.concat([p.cat]) : CATS;
+    const catSelect = catList.map(c =>
+      `<option value="${esc(c)}"${p.cat===c?' selected':''}>${esc(c)}</option>`
+    ).join('');
+    const editFn = isAdd ? `addProdEdit` : `prodEdit`;
+    return `<div style="display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 12px;background:var(--cd);border-radius:10px;border:1px solid var(--bd);${stripColor(p._status)};position:relative">
+      <!-- 썸네일 = 사진 업로드 버튼. 방금 올린 사진이 있으면 그걸 먼저 보여준다 -->
+      <div title="${isDel?'삭제 예정인 제품입니다':'클릭해서 사진 올리기 (JPG·PNG 모두 가능)'}"
+        ${isDel?'':`onclick="pickProductPhoto('${escJs(p.stem)}')"`}
+        style="width:56px;height:56px;border-radius:8px;overflow:hidden;background:var(--sf);flex-shrink:0;position:relative;${isDel?'':'cursor:pointer'}">
+        <img src="${escAttr(photoSrc(p))}" alt="${escAttr(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:9px;color:var(--tx4);text-align:center;padding:4px">사진<br>없음</div>
+        ${isDel?'':`<div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;font-size:8px;color:#fff;background:linear-gradient(transparent 55%,rgba(0,0,0,.62));opacity:0;transition:opacity .15s"
+          onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">사진 변경</div>`}
+      </div>
+      <!-- 편집 영역 -->
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--tx4);font-family:monospace">${escHtml(p.stem)}</span>
+          ${badge(p._status)}
+          <div style="flex:1"></div>
+          ${isDel
+            ? `<button onclick="prodRestore('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:10px;cursor:pointer">↩ 복원</button>`
+            : isAdd
+              ? `<button onclick="prodAddDel('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--rd);font-size:10px;cursor:pointer">× 취소</button>`
+              : `<button onclick="prodDel('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--rd);font-size:10px;cursor:pointer">× 삭제</button>`
+          }
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="grid-column:1/-1">
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품명</div>
+            <input type="text" value="${escAttr(p.name)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','name',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">대분류</div>
+            <select onchange="${editFn}('${escJs(p.stem)}','cat',this.value)" ${isDel?'disabled':''} style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+              ${catSelect}
+            </select>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">마감 <span style="opacity:.7">(스타일 탭 기준)</span></div>
+            <input type="text" list="r55-finishes" value="${escAttr(p.finish)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','finish',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">중분류</div>
+            <input type="text" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">제품그룹</div>
+            <input type="text" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">태그 (| 구분)</div>
+            <input type="text" value="${escAttr(p.tags)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','tags',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+    <!-- 제품소개 관리 (r55) -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;color:var(--tx4);margin-bottom:2px">PRODUCTS CATALOG</div>
+          <div style="font-size:18px;font-weight:800;color:var(--tx)">${PRODUCTS_BASE.length}종 제품 <span style="font-size:12px;font-weight:400;color:var(--tx3)">기준선</span></div>
+        </div>
+        <div style="flex:1"></div>
+        ${hasChanges ? `
+          <div style="font-size:11px;color:var(--tx3);text-align:right">
+            ${totalAdd>0?`<span style="color:#22c55e">+${totalAdd} 신규</span> `:''}
+            ${totalEdit>0?`<span style="color:#fbbf24">${totalEdit} 수정</span> `:''}
+            ${totalDel>0?`<span style="color:#ef4444">${totalDel} 삭제</span>`:''}
+          </div>
+          <button data-needs-auth onclick="publishProducts()" style="padding:8px 16px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer">🚀 제품 발행</button>
+        ` : `<span style="font-size:11px;color:var(--tx4)">변경 없음</span>`}
+        <button onclick="prodAddNew()" style="padding:8px 14px;border-radius:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:12px;font-weight:700;cursor:pointer">+ 새 제품 추가</button>
+      </div>
+
+      <!-- 검색 + 카테고리 필터 -->
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <input type="text" placeholder="🔍 제품명·카테고리·stem 검색…" value="${prodSearch}"
+          oninput="prodSearch=this.value;R()"
+          style="padding:7px 12px;background:var(--cd);border:1px solid var(--bd);border-radius:8px;font-size:12px;color:var(--tx);width:220px">
+        <div style="display:flex;gap:5px;flex-wrap:wrap">${filterBtns}</div>
+      </div>
+
+      <!-- 발행 후 안내 -->
+      ${!hasChanges && PRODUCTS_BASE.length > 0 ? '' : ''}
+      ${hasChanges ? `<div style="padding:8px 12px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;font-size:11px;color:rgba(251,191,36,.8);margin-bottom:12px">
+        ⚠ 미발행 변경사항이 있습니다. 🚀 제품 발행 버튼을 눌러야 방문자 화면에 반영됩니다.
+      </div>` : ''}
+
+      <!-- 제품 목록 -->
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${shown.length === 0
+          ? `<div style="padding:32px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">검색 결과가 없습니다</div>`
+          : rows
+        }
+      </div>
+
+      <!-- 안내 — ★ 두 가지가 서로 다른 속도로 반영된다는 걸 여기서 못 박는다.
+           안 적으면 사진을 올리고 새로고침했다가 「안 올라갔다」고 판단하게 된다. -->
+      <div style="margin-top:16px;padding:12px 16px;background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.15);border-radius:10px;font-size:11px;color:var(--tx4);line-height:1.7">
+        📷 <b style="color:var(--tx3)">사진</b> — 썸네일을 클릭하면 바로 올라갑니다(JPG·PNG 모두 가능, 자동으로 변환·축소됩니다).
+        올린 즉시 이 화면에는 보이지만 <b style="color:var(--tx3)">홈페이지 반영까지는 1~2분</b> 걸립니다.
+        <br>
+        📝 <b style="color:var(--tx3)">제품 정보</b> — 이름·분류·태그를 고친 뒤 <b style="color:var(--tx3)">「제품 발행」</b>을 눌러야 홈페이지에 갑니다(약 30초).
+        <br>
+        🗂 사진 파일명은 자동으로 정해집니다 — 따로 입력하지 않으셔도 됩니다.
+        <br>
+        🎨 <b style="color:var(--tx3)">마감</b>은 홈페이지 <b style="color:var(--tx3)">스타일 탭(모던·클래식·프리미엄·레트로)</b>의 기준입니다.
+        아래 목록에 있는 값을 쓰면 해당 탭에 함께 나오고, 새로 지어 쓰면 「전체」와 대분류에만 나옵니다.
+      </div>
+      <!-- ★ 목록은 박지 않고 기준선에서 뽑는다(KNOWLEDGE 41). 실제 쓰이는 마감이 곧 선택지다. -->
+      <datalist id="r55-finishes">${
+        [...new Set(PRODUCTS_BASE.map(p=>p.finish).filter(Boolean))]
+          .sort().map(f=>`<option value="${escAttr(f)}">`).join('')
+      }</datalist>
+    </div>`;
+}
+
 // 부품 이미지 목록
 const PARTS_IMGS = Array.from({length:50},(_,i)=>({
   img: `parts/p${String(i+1).padStart(2,'0')}.png`,
@@ -1962,53 +2418,7 @@ function rLive(k){
 
   /* ━━━━━━━━━━ PRODUCTS (제품소개) ━━━━━━━━━━ */
   if(k === 'products'){
-    const prods = S.arrays.products||[];
-    const cats = ['전체', ...new Set(prods.map(p=>p.cat))];
-    const catCatalog = [...new Set(CATALOG.map(p=>p.cat))];
-    return hint + `
-      <div class="live-stage">
-        <!-- 히어로 -->
-        <div style="margin-bottom:24px">
-          <div class="lp-tag">${e('p_tag')} · ${CATALOG.length} MODELS</div>
-          <h1 class="lp-h1" style="font-size:38px">${e('p_title1')}<br/><span class="grad">${e('p_title2')}</span></h1>
-          <p class="lp-sub">${e('p_sub')}</p>
-          <div style="display:flex;gap:14px;margin-top:12px">
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#60a5fa"></span>${catCatalog.length}개 카테고리</span>
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#22d3ee"></span>${CATALOG.length}종 제품사진</span>
-            <span style="font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:#fbbf24"></span>20년 기술 노하우</span>
-          </div>
-        </div>
-
-        <!-- ★ 제품 이미지 관리 (핵심 기능) -->
-        ${rImgGrid('products', CATALOG, catCatalog, {compact:true})}
-
-        <!-- 텍스트 데이터 편집 (접이식) -->
-        <details style="margin-top:20px">
-          <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--ac);padding:10px 0">📋 제품 텍스트 데이터 편집 (${prods.length}개 항목) ▾</summary>
-          <div class="lp-pgrid" style="margin-top:10px">
-            ${prods.map((p,i)=>`
-              <div class="lp-card arr-wrap">
-                ${ac('products',i)}
-                <div class="no">No.${ae('products',i,'no')}</div>
-                <div class="cat">${ae('products',i,'cat')}</div>
-                <div class="nm">${ae('products',i,'n')}</div>
-                <div class="sp">${ae('products',i,'sp')}</div>
-              </div>`).join('')}
-          </div>
-          ${addBtn('products','새 제품 추가')}
-        </details>
-
-        <!-- CTA -->
-        <div style="margin-top:28px;padding:28px;border-radius:22px;background:linear-gradient(135deg,rgba(30,58,138,.4),#000 60%,#000);border:1px solid rgba(255,255,255,.1);text-align:center">
-          <div class="lp-tag" style="text-align:center">NEED HELP CHOOSING?</div>
-          <h3 class="lp-h2" style="text-align:center;font-size:24px">${e('p_cta_title')}</h3>
-          <p class="lp-sub" style="text-align:center;margin:12px auto 0">${e('p_cta_desc')}</p>
-          <div style="margin-top:18px;display:flex;justify-content:center;gap:10px">
-            <span style="padding:11px 20px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:12px">📞 ${escHtml(C.c_tel)}</span>
-            <span style="padding:11px 20px;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-weight:700;font-size:12px">시공 갤러리 보기 →</span>
-          </div>
-        </div>
-      </div>`;
+    return hint + `<div class="live-stage">${rProductsTab()}</div>`;
   }
 
   /* ━━━━━━━━━━ PARTS (부품소개) ━━━━━━━━━━ */

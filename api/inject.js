@@ -8,6 +8,10 @@ import { seoHead, SEO_MARK } from './_seo.js';
 
 const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
 
+// r55 — 관리자가 발행한 제품 차이분(add/edit/del). api/products.js 가 [skip ci] 로 커밋하므로
+// 배포본의 정적 파일은 낡는다 → 반드시 raw 에서 읽는다. 파일이 없으면 404 라 조용히 건너뛴다.
+const PATCH_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/data/products.json';
+
 // ★ 캐시버스팅 값(?v=)은 반드시 **배포**를 가리켜야 한다. 원래 `Date.now()` 였는데
 //   그건 배포 시각이 아니라 **서버리스 인스턴스가 시작한 시각**이라 배포와 무관하다.
 //   그래서 양쪽으로 다 틀렸다:
@@ -207,6 +211,43 @@ export default async function handler(req, res) {
     if (!html.includes('usung-overlay.js')) {
       html = html.replace('</body>', jsScript);
     }
+
+    /* ── r55 — 관리자 제품 발행분을 카탈로그에 얹는다 ────────────────────
+       승연 「제품소개의 관리자페이지는 유기적으로 움직이도록 … 하나더 추가하거나 빼거나
+       사진을 넣거나 추가하면 알아서 기입이되고 레이아웃도 추가로 생성되도록」
+
+       ★ 왜 서빙 시점인가 — 클라이언트에서 /api/products 를 부르면 응답 전에 r8 부트가
+         먼저 끝나 제품이 두 번 그려진다(r53 지도에서 겪은 것과 같은 번쩍임).
+         여기서 심으면 첫 페인트부터 옳고 브라우저 왕복이 0이다.
+       ★ 왜 raw.githubusercontent 인가 — api/products.js 는 [skip ci] 로 커밋한다.
+         재배포가 안 도니 **배포본의 정적 data/products.json 은 낡는다.** raw 는 리포를
+         그대로 주므로 발행 직후 값이 나온다(RAW_URL 이 index_v6.html 에 쓰는 것과 같은 이유).
+       ★ 실패해도 페이지가 죽으면 안 된다 — catch 에서 조용히 건너뛰면 정적 215종이 그대로 뜬다.
+       ★ `<` 를 이스케이프하는 이유: 제품명에 우연히 '</script' 가 들어가면 인라인 블록이
+         거기서 끊긴다. JSON 안의 꺾쇠는 < 로 바꿔도 파싱 결과가 같다.
+       되돌리기: 이 블록 + usung-r55-products.js. 둘은 짝이다.
+       배포 판정: 서빙된 HTML 에 `usung-r55-products.js` 가 있는지로 본다
+                 (서버리스 함수라 api/inject.js 자체는 HTTP 로 못 받아 md5 대조가 불가능하다). */
+    try {
+      const pr = await fetch(PATCH_URL, { cache: 'no-store' });
+      if (pr.ok) {
+        const raw = await pr.json();
+        const patch = {
+          add: Array.isArray(raw.add) ? raw.add : [],
+          edit: (raw.edit && typeof raw.edit === 'object') ? raw.edit : {},
+          del: Array.isArray(raw.del) ? raw.del : []
+        };
+        const anchor = '<script src="/usung-catalog-data.js?v=' + V + '" defer></script>';
+        if (html.includes(anchor)) {
+          const inline = '<script>window.UP_PATCH='
+            + JSON.stringify(patch).split('<').join('\\u003c')
+            + ';</script>';
+          const applier = '<script src="/usung-r55-products.js?v=' + V + '" defer></script>';
+          // 인라인(즉시 실행 · 데이터만) → 적용기(defer · 카탈로그 바로 다음 차례)
+          html = html.split(anchor).join(anchor + inline + applier);
+        }
+      }
+    } catch (e) { /* 패치를 못 읽으면 정적 카탈로그 그대로 — 화면은 오늘과 동일하다 */ }
     if (!html.includes('usung-r27-prepaint')) {
       html = html.replace('</head>', preStyle + '</head>');
     }
