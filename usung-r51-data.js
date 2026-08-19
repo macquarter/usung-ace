@@ -119,8 +119,11 @@
       var p = P[id];
       if (!p || !p.nm) return;
       var grp = grpOf[id] || '부품 · 구성품';
+      /* ★ 규격을 괄호로 묶는다. ' · ' 로 이으면 그룹 이름 자체가 「후레쉬볼 · 자바라」라서
+         「부품 › 후레쉬볼 · 자바라 · 크롬」처럼 규격이 그룹의 셋째 항목으로 읽힌다.
+         이름이 같은 부품이 여럿이라(후레쉬볼 4종) 이 줄로 구분해야 한다. */
       out.push({ t: 'n', id: id, title: p.nm,
-                 sub: '부품 › ' + grp + (p.sp ? ' · ' + p.sp : ''),
+                 sub: '부품 › ' + grp + (p.sp ? ' (' + p.sp + ')' : ''),
                  img: window.partSrc ? window.partSrc(id) : '',
                  key: norm(p.nm), aux: norm(grp + (p.sp || '')) });
     });
