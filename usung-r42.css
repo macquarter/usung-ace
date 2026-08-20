@@ -1,5 +1,5 @@
 /* usung-r42.css — 260817 모바일 최적화 (승연 요청 3·4번)
- * build-marker: r42-b3
+ * build-marker: r56-b1
  *
  * usung-r8.css 가 런타임 로드라 그쪽 선언을 덮으려면 선행 `html ` + !important 가
  * 필요하다(usung-r10-redesign.css·usung-r31.css 와 같은 이유).
@@ -10,6 +10,10 @@
  *   ③ .cta   버튼 305x56 이 좌측 정렬, .cta-r 이미지블록 112px
  *   ④ 갤러리 문의 진입점이 sticky 탭바 안 150x32 칩 하나뿐
  *   ⑤ 전역(헤더·푸터) tel: 링크 0개 — 전화로만 받는 회사인데 상시 진입점이 없다
+ *
+ * ★ r56 (260820) — 승연 「모바일 하단에 대표전화 탭 삭제부탁해」로 ⑤ 하단 고정 전화 바
+ *   (#r42-telbar)를 통째로 제거했다. 짝인 `body.r42-telbar-on { padding-bottom:56px }`
+ *   도 같이 뺐다 — 안 빼면 모바일 문서 끝에 56px 죽은 여백이 남는다(r50 과 같은 함정).
  */
 
 /* ════════════════════════════════════════════════════════════════
@@ -159,47 +163,13 @@
  * ════════════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════════════
- * ⑤ 모바일 하단 고정 전화 바
+ * ⑤ 모바일 하단 고정 전화 바 — r56 에서 제거 (승연 지시, 260820)
  *
- * 실측: 모바일에서 보이는 tel: 링크가 회사소개 페이지 y=3532 아래 3개뿐이다.
- * 「무조건 전화연결」이 방침인데(usung-r9-excel.js E2) 상시 진입점이 없다.
+ * 원래 여기에 `#r42-telbar`(fixed·bottom:0·56px·z-index 9500) 규칙과 짝인
+ * `@media (max-width:560px){ body.r42-telbar-on{ padding-bottom:56px } }` 이 있었다.
  *
- * ★ r31fix 교훈 — 고정 요소는 화면을 영구히 먹는다. 56px = 852px 의 6.6% 로
- *   묶고, 회사소개 전화 패널이 화면에 들어오면 스스로 접는다(r42.js 가 토글).
- *   모달이 열려 있을 때도 접는다 — 모달 자체에 「대표전화 문의하기」가 있다.
+ * ★ 되살릴 일이 생기면 CSS 만 되돌리지 말 것 — usung-r42.js 의 buildTelbar()/
+ *   syncTelbar()/watchCta()/watchModals() 가 같이 빠졌다. 짝은 커밋 단위로 되돌린다.
+ * ★ 남은 모바일 전화 진입점: sticky 탭바의 #usung-r9-gal-cta 알약 · 회사소개 tel: 3개 ·
+ *   제품소개 하단 .cta-l .btn · 각 모달의 「대표전화 문의하기」.
  * ════════════════════════════════════════════════════════════════ */
-#r42-telbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 56px;
-  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) * .6);
-  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-  color: #fff;
-  font-weight: 900;
-  font-size: 16px;
-  letter-spacing: -.2px;
-  text-decoration: none;
-  box-shadow: 0 -6px 22px rgba(15, 32, 54, .28);
-  transition: transform .22s ease;
-}
-#r42-telbar .r42-tb-k {
-  font-size: 12px;
-  font-weight: 700;
-  opacity: .82;
-  letter-spacing: .06em;
-}
-#r42-telbar.r42-off { transform: translateY(100%); }
-@media (max-width: 560px) {
-  #r42-telbar { display: flex; }
-  /* 바가 마지막 콘텐츠를 가리지 않도록 문서 끝에 여백을 준다. */
-  body.r42-telbar-on { padding-bottom: 56px; }
-}
-/* 인쇄물에는 고정 바가 의미 없다. */
-@media print { #r42-telbar { display: none !important; } }
