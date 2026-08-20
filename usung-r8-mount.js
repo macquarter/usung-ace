@@ -21,8 +21,10 @@
 
   /* ---- 활성 게이트 (기본 ON) ----
      재배포 없이 끌 수 있는 비상구. 이식본에 문제가 생기면 URL 로 바로 원래 화면을 볼 수 있다.
-       https://usung-ace.vercel.app/?r8=0   ← 그 브라우저에서 이식본 끄기(localStorage 고정)
-       https://usung-ace.vercel.app/?r8=1   ← 다시 켜기
+       https://yusungace.com/?r8=0   ← 그 브라우저에서 이식본 끄기(localStorage 고정)
+       https://yusungace.com/?r8=1   ← 다시 켜기
+     (r54 에서 주소 갱신. 옛 usung-ace.vercel.app 도 그대로 살아 있어 거기서도 먹는다.
+      단 localStorage 는 **출처별**이라 끈 주소에서 다시 켜야 한다.)
      한 세션만 되돌리려면 콘솔에서 __usungR8Unmount(). */
   function gate() {
     try {

@@ -30,9 +30,15 @@
 //   이 두 가지는 정적 사전렌더(별도 URL 생성)로만 풀린다. 별건이다.
 
 // ★ 실도메인이 붙으면 이 상수 하나만 바꾸면 전부 따라간다.
-//   지금은 usungace.com 이 이 배포를 가리키지 않아 vercel.app 이 정본이다.
-//   (canonical 을 아직 없는 도메인으로 적으면 색인이 통째로 증발한다)
-export const SITE = 'https://usung-ace.vercel.app';
+//   (canonical 을 아직 없는 도메인으로 적으면 색인이 통째로 증발한다 —
+//    그래서 r54 전까지 vercel.app 을 정본으로 뒀다.)
+// ★ r54(2026-08-20): 대표주소가 확정됐다 → yusungace.com.
+//   착수 전 실측: apex HTTP 200 · A 216.198.79.1 · www 는 apex 로 308.
+//   ★★ usungace.com 은 **보조 주소**다 — Vercel 도메인 설정에서 301 로
+//      yusungace.com 에 넘긴다. 즉 주소는 둘, 정본은 하나.
+//      301 과 canonical 이 **같은 곳**(yusungace.com)을 가리켜야 색인이 합쳐진다.
+//      여기를 usungace.com 으로 되돌리면 301 목적지와 어긋나 순환 신호가 된다.
+export const SITE = 'https://yusungace.com';
 
 // 회사 정보 출처 — index_v6.html ACE_DATA.company(2699행) + 회사소개 지도 카드(1880행)
 // 대표이사 이름은 **일부러 넣지 않는다** — r5 에서 화면 전체에서 삭제한 항목이다.

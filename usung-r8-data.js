@@ -4,7 +4,11 @@
  * Loads as a classic script; shares global scope with the other r8 modules.
  */
 
-const R8_IMG='https://usung-ace.vercel.app/products/final/';
+// r54(2026-08-20) 절대 URL → 상대경로. 도메인이 셋이 됐다(yusungace / usungace / vercel.app).
+// 절대로 박아두면 어느 주소로 들어와도 이미지만 vercel.app 에서 온다 = 불필요한 교차출처.
+// ★ 선행조건 확인함: 이미지는 `crossorigin="anonymous"` + trimImg() 가 캔버스 픽셀을 읽는다.
+//   상대경로면 동일출처가 되어 CORS 자체가 필요 없어진다(현재는 ACAO:* 덕에 겨우 통과 중).
+const R8_IMG='/products/final/';
 // 260729 회의: 카카오톡 채널은 운영하지 않음 — 모든 문의 동선은 대표전화 하나로 통일
 const TEL_NO='1588-9123', TEL_LABEL='대표전화';
 function telHref(){return 'tel:'+TEL_NO.replace(/[^0-9+]/g,'');}
@@ -84,7 +88,7 @@ function iconFor(s){
 //   ORDER 에서 뺐다(p01 「반후지 150·125Ø」 와 같은 부품 — r3_라스트 덱 S12).
 //   데이터는 51종 그대로다 — 제품 상세 모달의 모델별 조성(usung-r19-parts-data.js L)이
 //   아직 '1-1'→p52 를 쓰기 때문에 여기서 지우면 9개 모델의 부품 목록이 조용히 한 칸 빈다.
-const PART_BASE='https://usung-ace.vercel.app/parts/';
+const PART_BASE='/parts/';   // r54: 절대 URL → 상대경로 (R8_IMG 와 같은 이유)
 // 260731 정정) 직전 매핑은 구자산 「부품갤러리」 45종 + 형상 추정 3종(p46~p48 스텐)이었다.
 // 클라이언트 0730 확정본 48종으로 전면 교체한다. 추정 3종을 폐기하고 실물 5종을 새로 넣었다:
 // 원형 태엽감속기 · LED 안정기 · 신형 자바라 하부봉대 · 사각 태엽감속기(검정) · 350Ø 갓(슬림).
