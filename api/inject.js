@@ -196,6 +196,22 @@ export default async function handler(req, res) {
     //    인라인 style 로는 못 막는다 → CSS 속성 선택자라야 재생성돼도 계속 먹는다.
     const r46Style = '<style id="usung-r46-prepaint">#board-cat-tabs button[onclick*="기술정보"],#board-cat-tabs button[onclick*="시공사례"],#board-cat-tabs button[onclick*="업계동향"]{display:none!important}</style>';
 
+    /* r57) 새로고침 때 좌측 상단에 모달 텍스트 덩어리가 번쩍이는 문제(FOUC) 제거.
+       원인: usung-r8-mount.js 의 css() 는 /usung-r8.css 를 <link> 로 '비동기' 요청하는데,
+       overlay() 는 그것을 기다리지 않고 즉시 오버레이 4개(.lbox/.mask/.pmask/.fmask)를
+       document.body.firstChild 로 꽂는다(mount.js:114 — 맨 앞이어야 id 충돌에서 이긴다).
+       숨김 규칙 display:none 은 오직 usung-r8.css 안에만 있어(328/430/451/794),
+       CSS 가 도착하기 전까지 그 4개가 '일반 블록'으로 문서 맨 앞에 쌓인다.
+       실측(Fast 3G · yusungace.com): 높이 312px · 183ms 노출 · 히어로가 그만큼 밀린다.
+       ★ 빠른 회선에서는 노출 0 이다 — 내 맥에서만 보면 '결함 없음'으로 오판한다.
+       ★ 특이도 주의 — 여는 규칙은 `.r8x:not(#_r8_) .mask.on{display:flex}` 이고
+       :not(#_r8_) 가 id 특이도를 주어 (1,3,0) 이다. 아래 (0,1,0) 은 그걸 절대 못 이기므로
+       모달 열기는 그대로 동작한다. 그래서 !important 를 쓰면 안 된다(쓰면 모달이 안 열린다).
+       ★ 클래스 충돌 없음 — 이 4개 이름은 리포 전체에서 usung-r8.css / usung-r8-view.js
+       에만 존재한다(index_v6.html 0건 · 다른 CSS 0건, grep 실측).
+       배포 판정 마커: 서빙된 HTML 에 'usung-r57-prepaint' 가 있으면 반영된 것. */
+    const r57Style = '<style id="usung-r57-prepaint">.lbox,.mask,.pmask,.fmask{display:none}</style>';
+
     // 7) 위 h1 이 쓰는 그라데이션 클래스. usung-home.js 도 나중에 같은 규칙을 넣지만(중복 무해)
     //    첫 페인트에 없으면 「후드의 기준」 이 흰색으로 떴다가 그라데이션으로 바뀌어 또 번쩍인다.
     const preStyle = '<style id="usung-r27-prepaint">.usung-hgrad{background:linear-gradient(96deg,#bfdbfe 0%,#60a5fa 30%,#3b82f6 52%,#60a5fa 72%,#dbeafe 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:0 2px 24px rgba(37,99,235,.18);animation:usungHShine 6.5s ease-in-out infinite}@keyframes usungHShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}</style>';
@@ -261,6 +277,9 @@ export default async function handler(req, res) {
     }
     if (!html.includes('usung-r46-prepaint')) {
       html = html.replace('</head>', r46Style + '</head>');
+    }
+    if (!html.includes('usung-r57-prepaint')) {
+      html = html.replace('</head>', r57Style + '</head>');
     }
 
     // r39) SEO / GEO — description·canonical·OG·JSON-LD.
