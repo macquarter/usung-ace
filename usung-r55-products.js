@@ -42,9 +42,15 @@
 (function () {
   'use strict';
 
-  // usung-catalog-data.js 머리말의 필드순: [stem,대분류,중분류,제품그룹,제품명,마감,태그(|)]
-  var IDX = { cat: 1, mid: 2, grp: 3, name: 4, finish: 5, tags: 6 };
-  var WIDTH = 7;
+  /* usung-catalog-data.js 머리말의 필드순: [stem,대분류,중분류,제품그룹,제품명,마감,태그(|)]
+     ★ r60 이 7·8번 두 열을 덧댔다 — feat(특징) · badge(NEW/BEST).
+       카탈로그 원본은 여전히 7열이므로 215행 전부 이 두 칸이 undefined 다.
+       읽는 쪽(usung-r8-prod-a.js:8, admin.html PRODUCTS_BASE)은 반드시 `|| ''` 로 받는다.
+
+     ★★ WIDTH 는 「신규 추가 행을 몇 칸으로 펴는가」에만 쓰인다(150행 new Array(WIDTH)).
+       기존 215행은 여기서 안 늘어난다 — 늘릴 필요가 없다. JS 배열은 없는 칸을 undefined 로 준다. */
+  var IDX = { cat: 1, mid: 2, grp: 3, name: 4, finish: 5, tags: 6, feat: 7, badge: 8 };
+  var WIDTH = 9;
 
   function log(m) { try { console.info('[r55] ' + m); } catch (e) { } }
 

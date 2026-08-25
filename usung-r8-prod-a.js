@@ -5,7 +5,11 @@
  */
 function r8Build(){
   const D=window.UP_DATA||[];
-  let raw=D.map(d=>({stem:d[0],img:R8_IMG+d[0]+'.png',cat:d[1],mid:d[2],grp:d[3],name:d[4],finish:d[5],tags:(d[6]||'').split('|').filter(Boolean)}));
+  // r60) feat=d[7] 특징 · badge=d[8] NEW/BEST. 카탈로그 원본은 7열이라 둘 다 undefined 로 온다.
+  //   '-' 는 「관리자가 일부러 비웠다」는 뜻이다(빈 문자열은 발행 경로에서 '손대지 않음'으로
+  //   해석되므로 지우기를 표현할 수가 없다 — api/products.js normalize 참고). 여기서 ''로 되돌린다.
+  const dash=v=>{v=(v==null?'':String(v)).trim();return v==='-'?'':v;};
+  let raw=D.map(d=>({stem:d[0],img:R8_IMG+d[0]+'.png',cat:d[1],mid:d[2],grp:d[3],name:d[4],finish:d[5],tags:(d[6]||'').split('|').filter(Boolean),feat:dash(d[7]),badge:dash(d[8]).toUpperCase()}));
   // ── 코브라후드 정리: 중복(테이블/공백 중분류) 제거 ──
   // 260729 meeting: 하향식후드(코브라) has no sub-category — list products directly
   const seenCob={};

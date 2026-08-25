@@ -317,9 +317,59 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 .img-add-card:hover{border-color:var(--ac);color:var(--ac)}
 .img-add-card .plus{font-size:28px;margin-bottom:4px}
 .img-add-card .lb{font-size:11px;font-weight:700}
+/* ── r60) 제품 카드 그리드 ────────────────────────────────────────────
+   승연 지시: 「갤러리처럼 수정할 수 있게 … 플레이스 홀더 넣고 그 안에 제품 넣고
+   이름 넣고 특징 넣을 수 있도록」. 그래서 겉모습은 위 .img-card 를 따라간다.
+   ★ 다만 **배관은 갤러리 것을 안 쓴다.** 갤러리(GALLERY_IMGS)는 발행 경로가 아예 없어
+     고쳐도 그 브라우저에서만 바뀐다 — 그대로 베끼면 R1(공지)과 같은 「되는 것처럼 보이는
+     기능」이 하나 더 생긴다. 이 카드는 r55 의 productPatch → /api/products 로 붙였다. */
+.pg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.pg-card{position:relative;background:var(--cd);border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
+.pg-card:hover{border-color:var(--ac);box-shadow:0 8px 24px -10px rgba(59,130,246,.25)}
+.pg-card.is-added{border-color:rgba(34,197,94,.45)}
+.pg-card.is-edited{border-color:rgba(251,191,36,.45)}
+.pg-card.is-deleted{border-color:rgba(239,68,68,.45);opacity:.5}
+/* 사진칸 = 업로드 버튼. 제품 누끼는 배경이 투명한 PNG 가 섞여 있어 cover 로 자르면
+   가장자리가 날아간다 → contain + 어두운 판. */
+.pg-ph{position:relative;width:100%;aspect-ratio:4/3;background:#0f0f16;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+.pg-ph img{width:100%;height:100%;object-fit:contain;display:block;padding:6px}
+.pg-ph .none{font-size:10px;color:var(--tx4);text-align:center;line-height:1.6}
+.pg-ph .cam{position:absolute;left:0;right:0;bottom:0;padding:5px 0;text-align:center;font-size:10px;font-weight:700;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.72));opacity:0;transition:opacity .15s}
+.pg-card:hover .pg-ph .cam{opacity:1}
+.pg-ph .tag{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:800;color:#fff;border-radius:4px;padding:3px 7px;letter-spacing:.04em}
+.pg-ph .tag.best{background:var(--rd)}
+.pg-ph .tag.new{background:var(--ac)}
+.pg-bd{padding:9px 10px 10px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pg-lb{font-size:9px;color:var(--tx4)}
+.pg-in{width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx);font-family:inherit}
+.pg-in:focus{outline:none;border-color:var(--ac)}
+.pg-in:disabled{opacity:.4}
+/* NEW/BEST 3단 토글 — 라디오 성격이라 세 칸을 붙여 「지금 어느 상태인지」가 한눈에 보이게 한다 */
+.pg-bg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+.pg-bg button{padding:4px 0;font-size:9.5px;font-weight:700;background:transparent;border:none;border-right:1px solid var(--bd);color:var(--tx4);cursor:pointer;transition:all .12s}
+.pg-bg button:last-child{border-right:none}
+.pg-bg button:hover{background:rgba(255,255,255,.04);color:var(--tx3)}
+.pg-bg button.on{color:#fff}
+.pg-bg button.on[data-v="NEW"]{background:var(--ac)}
+.pg-bg button.on[data-v="BEST"]{background:var(--rd)}
+.pg-bg button.on[data-v=""]{background:var(--bd);color:var(--tx2)}
+.pg-ft{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:2px}
+.pg-stem{font-size:8.5px;color:var(--tx4);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.pg-x{padding:2px 7px;border-radius:5px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--rd);font-size:9.5px;cursor:pointer}
+.pg-more{width:100%;padding:4px 0;border:1px dashed var(--bd);border-radius:6px;background:transparent;color:var(--tx4);font-size:9.5px;cursor:pointer}
+.pg-more:hover{border-color:var(--ac);color:var(--ac)}
+.pg-adv{display:flex;flex-direction:column;gap:6px;padding-top:2px;border-top:1px dashed var(--bd)}
+.pg-badge{font-size:8.5px;padding:1px 5px;border-radius:4px;font-weight:700}
+/* 플레이스홀더 = 새 제품 자리. 갤러리의 .img-add-card 와 같은 모양이되 카드 비율을 맞춘다 */
+.pg-add{border:2px dashed var(--bd);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:210px;cursor:pointer;transition:all .15s;color:var(--tx4);text-align:center;padding:12px}
+.pg-add:hover{border-color:var(--ac);color:var(--ac);background:rgba(96,165,250,.04)}
+.pg-add .plus{font-size:30px;line-height:1;margin-bottom:6px}
+.pg-add .lb{font-size:11.5px;font-weight:800}
+.pg-add .sub{font-size:9.5px;opacity:.75;margin-top:3px;line-height:1.5}
 @media(max-width:768px){
   .img-grid{grid-template-columns:repeat(2,1fr)}
   .img-grid.sm{grid-template-columns:repeat(3,1fr)}
+  .pg-grid{grid-template-columns:repeat(2,1fr);gap:8px}
 }
 /* HOME hero feature animations */
 @keyframes swing-pipe{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
@@ -1208,6 +1258,12 @@ function rSidebar(){
   h += sbItem('dashboard','📊','대시보드');
   h += sbItem('inquiries','📬','문의내역', nw);
   h += `<div class="sb-sec">콘텐츠</div>`;
+  /* r60) 제품을 사이드바 1단으로 올렸다.
+     ★ 「제품 추가 기능이 없다」는 신고가 왔지만 기능은 r55 부터 있었다 —
+       「+ 새 제품 추가」 버튼까지 있는데 **거기까지 가는 길이 2클릭**이었다
+       (📝 페이지 편집 → 제품소개 타일). 사이드바에 제품 항목이 없으니 찾을 수가 없다.
+       고칠 것은 기능이 아니라 **길**이었다. */
+  h += sbItem('products','📦','제품 관리', PRODUCTS_BASE.length || null);
   h += sbItem('pages','📝','페이지 편집');
   h += `<div class="sb-sec">게시판</div>`;
   for(const k in BOARDS){
@@ -1235,6 +1291,7 @@ function rView(){
   const v = S.view;
   if(v === 'dashboard'){ tbt.textContent='대시보드'; ct.innerHTML = rDashboard(); }
   else if(v === 'inquiries'){ tbt.textContent='문의 내역'; ct.innerHTML = rInquiries(); }
+  else if(v === 'products'){ tbt.textContent='제품 관리'; ct.innerHTML = rProductsTab(); }   // r60
   else if(v === 'pages'){ tbt.textContent='페이지 편집'; ct.innerHTML = S.edit ? rPageEdit(S.edit) : rPageList(); }
   else if(v.startsWith('bd-')){ const k = v.slice(3); tbt.textContent = BOARDS[k].name; ct.innerHTML = rBoard(k); }
   else if(v === 'bot-kb'){   tbt.textContent='챗봇 지식베이스'; ct.innerHTML = rBotKB(); }
@@ -1468,6 +1525,11 @@ const PRODUCTS_BASE = (() => {
   return window.UP_DATA.map(r => ({
     stem: r[0], cat: r[1], mid: r[2], grp: r[3],
     name: r[4], finish: r[5], tags: r[6],
+    // r60) 7·8열(특징·NEW/BEST)은 카탈로그 원본에 없다 — 215행 전부 undefined 로 온다.
+    //   ''로 눌러 두지 않으면 아래 prodEdit 의 「기준선과 같아졌나」 비교가
+    //   ''(입력칸이 주는 값) vs undefined 로 어긋나 「수정됨」 배지가 안 지워진다.
+    feat: r[7] == null ? '' : r[7],
+    badge: r[8] == null ? '' : r[8],
     img: `products/final/${r[0]}.png`
   }));
 })();
@@ -1792,6 +1854,42 @@ function prodEdit(stem, field, val){
   saveLocal();
 }
 
+/* ── r60) 특징 · NEW/BEST ──────────────────────────────────────────────
+   ★★★ 이 두 칸은 **빈 값을 저장할 수가 없다.** 발행 경로가 빈 문자열을
+     「지우기」가 아니라 「손대지 않음」으로 읽기 때문이다
+     (api/products.js normalize · usung-r55-products.js:120 둘 다 `if(!s) continue`).
+     그 규칙 자체는 옳다 — 없으면 방문자 화면의 제품명이 빈칸으로 덮인다.
+     하지만 그대로 두면 **BEST 를 한 번 붙이면 영영 못 뗀다.**
+   → 그래서 「일부러 비웠다」를 '-' 한 글자로 적어 보낸다. '-' 는 빈 값이 아니라서
+     발행을 통과하고, 읽는 쪽 두 군데(여기와 usung-r8-prod-a.js:8)가 ''로 되돌린다.
+   ★ 관리자 화면에는 '-' 를 절대 노출하지 않는다 — 아래 두 함수만 거쳐서 읽는다. */
+const PROD_NONE = '-';
+function prodShow(v){ v = String(v == null ? '' : v).trim(); return v === PROD_NONE ? '' : v; }
+function featOf(p){ return prodShow(p.feat); }
+function badgeOf(p){ const v = prodShow(p.badge).toUpperCase(); return (v === 'NEW' || v === 'BEST') ? v : ''; }
+
+/* 입력칸이 비면 '' 가 아니라 '-' 를 저장한다(위 설명).
+   ★ 신규 제품은 prodEdit() 로 보내면 안 된다 — 첫 줄 `if(!base) return` 에 걸려
+     아무 일도 안 일어난다(기준선에 없는 stem 이니까). 그래서 기존 렌더러도
+     editFn 을 골라 쓴다. 여기서도 같은 갈림길을 둔다. */
+function prodSetField(stem, field, val){
+  const v = String(val == null ? '' : val).trim();
+  const out = v === '' ? PROD_NONE : v;
+  const isAdd = (S.productPatch.add || []).some(a => a.stem === stem);
+  if(isAdd) addProdEdit(stem, field, out); else prodEdit(stem, field, out);
+}
+// NEW/BEST 토글. 같은 값을 다시 누르면 해제된다 — 세 번째 버튼을 안 눌러도 뗄 수 있게.
+function prodSetBadge(stem, val){
+  const eff = effectiveProducts().find(p => p.stem === stem);
+  const cur = eff ? badgeOf(eff) : '';
+  prodSetField(stem, 'badge', cur === val ? '' : val);
+  R();
+}
+
+// 「자세히」 펼침 상태 — 저장하지 않는다(화면 상태일 뿐, 발행과 무관)
+const prodOpen = new Set();
+function prodToggleAdv(stem){ prodOpen.has(stem) ? prodOpen.delete(stem) : prodOpen.add(stem); R(); }
+
 // 신규 추가 제품 필드 수정
 function addProdEdit(stem, field, val){
   const idx = (S.productPatch.add || []).findIndex(a => a.stem === stem);
@@ -1842,9 +1940,17 @@ function prodAddNew(){
 
   const cats = productCats();
   if(!S.productPatch.add) S.productPatch.add = [];
-  S.productPatch.add.push({ stem, cat: cats[0] || '갤럭시', mid:'', grp:'', name:'', finish:'', tags:'' });
+  S.productPatch.add.push({ stem, cat: cats[0] || '갤럭시', mid:'', grp:'', name:'', finish:'', tags:'', feat:'', badge:'' });
   saveLocal(); R();
-  toast('새 제품이 추가되었습니다 — 제품명·제품그룹을 넣고 사진을 올리세요');
+  /* ★ 새 카드로 스크롤한다. 215종 그리드에서 새 카드는 맨 앞에 오지만,
+       필터가 걸려 있으면 안 보일 수 있다 — 그때 「추가했는데 아무 일도 안 일어났다」가 된다.
+       그래서 필터를 먼저 푼다. */
+  prodFilter = '전체'; prodSearch = ''; R();
+  setTimeout(() => {
+    const el = document.getElementById('pcard-' + stem);
+    if(el){ el.scrollIntoView({block:'center'}); const inp = el.querySelector('input'); if(inp) inp.focus(); }
+  }, 0);
+  toast('새 제품 자리가 만들어졌습니다 — 사진을 올리고 이름을 넣으세요');
 }
 
 /* ── 사진 업로드 ────────────────────────────────────────────────────
@@ -2009,13 +2115,8 @@ function rProductsTab(){
     return '';
   };
 
-  // 좌측 띠 색
-  const stripColor = (status) => {
-    if(status === 'edited')  return 'border-left:3px solid #fbbf24';
-    if(status === 'added')   return 'border-left:3px solid #22c55e';
-    if(status === 'deleted') return 'border-left:3px solid #ef4444;opacity:.55';
-    return 'border-left:3px solid transparent';
-  };
+  // r60) 좌측 띠 색(stripColor)은 세로 목록 전용이었다 — 카드 그리드에는 띠가 없고
+  //   테두리 색(.pg-card.is-added / .is-edited / .is-deleted)이 그 일을 한다. 그래서 지웠다.
 
   // 카테고리 필터 버튼
   const CATS = productCats();
@@ -2026,73 +2127,116 @@ function rProductsTab(){
     return `<button style="padding:5px 12px;border-radius:20px;border:1px solid ${act?'var(--ac)':'var(--bd)'};background:${act?'rgba(96,165,250,.15)':'transparent'};color:${act?'var(--ac)':'var(--tx3)'};font-size:11px;cursor:pointer;font-weight:${act?'700':'400'}" onclick="prodFilter='${c}';R()">${c} (${cnt})</button>`;
   }).join('');
 
-  // 제품 행 렌더 (썸네일 + 인라인 편집)
-  const rows = shown.map(p => {
+  /* ── 제품 카드 렌더 (r60) ──────────────────────────────────────────────
+     승연 지시: 「갤러리처럼 수정할 수 있게 … 플레이스 홀더 넣고 그 안에 제품 넣고
+     이름 넣고 특징 넣을 수 있도록 … new제품 설정 best설정도」.
+     그래서 카드 앞면에는 딱 그 넷만 둔다 — 사진 · 이름 · 특징 · NEW/BEST.
+
+     ★ 나머지(대분류·마감·중분류·제품그룹·태그)는 지우지 않고 「자세히」 안으로 접었다.
+       지우면 안 된다: 제품그룹은 **화면 카드 제목을 정하는 칸**이고(usung-r8-prod-a.js:56)
+       마감은 스타일 탭의 기준이다(usung-r8-prod-b.js:38). 없애면 r55 가 세운
+       고정점(215행 → 카드 62장)이 조용히 무너진다. 안 보이게만 한 것이다.
+
+     ★★ 신규·수정 카드를 맨 앞으로 올린다. 215장짜리 그리드에서 방금 추가한 제품이
+       제자리(맨 끝)에 있으면 「추가했는데 아무 일도 안 일어났다」로 보인다.
+       r55 가 세로 목록이었을 때 실제로 그렇게 읽혔다. */
+  const rank = p => p._status === 'added' ? 0 : p._status === 'edited' ? 1 : p._status === 'deleted' ? 2 : 3;
+  const ordered = shown.slice().sort((a, b) => rank(a) - rank(b));
+
+  const cards = ordered.map(p => {
     const isDel = p._status === 'deleted';
     const isAdd = p._status === 'added';
+    const editFn = isAdd ? `addProdEdit` : `prodEdit`;
+    const sj = escJs(p.stem), sa = escAttr(p.stem);
+    const bg = badgeOf(p);
+    const open = prodOpen.has(p.stem);
+    const dis = isDel ? ' disabled' : '';
+
     // ★ 현재 값이 목록에 없을 수도 있다(관리자가 새 분류를 직접 타이핑한 경우).
     //   그때 option 을 안 넣으면 select 가 첫 항목으로 **조용히 바뀐다** — 값이 유실된다.
     const catList = CATS.indexOf(p.cat) < 0 && p.cat ? CATS.concat([p.cat]) : CATS;
     const catSelect = catList.map(c =>
-      `<option value="${escAttr(c)}"${p.cat===c?' selected':''}>${escHtml(c)}</option>`
+      `<option value="${escAttr(c)}"${p.cat === c ? ' selected' : ''}>${escHtml(c)}</option>`
     ).join('');
-    const editFn = isAdd ? `addProdEdit` : `prodEdit`;
-    return `<div style="display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 12px;background:var(--cd);border-radius:10px;border:1px solid var(--bd);${stripColor(p._status)};position:relative">
-      <!-- 썸네일 = 사진 업로드 버튼. 방금 올린 사진이 있으면 그걸 먼저 보여준다 -->
-      <div title="${isDel?'삭제 예정인 제품입니다':'클릭해서 사진 올리기 (JPG·PNG 모두 가능)'}"
-        ${isDel?'':`onclick="pickProductPhoto('${escJs(p.stem)}')"`}
-        style="width:56px;height:56px;border-radius:8px;overflow:hidden;background:var(--sf);flex-shrink:0;position:relative;${isDel?'':'cursor:pointer'}">
-        <img src="${escAttr(photoSrc(p))}" alt="${escAttr(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:9px;color:var(--tx4);text-align:center;padding:4px">사진<br>없음</div>
-        ${isDel?'':`<div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;font-size:8px;color:#fff;background:linear-gradient(transparent 55%,rgba(0,0,0,.62));opacity:0;transition:opacity .15s"
-          onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">사진 변경</div>`}
+
+    const bgBtn = (v, lb) =>
+      `<button data-v="${v}" class="${bg === v ? 'on' : ''}"${dis} title="${v ? v + ' 배지를 붙입니다 (다시 누르면 해제)' : '배지 없음'}"
+        onclick="prodSetBadge('${sj}','${v}')">${lb}</button>`;
+
+    const adv = !open ? '' : `<div class="pg-adv">
+      <div>
+        <div class="pg-lb">대분류</div>
+        <select class="pg-in"${dis} onchange="${editFn}('${sj}','cat',this.value);grpHint()">${catSelect}</select>
       </div>
-      <!-- 편집 영역 -->
-      <div style="min-width:0">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--tx4);font-family:monospace">${escHtml(p.stem)}</span>
-          ${badge(p._status)}
-          <div style="flex:1"></div>
-          ${isDel
-            ? `<button onclick="prodRestore('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:10px;cursor:pointer">↩ 복원</button>`
-            : isAdd
-              ? `<button onclick="prodAddDel('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--rd);font-size:10px;cursor:pointer">× 취소</button>`
-              : `<button onclick="prodDel('${escJs(p.stem)}')" style="padding:3px 8px;border-radius:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--rd);font-size:10px;cursor:pointer">× 삭제</button>`
-          }
+      <div>
+        <div class="pg-lb">마감 <span style="opacity:.7">(스타일 탭 기준)</span></div>
+        <input type="text" class="pg-in" list="r55-finishes" value="${escAttr(p.finish)}"${dis}
+          oninput="${editFn}('${sj}','finish',this.value)">
+      </div>
+      <div>
+        <div id="ml-${sa}" class="pg-lb">${midLabHTML(p)}</div>
+        <input type="text" class="pg-in" list="r55-mids" value="${escAttr(p.mid)}"${dis}
+          oninput="${editFn}('${sj}','mid',this.value);grpHint()">
+      </div>
+      <div>
+        <div id="gl-${sa}" class="pg-lb">${grpLabHTML(p)}</div>
+        <input type="text" class="pg-in" list="r55-grps" value="${escAttr(p.grp)}"${dis}
+          oninput="${editFn}('${sj}','grp',this.value);grpHint()">
+        <div id="gh-${sa}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, view)}</div>
+      </div>
+      <div>
+        <div class="pg-lb">태그 (| 구분) <span style="opacity:.7">— 검색·색상 이름표에 쓰입니다</span></div>
+        <input type="text" class="pg-in" value="${escAttr(p.tags)}"${dis}
+          oninput="${editFn}('${sj}','tags',this.value)">
+      </div>
+    </div>`;
+
+    return `<div class="pg-card ${isAdd ? 'is-added' : p._status === 'edited' ? 'is-edited' : isDel ? 'is-deleted' : ''}" id="pcard-${sa}">
+      <!-- 사진칸 = 업로드 버튼. 방금 올린 사진(S.photoPreview)이 있으면 그걸 먼저 보여준다 -->
+      <div class="pg-ph" title="${isDel ? '삭제 예정인 제품입니다' : '클릭해서 사진 올리기 (JPG·PNG 모두 가능)'}"
+        ${isDel ? 'style="cursor:default"' : `onclick="pickProductPhoto('${sj}')"`}>
+        ${bg ? `<span class="tag ${bg === 'NEW' ? 'new' : 'best'}">${bg}</span>` : ''}
+        <img src="${escAttr(photoSrc(p))}" alt="${escAttr(p.name)}" loading="lazy"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="none" style="display:none">사진 없음<br><span style="opacity:.7">클릭해서 올리기</span></div>
+        ${isDel ? '' : `<div class="cam">📷 사진 ${photoSrc(p) ? '변경' : '올리기'}</div>`}
+      </div>
+      <div class="pg-bd">
+        <div>
+          <div id="nl-${sa}" class="pg-lb">${nameLabHTML(p)}</div>
+          <input type="text" class="pg-in" value="${escAttr(p.name)}"${dis} placeholder="제품 이름"
+            oninput="${editFn}('${sj}','name',this.value)">
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <div style="grid-column:1/-1">
-            <div id="nl-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${nameLabHTML(p)}</div>
-            <input type="text" value="${escAttr(p.name)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','name',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-          </div>
-          <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">대분류</div>
-            <select onchange="${editFn}('${escJs(p.stem)}','cat',this.value);grpHint()" ${isDel?'disabled':''} style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-              ${catSelect}
-            </select>
-          </div>
-          <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">마감 <span style="opacity:.7">(스타일 탭 기준)</span></div>
-            <input type="text" list="r55-finishes" value="${escAttr(p.finish)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','finish',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-          </div>
-          <div>
-            <div id="ml-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${midLabHTML(p)}</div>
-            <input type="text" list="r55-mids" value="${escAttr(p.mid)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','mid',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-          </div>
-          <div>
-            <div id="gl-${escAttr(p.stem)}" style="font-size:9px;color:var(--tx4);margin-bottom:2px">${grpLabHTML(p)}</div>
-            <input type="text" list="r55-grps" value="${escAttr(p.grp)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','grp',this.value);grpHint()" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-            <div id="gh-${escAttr(p.stem)}" style="font-size:9px;margin-top:3px;line-height:1.45">${grpHintHTML(p, view)}</div>
-          </div>
-          <div>
-            <div style="font-size:9px;color:var(--tx4);margin-bottom:2px">태그 (| 구분)</div>
-            <input type="text" value="${escAttr(p.tags)}" ${isDel?'disabled':''} oninput="${editFn}('${escJs(p.stem)}','tags',this.value)" style="width:100%;padding:5px 8px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;font-size:11px;color:var(--tx)${isDel?';opacity:.4':''}">
-          </div>
+        <div>
+          <div class="pg-lb">특징</div>
+          <input type="text" class="pg-in" value="${escAttr(featOf(p))}"${dis} placeholder="예) 저소음 · 스테인리스"
+            onchange="prodSetField('${sj}','feat',this.value)">
+        </div>
+        <div class="pg-bg">${bgBtn('NEW', 'NEW')}${bgBtn('BEST', 'BEST')}${bgBtn('', '없음')}</div>
+        ${adv}
+        <div class="pg-ft">
+          <span class="pg-stem" title="사진 파일명입니다 — 자동으로 정해집니다">${escHtml(p.stem)}</span>
+          ${badge(p._status)}
+          <button class="pg-more" style="width:auto;padding:2px 8px" onclick="prodToggleAdv('${sj}')">${open ? '⌃ 접기' : '⌄ 자세히'}</button>
+          ${isDel
+            ? `<button class="pg-x" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:#22c55e" onclick="prodRestore('${sj}')">↩ 복원</button>`
+            : isAdd
+              ? `<button class="pg-x" onclick="prodAddDel('${sj}')">× 취소</button>`
+              : `<button class="pg-x" onclick="prodDel('${sj}')">× 삭제</button>`
+          }
         </div>
       </div>
     </div>`;
   }).join('');
+
+  /* 플레이스홀더 카드 — 승연이 말한 「플레이스 홀더」가 이것이다.
+     ★ 그리드 **맨 앞**에 둔다. 갤러리(rImgGrid)는 맨 뒤에 두는데, 거기는 50장이라
+       끝까지 스크롤이 되지만 여기는 215장이다. 뒤에 두면 못 찾는다. */
+  const addCard = `<div class="pg-add" onclick="prodAddNew()">
+    <div class="plus">+</div>
+    <div class="lb">새 제품 추가</div>
+    <div class="sub">빈 자리가 하나 생깁니다<br>사진 · 이름 · 특징을 넣으세요</div>
+  </div>`;
 
   return `
     <!-- 제품소개 관리 (r55) -->
@@ -2135,11 +2279,14 @@ function rProductsTab(){
         ⚠ 미발행 변경사항이 있습니다. 🚀 제품 발행 버튼을 눌러야 방문자 화면에 반영됩니다.
       </div>` : ''}
 
-      <!-- 제품 목록 -->
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <!-- 제품 목록 (r60) 세로 목록 → 카드 그리드.
+           ★ 검색 결과가 없어도 「+ 새 제품」 자리는 남긴다. 그게 사라지면
+             검색어를 지우기 전엔 제품을 추가할 방법이 없어진다. -->
+      <div class="pg-grid">
+        ${addCard}
         ${shown.length === 0
-          ? `<div style="padding:32px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">검색 결과가 없습니다</div>`
-          : rows
+          ? `<div style="grid-column:1/-1;padding:32px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">검색 결과가 없습니다</div>`
+          : cards
         }
       </div>
 

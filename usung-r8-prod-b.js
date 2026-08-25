@@ -39,11 +39,32 @@ function inStyle(m,s){const keys=STYLES[s];return m.items.some(it=>keys.includes
 function matchStyle(m){return !activeStyle?true:inStyle(m,activeStyle);}
 function styleCount(s){return s?MODELS.filter(m=>inStyle(m,s)).length:MODELS.length;}
 
+/* r60) NEW/BEST 배지 — 관리자(제품 관리 탭)가 UP_DATA 8번 열에 넣은 값을 읽는다.
+   ★ 표시 설비는 원래부터 다 있었다: mcardHTML 의 tag 인자, .pc-tag CSS(usung-r8.css:243-244,
+     usung-r42.css:72-75 모바일 축소). **한 번도 안 쓰였을 뿐이다** — 유일한 호출부(114행)가
+     값을 안 넘기고 있었다. 그래서 여기서 새로 만드는 건 「어느 값을 넘길까」 하나뿐이다.
+   ★★ 카드(MODEL) 하나는 여러 행을 묶은 것이라 배지가 섞일 수 있다(예: 마감 5종 중 1종만 NEW).
+     BEST 가 하나라도 있으면 BEST, 아니면 NEW 가 있으면 NEW. 둘 다 없으면 배지 없음.
+     BEST 를 우선하는 이유는 「많이 팔린다」가 「새로 나왔다」보다 구매 결정에 강해서다.
+   ★★★ 위쪽 BEST4 쇼케이스(55행)와는 **별개다.** 그건 260729 에 사람이 고른 고정 4종이고
+     .bn-grid 가 repeat(4,1fr) 라 개수가 4가 아니면 레이아웃이 깨진다. 관리자 배지로 그걸
+     대체하려면 개수 보정이 필요해 지금은 손대지 않았다 — 승연 판단 대기(QUESTIONS L1). */
+function r8Badge(m){
+  const v=(m.items||[]).map(it=>String(it.badge||'').toUpperCase());
+  return v.indexOf('BEST')>=0?'BEST':(v.indexOf('NEW')>=0?'NEW':'');
+}
+/* 배지 span 은 두 군데서 그린다(제품소개 밴드의 .pcard · 카테고리뷰의 .mcard).
+   ★ 카테고리뷰에도 다는 이유: 밴드는 대분류마다 list.slice(0,12) 로 잘린다(129행).
+     대분류가 5개인데 모델이 62종이라 12를 넘는 대분류가 있고, 거기 13번째 제품에
+     BEST 를 걸면 **어디에서도 안 보인다.** 그러면 「설정했는데 아무 일도 안 일어난다」가
+     된다 — r60 을 부른 신고가 정확히 그 모양이었다. */
+function badgeTag(t){return t?`<span class="pc-tag ${t==='NEW'?'new':''}">${t}</span>`:'';}
+
 // card for a MODEL (색상·마감 N종)
 function mcardHTML(m,tag){
   const n=m.items.length;
   const fin=n>1?`색상·마감 ${n}종`:(m.rep.finish||'단일');
-  const tg=tag?`<span class="pc-tag ${tag==='NEW'?'new':''}">${tag}</span>`:'';
+  const tg=badgeTag(tag);
   return `<div class="pcard" onclick='openModel("${m.key}",0)'>
     <div class="pc-thumb">${tg}<img loading="lazy" crossorigin="anonymous" onload="trimImg(this)" src="${m.rep.img}" alt=""></div>
     <div class="pc-body"><div class="pc-cat">${m.cat==='코브라후드'?'하향식후드':m.cat}</div>
@@ -111,7 +132,7 @@ function renderBands(){
         <div class="cn-fx band-fx">${catFxHTML(c)}</div>
       </div>
       <div class="cards-area">
-        <div class="hrow" id="row-${c}">${shown.map(m=>mcardHTML(m)).join('')}</div>
+        <div class="hrow" id="row-${c}">${shown.map(m=>mcardHTML(m,r8Badge(m))).join('')}</div>
       </div>
     </div></div>`;
   });
@@ -142,7 +163,7 @@ function renderCatMain(cat){
     const ms=list.filter(m=>m.mid===md);
     return `<div class="midg" id="mid-${md}"><h3>${md||M.kr}</h3>
       <div class="grid4">${ms.map(m=>`<div class="mcard" onclick='openModel("${m.key}",0)'>
-        <div class="mt"><img loading="lazy" src="${m.rep.img}"></div>
+        <div class="mt">${badgeTag(r8Badge(m))}<img loading="lazy" src="${m.rep.img}"></div>
         <div class="mb"><div class="nm">${modelName(m)}</div><div class="fn">${m.items.length>1?'색상·마감 '+m.items.length+'종':(m.rep.finish||'단일')}</div></div>
       </div>`).join('')}</div></div>`;
   }).join('');
