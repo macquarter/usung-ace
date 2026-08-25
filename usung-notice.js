@@ -10,6 +10,12 @@
  *
  * r52 — build-marker: r52-b2. 승연 「더미값이면 당연히 없는게 맞아」 →
  *   고정카드 2건 삭제 + 타임라인 더미 7건 날짜로 필터. 근거는 DUMMY_DATES 주석.
+ *
+ * r58 — build-marker: r58-b1. 승연 「A로 가자」(공지 발행 경로를 오늘 만든다) →
+ *   /api/notice 를 단일 진실로 삼는다. 세 가지가 한꺼번에 풀린다:
+ *     R1  관리자 공지가 **자기 브라우저에서만** 사이트에 보이던 환상 제거
+ *     D3  비동기 fetch 뒤 재렌더 불가(1회 가드) → 내용 지문 가드로 교체
+ *     D4  프로즌 병합분과 서버분이 겹쳐 두 번 뜨는 문제 → 서버가 있으면 프로즌 잔여분 폐기
  */
 (function () {
   'use strict';
@@ -37,13 +43,18 @@
    * 타임라인 7은 index_v6.html:3629 의 인라인 배열이 #notice-timeline 에 그린 것을
    * 여기서 되읽는 구조라 「지울 원본」이 이 파일에 없다 → 읽은 뒤 걸러낸다.
    *
-   * ★ 제목이 아니라 **날짜**로 거른다. usung-r16-i18n-i.js:71-74 가 이 제목들을
-   *   5개 국어로 번역하므로, 한국어 제목으로 건 필터는 외국어 화면에서 통째로 샌다.
-   *   날짜 문자열(2026.04.05)은 사전에 없어 어느 언어에서도 그대로다.
+   * ★ 제목이 아니라 **날짜**로 거른다.
+   *   ★★ 8/24 정정 — 예전에 여기 「usung-r16-i18n-i.js:71-74 가 이 제목들을 5개 국어로
+   *   번역하므로 한국어 필터는 외국어 화면에서 샌다」고 적어 놨는데 **그건 내 오기다**.
+   *   실측: 이 7개 제목은 i18n.js 에 0건, 전체 .js 에서 이 파일 외 0건이고,
+   *   근거로 댄 usung-r16-i18n-i.js:71-74 는 **게시판 표 머리글**(분류/제목/등록일)이었다.
+   *   날짜로 거른다는 **선택은 여전히 옳다** — 날짜는 어느 언어에서도 안 변하고,
+   *   새 공지는 날짜가 달라 그대로 통과한다. 하지만 **이유가 틀렸으니 이 메모를
+   *   근거로 다음 설계를 세우지 말 것.**
    * ★ 하드코딩 목록은 원래 썩는다(KNOWLEDGE 41). 여기만 예외인 이유 —
    *   출처인 index_v6.html 이 frozen 이라 이 7건은 영원히 늘지도 줄지도 않는다.
-   *   반대로 CMS·게시판으로 **새로 들어온 공지는 날짜가 달라 그대로 통과**한다.
-   * ★ 결과가 0건인 게 정상이다. 공지는 서버 발행 경로가 없다(KNOWLEDGE 48-a). */
+   * ★ r58 이전엔 「결과 0건이 정상」이었다. 공지에 서버 발행 경로가 없었기 때문이다.
+   *   r58 이 /api/notice 를 열면서 그 전제가 끝났다 — 아래 pullServer() 참조. */
   var DUMMY_DATES = {
     '2026.04.05': 1,  // 2026 제품 카탈로그 v6 배포 안내
     '2026.03.28': 1,  // 태엽감속기 빠찌링 정품 교체 캠페인
@@ -54,10 +65,16 @@
     '2026.01.20': 1   // 유성에이스 공식 블로그 리뉴얼 완료
   };
 
-  // 이미 렌더된 #notice-timeline에서 항목 추출 → 더미 제외(없으면 빈 배열)
+  /* ── 프로즌 타임라인 읽기 ────────────────────────────────────────────
+   * ★★ r58 — 이 함수는 **한 번만** 유효하다. render() 가 .max-w-5xl 을 통째로 갈아치우면
+   *   #notice-timeline 자체가 사라지기 때문이다. 그런데 서버 fetch 는 비동기라 그 뒤에 온다.
+   *   → 읽은 결과를 캐시해 둬야 재렌더가 가능하다(캐시 없이는 두 번째 렌더가 항상 0건).
+   *   이게 납품 점검 때 「D3 재렌더 불가」로 잡아 둔 그 문제다. */
+  var frozenCache = null;
   function readTimeline() {
+    if (frozenCache) return frozenCache;
     var el = document.getElementById('notice-timeline');
-    if (!el || !el.children || !el.children.length) return [];
+    if (!el || !el.children || !el.children.length) return [];   // 아직 안 그려졌다 → 캐시하지 않는다
     var out = [];
     var rows = el.children;
     for (var i = 0; i < rows.length; i++) {
@@ -74,7 +91,64 @@
         excerpt: p ? p.textContent.trim() : ''
       });
     }
+    frozenCache = out;
     return out;
+  }
+
+  /* ── 서버 공지 (r58) ─────────────────────────────────────────────────
+   * ★★★ 왜 서버가 「단일 진실」이어야 하는가 — 납품 점검에서 나온 최대 리스크(R1).
+   *   index_v6.html:3635-3652(frozen)은 localStorage['usung-cms-state-v2'].boards.notice 를
+   *   읽어 #notice-timeline 에 병합한다. 관리자와 사이트가 **같은 오리진**이라,
+   *   고객이 관리자에서 공지를 쓰면 그 글이 **자기 브라우저에서만** 사이트에 보인다.
+   *   남에게는 안 보인다 → 시연은 성공처럼 보이고 실제로는 실패한다.
+   *
+   *   그래서 /api/notice 가 configured 면 **프로즌 타임라인 잔여분을 통째로 버린다**.
+   *   ★ 버려도 되는 근거: index_v6 의 defaultNoticeItems 7건은 DUMMY_DATES 로 이미
+   *     걸러진다. 즉 **필터 후 남은 행은 전부 localStorage 출신**이다 — 그게 바로 저 환상이다.
+   *   이 한 줄이 R1(환상)과 D4(중복 노출)를 동시에 없앤다.
+   *
+   * ★ 서버가 미설정(configured:false)이거나 fetch 가 실패하면 예전 동작 그대로 남는다.
+   *   납품 전 환경변수가 빠져도 공지 페이지가 깨지지 않는다는 뜻이다. */
+  var server = null;          // null = 아직 모름 / {configured, posts}
+  var pad2 = function (n) { return n < 10 ? '0' + n : '' + n; };
+
+  function toItem(p) {
+    var d = new Date(Number(p.createdAt) || Date.now());
+    var body = String(p.body == null ? '' : p.body);
+    return {
+      date: d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate()),
+      tag: p.cat || '공지',
+      title: p.title || '',
+      excerpt: body.length > 100 ? body.slice(0, 100) + '…' : body,
+      pin: !!p.pin,
+      ts: Number(p.createdAt) || 0
+    };
+  }
+
+  function serverItems() {
+    var posts = (server && server.posts) || [];
+    return posts.map(toItem).sort(function (a, b) {
+      if (a.pin !== b.pin) return a.pin ? -1 : 1;   // 상단고정 먼저
+      return b.ts - a.ts;                            // 그다음 최신순
+    });
+  }
+
+  function pullServer() {
+    if (!window.fetch) return;
+    fetch('/api/notice', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.configured || !Array.isArray(j.posts)) return;
+        server = { configured: true, posts: j.posts };
+        render(true);   // ★ fetch 는 첫 렌더 뒤에 온다 → 강제 재렌더가 반드시 필요하다
+      })
+      .catch(function () {});
+  }
+
+  // 화면에 그릴 최종 목록
+  function resolveItems() {
+    var frozen = readTimeline();
+    return (server && server.configured) ? serverItems() : frozen;
   }
 
   /* 공지 0건일 때 — 타임라인 자리를 빈 채로 두지 않는다
@@ -156,21 +230,33 @@
     '</div>';
   }
 
-  function render() {
+  /* ★ r58 — 가드를 「1회만」에서 「같은 내용이면 건너뛴다」로 바꿨다.
+   *   예전 가드(dataset==='v1' 이면 return)는 서버 fetch 가 도착해도 재렌더를 막았다.
+   *   그렇다고 가드를 없애면 setTimeout 3연발 + navigate 훅이 매번 DOM 을 갈아엎는다.
+   *   → 그릴 내용의 지문(stamp)을 비교한다. 같으면 no-op, 달라졌을 때만 다시 그린다. */
+  function stamp(items) {
+    return items.length + '|' + items.map(function (n) { return n.date + n.title; }).join('|');
+  }
+
+  function render(force) {
     var page = document.getElementById('page-notice');
     if (!page) return;
-    if (page.dataset.usungNotice === 'v1') return;
+    var items = resolveItems();
+    var sig = stamp(items);
+    if (!force && page.dataset.usungNotice === sig) return;
     var wrap = page.querySelector('.max-w-5xl') || page.firstElementChild;
     if (!wrap) return;
-    var items = readTimeline();
     wrap.outerHTML = buildHTML(items);
-    page.dataset.usungNotice = 'v1';
+    page.dataset.usungNotice = sig;
   }
 
   function boot() {
+    pullServer();          // 비동기 — 도착하면 스스로 render(true) 한다
     render();
-    setTimeout(render, 300);
-    setTimeout(render, 1200);
+    // ★ setTimeout(render, …) 로 넘기지 않는다 — render 가 이제 인자(force)를 받는다.
+    //   타이머가 인자를 넘기는 구현이면 조용히 force 로 돌아간다. 감싸서 인자를 끊는다.
+    setTimeout(function () { render(); }, 300);
+    setTimeout(function () { render(); }, 1200);
   }
 
   if (document.readyState === 'loading') {
@@ -185,7 +271,10 @@
     var _nav = window.navigate;
     window.navigate = function (id) {
       var r = _nav.apply(this, arguments);
-      if (id === 'notice') { setTimeout(render, 60); setTimeout(render, 400); }
+      if (id === 'notice') {
+        setTimeout(function () { render(); }, 60);
+        setTimeout(function () { render(); }, 400);
+      }
       return r;
     };
   }
