@@ -414,7 +414,12 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 <div class="login" id="loginView">
   <div class="login-card">
     <div class="login-brand">
-      <div class="login-plate"><span class="login-logo"><img src="유성%20에이스%20로고.png" alt="유성에이스"></span></div>
+      <!-- r63) 로고는 관리자가 직접 바꾼다 → 자리는 /brand/logo.png.
+           ★ onerror 를 「함수 호출」로 쓰면 안 된다 — 스크립트는 문서 끝에 있어서
+             아직 안 로드된 사이에 404 가 나면 ReferenceError 만 나고 대체가 안 된다.
+             그래서 속성 안에서 자족적으로 끝낸다. onerror=null 은 무한루프 방지. -->
+      <div class="login-plate"><span class="login-logo"><img class="js-logo" src="/brand/logo.png" alt="유성에이스"
+        onerror="this.onerror=null;this.src='/유성%20에이스%20로고.png'"></span></div>
       <div class="login-title">유성에이스 관리자</div>
       <div class="login-sub">홈페이지 관리 · CMS Admin Panel</div>
     </div>
@@ -442,7 +447,8 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
   <!-- SIDEBAR -->
   <aside class="sb" id="sidebar">
     <div class="sb-brand">
-      <span class="sb-plate"><img src="유성%20에이스%20로고.png" alt="유성에이스"></span>
+      <span class="sb-plate"><img class="js-logo" src="/brand/logo.png" alt="유성에이스"
+        onerror="this.onerror=null;this.src='/유성%20에이스%20로고.png'"></span>
       <div>
         <div class="nm">YUSUNG ACE</div>
         <div class="tg">ADMIN · v2.0</div>
@@ -3623,6 +3629,7 @@ function botTestRun(){
 function rSettings(){
   return `
     <div class="vw-hd"><div><div class="vw-ti">설정</div><div class="vw-sub">시스템 환경 설정</div></div></div>
+    ${rLogoCard()}
     <div class="cd"><div class="cd-ti">테마 <div class="ln"></div></div>
       <div style="display:flex;gap:10px">
         <button class="tb-btn ${S.theme==='dark'?'pri':''}" onclick="setTheme('dark')">다크 모드</button>
@@ -3652,6 +3659,107 @@ function rSettings(){
     </div>
   `;
 }
+/* ── 관리자 로고 교체 (r63) ──────────────────────────────────────────
+   승연: 「관리자 페이지에 활용된 로고도 변경가능하도록해줘. 내가 직접 변경할게」
+
+   ★ 바뀌는 곳은 **관리자 두 군데뿐**이다 — 로그인 화면 · 왼쪽 메뉴 위.
+     사이트 상단 로고는 파일이 아니라 usung-navfix.js 안에 base64 로 구워져 있고,
+     게다가 **흰색 판본**이다(헤더가 어두운 히어로 위 bg-transparent).
+     남색 판본을 거기 얹으면 안 보인다 → 묶지 않았다. 상세는 api/logo.js 헤더.
+
+   ★ 미리보기는 저장하지 않는다(saveLocal 안 부름). dataURL 은 수백 KB 라
+     localStorage 5MB 한도를 몇 번 만에 깨뜨린다 — 사진 업로드와 같은 이유.
+     새로고침하면 사라지고, 그때는 이미 배포본이 올라와 있다. */
+const LOGO_LIVE = '/brand/logo.png';         // 관리자가 올린 로고가 앉는 자리
+const LOGO_BASE = '/유성%20에이스%20로고.png'; // 아직 안 올렸을 때 / 되돌렸을 때
+let logoOverride = null;                      // dataURL 또는 경로. 방금 바꾼 것을 즉시 보여주려는 용도
+
+function rLogoCard(){
+  const cur = logoOverride || LOGO_LIVE;
+  return `
+    <div class="cd"><div class="cd-ti">관리자 로고 <div class="ln"></div></div>
+      <p style="font-size:12px;color:var(--tx3);margin-bottom:12px">
+        로그인 화면과 왼쪽 메뉴 위에 뜨는 로고입니다. 바꾸면 두 곳이 같이 바뀝니다.
+      </p>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <span class="sb-plate" style="padding:10px 14px 8px">
+          <img src="${cur}" alt="현재 로고" style="height:44px;width:auto;display:block"
+               onerror="this.onerror=null;this.src='${LOGO_BASE}'">
+        </span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="tb-btn pri" onclick="pickLogo()">로고 이미지 변경</button>
+          <button class="tb-btn" onclick="resetLogo()">기본 로고로 되돌리기</button>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--tx4);margin-top:12px;line-height:1.7">
+        PNG·JPG 둘 다 됩니다 (올릴 때 자동으로 PNG 로 바꿔 저장합니다).<br>
+        배경이 없는 <b>투명 PNG</b> 를 권합니다 — 흰 판 위에 얹히기 때문입니다.<br>
+        ★ 올린 뒤 화면에 보이기까지 <b>1~2분</b> 걸립니다. 제품 사진과 같습니다.
+      </p>
+    </div>`;
+}
+
+// 화면의 로고를 그 자리에서 갈아끼운다(배포를 기다리지 않고 보이게)
+function applyLogo(src){
+  logoOverride = src;
+  document.querySelectorAll('img.js-logo').forEach(im => { im.onerror = null; im.src = src; });
+  R();
+}
+
+function pickLogo(){
+  if(!authHeaders()){ toast('로그인해야 로고를 바꿀 수 있습니다', true); return; }
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/png,image/jpeg,image/webp';
+  inp.onchange = () => { const f = inp.files && inp.files[0]; if(f) uploadLogo(f); };
+  inp.click();
+}
+
+async function uploadLogo(file){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 로고를 바꿀 수 있습니다', true); return; }
+  toast('로고 변환 중…');
+  let dataUrl;
+  try { dataUrl = await toPngDataUrl(file); }   // 사진 업로드와 같은 변환기를 쓴다
+  catch(e){ toast('로고 처리 실패 : ' + e.message, true); return; }
+
+  toast('로고 올리는 중…');
+  try{
+    const r = await fetch('/api/logo', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', ...h },
+      body: JSON.stringify({ data: dataUrl })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok){
+      applyLogo(dataUrl);
+      toast(`로고를 ${j.replaced?'교체':'등록'}했습니다 — 반영까지 1~2분 걸립니다`);
+    }
+    else if(r.status === 401){ onAuthExpired(); }
+    else if(r.status === 503){ toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true); }
+    else { toast('로고 올리기 실패 : ' + (j.error || r.status), true); }
+  }catch(e){ toast('로고 올리기 실패 : ' + e.message, true); }
+}
+
+async function resetLogo(){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 로고를 바꿀 수 있습니다', true); return; }
+  if(!confirm('기본 로고로 되돌리시겠습니까?\n올린 로고 파일은 삭제됩니다.')) return;
+  toast('되돌리는 중…');
+  try{
+    const r = await fetch('/api/logo', { method:'DELETE', headers: h });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok){
+      // ★ 지운 직후에도 배포본에는 1~2분간 옛 파일이 남아 있다. 그래서 화면은 기본 로고를
+      //   **명시적으로** 가리키게 한다 — LOGO_LIVE 를 그대로 두면 지운 게 계속 보인다.
+      applyLogo(LOGO_BASE);
+      toast(j.message || '기본 로고로 되돌렸습니다');
+    }
+    else if(r.status === 401){ onAuthExpired(); }
+    else { toast('되돌리기 실패 : ' + (j.error || r.status), true); }
+  }catch(e){ toast('되돌리기 실패 : ' + e.message, true); }
+}
+
 function setTheme(t){
   S.theme = t;
   document.body.classList.toggle('light', t==='light');
