@@ -765,7 +765,7 @@ let S = {
      *   = 이건 미관이 아니라 **사고**다 (KNOWLEDGE 48 과 정확히 같은 형태, 대상만 다르다).
      *
      * 그래서 빈 배열로 둔다. 화면이 비어 보이는 문제는 pullNotice() 가 서버에서 채워 해결한다.
-     * 옛 9건(r48 시드)은 아래 R58_NOTICE_SEED + r58Purge() 가 기존 브라우저에서 걷어낸다.
+     * 옛 9건(r48 시드)은 아래 R58_NOTICE_SEED + r59Purge() 가 기존 브라우저에서 걷어낸다.
      * 삭제한 원본 9건은 backup/pre-r58-20260825 브랜치의 admin.html:746-774 에 남아 있다. */
     notice: [],
     // 홈페이지 게시판은 네이버 블로그 RSS 60건을 보여준다 — 방문자가 쓴 글은 0건이다.
@@ -824,9 +824,25 @@ function r48Purge(s){
      *   r58 이 /api/notice 를 열면서 **그 배열이 곧 발행 페이로드**가 됐다 →
      *   같은 줄이 「고객의 첫 발행 클릭 = 더미 9건 라이브 게시」로 뜻이 바뀐다.
      *   ★ 코드는 그대로인데 **주변이 바뀌어 위험해진 경우**다. 무해했던 줄을 다시 볼 것.
-     *   빈 화면은 pullNotice() 가 서버 값으로 채운다. */
-    s.boards.notice = r48DropSeed(s.boards.notice, R58_NOTICE_SEED, 'title');
+     *   빈 화면은 pullNotice() 가 서버 값으로 채운다.
+     *   ★★★ r59 — 옛 9건 청소는 여기 있으면 안 된다. 아래 r59Purge() 로 옮겼다(이유는 거기). */
   }
+}
+/* ============== r59 : r58 공지 퍼지의 게이트를 고친다 ==============
+ * ★★★ r58 은 이 청소를 r48Purge() 안에 넣었다. 그런데 r48Purge() 의 게이트는
+ *   `seedVer < 48` 이고, r55 이후 관리자를 연 브라우저는 이미 **49** 다.
+ *   = 옛 더미 9건을 실제로 갖고 있는 바로 그 브라우저에서만 청소가 안 돈다.
+ * ★ 새 프로필로 검증하면 notice 가 애초에 비어 있어 **실패할 수가 없는 검사**가 된다
+ *   (KNOWLEDGE 52). 통제군(seedVer 49 + 더미 9건 + 진짜 글 1건)으로 재서 잡았다 —
+ *   라이브에서 9/9 생존, 화면 「총 10건」.
+ * ★ r58 이 /api/notice 를 열었으므로 그 배열은 **곧 발행 페이로드**다.
+ *   승연이 공지 하나만 저장해도 pushNotice() 가 더미 9건을 같이 올린다.
+ * → 게이트를 r48 과 분리하고 seedVer 를 59 로 올린다. */
+function r59Purge(s){
+  if(!s.boards) return;
+  /* ★ 배열을 통째로 비우지 않는다 — id 와 제목이 「둘 다」 맞는 행만 지운다.
+   *   그 사이 승연이 쓴 진짜 공지는 제목이 달라 살아남는다(통제군으로 확인). */
+  s.boards.notice = r48DropSeed(s.boards.notice, R58_NOTICE_SEED, 'title');
 }
 
 // ============== AUTH (r44 — 서버 검증) ==============
@@ -1133,7 +1149,7 @@ function saveLocal(){
     content:S.content, arrays:S.arrays, images:S.images,
     inquiries:S.inquiries, boards:S.boards, theme:S.theme,
     productPatch: S.productPatch,   // r55) 제품 패치 상태 보존
-    seedVer: 49   // r55) UP_DATA 기반 전환. 48→49 로 올려 이전 더미 arrays.products 를 정리한다.
+    seedVer: 59   // r59) 49→59. r58 공지 시드 9건 청소가 seedVer 49 브라우저에서 안 돌던 것을 고친다.
   }));
 }
 function loadLocal(){
@@ -1151,12 +1167,17 @@ function loadLocal(){
       if(!s.seedVer || s.seedVer < 48){ r48Purge(S); }
       // migration r55: 구형 D2.products 더미 15개 제거 (arrays.products 는 이제 사용 안 함)
       if(!s.seedVer || s.seedVer < 49){ delete S.arrays.products; }
+      /* migration r59: r48 공지 시드 9건 청소.
+       * ★ r48Purge() 에 얹으면 안 된다 — 그쪽 게이트가 `< 48` 이라
+       *   더미를 실제로 가진 seedVer 49 브라우저에서 영영 안 돈다(r58 의 실수). */
+      if(!s.seedVer || s.seedVer < 59){ r59Purge(S); }
       // r55) 제품 패치 복원
       // ★ 복원이 saveLocal() 보다 **먼저**여야 한다. 뒤집히면 마이그레이션이 도는 로드에서
       //   아직 비어 있는 기본 패치가 저장돼 편집분을 덮어쓴다. 48→49 에서는 s.productPatch 가
       //   애초에 없어 손해가 없지만, 다음에 seedVer 를 또 올리면 그때 조용히 터진다.
+      //   ★ r59 가 바로 그 「또 올리는」 경우다 — 순서가 이대로여야 편집분이 산다.
       if(s.productPatch) S.productPatch = s.productPatch;
-      if(s.seedVer < 49 || !s.seedVer) saveLocal();
+      if(s.seedVer < 59 || !s.seedVer) saveLocal();
       if(S.sortBy && S.sortBy.archive){ S.sortBy.certification = S.sortBy.archive; delete S.sortBy.archive; }
       if(S.filterCat && S.filterCat.archive){ S.filterCat.certification = S.filterCat.archive; delete S.filterCat.archive; }
       S.theme = s.theme || 'dark';
