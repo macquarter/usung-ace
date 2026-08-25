@@ -12,22 +12,33 @@
 // ★ 데이터 출처 (전부 런타임 실측 — 하드코딩 숫자 0개)
 //   /api/board  GET → 게시판 글 수, 서버 저장소 연결 여부
 //   /api/cms    GET → 발행된 CMS 항목 수, 마지막 발행 시각
+//   /api/notice GET → 공지사항 서버 글 수 (r58 신설 · r61 에서 여기 연결)
+//   /_vercel/insights/script.js → 방문자 집계 on/off (r61)
 //   /           GET → 배포 커밋(오버레이 ?v= 값), SEO 태그 실재 여부
 //   /robots.txt · /sitemap.xml → HTTP 상태
 //   productCatalog (admin.html 이 이미 로드) → 제품 수
 //   localStorage['usung-cms-state-v2'] → 이 브라우저에 쌓인 문의
+//
+// ★★★ r61) 이 파일이 **두 군데서 썩어 있었다** — 둘 다 시스템 상태를 문장으로 박아둔 것이다.
+//   ① 「애널리틱스 미설치 · Vercel Analytics 모두 없음」 → r42 가 이미 스니펫을 넣었다
+//   ② 「공지사항은 서버로 올라가는 경로가 없습니다」   → r58 이 `/api/notice` 를 만들었다
+//   배관이 바뀌자마자 거짓이 됐다 → 갱신하지 말고 **매번 묻는다**(KNOWLEDGE 41). 위 두 줄이 그 질문.
 //
 // ★ 붙이는 방식: admin.html 의 rDashboard 를 **교체**한다. 원본은 지우지 않는다
 //   (rView 가 ct.innerHTML = rDashboard() 를 호출하므로 반환값은 동기 문자열이어야 한다.
 //    실측은 비동기라 먼저 「측정 중」으로 그리고, 끝나면 #ct 를 다시 그린다.)
 //
 // ★ 캐시: admin.html 은 정적 파일이라 ?v= 자동 주입이 없다. 이 파일을 고치면
-//   admin.html 의 <script src="/usung-r40-dash.js?v=r40"> 버전 문자열을 반드시 올릴 것.
+//   admin.html 의 <script src="/usung-r40-dash.js?v=…"> 버전 문자열을 반드시 올릴 것.
+//   현재 `?v=r61a` (r40 → r40a → r61a). 이 문자열이 배포 판정 마커다.
 
 (function () {
   'use strict';
 
   var D = { done: false, busy: false };
+
+  // Vercel Web Analytics 대시보드 (팀/프로젝트 실측값 — 8/20 화면에서 확인한 실주소)
+  var VA_URL = 'https://vercel.com/41quart-3483s-projects/usung-ace/analytics';
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -54,6 +65,12 @@
     return fetch(u, { method: 'HEAD', cache: 'no-store' })
       .then(function (r) { return r.status; }).catch(function () { return 0; });
   }
+  // ★ r61) 집계 스크립트는 실제 방문자 브라우저와 **같은 방법(GET)**으로 묻는다.
+  //   재는 방법이 도는 방법과 다르면 그 검사는 실물을 증명하지 못한다.
+  function stat(u) {
+    return fetch(u, { cache: 'no-store' })
+      .then(function (r) { return r.status; }).catch(function () { return 0; });
+  }
 
   function collect() {
     if (D.busy) return;
@@ -63,9 +80,12 @@
       getJSON('/api/cms'),
       fetch('/', { cache: 'no-store' }).then(function (r) { return r.text(); }).catch(function () { return ''; }),
       head('/robots.txt'),
-      head('/sitemap.xml')
+      head('/sitemap.xml'),
+      stat('/_vercel/insights/script.js'),   // r61) 방문자 집계 on/off
+      getJSON('/api/notice')                 // r61) 공지사항 서버 경로 (r58 신설)
     ]).then(function (a) {
       D.board = a[0]; D.cms = a[1];
+      D.va = a[5]; D.notice = a[6];
       var html = a[2] || '';
       var m = html.match(/\?v=([0-9a-f]{7,40})/);
       D.deploy = m ? m[1] : null;
@@ -103,6 +123,8 @@
       + '<span style="color:var(--tx3)">' + esc(k) + '</span>'
       + '<span style="color:' + col + ';font-weight:600;text-align:right">' + v + '</span></div>';
   }
+  // 값 옆에 붙는 흐린 보조 문구 (r61 — 같은 인라인 스타일이 네 군데로 늘어나 하나로 묶었다)
+  function sm(t) { return '<span style="color:var(--tx4);font-weight:400">' + t + '</span>'; }
   function note(text) {
     return '<div style="margin-top:10px;padding:10px 12px;border-radius:10px;font-size:11px;'
       + 'line-height:1.7;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.30);'
@@ -195,13 +217,24 @@
 
     var srvOk = b.configured && c.configured;
 
-    // ★ /api/board 가 담는 건 「고객게시판」 하나뿐이다(admin.html:773 이 S.boards.board 에만 넣는다).
-    //   공지사항·인증현황은 서버로 올라가는 경로 자체가 없어 이 브라우저에만 있다.
-    //   서버 수와 로컬 수가 다르면 「썼지만 아직 방문자에게 안 보이는 글」이 있다는 뜻이므로
-    //   합계를 뭉뚱그리지 않고 둘을 나란히 보여준다.
+    /* ★★ r61) `/_vercel/insights/script.js` 는 Web Analytics 를 켠 프로젝트에만 서빙된다
+         → 200=켜짐 · 404=꺼짐. 이 한 번의 왕복이 곧 상태 표시라 썩지 않는다.
+       ★★★ 방문자 **숫자는 여기 안 그린다** — Hobby 플랜이라 읽기 API 가 없다(실측
+         `Web Analytics not found`). 흉내내면 r40 이 지운 「1,284」와 같은 물건이 된다 → 링크를 준다. */
+    var vaOn = D.va === 200;
+    var vaLink = '<a href="' + VA_URL + '" target="_blank" rel="noopener" '
+      + 'style="color:inherit;text-decoration:underline">'
+      + (vaOn ? 'Vercel에서 방문자 보기 →' : 'Web Analytics 켜기 →') + '</a>';
+
+    // ★★ r61) 공지도 마찬가지 — r58 이 만든 `/api/notice` 에 직접 묻는다.
+    var nt = D.notice || {}, srvNotice = (nt.posts || []).length, noticeOk = nt.configured === true;
+
+    // ★ /api/board 는 「고객게시판」만 담는다. 공지는 /api/notice(r58), 인증현황은 아직 경로가 없다.
+    //   서버 수와 로컬 수가 다르면 「썼지만 아직 안 나간 글」이라 합치지 않고 나란히 보여준다.
     var lb = {};
     try { lb = (typeof S !== 'undefined' && S.boards) || {}; } catch (e) { lb = {}; }
     var locBoard = (lb.board || []).length;
+    var locNotice = (lb.notice || []).length;   // ★ lb 대입 뒤에 와야 한다 (var 호이스팅은 값을 안 옮긴다)
     var sync = posts === locBoard;
 
     var stats =
@@ -213,15 +246,18 @@
         sync ? 'ok' : 'warn')
       + card('발행된 CMS 항목', num(cmsN),
         cmsN ? '마지막 발행 ' + ago(c.updatedAt) : '아직 발행한 적 없음', cmsN ? 'ok' : 'mute')
-      + card('방문자', '측정 안 함', '애널리틱스 미설치 — 아래 참조', 'warn');
+      + card('방문자 집계', vaOn ? '집계 중' : '집계 꺼짐', vaLink, vaOn ? 'ok' : 'warn');
 
     var seoOk = seo.robots === 200 && seo.sitemap === 200 && seo.jsonld > 0;
     var siteBody =
       row('배포 커밋', D.deploy ? '<code>' + esc(D.deploy) + '</code>' : '확인 실패', D.deploy ? 'ok' : 'bad')
       + row('제품 카탈로그', prods ? num(prods) + '종 · ' + num(cats) + '개 분류' + shown() : '읽지 못함', prods ? 'ok' : 'bad')
-      + row('공지사항 · 인증현황',
-        num((lb.notice || []).length) + '건 · ' + num((lb.certification || []).length) + '건'
-        + ' <span style="color:var(--tx4);font-weight:400">(이 브라우저에만)</span>', 'warn')
+      // ★ r61) 공지는 게시판과 같은 모양(서버/이 브라우저). 인증현황은 아직 경로가 없어 분리했다 —
+      //   둘을 한 줄에 묶어두면 한쪽이 해결돼도 화면이 그대로다.
+      + row('공지사항', noticeOk ? num(srvNotice) + sm(' / ' + num(locNotice) + '건 (서버 / 이 브라우저)')
+                                 : num(locNotice) + '건 ' + sm('(이 브라우저에만)'),
+        !noticeOk ? 'bad' : srvNotice === locNotice ? 'ok' : 'warn')
+      + row('인증현황', num((lb.certification || []).length) + '건 ' + sm('(이 브라우저에만)'), 'warn')
       + row('robots.txt', seo.robots === 200 ? '정상 (200)' : '없음 (' + seo.robots + ')', seo.robots === 200 ? 'ok' : 'bad')
       + row('sitemap.xml', seo.sitemap === 200 ? '정상 (200)' : '없음 (' + seo.sitemap + ')', seo.sitemap === 200 ? 'ok' : 'bad')
       + row('구조화 데이터 (JSON-LD)', seo.jsonld ? seo.jsonld + '건' : '없음', seo.jsonld ? 'ok' : 'bad')
@@ -231,17 +267,22 @@
       + row('Open Graph (카톡·페북 미리보기)', seo.og ? seo.og + '개 태그' : '없음', seo.og ? 'ok' : 'bad');
 
     if (!seoOk) siteBody += note('검색엔진 노출 설정에 빠진 항목이 있습니다.');
-    if (!sync || (lb.notice || []).length || (lb.certification || []).length) {
-      siteBody += note(
-        '<b>공지사항과 인증현황은 서버로 올라가는 경로가 없습니다.</b> '
-        + '지금 이 컴퓨터에서만 보이고, 홈페이지 방문자에게는 보이지 않습니다. '
-        + '서버와 연결된 것은 고객게시판 하나뿐입니다.');
+    if (!noticeOk) {
+      siteBody += note('<b>공지사항이 서버로 올라가지 않는 상태입니다.</b> 지금 쓰신 공지는 이 컴퓨터에서만 '
+        + '보이고 홈페이지 방문자에게는 보이지 않습니다. Vercel 환경변수(BOARD_TOKEN · BOARD_ADMIN_KEY)를 확인해야 합니다.');
     }
-    siteBody += note(
-      '<b>방문자 수는 지금 셀 수 없습니다.</b> 이 사이트에는 방문자 분석 도구가 '
-      + '하나도 설치돼 있지 않습니다(구글 애널리틱스·네이버 애널리틱스·Vercel Analytics 모두 없음). '
-      + '이전 화면의 「1,284명 · 전월 대비 +8.4%」는 <b>실제 수치가 아니라 예시로 박아둔 값</b>이었습니다. '
-      + '측정을 원하시면 어떤 도구를 쓸지 정해 주시면 연결하겠습니다.');
+    if ((lb.certification || []).length) {
+      siteBody += note('<b>인증현황은 아직 홈페이지에 나가지 않습니다.</b> 홈페이지가 인증서를 개별로 '
+        + '보여주지 않기로 돼 있어(경쟁사 카피 방지) 내용을 받을 화면 자체가 없습니다. 노출 방식을 정해 주시면 연결하겠습니다.');
+    }
+    siteBody += note(vaOn
+      ? '<b>방문자 집계가 켜져 있습니다.</b> 방문자 수·인기 페이지는 위 「방문자 집계」 칸의 링크(Vercel)에서 '
+        + '보실 수 있습니다. <span style="color:var(--tx3)">이 화면에 숫자를 직접 띄우려면 유료 플랜이 필요해서, '
+        + '지어낸 값 대신 실제 화면으로 보내드립니다.</span>'
+      : '<b>방문자 집계 스위치가 아직 꺼져 있습니다.</b> 집계 코드는 사이트에 이미 들어가 있고(r42), '
+        + 'Vercel에서 <b>Web Analytics → Enable</b> 을 한 번 누르시면 그때부터 쌓입니다. 위 「방문자 집계」 칸의 '
+        + '링크가 그 화면입니다. <span style="color:var(--tx3)">누르기 전까지는 수집이 0이고, 이 화면은 '
+        + '「집계 꺼짐」이라고 그대로 말합니다 — 임의의 숫자를 만들지 않습니다.</span>');
 
     var inqBody = inqTrend(inq)
       + note(
