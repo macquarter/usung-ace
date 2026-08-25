@@ -317,7 +317,9 @@
 .r8x:not(#_r8_) .grid4{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .r8x:not(#_r8_) .mcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:.16s}
 .r8x:not(#_r8_) .mcard:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(22,41,77,.12);border-color:#d6e0f0}
-.r8x:not(#_r8_) .mcard .mt{aspect-ratio:1/1;background:#f5f7fb;display:flex;align-items:center;justify-content:center;padding:16px 16px 8px}
+/* r60) position:relative 은 .pc-tag(243행, position:absolute) 를 이 칸 안에 가두려고 넣었다.
+   없으면 배지가 위치 조상을 찾아 올라가 카드 밖 엉뚱한 곳에 찍힌다. flex 배치엔 영향 없다. */
+.r8x:not(#_r8_) .mcard .mt{position:relative;aspect-ratio:1/1;background:#f5f7fb;display:flex;align-items:center;justify-content:center;padding:16px 16px 8px}
 .r8x:not(#_r8_) .mcard .mt img{max-height:100%;object-fit:contain}
 .r8x:not(#_r8_) .mcard .mb{padding:16px 17px 18px}
 .r8x:not(#_r8_) .mcard .mb .nm{font-weight:700;font-size:16.5px;letter-spacing:-.01em;line-height:1.3}

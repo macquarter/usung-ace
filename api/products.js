@@ -97,9 +97,17 @@ const clean = (v) => String(v == null ? '' : v).replace(/[<>]/g, '').trim().slic
 // — '../' 가 섞이면 R8_IMG 와 이어붙을 때 엉뚱한 URL 이 만들어진다.
 const STEM_OK = /^[A-Za-z0-9_-]{1,40}$/;
 
-// 한 제품 레코드가 가질 수 있는 칸. usung-catalog-data.js 의 7열과 같은 이름이다
-// (stem·cat·mid·grp·name·finish·tags). 여기 없는 키는 조용히 버린다.
-const FIELDS = ['cat', 'mid', 'grp', 'name', 'finish', 'tags'];
+/* 한 제품 레코드가 가질 수 있는 칸. 앞 6개는 usung-catalog-data.js 의 7열과 같은 이름이다
+   (stem·cat·mid·grp·name·finish·tags). 여기 없는 키는 조용히 버린다.
+
+   ★ r60 에서 feat(특징)·badge(NEW/BEST) 두 칸을 더했다. 이 둘은 카탈로그 원본에 **없는 열**이라
+     215행 전부 undefined 로 시작한다 — 읽는 쪽은 항상 `|| ''` 로 받아야 한다.
+
+   ★★ 태그(tags)에 얹지 않은 이유가 있다. tags 는 죽은 칸이 아니다 —
+     usung-review.js:662 가 상세창에 **칩으로 그리고**, usung-r8-data.js:198 colorOf() 가
+     **마지막 태그를 색상 이름으로** 쓴다. 여기에 '특징' 이나 'BEST' 를 밀어 넣으면
+     제품 색상 이름표가 「BEST」로 바뀐다. 칸을 새로 파는 편이 싸다. */
+const FIELDS = ['cat', 'mid', 'grp', 'name', 'finish', 'tags', 'feat', 'badge'];
 
 function normRecord(o) {
   if (!o || typeof o !== 'object') return null;
