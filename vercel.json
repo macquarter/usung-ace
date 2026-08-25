@@ -3,6 +3,7 @@
   "routes": [
     { "src": "/api/blog", "dest": "/api/blog.js" },
     { "src": "/api/board", "dest": "/api/board.js" },
+    { "src": "/api/notice", "dest": "/api/notice.js" },
     { "src": "/api/cms", "dest": "/api/cms.js" },
     { "src": "/api/login", "dest": "/api/login.js" },
     { "src": "/api/inject", "dest": "/api/inject.js" },

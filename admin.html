@@ -32,10 +32,16 @@ a{color:inherit;text-decoration:none}
 /* ============ LOGIN ============ */
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 20% 20%,rgba(59,130,246,.18),transparent 50%),radial-gradient(circle at 80% 80%,rgba(96,165,250,.12),transparent 50%),var(--bg)}
 .login-card{width:100%;max-width:420px;background:var(--sf);border:1px solid var(--bd);border-radius:24px;padding:44px 36px;box-shadow:var(--sd)}
-.login-brand{text-align:center;margin-bottom:36px}
-.login-logo{display:inline-flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:-0.5px}
-.login-logo .dot{width:10px;height:10px;border-radius:50%;background:var(--ac);box-shadow:0 0 20px var(--ac)}
-.login-sub{margin-top:8px;color:var(--tx3);font-size:13px}
+.login-brand{text-align:center;margin-bottom:32px}
+/* r58) 로고는 원래도 있었지만 「안 보였다」 — 유성 에이스 로고.png 는 남색 도형 + 남색
+ *   「신개념신기술」이 투명 배경에 얹힌 그림이고, 이 카드는 #111114(거의 검정)다.
+ *   → 밑줄 문구가 배경에 묻혀 사라진다. 흰 판을 깔아 원본 그대로 보이게 한다.
+ *   ★ 라이트 테마에서도 같은 판을 쓴다(흰 위의 흰 판 = 무해). 테마 분기하지 않는다. */
+.login-plate{display:inline-block;background:#fff;border-radius:18px;padding:16px 26px 12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);margin-bottom:16px}
+.login-logo img{display:block;height:76px;width:auto}
+.login-title{font-size:19px;font-weight:800;letter-spacing:-.4px;color:var(--tx)}
+.login-sub{margin-top:6px;color:var(--tx3);font-size:13px}
 .login-field{margin-bottom:14px}
 .login-field label{display:block;font-size:12px;color:var(--tx3);margin-bottom:6px;font-weight:600}
 .login-field input{padding:14px 16px;background:var(--cd);border:1px solid var(--bd);border-radius:12px;font-size:14px;transition:border .15s}
@@ -330,11 +336,17 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
 <div class="login" id="loginView">
   <div class="login-card">
     <div class="login-brand">
-      <div class="login-logo"><img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:56px;margin-bottom:8px;"></div>
-      <div class="login-sub">관리자 로그인 · CMS Admin Panel</div>
+      <div class="login-plate"><span class="login-logo"><img src="유성%20에이스%20로고.png" alt="유성에이스"></span></div>
+      <div class="login-title">유성에이스 관리자</div>
+      <div class="login-sub">홈페이지 관리 · CMS Admin Panel</div>
     </div>
     <div class="login-field">
-      <label>관리자 비밀번호</label>
+      <label>아이디</label>
+      <input type="text" id="loginId" placeholder="admin" autocomplete="username"
+             autocapitalize="off" autocorrect="off" spellcheck="false" />
+    </div>
+    <div class="login-field">
+      <label>비밀번호</label>
       <input type="password" id="loginPw" placeholder="••••••••" autocomplete="current-password" />
     </div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">로그인</button>
@@ -741,37 +753,21 @@ let S = {
   // 아래 값은 전부 2026-08-18 라이브 DOM 실측으로 맞춘 것이다(KNOWLEDGE 47 — 기준은 파일이 아니라 화면).
   inquiries: [],   // 사이트에 문의 폼이 없다 → 수신 경로 자체가 없으므로 영구 0건 (QUESTIONS F1)
   boards: {
-    // 홈페이지 공지 페이지에 실제로 떠 있는 9건. 상단고정 2건 + 타임라인 7건.
-    // ⚠ 이 목록은 화면 표시용이다 — 서버 발행 경로가 없다(발행은 board 만: admin.html 의 `k==='board'`).
-    notice: [
-      { id:'n1', title:'2026 설 연휴 A/S 운영 안내', cat:'중요', pin:true,
-        body:'2026년 2월 16일(월) ~ 18일(수) 설 연휴 기간 중 긴급 A/S는 1588-9123으로 연락주시면 순차 대응합니다.',
-        createdAt: Date.parse('2026-02-10T00:00:00+09:00') },
-      { id:'n2', title:'창립 기념 감사 프로모션', cat:'이벤트', pin:true,
-        body:'갤럭시 A·B 타입 일괄 견적 시 최대 15% 할인 + F.V.D 방화댐퍼 무상 업그레이드. 5월 31일까지!',
-        createdAt: Date.parse('2026-04-01T00:00:00+09:00') },
-      { id:'n3', title:'2026 제품 카탈로그 v6 배포 안내', cat:'업데이트',
-        body:'갤럭시 A~D 타입 전면 개정된 최신 카탈로그가 자료실에 업로드되었습니다. 신규 F.V.D 방화댐퍼 라인업 포함.',
-        createdAt: Date.parse('2026-04-05T00:00:00+09:00') },
-      { id:'n4', title:'태엽감속기 빠찌링(베어링) 정품 교체 캠페인', cat:'A/S',
-        body:'5년 이상 사용 매장 대상으로 베어링 무상 점검 및 할인 교체를 진행합니다. 전화 접수만 받습니다.',
-        createdAt: Date.parse('2026-03-28T00:00:00+09:00') },
-      { id:'n5', title:'파주 본사 주차장 확장 공사 안내', cat:'공지',
-        body:'3월 25일 ~ 4월 10일까지 본사 주차장 확장 공사로 임시 주차 장소를 운영합니다.',
-        createdAt: Date.parse('2026-03-20T00:00:00+09:00') },
-      { id:'n6', title:'시공후기 리뷰 이벤트 — 스타벅스 기프티콘', cat:'이벤트',
-        body:'게시판에 실제 시공 사진과 후기를 남겨주시는 분들께 매주 5분 추첨하여 커피 기프티콘을 드립니다.',
-        createdAt: Date.parse('2026-03-12T00:00:00+09:00') },
-      { id:'n7', title:'F.V.D 방화댐퍼 2세대 정식 출시', cat:'업데이트',
-        body:'기존 대비 폐쇄 속도 40% 향상, 스프링 수명 2배 연장된 2세대 F.V.D가 전 제품군에 기본 탑재됩니다.',
-        createdAt: Date.parse('2026-02-28T00:00:00+09:00') },
-      { id:'n8', title:'설 연휴 기간 긴급 A/S 접수 안내', cat:'A/S',
-        body:'설 연휴 기간 긴급 상황 발생 시 1588-9123으로 연락 주시면 순차 대응해드립니다.',
-        createdAt: Date.parse('2026-02-15T00:00:00+09:00') },
-      { id:'n9', title:'유성에이스 공식 블로그 리뉴얼 완료', cat:'공지',
-        body:'네이버 공식 블로그가 새롭게 리뉴얼되었습니다. 시공 사례와 기술 정보를 확인하세요.',
-        createdAt: Date.parse('2026-01-20T00:00:00+09:00') }
-    ],
+    /* ============== r58 : 공지 시드 퇴출 ==============
+     * r48 때는 「관리자가 사이트보다 비어 보이면 안 된다」는 이유로 홈페이지에 떠 있던 9건을
+     * 여기 그대로 옮겨 적었다. 그 판단은 **서버 발행 경로가 없던 시절**에는 맞았다.
+     *
+     * ★ r58 이 공지에 발행 경로(/api/notice)를 열면서 그 전제가 뒤집혔다.
+     *   이제 이 목록은 「표시용」이 아니라 **발행 페이로드**다. 시드를 남겨 두면
+     *   고객의 첫 발행 클릭이 더미 9건을 그대로 방문자 화면에 올린다.
+     *   그중 n1(2026.02.10)·n2(2026.04.01)는 usung-notice.js 의 DUMMY_DATES 에 **없어서**
+     *   날짜 필터도 못 걸러낸다 → r52 에서 지운 더미가 라이브에 되살아난다.
+     *   = 이건 미관이 아니라 **사고**다 (KNOWLEDGE 48 과 정확히 같은 형태, 대상만 다르다).
+     *
+     * 그래서 빈 배열로 둔다. 화면이 비어 보이는 문제는 pullNotice() 가 서버에서 채워 해결한다.
+     * 옛 9건(r48 시드)은 아래 R58_NOTICE_SEED + r58Purge() 가 기존 브라우저에서 걷어낸다.
+     * 삭제한 원본 9건은 backup/pre-r58-20260825 브랜치의 admin.html:746-774 에 남아 있다. */
+    notice: [],
     // 홈페이지 게시판은 네이버 블로그 RSS 60건을 보여준다 — 방문자가 쓴 글은 0건이다.
     // ★ 여기에 넣은 글은 발행 시 실제로 방문자 화면에 병합된다. 가짜를 두면 안 된다.
     board: [],
@@ -795,7 +791,22 @@ const R48_SEED = {
   board:         [['b1','강남 시공 정말 만족합니다'], ['b2','견적 재문의드립니다']],
   certification: [['a1','2026 제품 카탈로그'], ['a2','표준 후드 설계 도면'], ['a3','설치 가이드 영상']]
 };
-const R48_NOTICE_DEFAULT = JSON.parse(JSON.stringify(S.boards.notice));
+/* ============== r58 : r48 공지 시드 9건 청소 ==============
+ * 소스에서 지우는 것만으로는 부족하다(r48 에서 배운 그대로). 관리자를 한 번이라도 연
+ * 브라우저에는 그 9건이 localStorage 에 그대로 남아 있고, r58 은 그 배열을 **발행**한다.
+ * ★ 여기서도 배열을 통째로 비우지 않는다 — id 와 제목이 「둘 다」 맞는 행만 지운다.
+ *   그 사이 승연이 쓴 진짜 공지는 제목이 달라 살아남는다. */
+const R58_NOTICE_SEED = [
+  ['n1','2026 설 연휴 A/S 운영 안내'],
+  ['n2','창립 기념 감사 프로모션'],
+  ['n3','2026 제품 카탈로그 v6 배포 안내'],
+  ['n4','태엽감속기 빠찌링(베어링) 정품 교체 캠페인'],
+  ['n5','파주 본사 주차장 확장 공사 안내'],
+  ['n6','시공후기 리뷰 이벤트 — 스타벅스 기프티콘'],
+  ['n7','F.V.D 방화댐퍼 2세대 정식 출시'],
+  ['n8','설 연휴 기간 긴급 A/S 접수 안내'],
+  ['n9','유성에이스 공식 블로그 리뉴얼 완료']
+];
 function r48DropSeed(rows, pairs, key){
   if(!Array.isArray(rows)) return rows;
   return rows.filter(function(r){
@@ -808,8 +819,13 @@ function r48Purge(s){
     s.boards.notice        = r48DropSeed(s.boards.notice,        R48_SEED.notice,        'title');
     s.boards.board         = r48DropSeed(s.boards.board,         R48_SEED.board,         'title');
     s.boards.certification = r48DropSeed(s.boards.certification, R48_SEED.certification, 'title');
-    // 공지는 홈페이지에 9건이 떠 있다. 가짜만 걷어내고 비워두면 관리자가 사이트보다 비어 보인다.
-    if(!s.boards.notice.length) s.boards.notice = JSON.parse(JSON.stringify(R48_NOTICE_DEFAULT));
+    /* ★★ r58 — 여기 있던 「비었으면 더미 9건을 도로 채운다」 줄을 삭제했다.
+     *   r48 당시엔 공지에 발행 경로가 없어서 그 줄이 무해했다(화면 표시용).
+     *   r58 이 /api/notice 를 열면서 **그 배열이 곧 발행 페이로드**가 됐다 →
+     *   같은 줄이 「고객의 첫 발행 클릭 = 더미 9건 라이브 게시」로 뜻이 바뀐다.
+     *   ★ 코드는 그대로인데 **주변이 바뀌어 위험해진 경우**다. 무해했던 줄을 다시 볼 것.
+     *   빈 화면은 pullNotice() 가 서버 값으로 채운다. */
+    s.boards.notice = r48DropSeed(s.boards.notice, R58_NOTICE_SEED, 'title');
   }
 }
 
@@ -841,12 +857,26 @@ function authHeaders(){
   const k = sessionStorage.getItem('board-srv-key');
   return k ? { 'x-admin-key': k } : null;
 }
+/* r58) 아이디 칸 — 승연 「아이디 admin 비번 yuadmin 으로 가자」
+ * ★ 이 검사는 클라이언트에서 한다. 숨기려는 게 아니라 **정직하게 그렇다** —
+ *   소스를 열면 'admin' 이 그대로 보인다. 그래도 이렇게 두는 이유:
+ *   진짜 잠금장치는 비밀번호 하나뿐이고(서버의 BOARD_ADMIN_KEY), 아이디를 서버로 옮기면
+ *   납품 당일에 api/login.js 의 인증 계약을 바꾸게 된다 — 보안 이득 0, 사고 확률만 오른다.
+ *   즉 이건 **비밀이 아니라 입력 편의**다. 나중에 계정을 여러 개 둘 일이 생기면
+ *   그때 서버로 옮기고 이 상수를 지운다. */
+const ADMIN_ID = 'admin';
+
 async function doLogin(){
+  const idEl = document.getElementById('loginId');
   const pwEl = document.getElementById('loginPw');
   const btn  = document.getElementById('loginBtn');
   const msg  = document.getElementById('loginMsg');
+  const id = (idEl.value || '').trim();
   const pw = pwEl.value;
-  if(!pw){ msg.textContent = '비밀번호를 입력하세요'; return; }
+  if(!id){ msg.textContent = '아이디를 입력하세요'; idEl.focus(); return; }
+  // 대소문자는 따지지 않는다 — 모바일 자판이 첫 글자를 대문자로 올린다.
+  if(id.toLowerCase() !== ADMIN_ID){ msg.textContent = '아이디가 올바르지 않습니다'; idEl.focus(); return; }
+  if(!pw){ msg.textContent = '비밀번호를 입력하세요'; pwEl.focus(); return; }
   btn.disabled = true; msg.textContent = '확인 중…';
   try{
     const r = await fetch('/api/login', {
@@ -864,6 +894,13 @@ async function doLogin(){
     if(r.status === 503){
       msg.innerHTML = '관리자 비밀번호가 아직 정해지지 않았습니다.<br>'
         + 'Vercel → Settings → Environment Variables → <b>BOARD_ADMIN_KEY</b> 를 정한 뒤 재배포하세요.';
+    } else if(r.status === 401){
+      /* r58) 「비번이 틀렸다」로만 끝내면 안 된다 — 실제로 제일 흔한 원인은 오타가 아니라
+       *   **환경변수를 바꾸고 재배포를 안 한 것**이다. Vercel 은 배포 시점에 env 를 굽는다.
+       *   대시보드에서 값을 저장해도 그 뒤 배포가 한 번 일어나야 서버가 새 값을 본다. */
+      msg.innerHTML = '비밀번호가 일치하지 않습니다.<br>'
+        + '<span style="color:#8e8e93">Vercel 에서 <b>BOARD_ADMIN_KEY</b> 를 방금 바꿨다면, '
+        + '<b>재배포(Redeploy)</b>를 한 번 해야 새 비밀번호가 적용됩니다.</span>';
     } else {
       msg.textContent = j.error || ('로그인 실패 (' + r.status + ')');
     }
@@ -925,6 +962,7 @@ function showApp(){
   R();
   renderAuthBanner();   // r44) 권한 없으면 발행 버튼을 잠그고 배너를 띄운다
   pullBoard();
+  pullNotice();         // r58) 공지도 서버가 단일 진실이다
   pullCms();
   loadProductPatch();   // r55) 서버 제품 패치 동기화 (비동기 — 실패해도 로컬 패치로 계속)
 }
@@ -955,6 +993,40 @@ async function pushBoard(){
     });
     const j = await r.json().catch(()=>({}));
     if(j.ok) toast(`홈페이지에 반영되었습니다 (${j.count}건)`);
+    else if(r.status===401){ onAuthExpired(); }
+    else toast('서버 반영 실패 : ' + (j.error || r.status), true);
+  }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
+}
+
+/* ============== 공지사항 서버 동기화 (r58) ==============
+ * 게시판과 **일부러 같은 모양**으로 뒀다. 배관이 둘로 갈라지면 한쪽만 썩는다.
+ *
+ * ★★ 이걸 만들기 전까지 공지는 「되는 것처럼 보이고 안 되는」 상태였다 —
+ *   index_v6.html:3635-3652(frozen)가 localStorage 를 읽어 타임라인에 병합하는데
+ *   관리자와 사이트가 같은 오리진이라, 고객이 공지를 쓰면 **자기 눈에만** 보였다.
+ *   시연은 통과하고 실제로는 아무에게도 안 보이는 형태. 그래서 이 경로가 필요했다. */
+async function pullNotice(){
+  try{
+    const r = await fetch('/api/notice', { cache:'no-store' });
+    const j = await r.json();
+    if(!j || !j.configured || !Array.isArray(j.posts)) return;
+    // 서버가 비었는데 로컬에 글이 있으면 덮지 않는다 — 첫 이관 때 로컬 글이 날아간다(pullBoard 와 동일).
+    if(!j.posts.length && (S.boards.notice||[]).length) return;
+    S.boards.notice = j.posts;
+    saveLocal(); R();
+  }catch(e){}
+}
+async function pushNotice(){
+  const h = authHeaders();
+  if(!h){ toast('로그인하지 않아 이 브라우저에만 저장했습니다 — 홈페이지에는 반영되지 않습니다', true); return; }
+  try{
+    const r = await fetch('/api/notice', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', ...h },
+      body: JSON.stringify({ posts: S.boards.notice || [] })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok) toast(`홈페이지 공지에 반영되었습니다 (${j.count}건) — 최대 30초 뒤 보입니다`);
     else if(r.status===401){ onAuthExpired(); }
     else toast('서버 반영 실패 : ' + (j.error || r.status), true);
   }catch(e){ toast('서버 반영 실패 : ' + e.message, true); }
@@ -3083,13 +3155,15 @@ function bdSave(k, id){
     S.boards[k].unshift({ id:'x'+Date.now(), ...data, views:0, createdAt:Date.now() });
   }
   saveLocal(); closeModal(); R(); toast('저장되었습니다');
-  if(k==='board') pushBoard();
+  if(k==='board')  pushBoard();
+  if(k==='notice') pushNotice();   // r58) 공지도 서버로 올린다
 }
 function bdDel(k, id){
   if(!confirm('삭제하시겠습니까?')) return;
   S.boards[k] = S.boards[k].filter(x=>x.id!==id);
   saveLocal(); R(); toast('삭제되었습니다');
-  if(k==='board') pushBoard();
+  if(k==='board')  pushBoard();
+  if(k==='notice') pushNotice();   // r58) 삭제도 서버에 반영해야 방문자 화면에서 사라진다
 }
 
 // ============== 챗봇 관리 ==============
@@ -3438,9 +3512,17 @@ if(sessionStorage.getItem('cms-auth') === '1'){
     })
     .catch(()=>{});
 }
+/* ★ r58 — 인라인 onkeydown 을 쓰지 않는다. 여기 이미 리스너가 있어서 둘 다 걸면
+ *   Enter 한 번에 doLogin() 이 **두 번** 돈다(POST 도 두 번). 바인딩은 이 한 곳에만 둔다. */
 document.getElementById('loginPw').addEventListener('keypress', e=>{
   if(e.key === 'Enter') doLogin();
 });
+// 아이디 칸에서 Enter → 비밀번호로 이동(바로 로그인하지 않는다. 빈 비번으로 실패만 늘린다)
+document.getElementById('loginId').addEventListener('keypress', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('loginPw').focus(); }
+});
+// 아이디는 하나뿐이다 — 미리 채워 둔다(승연 「아이디 admin」). 비번은 절대 채우지 않는다.
+document.getElementById('loginId').value = ADMIN_ID;
 </script>
 <!-- r40) 대시보드 실데이터화. 위 인라인 스크립트가 rDashboard 를 정의한 **뒤**에 실려야
      교체가 먹으므로 </body> 바로 앞에 둔다.
