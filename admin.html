@@ -55,7 +55,17 @@ a{color:inherit;text-decoration:none}
 .app{display:none;min-height:100vh}
 .app.active{display:flex}
 .sb{width:220px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:10}
-.sb-brand{padding:20px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+/* r61) 사이드바 로고 — r58 이 로그인 카드에 쓴 흰 판을 여기에도 쓴다.
+ *   같은 그림 + 같은 어두운 배경이면 같은 문제다. 「유성 에이스 로고.png」는 남색 도형과
+ *   남색 「신개념신기술」이 투명 배경에 얹힌 그림인데 사이드바는 var(--sf)(거의 검정)라
+ *   밑줄 문구가 배경에 묻혀 사라진다. 로고를 흰 판·검은 판에 각각 얹어 대조해 확인했다.
+ * ★ 가로로 놓으면 안 된다 — .sb 는 220px 고정, 좌우 패딩을 빼면 184px 인데
+ *   로고가 80px(36px 높이 × 800:360) + gap 10px 을 먹어 글자 자리가 94px 뿐이라
+ *   「YUSUNG ACE」가 두 줄로 접힌다. 라이브 스크린샷에서 실제로 접혀 있었다.
+ *   → 세로로 쌓아 글자에 폭을 전부 준다(접힘 0). */
+.sb-brand{padding:16px;border-bottom:1px solid var(--bd);display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.sb-plate{background:#fff;border-radius:10px;padding:7px 11px 5px;box-shadow:0 4px 14px rgba(0,0,0,.30)}
+.sb-plate img{display:block;height:32px;width:auto}
 .sb-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--ac);box-shadow:0 0 14px var(--ac)}
 .sb-brand .nm{font-weight:800;font-size:15px;letter-spacing:-0.3px}
 .sb-brand .tg{font-size:10px;color:var(--tx4);letter-spacing:.1em;text-transform:uppercase}
@@ -414,7 +424,7 @@ textarea.ed-in{min-height:72px;resize:vertical;line-height:1.5}
   <!-- SIDEBAR -->
   <aside class="sb" id="sidebar">
     <div class="sb-brand">
-      <img src="유성%20에이스%20로고.png" alt="유성에이스" style="height:36px;flex-shrink:0;">
+      <span class="sb-plate"><img src="유성%20에이스%20로고.png" alt="유성에이스"></span>
       <div>
         <div class="nm">YUSUNG ACE</div>
         <div class="tg">ADMIN · v2.0</div>
@@ -1305,25 +1315,45 @@ function rDashboard(){
   const ni = S.inquiries.filter(i=>i.st==='new').length;
   const tp = Object.values(S.boards).flat().length;
   const tot = S.inquiries.length;
-  const monthly = [12, 18, 24, 31, 28, 42, 38];
-  const max = Math.max(...monthly);
-  const labels = ['10월','11월','12월','1월','2월','3월','4월'];
+  const nNotice = (S.boards.notice || []).length;
+
+  /* ★★★ 이 함수는 **화면에 안 나온다.** `usung-r40-dash.js:271` 이 로드 직후
+       `window.rDashboard` 를 통째로 갈아끼운다(실측: 도는 함수의 `toString().length === 56`).
+       승연이 보는 대시보드는 저쪽이다. 여기는 그 파일이 못 뜰 때만 도는 **비상용**이다.
+     ★★★ r61) 그런데도 여기 있던 수치 6개는 지어낸 값이었다 — 방문자 `1,284` · `▲ +8.4%` ·
+       `▲ +3` · `▲ +12%` · `▲ +2건` · 월별 막대 `[12,18,24,31,28,42,38]`(라벨이 `10월~4월` 로
+       굳어 있었다. 오늘은 8월이다). r40 이 살아있는 화면을 고칠 때 **닿지 않는 이 사본은
+       그대로 뒀고**, 그래서 여기만 2026-08-17 이전 상태로 남아 있었다.
+     ★★ 문의는 수신 경로가 없어 **영구 0건**이다(F1). 0 인 값에 「전월 대비 +12%」는 틀린 게
+        아니라 **성립하지 않는다**. 갱신하지 말고 없앤다(KNOWLEDGE 41).
+     ★ 방문자 칸은 여기 두지 않는다 — 집계 상태를 묻는 코드가 두 곳이면 반드시 한쪽만 썩는다.
+       그 질문은 `usung-r40-dash.js` 한 곳에만 있다. */
+  const prods = effectiveProducts();
+  const view  = r8View(prods);
+
+  // 대분류별 제품 수 — ★ 목록을 박지 않고 데이터에서 뽑는다. 분류가 늘면 막대도 같이 는다.
+  const byCat = {};
+  prods.forEach(p => { const c = String(p.cat || '').trim() || '미분류'; byCat[c] = (byCat[c] || 0) + 1; });
+  const cats = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+  const maxC = cats.reduce((m, c) => Math.max(m, c[1]), 1);
 
   return `
     <div class="st-grid">
-      <div class="st-cd"><div class="lb">신규 문의</div><div class="vl">${ni}</div><div class="dl">▲ 지난주 대비 +3</div></div>
-      <div class="st-cd"><div class="lb">총 문의</div><div class="vl">${tot}</div><div class="dl">▲ 전월 대비 +12%</div></div>
-      <div class="st-cd"><div class="lb">게시물</div><div class="vl">${tp}</div><div class="dl">▲ +${tp>0?2:0}건 추가</div></div>
-      <div class="st-cd"><div class="lb">방문자 (이번달)</div><div class="vl">1,284</div><div class="dl">▲ 전월 대비 +8.4%</div></div>
+      <div class="st-cd"><div class="lb">제품</div><div class="vl">${prods.length}</div>
+        <div class="dl" style="color:var(--tx3)">화면 카드 ${view.cards}장</div></div>
+      <div class="st-cd"><div class="lb">공지사항</div><div class="vl">${nNotice}</div>
+        <div class="dl" style="color:var(--tx3)">게시판 글 ${Math.max(0, tp - nNotice)}건</div></div>
+      <div class="st-cd"><div class="lb">문의</div><div class="vl">${tot}</div>
+        <div class="dl" style="color:var(--tx3)">${tot ? `신규 ${ni}건` : '접수 경로 준비 중'}</div></div>
     </div>
     <div class="db-grid">
       <div class="cd">
-        <div class="cd-ti">월별 문의 추이 <div class="ln"></div></div>
+        <div class="cd-ti">대분류별 제품 수 <div class="ln"></div></div>
         <div class="bar-wrap">
-          ${monthly.map((m,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center">
-            <div class="bar" style="width:100%;height:${(m/max)*160}px"><div class="bar-vl">${m}</div></div>
-            <div class="bar-lb">${labels[i]}</div>
-          </div>`).join('')}
+          ${cats.map(([c, n]) => `<div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center">
+            <div class="bar" style="width:100%;height:${(n / maxC) * 160}px"><div class="bar-vl">${n}</div></div>
+            <div class="bar-lb" style="max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(c)}</div>
+          </div>`).join('') || '<div class="sg">제품 데이터를 불러오지 못했습니다</div>'}
         </div>
       </div>
       <div class="cd">
@@ -3696,7 +3726,7 @@ document.getElementById('loginId').value = ADMIN_ID;
      교체가 먹으므로 </body> 바로 앞에 둔다.
      ★ admin.html 은 정적 파일이라 ?v= 자동 주입이 없다 — 이 스크립트를 고치면
        아래 v= 값을 손으로 올려야 브라우저가 새로 받는다. -->
-<script src="/usung-r40-dash.js?v=r40a"></script>
+<script src="/usung-r40-dash.js?v=r61a"></script>
 <!-- r41) 「화면에서 편집」. admin.html 에 박아둔 104개 목록 대신 실제 사이트를
      iframe 으로 읽어 편집한다. live=상태·저장, ui=화면. live 가 먼저여야 한다
      (ui 가 R41 을 참조). 위 인라인 스크립트가 rSidebar/rView 를 정의한 뒤에 실려야
