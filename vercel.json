@@ -1,6 +1,7 @@
 {
   "version": 2,
   "routes": [
+    { "src": "/(.*)\\.php(/.*)?", "headers": { "Location": "/" }, "status": 301 },
     { "src": "/api/blog", "dest": "/api/blog.js" },
     { "src": "/api/board", "dest": "/api/board.js" },
     { "src": "/api/notice", "dest": "/api/notice.js" },
