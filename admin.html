@@ -530,12 +530,15 @@ const PAGES = {
     icon: '🏢',
     sections: [
       { title: '소개 헤더',  fields: ['a_tag','a_title1','a_title2','a_desc'] },
-      { title: 'CEO 인사말', fields: ['a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
+      { title: 'CEO 인사말', fields: ['a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
       { title: '회사 정보',  fields: ['c_name','c_name_en','c_tel','c_fax','c_biz','c_addr','c_addr_sub'] },
       { title: '우리의 약속', fields: ['a_promise1','a_promise2','a_promise_desc'] }
     ]
     // r68) 「대표자명(c_ceo)」 칸을 뺐다 — 발행 경로가 없어 고쳐도 화면이 안 바뀌는데
     //   값이 '박진선' 이라 실제 화면('유성에이스 주식회사')과 달라 오해만 낳았다(QUESTIONS H1 종결).
+    // ★ r69) 쌍둥이가 하나 더 있었다 — 「인사말 서명(a_ceo_name)」도 뺐다. 승연 「대표이름 없는게 맞아」.
+    //   이건 CMS_LIVE 에 **들어 있어서** 초록 「● 반영됨」이 붙었는데도 안 나간다(위 CMS_LIVE 주석 참조).
+    //   사이트는 이미 옳다 — usung-r5-company.js 가 대표이름을 지우고 회사명을 강제한다. 고칠 건 관리자뿐이었다.
   },
   home:     { name: '홈 · 히어로',   icon: '🏠', sections: [] },
   products: { name: '제품소개',      icon: '📦', sections: [] },   // r55) 제품은 rProductsTab() 이 담당
@@ -1076,8 +1079,14 @@ async function pushNotice(){
 //   이걸 표시하지 않으면 「고쳐도 반영이 안 되더라」가 그대로 재발한다.
 //   발행 배관이 아니라 **화면 소유권**의 문제다. 확장하려면 오버레이가 CMS 를 참조하도록
 //   고쳐야 하고, 어느 문구를 열지는 승연 판단이 필요하다.
+// ★★★ r69) 관문이 하나가 아니라 둘이다 — 이 집합은 「보이는가」이지 「고칠 수 있는가」가 아니다.
+//   여기 있어도 usung-r37-cms.js:46 의 `SKIP` 에 걸리면 사이트가 그 값을 **되돌린다**.
+//   실측(r37 헤더): 75개 [data-cms] 에 프로브를 심고 3초 뒤 확인 → 되돌려진 건 **정확히 1개 a_ceo_name**.
+//   게다가 usung-r5-company.js 가 100ms 마다 「유성에이스 주식회사」를 강제한다(= 대표이름 삭제가 r5 의 목적).
+//   → r68 이 「남은 19칸은 100% 발행된다」고 적은 건 **1칸 틀렸다**. a_ceo_name 을 빼서 **18개**로 맞춘다.
+//   ★ 다음에 이 집합을 늘릴 땐 usung-r37-cms.js 의 SKIP 과 오버레이 강제를 **같이** 확인할 것.
 const CMS_LIVE = new Set([
-  'a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4','a_desc',
+  'a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4','a_desc',
   'a_promise1','a_promise2','a_promise_desc','a_tag','a_title1','a_title2',
   'c_addr','c_addr_sub','c_biz','c_fax','c_name','c_name_en','c_tel'
 ]);
@@ -1088,7 +1097,6 @@ const FIELD_LABELS = {
   a_title1:     '큰 제목 — 첫째 줄',
   a_title2:     '큰 제목 — 둘째 줄',
   a_desc:       '소개 문단',
-  a_ceo_name:   '인사말 서명 (대표 이름)',
   a_ceo_p1:     'CEO 인사말 — 1번째 문단',
   a_ceo_p2:     'CEO 인사말 — 2번째 문단',
   a_ceo_p3:     'CEO 인사말 — 3번째 문단',
