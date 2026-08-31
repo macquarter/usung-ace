@@ -563,19 +563,11 @@ const PAGES = {
     arrays: []   // r55) products 는 UP_DATA 기반으로 별도 관리 — 더미 루프 사용 안 함
   },
   parts: {
-    name: '부품소개',
+    name: '부품 · 구성품',
     icon: '🔩',
     sections: [
       { title: '부품 헤더', fields: ['pt_title','pt_desc'] }
     ]
-  },
-  manual: {
-    name: '사용방법',
-    icon: '📖',
-    sections: [
-      { title: '사용방법 헤더', fields: ['m_title','m_desc'] }
-    ],
-    arrays: ['manual_feat','steps']
   },
   gallery: {
     name: '시공갤러리',
@@ -585,27 +577,9 @@ const PAGES = {
     ],
     arrays: ['gallery']
   },
-  process: {
-    name: '프로세스',
-    icon: '🔄',
-    sections: [
-      { title: '프로세스 헤더', fields: ['pr_tag','pr_title1','pr_title2','pr_desc'] }
-    ],
-    arrays: ['proc']
-  },
-  notice: {
-    name: '공지사항',
-    icon: '📢',
-    sections: []
-  },
   board: {
-    name: '고객 게시판',
+    name: '공지게시판',
     icon: '💬',
-    sections: []
-  },
-  certification: {
-    name: '인증현황',
-    icon: '🏅',
     sections: []
   }
 };
@@ -1406,8 +1380,8 @@ function rPageList(){
     { label:'회사소개', icon:'🏢', color:'#8b5cf6', pages:['about'] },
     { label:'제품', icon:'📦', color:'#f59e0b', pages:['products','parts'] },
     { label:'시공', icon:'📸', color:'#22c55e', pages:['gallery'] },
-    { label:'기술 / 서비스', icon:'⚙️', color:'#06b6d4', pages:['tech','process','manual'] },
-    { label:'고객센터', icon:'📢', color:'#ef4444', pages:['notice','board','certification'] }
+    { label:'기술력', icon:'⚙️', color:'#06b6d4', pages:['tech'] },
+    { label:'공지게시판', icon:'📢', color:'#ef4444', pages:['board'] }
   ];
   let h = `<div class="vw-hd">
     <div>
@@ -2998,49 +2972,6 @@ function rLive(k){
       </div>`;
   }
 
-  /* ━━━━━━━━━━ MANUAL (사용방법) ━━━━━━━━━━ */
-  if(k === 'manual'){
-    const mf = S.arrays.manual_feat||[];
-    return hint + `
-      <div class="live-stage">
-        <div style="text-align:center;margin-bottom:28px">
-          <h1 class="lp-h1" style="text-align:center;font-size:38px">${e('m_title')}</h1>
-          <p class="lp-sub" style="margin:14px auto 0;text-align:center">${e('m_desc')}</p>
-        </div>
-
-        <!-- 제품 사용 특징 비주얼 가이드 -->
-        <div style="margin-bottom:24px">
-          <div class="lp-tag">PRODUCT FEATURES · VIDEO GUIDE</div>
-          <h2 class="lp-h2" style="font-size:22px">유성에이스 후드, <span class="grad">${mf.length}가지 핵심 특징.</span></h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
-            ${mf.map((f,i)=>`<div class="arr-wrap" style="background:#0e1117;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px${i===mf.length-1 && mf.length%2===1?';grid-column:1/-1':''}">
-              ${ac('manual_feat',i)}
-              <div style="font-size:10px;color:#60a5fa;font-weight:700">${ae('manual_feat',i,'num')}</div>
-              <div style="font-size:14px;font-weight:800;margin-top:4px">${ae('manual_feat',i,'tt')}</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">${ae('manual_feat',i,'dd')}</div>
-            </div>`).join('')}
-          </div>
-          ${addBtn('manual_feat','새 특징 추가')}
-        </div>
-
-        <!-- 구분선 -->
-        <div style="text-align:center;margin:20px 0;padding:8px;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.32em;color:rgba(255,255,255,.3)">MAINTENANCE GUIDE</span>
-        </div>
-
-        <!-- 유지보수 가이드 스텝 -->
-        <div style="display:flex;flex-direction:column;gap:14px">
-          ${(S.arrays.steps||[]).map((s,i)=>`
-            <div class="lp-step arr-wrap">
-              ${ac('steps',i)}
-              <div class="num">${ae('steps',i,'num')}</div>
-              <div class="tt">${ae('steps',i,'tt')}</div>
-              <div class="dd">${ae('steps',i,'dd')}</div>
-            </div>`).join('')}
-        </div>
-        ${addBtn('steps','새 단계 추가')}
-      </div>`;
-  }
 
   /* ━━━━━━━━━━ GALLERY (시공갤러리) ━━━━━━━━━━ */
   if(k === 'gallery'){
@@ -3071,68 +3002,7 @@ function rLive(k){
       </div>`;
   }
 
-  /* ━━━━━━━━━━ PROCESS (프로세스) ━━━━━━━━━━ */
-  if(k === 'process'){
-    const procColors = ['#60a5fa','#818cf8','#22d3ee','#34d399','#f59e0b','#f472b6'];
-    return hint + `
-      <div class="live-stage">
-        <div style="text-align:center;margin-bottom:28px">
-          <div class="lp-tag" style="text-align:center">${e('pr_tag')}</div>
-          <h1 class="lp-h1" style="text-align:center;font-size:36px">${e('pr_title1')}<br/><span class="grad">${e('pr_title2')}</span></h1>
-          <p class="lp-sub" style="text-align:center;margin:12px auto 0">${e('pr_desc')}</p>
-        </div>
 
-        <!-- 프로세스 단계 카드 (2열 그리드) -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          ${(S.arrays.proc||[]).map((p,i)=>{
-            const c = procColors[i%procColors.length];
-            const n = String(i+1).padStart(2,'0');
-            return `<div class="arr-wrap" style="position:relative;background:linear-gradient(135deg,${c}33,${c}11);border:1px solid ${c}44;border-radius:18px;padding:20px;overflow:hidden">
-              ${ac('proc',i)}
-              <div style="position:absolute;top:8px;right:12px;font-size:48px;font-weight:900;color:${c}22">${n}</div>
-              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:${c};margin-bottom:6px">${ae('proc',i,'num')}</div>
-              <div style="font-size:18px;font-weight:900;margin-bottom:6px">${ae('proc',i,'tt')}</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.7">${ae('proc',i,'dd')}</div>
-            </div>`;
-          }).join('')}
-        </div>
-        ${addBtn('proc','새 단계 추가')}
-
-        <!-- CTA -->
-        <div style="margin-top:24px;text-align:center">
-          <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:12px 24px">
-            <span style="color:rgba(255,255,255,.7);font-size:13px">지금 바로 상담받으세요</span>
-            <span style="padding:8px 18px;background:#2563eb;border-radius:999px;font-weight:700;font-size:12px">견적 상담 →</span>
-          </div>
-        </div>
-      </div>`;
-  }
-
-  /* ━━━━━━━━━━ NOTICE (공지사항) ━━━━━━━━━━ */
-  if(k === 'notice'){
-    const items = S.boards.notice||[];
-    return hint + `
-      <div class="live-stage">
-        <div style="margin-bottom:24px">
-          <div class="lp-tag">NOTICE</div>
-          <h1 class="lp-h1" style="font-size:36px">공지사항</h1>
-          <p class="lp-sub">유성에이스의 최신 소식과 공지를 확인하세요.</p>
-        </div>
-        <!-- 카테고리 필터 -->
-        <div style="display:flex;gap:6px;margin-bottom:18px">
-          ${['전체','공지','이벤트','업데이트'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
-        </div>
-        <!-- 게시글 목록 -->
-        <div style="display:flex;flex-direction:column;gap:8px">
-          ${items.length ? items.map(n=>`<div style="padding:16px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;display:flex;align-items:center;gap:14px">
-            ${n.pin?'<span style="font-size:10px;padding:3px 8px;background:#f59e0b;color:#000;border-radius:6px;font-weight:800">📌 고정</span>':''}
-            <span style="font-size:10px;padding:3px 8px;background:rgba(96,165,250,.15);color:#60a5fa;border-radius:6px;font-weight:700">${escHtml(n.cat||'공지')}</span>
-            <div style="flex:1"><div style="font-size:14px;font-weight:700">${escHtml(n.title)}</div><div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px">${new Date(n.createdAt).toLocaleDateString('ko')} · 조회 ${n.views||0}</div></div>
-          </div>`).join('') : '<div style="padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 공지가 없습니다</div>'}
-        </div>
-        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">게시글은 사이드바 「📢 공지사항」 메뉴에서 관리합니다</div>
-      </div>`;
-  }
 
   /* ━━━━━━━━━━ BOARD (고객 게시판) ━━━━━━━━━━ */
   if(k === 'board'){
@@ -3157,36 +3027,6 @@ function rLive(k){
       </div>`;
   }
 
-  /* ━━━━━━━━━━ CERTIFICATION (인증현황) ━━━━━━━━━━ */
-  if(k === 'certification'){
-    const items = S.boards.certification||[];
-    const typeIcons = {PDF:'📕',DWG:'📐',MP4:'🎬',ZIP:'📦',XLSX:'📊'};
-    return hint + `
-      <div class="live-stage">
-        <div style="margin-bottom:24px">
-          <div class="lp-tag">CERTIFICATIONS</div>
-          <h1 class="lp-h1" style="font-size:36px">인증현황</h1>
-          <p class="lp-sub">유성에이스가 보유한 특허, 디자인등록, 인증서를 확인하세요.</p>
-        </div>
-        <div style="display:flex;gap:6px;margin-bottom:18px">
-          ${['전체','특허','디자인등록','인증서'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          ${items.length ? items.map(a=>`<div style="padding:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-              <span style="font-size:24px">${typeIcons[a.ftype]||'📄'}</span>
-              <div>
-                <div style="font-size:13px;font-weight:700">${escHtml(a.title)}</div>
-                <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">${escHtml(a.ftype||'')} · ${escHtml(a.size||'')}</div>
-              </div>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.5">${escHtml(a.desc||'')}</div>
-            <div style="margin-top:10px"><span style="font-size:10px;padding:5px 12px;background:rgba(96,165,250,.15);color:#60a5fa;border-radius:8px;font-weight:700">다운로드 ↓</span></div>
-          </div>`).join('') : '<div style="grid-column:1/-1;padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 자료가 없습니다</div>'}
-        </div>
-        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">인증자료는 사이드바 「🏅 인증현황」 메뉴에서 관리합니다</div>
-      </div>`;
-  }
 
   return `<div class="live-stage" style="display:flex;align-items:center;justify-content:center;min-height:300px"><div style="text-align:center;color:rgba(255,255,255,.3)"><div style="font-size:40px;margin-bottom:8px">🚧</div><div style="font-size:14px;font-weight:600">라이브 프리뷰 준비중</div></div></div>`;
 }
@@ -3857,8 +3697,8 @@ document.getElementById('loginId').value = ADMIN_ID;
      iframe 으로 읽어 편집한다. live=상태·저장, ui=화면. live 가 먼저여야 한다
      (ui 가 R41 을 참조). 위 인라인 스크립트가 rSidebar/rView 를 정의한 뒤에 실려야
      감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
-<script src="/usung-r41-live.js?v=r41"></script>
-<script src="/usung-r41-ui.js?v=r41"></script>
+<script src="/usung-r41-live.js?v=r65"></script>
+<script src="/usung-r41-ui.js?v=r65"></script>
 <script>
 /* r46) 사이드바 토글. 메뉴를 고르면 바로 닫는다 — 안 닫으면 사이드바가 내용을 덮은 채로 남는다.
    사이드바 항목은 sbItem() 이 매번 새로 그리므로 개별 바인딩 대신 위임으로 받는다. */
