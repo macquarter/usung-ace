@@ -161,13 +161,26 @@ function renderTech(){
      ★ openFirst()·#fmask·CERTS 등 아래 코드는 지우지 않는다 — 호출만 안 되면 무해하고,
        승연이 「역시 모달은 두자」 하면 이 한 줄만 되돌리면 된다.
      ★ 커서·hover 들썩임은 usung-r32.css 가 죽인다(여기서 클래스만 남긴다). */
+  /* ── r66) 사진 4장을 관리자가 바꿀 수 있게 한다 ──────────────────────────────
+     ★ `FIRSTS[i].src`(=proto_assets/tf_*.png)를 **덮어쓰지 않는다.** 새 자리
+       `/tech/first<N>.png` 를 먼저 보고, 없으면 원본으로 떨어진다(r63 로고와 같은 형태).
+       → **그 파일 하나 지우는 게 곧 원상복구**이고, 원본은 리포에 그대로 산다.
+       착수 시점 실측 `GET /tech/first1.png` → **404** = 안 올린 지금이 정상 동작이다.
+     ★★ `onerror` 를 **함수 호출로 쓰지 않는다** — 이 스크립트가 로드되기 전에 404 가 나면
+       이름 있는 함수는 ReferenceError 만 내고 대체가 안 된다(r63 `0_onerror_자족적`).
+       속성 안에서 자족적으로 끝낸다. 사슬 = 새 파일 → 원본 → (원본도 실패하면) 숨김.
+       ★ 첫 줄에서 `this.onerror` 를 **먼저 갈아끼운다** — 안 그러면 원본도 404 일 때
+         같은 핸들러가 다시 돌아 `src` 를 계속 원본으로 되돌리는 무한 루프가 된다.
+     ★ 폭 상한은 `usung-r66.css` 가 잡는다 — 종횡비가 제각각인 사진이 올라와도
+       카드 글자를 덮지 않는다(승연 「플레이스 홀더는 사이즈 동일하게」). */
   document.getElementById('th-first').innerHTML=FIRSTS.map((f,i)=>
     `<div class="tf-card reveal r32-nolink" style="transition-delay:${i*90}ms">
       <div class="tf-txt">
         <span class="tf-badge">국내 최초</span>
         <div class="tf-title">${f.t}</div><div class="tf-desc">${f.d}</div>
       </div>
-      <img class="tf-hood" src="${f.src}" alt="${f.t}" onerror="this.style.opacity=0">
+      <img class="tf-hood" src="/tech/first${i+1}.png" alt="${f.t}"
+           onerror="this.onerror=function(){this.style.opacity=0};this.src='${f.src}'">
     </div>`).join('');
   renderBH();
   document.getElementById('cert-row').innerHTML=CERTS.map(c=>
