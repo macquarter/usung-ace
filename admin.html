@@ -515,73 +515,34 @@ const USE_FIREBASE = false;
 //   서버가 한 번도 보지 않는 값이라 자물쇠가 아니었고, 로그인 화면에 인쇄까지 돼 있었다.
 //   이제 비밀번호 검사는 /api/login 이 BOARD_ADMIN_KEY 로 한다.
 
-// ============== PAGES 메타데이터 (44 data-cms fields) ==============
+// ============== PAGES 메타데이터 (발행되는 19칸만) ==============
+// r68) 승연 「25칸이 현재 웹사이트에 없는 내용이라면 정리해줘」
+//   ★ 기준은 취향이 아니라 아래 CMS_LIVE(19개 · 이 파일 하단에 정의) 한 가지다. 그 밖의 칸은 발행 경로가 **아예 없어**
+//     고쳐도 홈페이지에 안 나간다. 측정값(2026-08-31 · 라이브 fcca0d8): 전체 98칸 중 79칸(81%)이 그랬다.
+//   ★ 「⚠ 미반영」 배지로 표시만 해 두는 방식은 이미 해 봤고 실패했다 — 승연이 그 칸들을 보고
+//     「예전 내용이 다수 있어 헷갈려」라고 신고했다. 표시를 고치는 게 아니라 칸을 없앤다(KNOWLEDGE 41).
+//   ★ 값 자체는 S.content 에 그대로 둔다. 지우면 되돌리기가 「복원」이 아니라 「손실」이 된다.
+//   ★ 제품·부품·갤러리 사진은 층이 달라 그대로 산다(아래 rProductsTab / rImgGrid).
+//   ★ 여기 없는 화면의 글자는 「🖥️ 화면에서 편집」에서 진짜 사이트를 띄워 고친다.
 const PAGES = {
-  home: {
-    name: '홈 · 히어로',
-    icon: '🏠',
-    sections: [
-      { title: '히어로 메인', fields: ['h_tag','h_title1','h_title2','h_sub'] },
-      { title: '스크롤 카피 1', fields: ['h_sub2_a','h_sub2_b'] },
-      { title: '스크롤 카피 2', fields: ['h_sub3_a','h_sub3_b'] },
-      { title: 'CTA 섹션', fields: ['h_cta_tag','h_cta_title1','h_cta_title2','h_cta_desc','h_cta_btn1','h_cta_btn2'] },
-      { title: 'Features in Motion', fields: ['fim_tag','fim_title_a','fim_title_b','fim_title_c','fim_desc','fim_card1_tag','fim_card1_title','fim_card2_tag','fim_card2_title','fim_card3_tag','fim_card3_title','fim_card4_tag','fim_card4_title'] },
-      { title: 'Where We Work', fields: ['www_tag','www_title_a','www_title_b','www_title_c','www_desc','www_case1_tag','www_case1_title','www_case1_desc','www_case2_tag','www_case2_title','www_case2_desc','www_case3_tag','www_case3_title','www_case3_desc'] },
-      { title: 'Statement', fields: ['stmt_tag','stmt_title1','stmt_title2','stmt_title3','stmt_desc'] },
-      { title: 'Gallery Preview', fields: ['gp_tag','gp_title1','gp_title2'] },
-      { title: 'Video Showcase', fields: ['vid_tag','vid_title1','vid_title2','vid_desc'] }
-    ]
-  },
-  tech: {
-    name: '코어 기술',
-    icon: '⚙️',
-    sections: [
-      { title: '기술 소개', fields: ['t_tag','t_title','t_desc'] },
-      { title: '임팩트 카피', fields: ['t_impact1','t_impact2'] },
-      { title: '통계', fields: ['t_stat1_v','t_stat1_l','t_stat2_v','t_stat2_l','t_stat3_v','t_stat3_l','t_stat4_v','t_stat4_l'] }
-    ],
-    arrays: ['tech_adv']
-  },
   about: {
     name: '회사소개',
     icon: '🏢',
     sections: [
-      { title: '소개 헤더', fields: ['a_tag','a_title1','a_title2','a_desc'] },
-      { title: 'CEO 메시지', fields: ['a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
-      { title: '회사 정보', fields: ['c_name','c_name_en','c_ceo','c_tel','c_fax','c_biz','c_addr','c_addr_sub'] },
-      { title: '약속', fields: ['a_promise1','a_promise2','a_promise_desc'] }
-    ],
-    arrays: ['history']
-  },
-  products: {
-    name: '제품소개',
-    icon: '📦',
-    sections: [
-      { title: '제품 히어로', fields: ['p_tag','p_title1','p_title2','p_sub'] },
-      { title: '제품 CTA', fields: ['p_cta_title','p_cta_desc'] }
-    ],
-    arrays: []   // r55) products 는 UP_DATA 기반으로 별도 관리 — 더미 루프 사용 안 함
-  },
-  parts: {
-    name: '부품 · 구성품',
-    icon: '🔩',
-    sections: [
-      { title: '부품 헤더', fields: ['pt_title','pt_desc'] }
+      { title: '소개 헤더',  fields: ['a_tag','a_title1','a_title2','a_desc'] },
+      { title: 'CEO 인사말', fields: ['a_ceo_name','a_ceo_p1','a_ceo_p2','a_ceo_p3','a_ceo_p4'] },
+      { title: '회사 정보',  fields: ['c_name','c_name_en','c_tel','c_fax','c_biz','c_addr','c_addr_sub'] },
+      { title: '우리의 약속', fields: ['a_promise1','a_promise2','a_promise_desc'] }
     ]
+    // r68) 「대표자명(c_ceo)」 칸을 뺐다 — 발행 경로가 없어 고쳐도 화면이 안 바뀌는데
+    //   값이 '박진선' 이라 실제 화면('유성에이스 주식회사')과 달라 오해만 낳았다(QUESTIONS H1 종결).
   },
-  gallery: {
-    name: '시공갤러리',
-    icon: '📸',
-    sections: [
-      { title: '갤러리 헤더', fields: ['g_tag','g_title','g_title2','g_desc'] }
-    ],
-    arrays: ['gallery']
-  },
-  board: {
-    name: '공지게시판',
-    icon: '💬',
-    sections: []
-  }
+  home:     { name: '홈 · 히어로',   icon: '🏠', sections: [] },
+  products: { name: '제품소개',      icon: '📦', sections: [] },   // r55) 제품은 rProductsTab() 이 담당
+  parts:    { name: '부품 · 구성품', icon: '🔩', sections: [] },   // 부품 사진은 rImgGrid() 가 담당
+  gallery:  { name: '시공갤러리',    icon: '📸', sections: [] },   // 갤러리 사진은 rImgGrid() 가 담당
+  tech:     { name: '코어 기술',     icon: '⚙️', sections: [] },
+  board:    { name: '공지게시판',    icon: '💬', sections: [] }
 };
 
 // ============== 기본 콘텐츠 D (실제 홈페이지 텍스트) ==============
@@ -791,7 +752,6 @@ const BOARDS = {
 let S = {
   view: 'dashboard',
   edit: null,
-  mode: 'list',
   content: {...D},
   arrays: JSON.parse(JSON.stringify(D2)),
   images: {},
@@ -1121,6 +1081,30 @@ const CMS_LIVE = new Set([
   'a_promise1','a_promise2','a_promise_desc','a_tag','a_title1','a_title2',
   'c_addr','c_addr_sub','c_biz','c_fax','c_name','c_name_en','c_tel'
 ]);
+// r68) 칸 이름을 사람이 읽는 말로. 전에는 라벨이 필드 id(`a_ceo_p1`) 그대로였다.
+//   ★ 여기 없는 id 는 id 그대로 나온다 — 「빠뜨리면 조용히 예뻐 보이는」 일이 없게 일부러 그렇게 둔다.
+const FIELD_LABELS = {
+  a_tag:        '상단 영문 문구',
+  a_title1:     '큰 제목 — 첫째 줄',
+  a_title2:     '큰 제목 — 둘째 줄',
+  a_desc:       '소개 문단',
+  a_ceo_name:   '인사말 서명 (대표 이름)',
+  a_ceo_p1:     'CEO 인사말 — 1번째 문단',
+  a_ceo_p2:     'CEO 인사말 — 2번째 문단',
+  a_ceo_p3:     'CEO 인사말 — 3번째 문단',
+  a_ceo_p4:     'CEO 인사말 — 4번째 문단',
+  c_name:       '회사명 (국문)',
+  c_name_en:    '회사명 (영문)',
+  c_tel:        '대표전화',
+  c_fax:        '팩스',
+  c_biz:        '사업자등록번호',
+  c_addr:       '주소',
+  c_addr_sub:   '주소 — 상세',
+  a_promise1:   '약속 — 첫째 줄',
+  a_promise2:   '약속 — 둘째 줄',
+  a_promise_desc: '약속 설명'
+};
+function fieldLabel(fid){ return FIELD_LABELS[fid] || fid; }
 function cmsBadge(fid){
   if(CMS_LIVE.has(fid)) return ` <span style="font-size:10px;color:#34d399;font-weight:700">● 반영됨</span>`;
   return ` <span style="font-size:10px;color:#fbbf24;font-weight:700" title="이 문구는 다른 화면 구성요소가 덮어쓰고 있어, 고쳐도 홈페이지에 나타나지 않습니다. 반영이 필요하면 알려주세요.">⚠ 미반영</span>`;
@@ -1386,18 +1370,13 @@ function rPageList(){
   let h = `<div class="vw-hd">
     <div>
       <div class="vw-ti">페이지 편집</div>
-      <div class="vw-sub">편집할 페이지를 선택하세요 · 현재 편집 방식 : <b style="color:var(--ac)">${S.mode==='live'?'👁 라이브(시각) 모드':'📋 필드(목록) 모드'}</b></div>
+      <div class="vw-sub">여기서 고친 글자는 🚀 발행을 눌러야 홈페이지에 나갑니다</div>
     </div>
     <div class="tb-sp"></div>
-    <div class="mode-sw">
-      <button class="${S.mode==='list'?'active':''}" onclick="setMode('list')">📋 필드 모드</button>
-      <button class="${S.mode==='live'?'active':''}" onclick="setMode('live')">👁 라이브 모드</button>
-    </div>
   </div>`;
   h += `<div class="live-hint" style="margin-bottom:14px">
-    <b>필드 모드</b>는 스프레드시트처럼 항목별로 빠르게 편집합니다.
-    <b>라이브 모드</b>는 실제 홈페이지 화면 위에서 텍스트를 직접 클릭해 블로그처럼 수정할 수 있습니다.
-    위에서 원하는 모드를 먼저 고른 뒤, 아래 페이지를 선택하세요.
+    <b>이 목록에는 「고치면 홈페이지에 실제로 반영되는 칸」만 둡니다.</b>
+    나머지 화면의 글자는 왼쪽 <b>🖥️ 화면에서 편집</b>에서 진짜 홈페이지를 띄워 놓고 직접 눌러 고칩니다.
   </div>`;
   NAV_GROUPS.forEach(g=>{
     h += `<div style="margin-bottom:20px">
@@ -1409,11 +1388,16 @@ function rPageList(){
       <div class="pg-list" style="margin-bottom:0">`;
     g.pages.forEach(k=>{
       const p = PAGES[k]; if(!p) return;
-      const secCount = p.sections.length + (p.arrays ? p.arrays.length : 0);
+      // r68) 「N개 섹션」은 이제 거짓말이 된다(대부분 0). 실제로 손댈 수 있는 게 뭔지 적는다.
+      const nF = p.sections.reduce((a,sc)=>a+((sc.fields||[]).length),0);
+      const secCount = nF ? nF + '개 항목'
+        : (k==='products' ? '제품 관리'
+        : (k==='parts'||k==='gallery') ? '사진 관리'
+        : '화면에서 편집');
       h += `<div class="pg-tile" onclick="editPage('${k}')" style="border-left:3px solid ${g.color}">
         <div class="ic">${p.icon}</div>
         <div class="nm">${p.name}</div>
-        <div class="mt">${secCount}개 섹션</div>
+        <div class="mt">${secCount}</div>
       </div>`;
     });
     h += `</div></div>`;
@@ -1426,17 +1410,12 @@ function rPageEdit(k){
   const p = PAGES[k];
   let h = `<div class="vw-hd">
     <button class="tb-btn" onclick="S.edit=null;R()">← 뒤로</button>
-    <div><div class="vw-ti">${p.icon} ${p.name}</div><div class="vw-sub">필드를 클릭하여 편집하세요</div></div>
+    <div><div class="vw-ti">${p.icon} ${p.name}</div><div class="vw-sub">칸을 클릭해 고친 뒤 🚀 발행을 누르세요</div></div>
     <div class="tb-sp"></div>
-    <div class="mode-sw">
-      <button class="${S.mode==='list'?'active':''}" onclick="setMode('list')">📋 필드</button>
-      <button class="${S.mode==='live'?'active':''}" onclick="setMode('live')">👁 라이브</button>
-    </div>
   </div>`;
-  if(S.mode === 'live'){
-    h += `<div class="live-wrap">${rLive(k)}</div>`;
-  } else {
-    // Field mode sections
+  {
+    // r68) 「👁 라이브 모드」를 없앴다. 그건 사이트를 손으로 베껴 그린 사본이라
+    //   고칠 때마다 진짜 화면과 어긋났다. 진짜 화면 위에서 고치는 일은 「🖥️ 화면에서 편집」이 한다.
     p.sections.forEach(sc=>{
       h += `<div class="ed-sec">
         <div class="ed-sec-hd"><div class="ed-sec-ti">${sc.title}</div></div>
@@ -1445,7 +1424,7 @@ function rPageEdit(k){
         const v = S.content[fid]||'';
         const isLong = v.length > 50 || v.includes('\n');
         h += `<div class="ed-ln">
-          <div class="ed-lb">${fid}${cmsBadge(fid)}</div>
+          <div class="ed-lb">${fieldLabel(fid)}${cmsBadge(fid)}</div>
           ${isLong
             ? `<textarea class="ed-in" oninput="sEd('${fid}',this.value)">${escHtml(v)}</textarea>`
             : `<div class="ed-in" contenteditable="true" oninput="sEd('${fid}',this.innerText)">${escHtml(v)}</div>`}
@@ -1499,19 +1478,34 @@ function rPageEdit(k){
         ${arr.length===0 ? '<div style="padding:24px;text-align:center;color:var(--tx4);font-size:12px;background:var(--cd);border-radius:12px">항목이 없습니다. + 버튼을 눌러 추가하세요</div>' : ''}
       </div>`;
     });
-    // 필드 모드에서도 이미지 관리 표시 (제품/부품/갤러리)
+    // 사진·제품 관리는 글자와 층이 달라 그대로 산다 (제품/부품/갤러리)
     if(k === 'products'){
       h += rProductsTab();   // r55) UP_DATA 기반 제품 관리 UI
     }
     if(k === 'parts') h += rImgGrid('parts', PARTS_IMGS, ['부품']);
     if(k === 'gallery') h += rImgGrid('gallery', GALLERY_IMGS, ['시공갤러리']);
+    // r68) 고칠 칸이 하나도 없는 페이지 — 빈 화면만 내놓으면 「고장났다」로 읽힌다.
+    //   ★ 버튼은 「화면에서 편집」이 실제로 실려 있을 때만 그린다(usung-r41-ui.js 미로드 시 죽은 버튼 방지).
+    if(!p.sections.some(sc=>(sc.fields||[]).length) && k!=='products' && k!=='parts' && k!=='gallery'){
+      const ok = (typeof window.rLiveEdit === 'function');
+      h += `<div class="ed-sec" style="text-align:center;padding:38px 20px">
+        <div style="font-size:34px;margin-bottom:10px">🖥️</div>
+        <div style="font-size:15px;font-weight:800;margin-bottom:8px">이 페이지의 글자는 여기서 안 고칩니다</div>
+        <div style="font-size:12.5px;color:var(--tx3);line-height:1.75;max-width:560px;margin:0 auto">
+          이 화면의 글자는 홈페이지가 <b>다른 방식으로 다시 그리기 때문에</b>,
+          여기에 칸을 만들어 고쳐도 홈페이지에는 나타나지 않습니다.<br/>
+          <b>🖥️ 화면에서 편집</b>에서 진짜 홈페이지를 띄워 놓고 고칠 글자를 직접 누르세요.
+        </div>
+        ${ok ? `<button class="tb-btn pri" style="margin-top:16px" onclick="nav('livedit')">🖥️ 화면에서 편집으로 가기</button>`
+             : `<div style="margin-top:16px;font-size:12px;color:var(--tx4)">화면 편집 모듈을 불러오지 못했습니다 (usung-r41-ui.js)</div>`}
+      </div>`;
+    }
     // r67) 「국내 최초」 4장 사진 칸은 여기서 뺐다 — 「화면에서 편집」으로 옮겼다.
     //   승연: 「해당 페이지도 아직 예전 내용들이 다수 있어 여기에 국내최초 4장 사진 넣어놓으면 헷갈려」
     //   r66 은 이 자리에 넣었고 그 배치가 틀렸다. 사진은 이제 액자 속 진짜 후드를 눌러서 바꾼다.
   }
   return h;
 }
-function setMode(m){ S.mode = m; R(); }
 function sEd(fid, val){ S.content[fid] = val; }
 
 // ====== 배열 항목 인라인 편집 / 추가 / 삭제 ======
@@ -2572,467 +2566,10 @@ function rImgGrid(type, items, filterCats, opts){
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ============== Live Preview ==============
-function rLive(k){
-  const C = S.content;
-  const e = (fid,tag='span') => `<${tag} contenteditable="true" data-fid="${fid}" oninput="sEd('${fid}',this.innerText)">${escHtml(C[fid]||'')}</${tag}>`;
-  const ae = (arr,idx,field,tag='span') => `<${tag} contenteditable="true" oninput="sArrEd('${arr}',${idx},'${field}',this.innerText)">${escHtml(String((S.arrays[arr][idx]||{})[field]??''))}</${tag}>`;
-  const ac = (arr,idx) => `<div class="arr-ctrl">
-    <button onclick="arrMove('${arr}',${idx},-1)" title="위로">↑</button>
-    <button onclick="arrMove('${arr}',${idx},1)" title="아래로">↓</button>
-    <button class="del" onclick="arrDel('${arr}',${idx})" title="삭제">×</button>
-  </div>`;
-  const addBtn = (arr,label) => `<button class="arr-add" onclick="arrAdd('${arr}')">+ ${label}</button>`;
-  const hint = `<div class="live-hint"><b>텍스트를 클릭하면 바로 수정됩니다.</b> · 항목 위에 마우스를 올리면 이동/삭제 버튼이 나타납니다.</div>`;
-
-  /* ━━━━━━━━━━ HOME ━━━━━━━━━━ */
-  if(k === 'home'){
-    const ta = S.arrays.tech_adv||[];
-    const featColors = ['#60a5fa','#fb923c','#34d399','#c084fc'];
-    const featBorders = ['rgba(96,165,250,.2)','rgba(251,146,60,.2)','rgba(52,211,153,.2)','rgba(192,132,252,.2)'];
-    const featLabels = ['TECH 01','TECH 02','TECH 03','TECH 04'];
-    // 실제 사이트와 동일한 CSS 애니메이션 아이콘
-    const featIcons = [
-      /* TECH 01: 360° 스윙 — 시계추 파이프 */
-      `<div style="position:relative;width:64px;height:72px">
-        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:4px;background:rgba(255,255,255,.3);border-radius:2px"></div>
-        <div style="position:absolute;top:4px;left:50%;transform-origin:top center;animation:swing-pipe 3s ease-in-out infinite">
-          <div style="width:6px;height:36px;margin-left:-3px;border-radius:0 0 3px 3px;background:linear-gradient(to bottom,#C49B2A,#8B6914)"></div>
-          <div style="width:28px;height:16px;margin-left:-11px;border-radius:0 0 8px 8px;background:linear-gradient(to bottom,#999,#666);clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%)"></div>
-        </div>
-      </div>`,
-      /* TECH 02: F.V.D 방화댐퍼 — 댐퍼 닫힘 + 불꽃 */
-      `<div style="position:relative;width:64px;height:56px">
-        <div style="position:absolute;inset:8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(to bottom,rgba(139,105,20,.4),rgba(107,82,16,.2))"></div>
-        <div style="position:absolute;top:50%;left:50%;width:48px;height:3px;border-radius:2px;background:linear-gradient(90deg,#f97316,#dc2626);box-shadow:0 0 10px rgba(234,88,12,.5);animation:damper-close 2.5s ease-in-out infinite"></div>
-        <div style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:12px;height:14px;border-radius:50%;background:linear-gradient(to top,rgba(249,115,22,.5),rgba(253,224,71,.3));filter:blur(2px);animation:flame-flicker 1.5s ease-in-out infinite"></div>
-      </div>`,
-      /* TECH 03: 분리청소 — 나사 분리 */
-      `<div style="display:flex;flex-direction:column;align-items:center;width:64px;height:72px;justify-content:center">
-        <div style="width:12px;height:22px;border-radius:0 0 4px 4px;background:linear-gradient(to bottom,#C49B2A,#8B6914)"></div>
-        <div style="width:20px;height:5px;border-radius:3px;background:linear-gradient(90deg,#888,#ddd,#888);animation:screw-apart-up 2s ease-in-out infinite"></div>
-        <div style="width:20px;height:5px;border-radius:3px;background:linear-gradient(90deg,#888,#ddd,#888);animation:screw-apart-dn 2s ease-in-out infinite"></div>
-        <div style="width:12px;height:22px;border-radius:4px 4px 0 0;background:linear-gradient(to bottom,#8B6914,#C49B2A)"></div>
-      </div>`,
-      /* TECH 04: 상하작동 텐션 — 높이 조절 */
-      `<div style="display:flex;flex-direction:column;align-items:center;width:64px;height:72px">
-        <div style="width:24px;height:4px;background:rgba(255,255,255,.3);border-radius:2px"></div>
-        <div style="animation:tension-ud 2.5s ease-in-out infinite;display:flex;flex-direction:column;align-items:center">
-          <div style="width:4px;height:22px;border-radius:2px;background:linear-gradient(to bottom,rgba(255,255,255,.4),rgba(255,255,255,.1))"></div>
-          <div style="display:flex;flex-direction:column;gap:1px;margin-top:-2px">
-            <div style="width:16px;height:2px;background:rgba(192,132,252,.6);border-radius:1px"></div>
-            <div style="width:16px;height:2px;background:rgba(192,132,252,.5);border-radius:1px"></div>
-            <div style="width:16px;height:2px;background:rgba(192,132,252,.4);border-radius:1px"></div>
-          </div>
-          <div style="width:36px;height:14px;margin-top:2px;border-radius:0 0 8px 8px;background:linear-gradient(to bottom,#999,#666);clip-path:polygon(15% 0%,85% 0%,100% 100%,0% 100%)"></div>
-        </div>
-      </div>`
-    ];
-
-    return hint + `
-      <div class="live-stage" style="padding:0;overflow:hidden">
-
-        <!-- ━━ 1. 히어로 (비디오 배경 + 다크 오버레이) ━━ -->
-        <div style="position:relative;min-height:420px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#05070f,#0a0f1c,#05070f);overflow:hidden">
-          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(59,130,246,.08),transparent 70%)"></div>
-          <div style="position:absolute;inset:0;background:rgba(0,0,0,.8)"></div>
-          <div style="position:relative;z-index:1;text-align:center;padding:48px 24px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.32em;color:#60a5fa;margin-bottom:20px">${e('h_tag')}</div>
-            <h1 style="font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:.95;color:#fff;margin-bottom:24px">${e('h_title1','span')}<br/><span style="background:linear-gradient(90deg,#60a5fa,#67e8f9,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_title2','span')}</span></h1>
-            <p style="font-size:20px;color:rgba(255,255,255,.55);font-weight:500">${e('h_sub')}</p>
-          </div>
-          <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);text-align:center">
-            <div style="width:22px;height:34px;border:2px solid rgba(255,255,255,.25);border-radius:11px;margin:0 auto 6px;position:relative"><div style="width:3px;height:8px;background:rgba(255,255,255,.5);border-radius:2px;position:absolute;top:6px;left:50%;transform:translateX(-50%)"></div></div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:.25em;color:rgba(255,255,255,.35)">SCROLL</div>
-          </div>
-        </div>
-
-        <!-- ━━ 2. 스크롤 카피 1 ━━ -->
-        <div style="min-height:220px;display:flex;align-items:center;justify-content:center;background:#030408;padding:40px 24px">
-          <h2 style="font-size:36px;font-weight:900;text-align:center;line-height:1.15;letter-spacing:-.02em">${e('h_sub2_a')}<br/><span class="grad">${e('h_sub2_b')}</span></h2>
-        </div>
-
-        <!-- ━━ 3. 스크롤 카피 2 ━━ -->
-        <div style="min-height:220px;display:flex;align-items:center;justify-content:center;background:#030408;padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <h2 style="font-size:36px;font-weight:900;text-align:center;line-height:1.15;letter-spacing:-.02em">${e('h_sub3_a')}<br/><span style="background:linear-gradient(90deg,#fbbf24,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent">${e('h_sub3_b')}</span></h2>
-        </div>
-
-        <!-- ━━ 4. 스크롤 피처 4개 (애니메이션 아이콘) ━━ -->
-        ${ta.slice(0,4).map((a,i)=>{
-          const c = featColors[i]; const bd = featBorders[i];
-          return `<div style="min-height:240px;display:flex;align-items:center;justify-content:center;background:#030408;padding:32px 24px;border-top:1px solid rgba(255,255,255,.04)">
-            <div class="arr-wrap" style="text-align:center;max-width:520px;position:relative">
-              ${ac('tech_adv',i)}
-              <div style="width:90px;height:90px;margin:0 auto 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid ${bd};display:flex;align-items:center;justify-content:center">
-                ${featIcons[i]||'<div style="font-size:28px">⚙️</div>'}
-              </div>
-              <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:${c};margin-bottom:6px">${featLabels[i]}</div>
-              <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:8px">${ae('tech_adv',i,'tt')}</div>
-              <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.5;max-width:400px;margin:0 auto">${ae('tech_adv',i,'dd')}</div>
-            </div>
-          </div>`;
-        }).join('')}
-        ${addBtn('tech_adv','새 피처 추가')}
-
-        <!-- ━━ 5. CTA (한 번 쓰면 다시 못 돌아갑니다) ━━ -->
-        <div style="min-height:320px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <div style="text-align:center;max-width:640px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#60a5fa;margin-bottom:16px">${e('h_cta_tag')}</div>
-            <h2 style="font-size:48px;font-weight:900;letter-spacing:-.03em;line-height:.95">${e('h_cta_title1')}<br/><span class="grad">${e('h_cta_title2')}</span></h2>
-            <p style="margin-top:20px;font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto">${e('h_cta_desc')}</p>
-            <div style="margin-top:24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
-              <span style="padding:14px 28px;background:#fff;color:#000;border-radius:999px;font-weight:800;font-size:14px">${e('h_cta_btn1')}</span>
-              <span style="padding:14px 28px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-weight:700;font-size:14px;color:#fff">${e('h_cta_btn2')}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ━━ 6. CORE TECHNOLOGY (흰 배경) ━━ -->
-        <div style="background:#fff;color:#1d1d1f;padding:40px 24px">
-          <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#2563eb;margin-bottom:8px">${e('t_tag')}</div>
-            <h2 style="font-size:36px;font-weight:900;letter-spacing:-.02em;color:#000;line-height:1.05">${e('t_title')}</h2>
-            <p style="margin-top:10px;font-size:13px;color:rgba(0,0,0,.5);max-width:560px;margin-left:auto;margin-right:auto;line-height:1.5">${e('t_desc')}</p>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08)">
-            <div style="background:#0a0c18;padding:24px;display:flex;align-items:center;justify-content:center;min-height:180px">
-              <div style="text-align:center;color:rgba(255,255,255,.3)"><div style="font-size:40px;margin-bottom:4px">🏗️</div><div style="font-size:11px;font-weight:600">3D 후드 애니메이션</div></div>
-            </div>
-            <div style="background:#0a0c18;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
-              ${ta.slice(0,4).map((a,i)=>`<div style="padding:10px;border-radius:10px;border:1px solid ${featColors[i]}33;background:${featColors[i]}0d">
-                <div style="font-size:9px;color:${featColors[i]};font-weight:700;letter-spacing:.12em">${escHtml(a.num||featLabels[i])}</div>
-                <div style="font-size:12px;font-weight:800;color:#fff;margin-top:3px">${escHtml(a.tt||'')}</div>
-              </div>`).join('')}
-            </div>
-          </div>
-          <!-- 임팩트 카피 -->
-          <div style="text-align:center;margin-top:24px">
-            <p style="font-size:22px;font-weight:900;color:#000;line-height:1.2">${e('t_impact1')}<br/><span style="color:#2563eb">${e('t_impact2')}</span></p>
-          </div>
-          <!-- 스탯 바 -->
-          <div style="margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-            <div style="text-align:center;padding:12px 6px;background:#f5f5f7;border-radius:10px"><div style="font-size:20px;font-weight:900;color:#2563eb">${e('t_stat1_v')}</div><div style="font-size:9px;color:rgba(0,0,0,.4);margin-top:2px;font-weight:600">${e('t_stat1_l')}</div></div>
-            <div style="text-align:center;padding:12px 6px;background:#f5f5f7;border-radius:10px"><div style="font-size:20px;font-weight:900;color:#2563eb">${e('t_stat2_v')}</div><div style="font-size:9px;color:rgba(0,0,0,.4);margin-top:2px;font-weight:600">${e('t_stat2_l')}</div></div>
-            <div style="text-align:center;padding:12px 6px;background:#f5f5f7;border-radius:10px"><div style="font-size:20px;font-weight:900;color:#2563eb">${e('t_stat3_v')}</div><div style="font-size:9px;color:rgba(0,0,0,.4);margin-top:2px;font-weight:600">${e('t_stat3_l')}</div></div>
-            <div style="text-align:center;padding:12px 6px;background:#f5f5f7;border-radius:10px"><div style="font-size:20px;font-weight:900;color:#2563eb">${e('t_stat4_v')}</div><div style="font-size:9px;color:rgba(0,0,0,.4);margin-top:2px;font-weight:600">${e('t_stat4_l')}</div></div>
-          </div>
-        </div>
-
-        <!-- ━━ 7. FEATURES IN MOTION (2x2 카드) ━━ -->
-        <div style="background:linear-gradient(180deg,#080c1a,#0a0f22);padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#60a5fa;margin-bottom:6px">${e('fim_tag')}</div>
-            <h2 style="font-size:32px;font-weight:900;color:#fff">${e('fim_title_a')}<span class="grad">${e('fim_title_b')}</span>${e('fim_title_c')}</h2>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:0 auto">
-            <div style="background:#0c1226;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#60a5fa;margin-bottom:4px">${e('fim_card1_tag')}</div>
-              <div style="font-size:18px;font-weight:900;color:#fff">${e('fim_card1_title')}</div>
-            </div>
-            <div style="background:#160b0b;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#ef4444;margin-bottom:4px">${e('fim_card2_tag')}</div>
-              <div style="font-size:18px;font-weight:900;color:#fff">${e('fim_card2_title')}</div>
-            </div>
-            <div style="background:#0a1626;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#22d3ee;margin-bottom:4px">${e('fim_card3_tag')}</div>
-              <div style="font-size:18px;font-weight:900;color:#fff">${e('fim_card3_title')}</div>
-            </div>
-            <div style="background:#0b0f1e;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.2em;color:#a78bfa;margin-bottom:4px">${e('fim_card4_tag')}</div>
-              <div style="font-size:18px;font-weight:900;color:#fff">${e('fim_card4_title')}</div>
-            </div>
-          </div>
-          <!-- 마퀴 키워드 -->
-          <div style="margin-top:18px;padding:10px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;text-align:center">
-            <div style="font-size:24px;font-weight:900;color:rgba(255,255,255,.06);letter-spacing:-.02em;white-space:nowrap">360° SWING · EASY CLEAN · FVD SAFETY · CUSTOM FIT · MADE IN KOREA</div>
-          </div>
-        </div>
-
-        <!-- ━━ 8. WHERE WE WORK (사용 현장 3카드) ━━ -->
-        <div style="background:#000;padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#60a5fa;margin-bottom:6px">${e('www_tag')}</div>
-            <h2 style="font-size:32px;font-weight:900;color:#fff">${e('www_title_a')}<span class="grad">${e('www_title_b')}</span>${e('www_title_c')}</h2>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:640px;margin:0 auto">
-            <div style="background:linear-gradient(to bottom,#1a1a1c,#0a0a0c);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;min-height:140px;display:flex;flex-direction:column;justify-content:space-between">
-              <div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:#fb923c">${e('www_case1_tag')}</div><div style="font-size:16px;font-weight:900;color:#fff;margin-top:4px">${e('www_case1_title')}</div></div>
-              <div style="font-size:10px;color:#60a5fa;font-weight:700;margin-top:8px">${e('www_case1_desc')}</div>
-            </div>
-            <div style="background:linear-gradient(to bottom,#0c1226,#050510);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;min-height:140px;display:flex;flex-direction:column;justify-content:space-between">
-              <div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:#60a5fa">${e('www_case2_tag')}</div><div style="font-size:16px;font-weight:900;color:#fff;margin-top:4px">${e('www_case2_title')}</div></div>
-              <div style="font-size:10px;color:#60a5fa;font-weight:700;margin-top:8px">${e('www_case2_desc')}</div>
-            </div>
-            <div style="background:linear-gradient(to bottom,#0a1626,#050a14);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;min-height:140px;display:flex;flex-direction:column;justify-content:space-between">
-              <div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:#22d3ee">${e('www_case3_tag')}</div><div style="font-size:16px;font-weight:900;color:#fff;margin-top:4px">${e('www_case3_title')}</div></div>
-              <div style="font-size:10px;color:#60a5fa;font-weight:700;margin-top:8px">${e('www_case3_desc')}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ━━ 9. STATEMENT (신개념 슬로건) ━━ -->
-        <div style="background:#000;padding:60px 24px;border-top:1px solid rgba(59,130,246,.1);position:relative;overflow:hidden">
-          <div style="position:absolute;inset:0;background:radial-gradient(600px 300px at 20% 30%,rgba(59,130,246,.12),transparent 60%),radial-gradient(600px 300px at 80% 70%,rgba(34,211,238,.08),transparent 60%)"></div>
-          <div style="position:relative;text-align:center">
-            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);margin-bottom:18px">
-              <div style="width:6px;height:6px;border-radius:50%;background:#60a5fa"></div>
-              <span style="font-size:10px;font-weight:700;letter-spacing:.3em;color:rgba(255,255,255,.6)">${e('stmt_tag')}</span>
-            </div>
-            <h2 style="font-size:42px;font-weight:900;letter-spacing:-.04em;line-height:.95;color:#fff;margin-bottom:16px">${e('stmt_title1')}<br/><span class="grad">${e('stmt_title2')}</span>${e('stmt_title3')}</h2>
-            <!-- 키워드 칩 -->
-            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px">
-              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">360° SWING</span>
-              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">F.V.D 방화댐퍼</span>
-              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">분리 청소</span>
-              <span style="padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em">상하 텐션</span>
-            </div>
-            <!-- 큰 카운터 -->
-            <!-- ★ 이 블록은 실사이트를 흉내 낸 **정적 미리보기**다. 사이트를 고치면 여기도 같이 고쳐야
-                 「관리자가 옛날 기준」이 된다. 260818 실측: 3번 칸이 r32(No.1 삭제)·r43(1 + 라벨)
-                 두 리비전을 놓쳐 두 달치가 밀려 있었다. 현재 = r45 기준.
-                 실사이트 원본은 api/inject.js 의 S01 배열이다. -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:420px;margin:24px auto 0">
-              <div><div style="font-size:36px;font-weight:900;color:#fff">14<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">YEARS</div></div>
-              <div style="border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)"><div style="font-size:36px;font-weight:900;color:#fff">28<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">PRODUCTS</div></div>
-              <div><div style="font-size:36px;font-weight:900;color:#fff">1<span style="color:#60a5fa">+</span></div><div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:2px">최초의 혁신적 후드</div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ━━ 10. GALLERY PREVIEW (현장 사진) ━━ -->
-        <div style="background:#000;padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px">
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.3em;color:#60a5fa;margin-bottom:6px">${e('gp_tag')}</div>
-              <h2 style="font-size:28px;font-weight:900;color:#fff;line-height:1.1">${e('gp_title1')}<br/><span class="grad">${e('gp_title2')}</span></h2>
-            </div>
-            <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.12);padding:6px 16px;border-radius:999px">전체 갤러리 보기 →</span>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-            ${[1,2,3,4,5,6,7,8].map(i=>`<div style="aspect-ratio:1;border-radius:8px;overflow:hidden;background:#111"><img src="gallery/g${String(i).padStart(2,'0')}.jpg" style="width:100%;height:100%;object-fit:cover;opacity:.85" loading="lazy" onerror="this.style.background='#1a1a2e'"/></div>`).join('')}
-          </div>
-        </div>
-
-        <!-- ━━ 11. VIDEO SHOWCASE (LIVE PREVIEW) ━━ -->
-        <div style="background:linear-gradient(to bottom,#000,#050a14,#000);padding:40px 24px;border-top:1px solid rgba(255,255,255,.04)">
-          <div style="display:grid;grid-template-columns:2fr 3fr;gap:20px;align-items:center">
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.3em;color:#60a5fa;margin-bottom:6px">${e('vid_tag')}</div>
-              <h2 style="font-size:24px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:10px">${e('vid_title1')}<br/><span class="grad">${e('vid_title2')}</span></h2>
-              <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:#fff;color:#000;border-radius:999px;font-size:11px;font-weight:800">네이버 블로그 →</span>
-            </div>
-            <div style="aspect-ratio:16/9;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-              <div style="position:absolute;top:8px;left:10px;font-size:9px;font-weight:700;letter-spacing:.2em;color:#60a5fa">LIVE PREVIEW</div>
-              <div style="text-align:center;color:rgba(255,255,255,.2)"><div style="font-size:36px;margin-bottom:4px">▶</div><div style="font-size:10px;font-weight:600">덕트 흡입 애니메이션</div></div>
-              <div style="position:absolute;bottom:8px;right:10px;font-size:8px;font-weight:700;letter-spacing:.15em;color:rgba(255,255,255,.3)">YUSUNG ACE · DUCT SYSTEM</div>
-            </div>
-          </div>
-        </div>
-
-      </div>`;
-  }
-
-  /* ━━━━━━━━━━ TECH (코어 기술 — 흰배경) ━━━━━━━━━━ */
-  if(k === 'tech'){
-    const advColors = ['rgba(96,165,250','rgba(251,146,60','rgba(52,211,153','rgba(192,132,252'];
-    return hint + `
-      <div class="live-stage light-sec" style="background:#fff;color:#1d1d1f">
-        <!-- CORE TECHNOLOGY 헤더 -->
-        <div style="text-align:center;margin-bottom:20px">
-          <div style="font-size:11px;font-weight:700;letter-spacing:.24em;color:#2563eb;margin-bottom:10px">${e('t_tag')}</div>
-          <h2 style="font-size:36px;font-weight:900;letter-spacing:-0.02em;color:#000;line-height:1.05">${e('t_title')}</h2>
-          <p style="margin-top:12px;font-size:14px;color:rgba(0,0,0,.55);max-width:620px;margin-left:auto;margin-right:auto;line-height:1.6">${e('t_desc')}</p>
-        </div>
-
-        <!-- 3D 후드 + 장점 카드 -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08)">
-          <div style="background:#0a0c18;padding:30px;display:flex;align-items:center;justify-content:center;min-height:240px">
-            <div style="text-align:center;color:rgba(255,255,255,.4)">
-              <div style="font-size:48px;margin-bottom:8px">🏗️</div>
-              <div style="font-size:12px;font-weight:600">3D 후드 애니메이션</div>
-              <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px">index_v6.html 자체 렌더링</div>
-            </div>
-          </div>
-          <div style="background:#0a0c18;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            ${(S.arrays.tech_adv||[]).map((a,i)=>`<div class="arr-wrap" style="padding:14px;border-radius:12px;border:1px solid ${advColors[i%4]},.15);background:${advColors[i%4]},.05)">
-              ${ac('tech_adv',i)}
-              <div style="font-size:10px;color:${advColors[i%4]},1);font-weight:700;letter-spacing:.12em">${ae('tech_adv',i,'num')}</div>
-              <div style="font-size:14px;font-weight:800;color:#fff;margin-top:4px">${ae('tech_adv',i,'tt')}</div>
-              <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">${ae('tech_adv',i,'dd')}</div>
-            </div>`).join('')}
-          </div>
-        </div>
-        ${addBtn('tech_adv','새 장점 추가')}
-
-        <!-- 임팩트 카피 + 스탯바 -->
-        <div style="text-align:center;margin-top:28px">
-          <p style="font-size:26px;font-weight:900;color:#000;line-height:1.2">${e('t_impact1')}<br/><span style="color:#2563eb">${e('t_impact2')}</span></p>
-        </div>
-        <div style="margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat1_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat1_l')}</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat2_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat2_l')}</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat3_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat3_l')}</div></div>
-          <div style="text-align:center;padding:14px 8px;background:#f5f5f7;border-radius:12px;border:1px solid rgba(0,0,0,.04)"><div style="font-size:24px;font-weight:900;color:#2563eb">${e('t_stat4_v')}</div><div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px;font-weight:600">${e('t_stat4_l')}</div></div>
-        </div>
-      </div>`;
-  }
-
-  /* ━━━━━━━━━━ ABOUT (회사소개) ━━━━━━━━━━ */
-  if(k === 'about'){
-    return hint + `
-      <div class="live-stage">
-        <!-- Hero -->
-        <div style="margin-bottom:30px">
-          <div class="lp-tag">${e('a_tag')}</div>
-          <h1 class="lp-h1" style="font-size:48px">${e('a_title1')}<br/><span class="grad">${e('a_title2')}</span></h1>
-          <p class="lp-sub" style="font-size:17px;max-width:none">${e('a_desc')}</p>
-        </div>
-
-        <!-- CEO Message (그리드 레이아웃) -->
-        <div style="padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
-          <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px">
-            <div>
-              <div class="lp-tag">CEO MESSAGE</div>
-              <h2 class="lp-h2" style="margin:0">대표이사<br/><span style="color:#60a5fa">${e('a_ceo_name')}</span></h2>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:14px">
-              <p class="lp-p" style="font-size:14px;line-height:1.7">${e('a_ceo_p1','span')}</p>
-              <p class="lp-p" style="font-size:14px;line-height:1.7">${e('a_ceo_p2','span')}</p>
-              <p class="lp-p" style="font-size:14px;line-height:1.7">${e('a_ceo_p3','span')}</p>
-              <p class="lp-p" style="font-size:14px;line-height:1.7;color:#fff">${e('a_ceo_p4','span')}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Company Info Grid (실제 사이트와 동일한 2x2 + 1 그리드) -->
-        <div style="margin-top:30px;padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
-          <div class="lp-tag">COMPANY INFO</div>
-          <h2 class="lp-h2" style="margin-bottom:18px">회사 정보</h2>
-          <div class="lp-info">
-            <div class="ib"><div class="lb2">COMPANY</div><div class="vl2">${e('c_name')}</div><div class="sm2">${e('c_name_en')}</div></div>
-            <div class="ib"><div class="lb2">CEO</div><div class="vl2">${e('c_ceo')}</div><div class="sm2">대표이사</div></div>
-            <div class="ib"><div class="lb2">TEL</div><div class="vl2">${e('c_tel')}</div><div class="sm2">${e('c_fax')}</div></div>
-            <div class="ib"><div class="lb2">BUSINESS NO.</div><div class="vl2">${e('c_biz')}</div><div class="sm2">사업자등록번호</div></div>
-            <div class="ib full"><div class="lb2">ADDRESS</div><div class="vl2">${e('c_addr')}</div><div class="sm2">${e('c_addr_sub')}</div></div>
-          </div>
-        </div>
-
-        <!-- 찾아오시는 길 (비편집 안내) -->
-        <div style="margin-top:30px;padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
-          <div class="lp-tag">LOCATION</div>
-          <h2 class="lp-h2" style="margin-bottom:14px">찾아오시는 길</h2>
-          <div style="height:140px;border-radius:14px;background:linear-gradient(135deg,#1e293b,#0a0f1c);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:12px">🗺️ Google Maps 임베드 (자동 연동)</div>
-        </div>
-
-        <!-- Promise -->
-        <div style="margin-top:30px;padding:28px 24px;border-radius:22px;background:linear-gradient(135deg,rgba(59,130,246,.12),transparent 60%,rgba(34,211,238,.06));border:1px solid rgba(255,255,255,.1)">
-          <div class="lp-tag">OUR PROMISE</div>
-          <h2 class="lp-h1" style="font-size:30px">${e('a_promise1')}<br/><span class="grad">${e('a_promise2')}</span></h2>
-          <p class="lp-sub" style="margin-top:14px">${e('a_promise_desc')}</p>
-        </div>
-
-        <!-- History -->
-        <div style="margin-top:30px;padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
-          <div class="lp-tag">HISTORY</div>
-          <h2 class="lp-h2">20년의 발자취</h2>
-          <div class="lp-timeline">
-            ${(S.arrays.history||[]).map((h,i)=>`<div class="it arr-wrap" style="padding-right:76px">
-              ${ac('history',i)}
-              <div class="yr">${ae('history',i,'y')}</div>
-              <div class="tx">${ae('history',i,'t')}</div>
-            </div>`).join('')}
-          </div>
-          ${addBtn('history','새 연혁 추가')}
-        </div>
-
-        <!-- 문의하기 안내 -->
-        <div style="margin-top:30px;padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
-          <div class="lp-tag">CONTACT US</div>
-          <h2 class="lp-h2" style="margin-bottom:10px">문의하기</h2>
-          <div style="padding:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;color:rgba(255,255,255,.4);font-size:12px;text-align:center">
-            📝 견적/설치/AS 문의 폼 (자동 렌더링 영역)
-          </div>
-        </div>
-      </div>`;
-  }
-
-  /* ━━━━━━━━━━ PRODUCTS (제품소개) ━━━━━━━━━━ */
-  if(k === 'products'){
-    return hint + `<div class="live-stage">${rProductsTab()}</div>`;
-  }
-
-  /* ━━━━━━━━━━ PARTS (부품소개) ━━━━━━━━━━ */
-  if(k === 'parts'){
-    return hint + `
-      <div class="live-stage">
-        <div style="text-align:center;margin-bottom:26px">
-          <div class="lp-tag" style="text-align:center">PARTS CATALOG · ${PARTS_IMGS.length} ITEMS</div>
-          <h1 class="lp-h1" style="text-align:center;font-size:42px">${e('pt_title')}</h1>
-          <p class="lp-sub" style="margin:14px auto 0;text-align:center;font-size:16px">${e('pt_desc')}</p>
-        </div>
-
-        <!-- ★ 부품 이미지 관리 (핵심 기능) -->
-        ${rImgGrid('parts', PARTS_IMGS, ['부품'])}
-      </div>`;
-  }
-
-
-  /* ━━━━━━━━━━ GALLERY (시공갤러리) ━━━━━━━━━━ */
-  if(k === 'gallery'){
-    return hint + `
-      <div class="live-stage">
-        <div style="margin-bottom:26px">
-          <div class="lp-tag">${e('g_tag')}</div>
-          <h1 class="lp-h1" style="font-size:42px">${e('g_title')}<br/><span class="grad">${e('g_title2')}</span></h1>
-          <p class="lp-sub" style="font-size:16px">${e('g_desc')}</p>
-        </div>
-
-        <!-- ★ 갤러리 이미지 관리 (핵심 기능) -->
-        ${rImgGrid('gallery', GALLERY_IMGS, ['시공갤러리'])}
-
-        <!-- 텍스트 데이터 편집 (접이식) -->
-        <details style="margin-top:20px">
-          <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--ac);padding:10px 0">📋 갤러리 캡션 편집 (${(S.arrays.gallery||[]).length}개 항목) ▾</summary>
-          <div class="lp-pgrid" style="grid-template-columns:repeat(2,1fr);margin-top:10px">
-            ${(S.arrays.gallery||[]).map((g,i)=>`
-              <div class="lp-card arr-wrap">
-                ${ac('gallery',i)}
-                <div class="cat">${ae('gallery',i,'c')}</div>
-                <div class="nm">${ae('gallery',i,'t')}</div>
-              </div>`).join('')}
-          </div>
-          ${addBtn('gallery','새 캡션 추가')}
-        </details>
-      </div>`;
-  }
-
-
-
-  /* ━━━━━━━━━━ BOARD (고객 게시판) ━━━━━━━━━━ */
-  if(k === 'board'){
-    const items = S.boards.board||[];
-    return hint + `
-      <div class="live-stage">
-        <div style="margin-bottom:24px">
-          <div class="lp-tag">CUSTOMER BOARD</div>
-          <h1 class="lp-h1" style="font-size:36px">고객 게시판</h1>
-          <p class="lp-sub">시공후기, 문의, 칭찬 등 고객의 소리를 확인하세요.</p>
-        </div>
-        <div style="display:flex;gap:6px;margin-bottom:18px">
-          ${['전체','시공후기','문의','칭찬','일반'].map((c,i)=>`<span class="lp-pill" style="${i===0?'background:#fff;color:#000':''}">${c}</span>`).join('')}
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          ${items.length ? items.map(b=>`<div style="padding:16px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;display:flex;align-items:center;gap:14px">
-            <span style="font-size:10px;padding:3px 8px;background:rgba(52,211,153,.15);color:#34d399;border-radius:6px;font-weight:700">${escHtml(b.cat||'일반')}</span>
-            <div style="flex:1"><div style="font-size:14px;font-weight:700">${escHtml(b.title)}</div><div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px">${escHtml(b.author||'익명')} · ${new Date(b.createdAt).toLocaleDateString('ko')} · 조회 ${b.views||0}</div></div>
-          </div>`).join('') : '<div style="padding:40px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">등록된 게시글이 없습니다</div>'}
-        </div>
-        <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,.25)">게시글은 사이드바 「💬 고객 게시판」 메뉴에서 관리합니다</div>
-      </div>`;
-  }
-
-
-  return `<div class="live-stage" style="display:flex;align-items:center;justify-content:center;min-height:300px"><div style="text-align:center;color:rgba(255,255,255,.3)"><div style="font-size:40px;margin-bottom:8px">🚧</div><div style="font-size:14px;font-weight:600">라이브 프리뷰 준비중</div></div></div>`;
-}
+// r68) 「👁 라이브 모드」가 쓰던 rLive 함수 460줄을 지웠다.
+//   이건 홈페이지를 admin.html 안에 손으로 베껴 그린 사본이었다. 사이트가 바뀌면 반드시 어긋나고,
+//   실제로 승연이 그 어긋난 내용을 보고 「예전 내용들이 다수 있어 헷갈려」라고 신고했다.
+//   후계자는 「🖥️ 화면에서 편집」(usung-r41-*.js) — 사본이 아니라 진짜 사이트를 액자에 띄운다.
 
 // ============== 문의 ==============
 function rInquiries(){
