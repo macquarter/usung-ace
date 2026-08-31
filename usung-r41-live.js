@@ -17,11 +17,14 @@
 (function () {
   'use strict';
 
+  // r65) 웹사이트 실측 도달 가능한 뷰만 남긴다. 생산공정·사용방법·공지사항·
+  // 인증현황은 오버레이(usung-r5-nav.js hideByI18n / usung-r10-fix.css)가
+  // 나브에서 지워 방문자가 도달할 길이 없다(1440·393 양쪽 실측 display:none).
+  // ★ parts 는 헤더에 없어도 남긴다 — 제품소개 본문 「부품 전체 50종 보기 →」로 2클릭에 닿는다.
   var PAGES_R41 = [
     ['home', '홈'], ['about', '회사소개'], ['products', '제품소개'],
-    ['parts', '부품'], ['tech', '기술력'], ['process', '생산공정'],
-    ['manual', '사용방법'], ['gallery', '시공갤러리'],
-    ['notice', '공지사항'], ['board', '고객문의'], ['certification', '인증현황']
+    ['parts', '부품 · 구성품'], ['tech', '기술력'],
+    ['gallery', '시공갤러리'], ['board', '공지게시판']
   ];
 
   var CHUNK = 1800;          // api/cms.js MAX_VAL 2000 보다 낮게 (여유)
