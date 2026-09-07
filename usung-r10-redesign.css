@@ -22,7 +22,15 @@ html .r8x:not(#_r8_) .gal-tabs{
   padding:20px 0 16px !important;
   top:var(--r10-navh,65px) !important;
   background:#fff !important;
-  box-shadow:0 1px 0 var(--line), 0 10px 14px -12px rgba(22,41,77,.28) !important;
+  /* r71) box-shadow 를 뺐다. 승연: 「고정 바가 그림자지고 있어 이부분의 그림자만 안보이게」.
+   * 원래 값(되돌릴 때 이 줄을 그대로 살린다):
+   *   box-shadow:0 1px 0 var(--line), 0 10px 14px -12px rgba(22,41,77,.28) !important;
+   * ★ 두 겹이었다 — `0 1px 0 var(--line)` 은 blur 0 인 **구분선**, 뒤가 실제 **그림자**.
+   *   승연 확인 후 둘 다 뺀다(구분선만 남기면 바 아래 회색 실선이 그대로 보인다).
+   * ★ `.gal-tabs` 의 box-shadow 출처는 이 한 줄뿐이다(실측: 리포 전체에서 유일).
+   *   그래서 `none` 으로 덮지 않고 **선언을 지운다** — r8:763 에도 그림자가 없어 되살아날 게 없다.
+   * ★ 바가 안 비쳐 보이는 건 그림자가 아니라 위의 `background:#fff !important` 가 맡는다.
+   *   (r8:763 의 원래 배경은 아래 30% 가 투명한 그라디언트였다 — 그건 그대로 덮여 있다) */
 }
 html .r8x:not(#_r8_) .gal-grid{padding-top:22px !important;}
 
