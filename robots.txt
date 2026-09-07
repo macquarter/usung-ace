@@ -43,4 +43,6 @@ Allow: /
 User-agent: Daumoa
 Allow: /
 
-Sitemap: https://usung-ace.vercel.app/sitemap.xml
+# ★ r74) 대표 주소를 yusungace.com 으로 맞췄다 (sitemap.xml 과 짝이다).
+#   r54 가 대표 주소를 옮길 때 api/_seo.js 만 고치고 이 줄과 sitemap.xml 을 빠뜨렸다.
+Sitemap: https://yusungace.com/sitemap.xml
