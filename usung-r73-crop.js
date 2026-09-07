@@ -72,11 +72,15 @@
         var line = light ? 'rgba(0,0,0,.12)' : 'rgba(255,255,255,.14)';
 
         /* ── 껍데기 ── */
+        /* ★ `align-items:center` 를 쓰면 안 된다 — 패널이 화면보다 높을 때 flex 는 **위쪽으로** 밀어내고
+             그 넘친 부분은 `overflow:auto` 로도 못 잡는다(스크롤 원점보다 앞이라). 실제로 1440x813 에서
+             패널 상단이 -89px 로 잘려 **아래 버튼 4개가 화면 밖**이 됐다.
+             `flex-start` + `margin:auto` 면 들어갈 땐 가운데, 넘칠 땐 위에서부터 전부 스크롤된다. */
         var ov = el('div', 'position:fixed;inset:0;z-index:99999;background:rgba(3,6,12,.74);' +
-          'display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;' +
+          'display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;' +
           '-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)');
         var pan = el('div', 'background:' + panelBg + ';color:' + fg + ';border:1px solid ' + line + ';' +
-          'border-radius:16px;padding:18px 20px 16px;max-width:820px;width:100%;' +
+          'border-radius:16px;padding:18px 20px 16px;max-width:820px;width:100%;margin:auto;' +
           'box-shadow:0 24px 60px rgba(0,0,0,.5);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif');
 
         pan.appendChild(el('div', 'font-size:17px;font-weight:700;margin-bottom:2px', '사진 편집'));
@@ -127,9 +131,14 @@
           'margin-bottom:10px;cursor:' + (hasMargin ? 'pointer' : 'default') + ';opacity:' + (hasMargin ? '1' : '.5'));
         var cb = document.createElement('input');
         cb.type = 'checkbox'; cb.checked = hasMargin; cb.disabled = !hasMargin;
-        cb.style.cssText = 'margin-top:2px;flex:0 0 auto';
+        /* ★★ 체크상자에 **픽셀 폭을 못박는다**(KNOWLEDGE 65 의 한글 flex 병).
+             `flex:0 0 auto` 만으로는 부족했다 — 체크상자가 452px 을 차지해 옆 글자가
+             min-content(한글은 한 글자 = 11px)까지 눌리고, 「투 명 여 백」처럼 **세로로 쌓였다**.
+             그 488px 짜리 글자 기둥이 패널을 991px 로 부풀린 진짜 원인이었다.
+             글자 쪽엔 `min-width:0` 을 준다 — 없으면 flex 항목의 하한이 min-content 로 잡힌다. */
+        cb.style.cssText = 'margin-top:2px;flex:0 0 16px;width:16px;height:16px';
         wrapAuto.appendChild(cb);
-        wrapAuto.appendChild(el('span', '', hasMargin
+        wrapAuto.appendChild(el('span', 'flex:1 1 auto;min-width:0', hasMargin
           ? '투명 여백 자동 제거 <span style="color:' + sub + ';font-size:11.5px">— 사진 둘레의 빈 공간을 찾아 잘라냅니다</span>'
           : '<span style="color:' + sub + '">이 사진에는 잘라낼 투명 여백이 없습니다</span>'));
         right.appendChild(wrapAuto);
