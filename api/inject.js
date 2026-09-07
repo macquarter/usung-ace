@@ -133,13 +133,34 @@ export default async function handler(req, res) {
     //   즉 「전체」는 말 그대로 세 칸이고, 이미 + 가 있는 14+ 가 본보기다.
     // ★ + 는 index_v6.html:1731 의 14+ 와 **같은 마크업**을 쓴다 — `<span class="text-blue-400">+</span>`.
     //   따로 클래스를 만들면 파란색 기준(usung-blue-standard)에서 벗어난다.
-    // ★ 「1+」 는 승연에게 확인이 필요한 표기다(QUESTIONS.md G1). 되돌리려면 아래 S01
-    //   두 번째 항 to 에서 `<span class="text-blue-400">+</span>` 만 지우면 된다 — 한 줄이다.
+    // ★ 「10+」 는 유성 미팅에서 정해진 표기다(QUESTIONS.md G1 — 닫힘, 2026-09-07 승연 확정).
+    //   되돌리려면 아래 S01 두 번째 항 to 에서 `<span class="text-blue-400">+</span>` 만
+    //   지우면 된다 — 한 줄이다.
+    //
+    // ── r74) 「1」→「10」 을 **여기로 옮겼다**. 관리자 오버라이드에서 뺐다 ──
+    // 그 전까지 이 숫자는 관리자 「화면에서 편집」이 만든 텍스트 오버라이드
+    //   (data/cms.json 의 r41_ov_0 에 있던 {"p":"home","f":"1","t":"10"}) 였다.
+    // ★ 의도는 정당했다 — 유성이 요청한 것은 홈 카운터 하나다.
+    //   문제는 **착지 지점**이었다. r41 적용기의 p:"home" 은 「어떤 오버라이드를 켤까」만
+    //   정하고 실제 치환은 document.body 전체를 훑는다. index_v6.html 은 SPA 라
+    //   11개 페이지가 **한 문서 안에** 있으므로, 「1」 하나짜리 텍스트 노드가 전부 물렸다.
+    // ★ 라이브 실측(2026-09-08, 홈 1440): 「10」 노드 10개 중 의도한 것은 1개.
+    //     갤럭시B1 → 갤럭시B10  ·  코브라 후드 1 → 10  ·  「1파이프가…」 → 「10파이프가…」
+    //     단면도 「210Ø 1 토출」 ×2  ·  업계동향 1(실제 1건) → 10  ·  페이지 버튼 ‹ 1 → ‹ 10
+    //   즉 **제품 이름이 틀리게 나오고 있었다.**
+    // ★ 왜 「오버라이드를 홈에만 착지시키기」가 아니라 「S01 로 옮기기」인가 —
+    //   적용기는 문서 전체를 훑는 구조라 페이지 단위 착지가 **구조적으로 불가능**하다.
+    //   여기(S01)는 HTML 문자열을 서버에서 직접 치환하므로 이 마크업 한 곳에만 닿는다.
+    //   그래서 홈은 「10+」 그대로 두고 나머지 9곳만 원래 숫자로 돌아온다.
+    // ★ 짝이 셋이다 — 하나라도 빠지면 안 닫힌다:
+    //     ① 여기(S01)          ② data/cms.json 의 r41_ov_0 에서 해당 항 제거
+    //     ③ admin.html 의 r74Purge() — **브라우저 localStorage 에도 남아 있다.**
+    //        ③ 이 없으면 승연이 다음에 발행할 때 되살아난다(r48·r58 에서 배운 그대로).
     const S01 = [
       ['<div class="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[12px] font-bold tracking-wider text-white/70 hover:bg-white/10 hover:border-blue-400/40 transition" data-i18n="stmt_chip5">친환경 설계</div>',
        ''],
       ['<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">No.<span class="text-blue-400">1</span></div>',
-       '<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">1<span class="text-blue-400">+</span></div>'],
+       '<div class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">10<span class="text-blue-400">+</span></div>'],
       ['<div class="text-[10px] font-bold tracking-[0.22em] text-white/40 mt-2">IN KOREA</div>',
        '<div class="text-[10px] font-bold tracking-[0.22em] text-white/40 mt-2 r43-stat3">최초의 혁신적 후드</div>'],
       // PRODUCTS 칸(index_v6.html:1735) — 원문에 + 가 없다.
