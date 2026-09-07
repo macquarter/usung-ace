@@ -58,6 +58,25 @@
     };
   }
 
+  /* 캔버스에 **실제로 칠해진** 불투명 픽셀의 오른쪽·아래 끝.
+     ★ 왜 필요한가 — 미리보기의 「오른쪽 끝에 닿았나」를 **크롭 네모**로 재면 항상 「닿았다」가 나온다.
+       `object-position:bottom right` 라 네모의 오른쪽은 정의상 박스 우단이기 때문이다.
+       편집자가 알고 싶은 건 네모가 아니라 **눈에 보이는 후드**의 위치다. r73 음성대조에서 이걸 잡았다. */
+  function edges(cx, w, h) {
+    var d;
+    try { d = cx.getImageData(0, 0, w, h).data; } catch (e) { return null; }
+    var x1 = -1, y1 = -1, x, y;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        if (d[(y * w + x) * 4 + 3] > ALPHA_MIN) {
+          if (x > x1) x1 = x;
+          if (y > y1) y1 = y;
+        }
+      }
+    }
+    return x1 < 0 ? null : { right: x1, bottom: y1 };
+  }
+
   function load(file) {
     return new Promise(function (res, rej) {
       var fr = new FileReader();
@@ -105,5 +124,5 @@
     });
   }
 
-  window.r73Scan = { bounds: bounds, load: load, plan: plan, measure: measure };
+  window.r73Scan = { bounds: bounds, edges: edges, load: load, plan: plan, measure: measure };
 })();

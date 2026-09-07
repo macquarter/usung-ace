@@ -115,6 +115,9 @@
         pv.style.cssText = 'display:block;border-radius:10px;max-width:100%';
         right.appendChild(pv);
         var pcx = pv.getContext('2d');
+        // 화면에 안 붙인다 — 카드 배경 없이 사진만 그려 「보이는 끝」을 재는 자다.
+        var mv = document.createElement('canvas');
+        var mvx = mv.getContext('2d', { willReadFrequently: true });
 
         var note = el('div', 'font-size:11.5px;color:' + sub + ';margin:7px 0 12px;min-height:32px');
         right.appendChild(note);
@@ -227,9 +230,16 @@
           pcx.strokeStyle = 'rgba(59,130,246,.5)'; pcx.lineWidth = 1;
           pcx.strokeRect(.5, .5, W - 1, H - 1);
 
-          // 「오른쪽 끝에 닿았나」 — 승연이 확인하고 싶은 바로 그 숫자를 글로 적는다.
-          var gapR = Math.round((W - 1) - (ix + iw));
-          var gapB = Math.round((H - 1) - (iy + ih));
+          /* 「오른쪽 끝에 닿았나」 — 승연이 확인하고 싶은 바로 그 숫자를 글로 적는다.
+             ★★ 네모(ix+iw)로 재면 안 된다. `object-position:bottom right` 라 네모의 오른쪽은
+                항상 박스 우단이어서 **언제나 「닿았다」**가 나온다(자르지 않은 사진 2도 그랬다).
+                그래서 배경 없는 캔버스에 사진만 다시 그려 **불투명 픽셀의 끝**을 잰다. */
+          if (mv.width !== W || mv.height !== H) { mv.width = W; mv.height = H; }
+          mvx.clearRect(0, 0, W, H);
+          mvx.drawImage(img, crop.x, crop.y, crop.w, crop.h, ix, iy, iw, ih);
+          var e = window.r73Scan.edges(mvx, W, H);
+          var gapR = e ? (W - 1) - e.right : 0;
+          var gapB = e ? (H - 1) - e.bottom : 0;
           note.innerHTML = gapR <= PHOTO_RIGHT + 1
             ? '<b style="color:#16a34a">오른쪽 끝에 닿았습니다</b> · 아래 여백 ' + gapB + 'px'
             : '오른쪽이 <b style="color:' + (gapR > 30 ? '#dc2626' : fg) + '">' + gapR + 'px</b> 떠 있습니다' +
