@@ -137,6 +137,9 @@
        여부와 무관하게 body 전체에서 일어나기 때문이다. */
   function warmup(done) {
     var w = win(), d = doc();
+    // hook() 은 frame.onload 와 readyState 검사 양쪽에서 불릴 수 있다.
+    // 두 번 겹치면 두 순회가 서로 페이지를 빼앗아 둘 다 어긋난다.
+    if (WARMING) return;
     if (!w || !d || typeof w.navigate !== 'function') { done(); return; }
     var els = d.querySelectorAll('.page'), ids = [], i;
     for (i = 0; i < els.length; i++) {
