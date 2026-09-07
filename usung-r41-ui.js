@@ -160,7 +160,51 @@
     if (slot) { openPhoto(slot); return; }
     var n = pick(ev);
     if (!n) { msg('그 자리에는 고칠 글자가 없습니다. 글자 위를 정확히 클릭하세요.'); return; }
-    open(norm(n.nodeValue));
+
+    /* ★★★ 열기 전에 「몇 곳인가」를 먼저 묻는다 (r70).
+       적용기는 같은 문구를 문서 전체에서 전부 바꾼다. 여기서 안 막으면
+       갤러리 후드 이름 하나를 고쳤을 때 26장이 조용히 같이 바뀐다. */
+    var cur = norm(n.nodeValue);
+    var c = hits(cur);
+    if (c < 0) { msg('지금은 확인할 수 없습니다. 🔄 새로고침 후 다시 눌러주세요.'); return; }
+    if (c === 0) { msg('그 자리는 고칠 수 없는 글자입니다.'); return; }
+    if (c > 1) { warnMulti(cur, c); return; }
+    open(cur);
+  }
+
+  /* 세는 일은 적용기(__r41.count)에게 맡긴다 — 여기서 따로 세면 세는 규칙과
+     바꾸는 규칙이 갈라진다. 못 물어보면 -1 을 돌려 **편집을 막는다**(열어주는
+     쪽이 위험하다 · 적용기가 없으면 어차피 방문자 화면에 반영도 안 된다). */
+  function hits(s) {
+    var a = api();
+    if (!a || typeof a.count !== 'function') return -1;
+    try { return a.count(s); } catch (e) { return -1; }
+  }
+
+  /* 「그럼 어디서 고치나」의 답은 페이지마다 다르다. ★ 없는 기능을 안내하면
+     안 된다 — 부품·갤러리·홈·기술력은 글자 발행 경로가 실제로 없다. */
+  var WHERE = {
+    products: '제품 이름·특징은 왼쪽 <b>「제품 관리」</b> 메뉴에서 고칩니다.',
+    about: '회사소개 글자는 <b>「페이지 편집 → 회사소개」</b>에서 고칩니다.',
+    board: '공지 글은 <b>「공지사항」</b>, 문의 글은 <b>「고객 게시판」</b> 메뉴에서 고칩니다.'
+  };
+
+  function warnMulti(cur, c) {
+    var p = curPage() || R41.page;
+    var box = document.getElementById('r41Edit');
+    if (!box) return;
+    CUR = null;
+    box.innerHTML =
+      '<div class="r41-card" style="border-color:#fbbf24">' +
+      '<h4 style="color:#fbbf24">⚠ 여기서는 고칠 수 없습니다</h4>' +
+      '<div class="r41-org">' + esc(cut(cur)) + '</div>' +
+      '<div style="font-size:12px;line-height:1.7;margin-top:8px">' +
+      '이 문구는 홈페이지 안에 <b style="color:#fbbf24">' + c + '곳</b> 있습니다.<br>' +
+      '여기서 고치면 <b>' + c + '곳이 한꺼번에</b> 바뀝니다.<br>' +
+      (WHERE[p] || '이 글자는 관리자에서 고칠 수 없습니다. 수정이 필요하면 개발자에게 알려주세요.') +
+      '</div>' +
+      '<div style="margin-top:8px"><button class="tb-btn" onclick="r41Close()">닫기</button></div>' +
+      '</div>';
   }
 
   /* 눌린 것이 「국내 최초」 후드 사진이면 슬롯 번호(1부터), 아니면 0.
@@ -304,9 +348,22 @@
     } else if (!mine.length) {
       h += '<div style="font-size:12px;color:#94a3b8">아직 없습니다. 화면의 글자를 클릭하세요.</div>';
     }
+    /* ★★ r70 이전에 저장된 항목은 다중 일치일 수 있다. entries 는 서버가 아니라
+       이 브라우저의 S.content 에서 오므로, 여기서 안 잡으면 🚀 발행 때 라이브로
+       나간다. 초록 「● 반영됨」은 26곳을 바꿔도 그냥 반영됨이라 오라클이 못 된다. */
+    var hit = {};
+    if (a && typeof a.counts === 'function') {
+      var want = [];
+      for (var m = 0; m < mine.length; m++) want.push(mine[m].t);
+      try { hit = a.counts(want) || {}; } catch (e2) { hit = {}; }
+    }
+
     for (var j = 0; j < mine.length; j++) {
       var e = mine[j], s = st[norm(e.f)] || '';
-      var tag = s === 'applied' ? '<span class="st" style="color:#34d399">● 반영됨</span>'
+      var hc = hit[norm(e.t)] || 0;
+      var tag = hc > 1
+        ? '<span class="st" style="color:#f87171">⚠ ' + hc + '곳이 함께 바뀝니다 — ✕ 로 지우세요</span>'
+        : s === 'applied' ? '<span class="st" style="color:#34d399">● 반영됨</span>'
         : s === 'conflict' ? '<span class="st" style="color:#fbbf24">⚠ 다른 항목과 충돌</span>'
           : s === 'missing' ? '<span class="st" style="color:#fbbf24">⚠ 원문이 바뀌어 적용 중단됨</span>'
             : '<span class="st" style="color:#94a3b8">· 확인 중</span>';
