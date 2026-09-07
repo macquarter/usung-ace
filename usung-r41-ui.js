@@ -25,6 +25,10 @@
 
   var EDIT = true;
   var CUR = null;          // {from, node}
+  /* r70d — 「N곳 전부 바꾸기」 확인을 기다리는 문구.
+     용어 통일(반후지→상부 처럼)은 전역 치환이 **맞다**. 전면 차단만 하면
+     라이브에 이미 발행된 그 방식의 수정을 관리자가 다시는 못 하게 된다. */
+  var PEND = null;
   var WARMING = false;     // r70 워밍업 중에는 클릭을 받지 않는다 (계수가 아직 거짓말한다)
   var frame = null;
 
@@ -211,7 +215,7 @@
     if (c < 0) { msg('지금은 확인할 수 없습니다. 🔄 새로고침 후 다시 눌러주세요.'); return; }
     if (c === 0) { msg('그 자리는 고칠 수 없는 글자입니다.'); return; }
     if (c > 1) { warnMulti(cur, c); return; }
-    open(cur);
+    open(cur, c);   // 여기 오면 c === 1 이다
   }
 
   /* 세는 일은 적용기(__r41.count)에게 맡긴다 — 여기서 따로 세면 세는 규칙과
@@ -236,17 +240,23 @@
     var box = document.getElementById('r41Edit');
     if (!box) return;
     CUR = null;
+    PEND = cur;
     box.innerHTML =
       '<div class="r41-card" style="border-color:#fbbf24">' +
-      '<h4 style="color:#fbbf24">⚠ 여기서는 고칠 수 없습니다</h4>' +
+      '<h4 style="color:#fbbf24">⚠ 이 문구는 한 곳이 아닙니다</h4>' +
       '<div class="r41-org">' + esc(cut(cur)) + '</div>' +
       '<div style="font-size:12px;line-height:1.7;margin-top:8px">' +
-      '이 문구는 홈페이지 안에 <b style="color:#fbbf24">' + c + '곳</b> 있습니다.<br>' +
+      '홈페이지 안에 <b style="color:#fbbf24">' + c + '곳</b> 있습니다. ' +
       '여기서 고치면 <b>' + c + '곳이 한꺼번에</b> 바뀝니다.<br>' +
-      (WHERE[p] || '이 글자는 관리자에서 고칠 수 없습니다. 수정이 필요하면 개발자에게 알려주세요.') +
+      '<b>한 곳만</b> 바꾸는 것은 안 됩니다 — ' +
+      (WHERE[p] || '이 자리는 관리자에서 따로 고칠 수 없습니다. 개발자에게 알려주세요.') +
+      '<br><br>「갓등」→「갓등」처럼 <b>같은 말을 전부 바꾸는 것이 목적</b>이라면 아래로 진행하세요.' +
       '</div>' +
-      '<div style="margin-top:8px"><button class="tb-btn" onclick="r41Close()">닫기</button></div>' +
-      '</div>';
+      '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">' +
+      '<button class="tb-btn" style="border-color:#fbbf24;color:#fbbf24" onclick="r41Force()">' +
+      '⚠ ' + c + '곳 전부 바꾸기</button>' +
+      '<button class="tb-btn" onclick="r41Close()">취소</button>' +
+      '</div></div>';
   }
 
   /* 눌린 것이 「국내 최초」 후드 사진이면 슬롯 번호(1부터), 아니면 0.
@@ -296,7 +306,9 @@
     return cur;
   }
 
-  function open(cur) {
+  /* c 를 넘기면(r70d 「전부 바꾸기」 경로) 편집기 안에 몇 곳인지 계속 띄워 둔다.
+     경고를 한 번 지나쳤다고 잊으면 안 되는 정보다. */
+  function open(cur, c) {
     if (!cur) return;
     R41.page = curPage() || R41.page;
     var from = anchorOf(cur);
@@ -304,7 +316,12 @@
     var box = document.getElementById('r41Edit');
     if (!box) return;
     box.innerHTML =
-      '<div class="r41-card"><h4>✏️ ' + esc(R41.name(R41.page)) + ' — 글자 수정</h4>' +
+      '<div class="r41-card"' + (c > 1 ? ' style="border-color:#fbbf24"' : '') + '>' +
+      '<h4>✏️ ' + esc(R41.name(R41.page)) + ' — 글자 수정</h4>' +
+      (c > 1
+        ? '<div style="font-size:12px;color:#fbbf24;margin:-2px 0 6px">' +
+          '⚠ 적용하면 <b>' + c + '곳이 전부</b> 바뀝니다.</div>'
+        : '') +
       '<div class="r41-org">' + esc(from) + '</div>' +
       '<textarea id="r41Txt">' + esc(cur) + '</textarea>' +
       '<div style="margin-top:8px;display:flex;gap:6px">' +
@@ -404,7 +421,7 @@
       var e = mine[j], s = st[norm(e.f)] || '';
       var hc = hit[norm(e.t)] || 0;
       var tag = hc > 1
-        ? '<span class="st" style="color:#f87171">⚠ ' + hc + '곳이 함께 바뀝니다 — ✕ 로 지우세요</span>'
+        ? '<span class="st" style="color:#fbbf24">⚠ ' + hc + '곳이 함께 바뀝니다 — 의도한 것이 아니면 ✕</span>'
         : s === 'applied' ? '<span class="st" style="color:#34d399">● 반영됨</span>'
         : s === 'conflict' ? '<span class="st" style="color:#fbbf24">⚠ 다른 항목과 충돌</span>'
           : s === 'missing' ? '<span class="st" style="color:#fbbf24">⚠ 원문이 바뀌어 적용 중단됨</span>'
@@ -438,7 +455,20 @@
     if (d) d.location.reload();   // 이미 바뀐 글자는 다시 그려야 원문이 돌아온다
     r41Close();
   };
-  window.r41Close = function () { CUR = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+  window.r41Close = function () { CUR = null; PEND = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+
+  /* r70d — 다중 일치를 「알고」 진행한다. 개수는 여기서 다시 센다:
+     경고를 띄운 뒤 화면이 다시 그려졌을 수 있고, 그 사이 개수가 변했다면
+     낡은 숫자로 확인받는 셈이 된다. */
+  window.r41Force = function () {
+    var cur = PEND;
+    PEND = null;
+    if (!cur) return;
+    var c = hits(cur);
+    if (c < 0) { msg('지금은 확인할 수 없습니다. 🔄 새로고침 후 다시 눌러주세요.'); return; }
+    if (c === 0) { msg('그 글자가 화면에서 사라졌습니다. 다시 클릭해 주세요.'); return; }
+    open(cur, c);
+  };
 
   /* ★ admin.html 의 전역을 그대로 부른다(선언된 function 은 window 에 붙는다).
        없으면 조용히 실패하지 말고 왜 못 하는지 말한다 — 「눌렀는데 아무 일도 없다」가 제일 나쁘다. */
