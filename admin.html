@@ -3216,6 +3216,26 @@ function pickTechPhoto(slot){
 async function uploadTechPhoto(slot, file){
   const h = authHeaders();
   if(!h){ toast('로그인해야 사진을 바꿀 수 있습니다', true); return; }
+
+  /* ★ r73) 올리기 전에 잘라내기 편집기를 띄운다 (usung-r73-crop.js).
+     승연 「관리자에서 직접 크기까지 조정가능하도록 마치 포토샵같이」.
+     ── 왜 필요했나: r72 실측에서 「국내 최초」 네 PNG 의 불투명 가로 비율이
+        79.3% · 34.4% · 100% · 36.8% 로 제각각이었다. 2·4 는 투명 여백이 **파일 안에
+        구워져** 있어 object-fit:contain 이 그걸 「그림」으로 센다 → CSS 로는 right:0 을
+        줘도 카드 우단에서 65px 뜬다. **자를 수 있는 자리는 여기뿐이다.**
+     ── ★ typeof 로 감싼 이유: 파일이 404 여도 예전처럼 바로 올라가야 한다. 되돌리기가 싸진다.
+     ── ★ 편집기는 File 을 돌려준다 → 아래 toPngDataUrl 이 **그대로** 이어 받는다.
+          크기 상한(IMG_MAX_EDGE)·PNG 변환 규칙이 이 파일 한 곳에만 남는다(KNOWLEDGE 41).
+     ── ★ 제품 사진·로고에는 안 걸었다. toPngDataUrl 은 셋이 공유하는 관문이라
+          거기 끼우면 승연이 부탁하지 않은 두 흐름까지 바뀐다. */
+  if(typeof window.r73CropPhoto === 'function'){
+    let picked;
+    try { picked = await window.r73CropPhoto(file); }
+    catch(e){ toast('사진을 열지 못했습니다 : ' + e.message, true); return; }
+    if(!picked) return;          // 취소 — 아무 일도 일어나지 않는다(토스트도 띄우지 않는다)
+    file = picked;
+  }
+
   toast('사진 변환 중…');
   let dataUrl;
   try { dataUrl = await toPngDataUrl(file); }   // 로고·제품 사진과 같은 변환기
@@ -3358,6 +3378,15 @@ document.getElementById('loginId').value = ADMIN_ID;
      감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
 <script src="/usung-r41-live.js?v=r67"></script>
 <script src="/usung-r41-ui.js?v=r70e"></script>
+<!-- r73) 사진을 올리기 전에 잘라내는 편집기. 승연 「관리자에서 직접 크기까지 조정가능하도록
+     마치 포토샵같이」. window.r73CropPhoto 하나만 내놓고, uploadTechPhoto 가 **있으면** 부른다
+     → 이 파일이 404 여도 관리자는 예전처럼 그냥 올라간다(기능만 없어진다).
+     ★ 지금은 **기술력 「국내 최초」 4장에서만** 뜬다. 제품 215장·로고는 안 건드렸다
+       (공통 관문 toPngDataUrl 을 고치면 부탁받지 않은 두 흐름까지 바뀐다).
+     ★ scan 이 먼저다 — crop 이 window.r73Scan 을 쓴다. 순서가 바뀌면 편집기가 열리지
+       않고 원본이 그냥 올라간다(죽지는 않는다 — crop.js 가 그렇게 방어한다). -->
+<script src="/usung-r73-scan.js?v=r73"></script>
+<script src="/usung-r73-crop.js?v=r73"></script>
 <script>
 /* r46) 사이드바 토글. 메뉴를 고르면 바로 닫는다 — 안 닫으면 사이드바가 내용을 덮은 채로 남는다.
    사이드바 항목은 sbItem() 이 매번 새로 그리므로 개별 바인딩 대신 위임으로 받는다. */
