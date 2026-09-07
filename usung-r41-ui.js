@@ -25,6 +25,7 @@
 
   var EDIT = true;
   var CUR = null;          // {from, node}
+  var WARMING = false;     // r70 워밍업 중에는 클릭을 받지 않는다 (계수가 아직 거짓말한다)
   var frame = null;
 
   function esc(s) {
@@ -115,12 +116,49 @@
     d.addEventListener('click', onClick, true);
     d.addEventListener('mouseover', onOver, true);
     d.addEventListener('mouseout', onOut, true);
-    if (R41.page && win() && typeof win().navigate === 'function' && curPage() !== R41.page) {
-      try { win().navigate(R41.page); } catch (e) { }
+    warmup(function () {
+      if (R41.page && win() && typeof win().navigate === 'function' && curPage() !== R41.page) {
+        try { win().navigate(R41.page); } catch (e) { }
+      }
+      preview();
+      // 사이트 스크립트(defer + fetch)가 늦게 뜬다 — 보험
+      [400, 1200, 2500].forEach(function (ms) { setTimeout(preview, ms); });
+    });
+  }
+
+  /* ── 워밍업 (r70) ────────────────────────────────────────────────────────
+     ★★★ 계수기는 「지금 그려진 DOM」만 센다. 갤러리·부품·기술력 격자는 그
+     페이지를 한 번 열기 전에는 노드가 아예 없다. 그래서 홈에서 「국내 최초」를
+     누르면 **1곳**이라 나와 편집이 통과되는데, 방문자가 기술력에 들어가는 순간
+     **5곳**이 된다(프리뷰 실측 1→5 · 갤러리 0→26 · 부품 0→8).
+     ★ 세는 쪽이 적게 세면 막아야 할 것을 통과시킨다 — 그래서 붙자마자 모든
+       페이지를 한 번 돌아 DOM 을 다 지어 놓고 센다.
+     ★ 7개(PAGES_R41)가 아니라 **문서의 .page 전부**를 돈다. 치환은 편집 가능
+       여부와 무관하게 body 전체에서 일어나기 때문이다. */
+  function warmup(done) {
+    var w = win(), d = doc();
+    if (!w || !d || typeof w.navigate !== 'function') { done(); return; }
+    var els = d.querySelectorAll('.page'), ids = [], i;
+    for (i = 0; i < els.length; i++) {
+      var id = String(els[i].id || '').replace(/^page-/, '');
+      if (id) ids.push(id);
     }
-    preview();
-    // 사이트 스크립트(defer + fetch)가 늦게 뜬다 — 보험
-    [400, 1200, 2500].forEach(function (ms) { setTimeout(preview, ms); });
+    if (ids.length < 2) { done(); return; }
+
+    WARMING = true;
+    msg('화면을 준비하는 중입니다… 잠시만 기다려 주세요.');
+    var k = 0;
+    (function step() {
+      if (k >= ids.length) {
+        WARMING = false;
+        msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.');
+        done();
+        return;
+      }
+      try { w.navigate(ids[k]); } catch (e) { }
+      k++;
+      setTimeout(step, 380);
+    })();
   }
 
   function curPage() {
@@ -153,6 +191,7 @@
     if (!EDIT) return;
     ev.preventDefault();
     ev.stopPropagation();
+    if (WARMING) { msg('화면을 준비하는 중입니다… 끝나면 클릭할 수 있습니다.'); return; }
     /* ★★★ 이미지 분기는 반드시 pick() **앞**이다. caretRangeFromPoint 는 <img> 위에서도
        근처 텍스트 노드를 돌려준다 — 뒤에 붙이면 이 분기가 영영 안 타고,
        후드를 눌렀는데 배지·제목 글자 편집기가 조용히 열린다. */
