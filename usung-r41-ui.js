@@ -25,6 +25,11 @@
 
   var EDIT = true;
   var CUR = null;          // {from, node}
+  /* r70d — 「N곳 전부 바꾸기」 확인을 기다리는 문구.
+     용어 통일(반후지→상부 처럼)은 전역 치환이 **맞다**. 전면 차단만 하면
+     라이브에 이미 발행된 그 방식의 수정을 관리자가 다시는 못 하게 된다. */
+  var PEND = null;
+  var WARMING = false;     // r70 워밍업 중에는 클릭을 받지 않는다 (계수가 아직 거짓말한다)
   var frame = null;
 
   function esc(s) {
@@ -115,12 +120,52 @@
     d.addEventListener('click', onClick, true);
     d.addEventListener('mouseover', onOver, true);
     d.addEventListener('mouseout', onOut, true);
-    if (R41.page && win() && typeof win().navigate === 'function' && curPage() !== R41.page) {
-      try { win().navigate(R41.page); } catch (e) { }
+    warmup(function () {
+      if (R41.page && win() && typeof win().navigate === 'function' && curPage() !== R41.page) {
+        try { win().navigate(R41.page); } catch (e) { }
+      }
+      preview();
+      // 사이트 스크립트(defer + fetch)가 늦게 뜬다 — 보험
+      [400, 1200, 2500].forEach(function (ms) { setTimeout(preview, ms); });
+    });
+  }
+
+  /* ── 워밍업 (r70) ────────────────────────────────────────────────────────
+     ★★★ 계수기는 「지금 그려진 DOM」만 센다. 갤러리·부품·기술력 격자는 그
+     페이지를 한 번 열기 전에는 노드가 아예 없다. 그래서 홈에서 「국내 최초」를
+     누르면 **1곳**이라 나와 편집이 통과되는데, 방문자가 기술력에 들어가는 순간
+     **5곳**이 된다(프리뷰 실측 1→5 · 갤러리 0→26 · 부품 0→8).
+     ★ 세는 쪽이 적게 세면 막아야 할 것을 통과시킨다 — 그래서 붙자마자 모든
+       페이지를 한 번 돌아 DOM 을 다 지어 놓고 센다.
+     ★ 7개(PAGES_R41)가 아니라 **문서의 .page 전부**를 돈다. 치환은 편집 가능
+       여부와 무관하게 body 전체에서 일어나기 때문이다. */
+  function warmup(done) {
+    var w = win(), d = doc();
+    // hook() 은 frame.onload 와 readyState 검사 양쪽에서 불릴 수 있다.
+    // 두 번 겹치면 두 순회가 서로 페이지를 빼앗아 둘 다 어긋난다.
+    if (WARMING) return;
+    if (!w || !d || typeof w.navigate !== 'function') { done(); return; }
+    var els = d.querySelectorAll('.page'), ids = [], i;
+    for (i = 0; i < els.length; i++) {
+      var id = String(els[i].id || '').replace(/^page-/, '');
+      if (id) ids.push(id);
     }
-    preview();
-    // 사이트 스크립트(defer + fetch)가 늦게 뜬다 — 보험
-    [400, 1200, 2500].forEach(function (ms) { setTimeout(preview, ms); });
+    if (ids.length < 2) { done(); return; }
+
+    WARMING = true;
+    msg('화면을 준비하는 중입니다… 잠시만 기다려 주세요.');
+    var k = 0;
+    (function step() {
+      if (k >= ids.length) {
+        WARMING = false;
+        msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.');
+        done();
+        return;
+      }
+      try { w.navigate(ids[k]); } catch (e) { }
+      k++;
+      setTimeout(step, 380);
+    })();
   }
 
   function curPage() {
@@ -153,6 +198,7 @@
     if (!EDIT) return;
     ev.preventDefault();
     ev.stopPropagation();
+    if (WARMING) { msg('화면을 준비하는 중입니다… 끝나면 클릭할 수 있습니다.'); return; }
     /* ★★★ 이미지 분기는 반드시 pick() **앞**이다. caretRangeFromPoint 는 <img> 위에서도
        근처 텍스트 노드를 돌려준다 — 뒤에 붙이면 이 분기가 영영 안 타고,
        후드를 눌렀는데 배지·제목 글자 편집기가 조용히 열린다. */
@@ -160,7 +206,61 @@
     if (slot) { openPhoto(slot); return; }
     var n = pick(ev);
     if (!n) { msg('그 자리에는 고칠 글자가 없습니다. 글자 위를 정확히 클릭하세요.'); return; }
-    open(norm(n.nodeValue));
+
+    /* ★★★ 열기 전에 「몇 곳인가」를 먼저 묻는다 (r70).
+       적용기는 같은 문구를 문서 전체에서 전부 바꾼다. 여기서 안 막으면
+       갤러리 후드 이름 하나를 고쳤을 때 26장이 조용히 같이 바뀐다. */
+    var cur = norm(n.nodeValue);
+    var c = hits(cur);
+    if (c < 0) { msg('지금은 확인할 수 없습니다. 🔄 새로고침 후 다시 눌러주세요.'); return; }
+    if (c === 0) { msg('그 자리는 고칠 수 없는 글자입니다.'); return; }
+    if (c > 1) { warnMulti(cur, c); return; }
+    open(cur, c);   // 여기 오면 c === 1 이다
+  }
+
+  /* 세는 일은 적용기(__r41.count)에게 맡긴다 — 여기서 따로 세면 세는 규칙과
+     바꾸는 규칙이 갈라진다. 못 물어보면 -1 을 돌려 **편집을 막는다**(열어주는
+     쪽이 위험하다 · 적용기가 없으면 어차피 방문자 화면에 반영도 안 된다). */
+  function hits(s) {
+    var a = api();
+    if (!a || typeof a.count !== 'function') return -1;
+    try { return a.count(s); } catch (e) { return -1; }
+  }
+
+  /* 「그럼 어디서 고치나」의 답은 페이지마다 다르다. ★ 없는 기능을 안내하면
+     안 된다 — 부품·갤러리·홈·기술력은 글자 발행 경로가 실제로 없다. */
+  var WHERE = {
+    products: '제품 이름·특징은 왼쪽 <b>「제품 관리」</b> 메뉴에서 고칩니다.',
+    about: '회사소개 글자는 <b>「페이지 편집 → 회사소개」</b>에서 고칩니다.',
+    board: '공지 글은 <b>「공지사항」</b>, 문의 글은 <b>「고객 게시판」</b> 메뉴에서 고칩니다.'
+  };
+
+  function warnMulti(cur, c) {
+    var p = curPage() || R41.page;
+    var box = document.getElementById('r41Edit');
+    if (!box) return;
+    CUR = null;
+    PEND = cur;
+    box.innerHTML =
+      '<div class="r41-card" style="border-color:#fbbf24">' +
+      '<h4 style="color:#fbbf24">⚠ 이 문구는 한 곳이 아닙니다</h4>' +
+      '<div class="r41-org">' + esc(cut(cur)) + '</div>' +
+      '<div style="font-size:12px;line-height:1.7;margin-top:8px">' +
+      '홈페이지 안에 <b style="color:#fbbf24">' + c + '곳</b> 있습니다. ' +
+      '여기서 고치면 <b>' + c + '곳이 한꺼번에</b> 바뀝니다.<br>' +
+      '<b>한 곳만</b> 바꾸는 것은 안 됩니다 — ' +
+      (WHERE[p] || '이 자리는 관리자에서 따로 고칠 수 없습니다. 개발자에게 알려주세요.') +
+      /* r70e) 예시는 **실제로 있었던 일**로 적는다. 09-03 에 「반후지」를 「상부」로
+         사이트 전체에서 바꾼 적이 있고, 그게 이 버튼의 정당한 쓰임새다.
+         ★ 앞의 예시는 「갓등」→「갓등」이라 같은 말이었다 — 예시 구실을 못 했다. */
+      '<br><br>「반후지」→「상부」처럼 <b>사이트 전체에서 같은 말을 한꺼번에 바꾸는 것이 목적</b>이라면 ' +
+      '아래 노란 버튼으로 진행하세요.' +
+      '</div>' +
+      '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">' +
+      '<button class="tb-btn" style="border-color:#fbbf24;color:#fbbf24" onclick="r41Force()">' +
+      '⚠ ' + c + '곳 전부 바꾸기</button>' +
+      '<button class="tb-btn" onclick="r41Close()">취소</button>' +
+      '</div></div>';
   }
 
   /* 눌린 것이 「국내 최초」 후드 사진이면 슬롯 번호(1부터), 아니면 0.
@@ -210,7 +310,9 @@
     return cur;
   }
 
-  function open(cur) {
+  /* c 를 넘기면(r70d 「전부 바꾸기」 경로) 편집기 안에 몇 곳인지 계속 띄워 둔다.
+     경고를 한 번 지나쳤다고 잊으면 안 되는 정보다. */
+  function open(cur, c) {
     if (!cur) return;
     R41.page = curPage() || R41.page;
     var from = anchorOf(cur);
@@ -218,7 +320,12 @@
     var box = document.getElementById('r41Edit');
     if (!box) return;
     box.innerHTML =
-      '<div class="r41-card"><h4>✏️ ' + esc(R41.name(R41.page)) + ' — 글자 수정</h4>' +
+      '<div class="r41-card"' + (c > 1 ? ' style="border-color:#fbbf24"' : '') + '>' +
+      '<h4>✏️ ' + esc(R41.name(R41.page)) + ' — 글자 수정</h4>' +
+      (c > 1
+        ? '<div style="font-size:12px;color:#fbbf24;margin:-2px 0 6px">' +
+          '⚠ 적용하면 <b>' + c + '곳이 전부</b> 바뀝니다.</div>'
+        : '') +
       '<div class="r41-org">' + esc(from) + '</div>' +
       '<textarea id="r41Txt">' + esc(cur) + '</textarea>' +
       '<div style="margin-top:8px;display:flex;gap:6px">' +
@@ -304,9 +411,22 @@
     } else if (!mine.length) {
       h += '<div style="font-size:12px;color:#94a3b8">아직 없습니다. 화면의 글자를 클릭하세요.</div>';
     }
+    /* ★★ r70 이전에 저장된 항목은 다중 일치일 수 있다. entries 는 서버가 아니라
+       이 브라우저의 S.content 에서 오므로, 여기서 안 잡으면 🚀 발행 때 라이브로
+       나간다. 초록 「● 반영됨」은 26곳을 바꿔도 그냥 반영됨이라 오라클이 못 된다. */
+    var hit = {};
+    if (a && typeof a.counts === 'function') {
+      var want = [];
+      for (var m = 0; m < mine.length; m++) want.push(mine[m].t);
+      try { hit = a.counts(want) || {}; } catch (e2) { hit = {}; }
+    }
+
     for (var j = 0; j < mine.length; j++) {
       var e = mine[j], s = st[norm(e.f)] || '';
-      var tag = s === 'applied' ? '<span class="st" style="color:#34d399">● 반영됨</span>'
+      var hc = hit[norm(e.t)] || 0;
+      var tag = hc > 1
+        ? '<span class="st" style="color:#fbbf24">⚠ ' + hc + '곳이 함께 바뀝니다 — 의도한 것이 아니면 ✕</span>'
+        : s === 'applied' ? '<span class="st" style="color:#34d399">● 반영됨</span>'
         : s === 'conflict' ? '<span class="st" style="color:#fbbf24">⚠ 다른 항목과 충돌</span>'
           : s === 'missing' ? '<span class="st" style="color:#fbbf24">⚠ 원문이 바뀌어 적용 중단됨</span>'
             : '<span class="st" style="color:#94a3b8">· 확인 중</span>';
@@ -339,7 +459,20 @@
     if (d) d.location.reload();   // 이미 바뀐 글자는 다시 그려야 원문이 돌아온다
     r41Close();
   };
-  window.r41Close = function () { CUR = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+  window.r41Close = function () { CUR = null; PEND = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+
+  /* r70d — 다중 일치를 「알고」 진행한다. 개수는 여기서 다시 센다:
+     경고를 띄운 뒤 화면이 다시 그려졌을 수 있고, 그 사이 개수가 변했다면
+     낡은 숫자로 확인받는 셈이 된다. */
+  window.r41Force = function () {
+    var cur = PEND;
+    PEND = null;
+    if (!cur) return;
+    var c = hits(cur);
+    if (c < 0) { msg('지금은 확인할 수 없습니다. 🔄 새로고침 후 다시 눌러주세요.'); return; }
+    if (c === 0) { msg('그 글자가 화면에서 사라졌습니다. 다시 클릭해 주세요.'); return; }
+    open(cur, c);
+  };
 
   /* ★ admin.html 의 전역을 그대로 부른다(선언된 function 은 window 에 붙는다).
        없으면 조용히 실패하지 말고 왜 못 하는지 말한다 — 「눌렀는데 아무 일도 없다」가 제일 나쁘다. */

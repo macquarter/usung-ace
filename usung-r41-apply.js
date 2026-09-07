@@ -108,6 +108,32 @@
     return changed;
   }
 
+  /* ── 다중 일치 계수기 (r70) ───────────────────────────────────────────────
+     apply() 는 문서 전체를 돌며 **같은 문구를 전부** 바꾼다. 페이지로 범위를
+     좁히는 것은 「어떤 오버라이드를 켤까」뿐이고, 실제 치환은 body 전체다.
+     그래서 `블로그`(문서에 101곳) 한 곳을 고치면 101곳이 함께 바뀐다.
+     관리자(usung-r41-ui.js)가 이걸 미리 막으려면 개수를 알아야 한다.
+     ★ 세는 일을 관리자쪽에 따로 짜면 두 규칙이 갈라져 「1곳이라더니 26곳이
+       바뀌었다」가 된다. 그래서 여기서, apply() 와 **같은 순회·같은 norm** 으로 센다. */
+  function countAnchors(list) {
+    var want = Object.create(null), out = Object.create(null), i;
+    for (i = 0; i < (list || []).length; i++) {
+      var q = norm(list[i]);
+      if (q) { want[q] = 1; out[q] = 0; }
+    }
+    eachTextNode(function (n) {
+      var s = norm(n.nodeValue);
+      if (want[s]) out[s]++;
+    });
+    return out;
+  }
+
+  function countAnchor(s) {
+    var q = norm(s);
+    if (!q) return 0;
+    return countAnchors([q])[q] || 0;
+  }
+
   function schedule() {
     if (timer) return;
     timer = setTimeout(function () { timer = null; apply(); }, 200);
@@ -180,6 +206,9 @@
     page: curPage,
     list: function () { return OV.slice(); },
     stat: function () { return JSON.parse(JSON.stringify(STAT)); },
+    // r70 — 「이 문구가 문서에 몇 곳인가」. 관리자가 다중 일치를 막는 데 쓴다.
+    count: countAnchor,
+    counts: countAnchors,
     // 관리자가 저장 없이 미리보기할 때 쓴다
     set: function (arr) {
       TO = {}; STAT = {};
