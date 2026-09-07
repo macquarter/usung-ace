@@ -5,15 +5,24 @@
   ★ URL 이 하나뿐인 이유를 여기 적어 둔다(다음 사람이 「빠뜨렸나?」 하지 않도록).
     index_v6.html:5398 의 navigate() 는 .page 요소에 class 를 토글할 뿐
     history.pushState 를 호출하지 않는다. 그래서 회사소개·제품소개·기술력·
-    시공갤러리 어디를 눌러도 주소창은 계속 https://usung-ace.vercel.app/ 다.
+    시공갤러리 어디를 눌러도 주소창은 계속 대표 주소 하나다.
     없는 주소를 사이트맵에 적으면 전부 404 로 잡혀 신뢰도만 깎인다.
 
   → 페이지별 URL 을 만들려면 라우팅 개편 또는 정적 사전렌더가 필요하다. 별건.
+
+  ★ r74) 대표 주소를 yusungace.com 으로 맞췄다.
+    r54 가 대표 주소를 옮길 때 api/_seo.js 의 canonical·og:url 만 고치고 이 파일과
+    robots.txt 를 빠뜨렸다. 그래서 canonical 은 yusungace.com 을, 사이트맵은
+    usung-ace.vercel.app 을 가리켜 **구글에 서로 다른 주소를 말하고 있었다.**
+    「301 과 canonical 이 같은 곳을 가리켜야 색인이 합쳐진다」(api/_seo.js:39)는
+    자기 원칙을 사이트맵이 깨고 있던 셈이다.
+    ★ 옛 주소가 죽은 것은 아니다 — usung-ace.vercel.app 도 계속 200 이다.
+      다만 「어느 쪽이 대표인가」는 한 곳만 말해야 한다.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://usung-ace.vercel.app/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://yusungace.com/</loc>
+    <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
