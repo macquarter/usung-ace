@@ -208,9 +208,11 @@
     var slot = hood(ev);
     if (slot) { openPhoto(slot); return; }
     /* r76) 갤러리 타일도 **pick() 앞**이다 — 후드와 같은 이유이고, 갤러리는 더 급하다.
-       타일 안에는 figcaption 글자(「003 · 시공갤러리」「시공 현장 03」)가 있어서
-       뒤에 두면 caretRangeFromPoint 가 그 글자를 집고, 사진 정보를 고치려던 사람이
-       **번호를 사이트 전체에서 바꾸는** 편집기를 열게 된다. */
+       타일 안에는 figcaption 글자(분류 kicker·제목·규격 세 줄)가 있다.
+       ★ 프리뷰 실측: gc01 타일의 「클래식」 글자 위에서 caretRangeFromPoint 가
+         그 글자를 그대로 돌려줬다. 즉 이 분기가 없으면 **반드시** 글자 편집기가 열린다.
+         (r10 이 「003 · 시공갤러리」 자리표시자를 실제 규격으로 갈아 끼웠으므로
+          옛 문구를 여기 적어 두면 썩는다 — 지금 무엇이 잡히는지만 적는다.) */
     var gsrc = gtile(ev);
     if (gsrc) { openGal(gsrc); return; }
     var n = pick(ev);
@@ -446,16 +448,22 @@
         '<div style="font-size:11px;color:#e2e8f0;line-height:1.7">' +
         esc(twins.join(' · ')) + '<br><br>' +
         '갤러리 <b>「전체」</b> 탭은 <b>이름과 내용이 같은 사진을 한 장으로 묶어</b> 보여줍니다. ' +
+        /* ★ 숫자를 못 재면(count() 가 -1) 숫자를 지어내지 않고 문장만 낸다 — KNOWLEDGE 61 의 ★측정무효.
+             ★ 「늘어납니다」를 삼항 밖에 두면 못 잰 쪽에서 두 번 나온다. 안에 둔다. */
         '한 장만 바꾸면 묶임이 풀려서 <b>전체 탭 사진이 ' +
-        (now > 0 ? now + '장에서 ' + (now + twins.length) + '장으로' : '늘어납니다') +
-        '</b> 늘어납니다. 보통은 <b>같이 바꾸는 쪽</b>이 맞습니다.' +
+        (now > 0 ? now + '장에서 ' + (now + twins.length) + '장으로 늘어납니다' : '늘어납니다') +
+        '</b>. 보통은 <b>같이 바꾸는 쪽</b>이 맞습니다.' +
         '</div>' +
         /* ★★ 체크상자에 픽셀을 못박고 글자에 min-width:0 을 준다 — r73 에서 겪은 병이다.
              안 박으면 체크상자가 줄을 독차지하고 한글이 한 글자씩 세로로 쌓인다(KNOWLEDGE 65). */
         '<label style="display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer">' +
         '<input type="checkbox" id="r41GalAll" checked style="flex:0 0 16px;width:16px;height:16px;margin:0">' +
         '<span style="flex:1 1 auto;min-width:0;font-size:12px;color:#fbbf24">' +
-        '같은 내용인 ' + twins.length + '장도 같이 바꾸기 <b>(권장)</b></span></label>' +
+        '같은 내용인 ' + twins.length + '장도 같이 바꾸기 <b>(권장)</b><br>' +
+        /* ★ 분류는 안 옮긴다 — 쌍둥이가 **일부러 다른 분류에** 놓인 경우가 있다(클래식/gc02 ↔ 레트로/gr01).
+             체크상자 하나로 그것까지 끌고 가면 사람이 예상 못 한 이동이 일어난다. 그래서 여기 적어 둔다. */
+        '<span style="color:#94a3b8">분류는 이 사진만 바뀝니다</span>' +
+        '</span></label>' +
         '</div>';
     }
 
@@ -477,11 +485,22 @@
       '<button class="tb-btn" onclick="r41GalPrev()">미리보기</button>' +
       '<button class="tb-btn" onclick="r41Close()">닫기</button>' +
       '</div>' +
+      /* ★★ 「적은 그대로 나오지 않는다」는 인상이 아니라 코드다. 지어내지 말 것 —
+           `usung-r8-gal.js:132 parseSpec()` 이 spec 에서 size·struct·color·body·fvd 만 뽑고,
+           `usung-r10.js` 의 tileTitle/tileKick/tileSub 와 `renderLbox()` 가 **그 다섯 개로만** 글을 짓는다.
+           spec 원문이 화면에 그대로 나오는 자리는 **한 곳도 없다.**
+           site 는 renderLbox 의 `📍 ${it.site}` 에서만 원문 그대로 나오고,
+           타일에서는 r10 의 `NOT_A_PLACE` 정규식(숫자·괄호로 시작하거나 갓·원통등 등)에 걸리면 빠진다.
+         ★ 그래서 사람에게 규칙을 외우게 하지 않고 **「미리보기」로 실물을 보라**고 한다 —
+           미리보기는 방문자와 **같은 applyEdit·renderGallery** 를 태우므로 갈라질 수가 없다. */
       '<div style="font-size:11px;color:#94a3b8;margin-top:10px;line-height:1.7">' +
       '<b>미리보기</b> — 이 화면에서만 바꿔 봅니다. 새로고침하면 되돌아가고 <b>사이트에는 안 올라갑니다</b>.<br>' +
       '<b>저장</b> — 진짜로 올립니다. ★ <b>🚀 발행이 필요 없습니다</b> — 공지사항과 같습니다. ' +
       '사이트 반영까지 <b>20~30초</b> 걸립니다.<br>' +
-      '★ 타일에 보이는 <b>번호(003 · 시공 현장 03)는 자동</b>입니다 — 여기서 고치는 값이 아닙니다.' +
+      '★ <b>적은 그대로 나오지 않습니다.</b> 사이트가 「내용」에서 규격(125Ø)·구조(스윙텐션·코브라·자바라)·' +
+      '색상(괄호 안)만 뽑아 카드 글자를 다시 씁니다. 「이름」은 사진을 <b>크게 열었을 때</b> 📍 옆에 그대로 나오고, ' +
+      '작은 카드에서는 제품 이름처럼 읽히면 빠집니다.<br>' +
+      '→ <b>저장하기 전에 「미리보기」를 눌러 실제로 어떻게 나오는지 보세요.</b>' +
       '</div></div>';
   }
 
