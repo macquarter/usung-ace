@@ -2143,6 +2143,48 @@ async function publishProducts(){
   }catch(e){ toast('발행 실패 : ' + e.message, true); }
 }
 
+/* ============== r76: 시공갤러리 한 장 저장 ==============
+   usung-r41-ui.js 의 r41GalSave() 가 부른다. 그 파일엔 fetch 가 한 줄도 없다 —
+   주소·값을 읽는 일만 거기서 하고 네트워크는 여기가 맡는다(r66/r75 와 같은 관례).
+
+   ★★ 「같이 바꾸기」는 **여기서 edit 항목을 여러 개로 펴서** 보낸다. 서버(api/gallery.js)는
+     쌍둥이를 모른다 — 쌍둥이 목록은 데이터가 바뀌면 같이 바뀌므로 서버에 굳혀 두면
+     반드시 썩는다(KNOWLEDGE 41). 서버는 시키는 대로 저장할 뿐이다.
+
+   ★ 이 경로는 **누르면 바로 올라간다 — 🚀 발행이 없다.** 공지사항(pushNotice)과 같다.
+     제품(publishProducts)처럼 담아 뒀다 한꺼번에 보내지 않는 이유: 이 편집기는 화면에서
+     타일 하나를 눌러 여는 자리라 「담아 둔 목록」을 보여줄 화면이 없다. 목록 화면 없이
+     쌓아 두면 무엇이 대기 중인지 조작자가 영영 모른다. */
+async function saveGallery(v){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 갤러리를 저장할 수 있습니다', true); return; }
+  if(!v || !v.src){ toast('저장할 사진을 찾지 못했습니다', true); return; }
+
+  const edit = {};
+  edit[v.src] = { cat: v.cat, site: v.site, spec: v.spec };
+  // 쌍둥이에는 이름·내용만 — 분류는 각자 자리를 지킨다(usung-r41-ui.js galRead 주석 참조)
+  (v.also || []).forEach(s => { edit[s] = { site: v.site, spec: v.spec }; });
+  const n = Object.keys(edit).length;
+
+  toast('갤러리 저장 중…');
+  try{
+    const r = await fetch('/api/gallery', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', ...h },
+      body: JSON.stringify({ add:[], edit, del:[] })
+    });
+    const j = await r.json().catch(()=>({}));
+    if(j.ok){
+      /* ★ 화면 갱신은 적용기에 맡긴다 — GALLERY 에 닿는 길이 거기에만 있다. */
+      try{ if(typeof r41GalDone === 'function') r41GalDone(v); }catch(e){}
+      toast(`갤러리 ${n}장을 저장했습니다 — 사이트 반영까지 20~30초 걸립니다 (🚀 발행 불필요)`);
+    }
+    else if(r.status === 401){ onAuthExpired(); }
+    else if(r.status === 503){ toast('서버 저장소가 아직 설정되지 않았습니다 (Vercel 환경변수 필요)', true); }
+    else { toast('저장 실패 : ' + (j.error || r.status), true); }
+  }catch(e){ toast('저장 실패 : ' + e.message, true); }
+}
+
 // ============== r55: 제품소개 탭 렌더 ==============
 function rProductsTab(){
   if(PRODUCTS_BASE.length === 0){
@@ -3445,7 +3487,7 @@ document.getElementById('loginId').value = ADMIN_ID;
      (ui 가 R41 을 참조). 위 인라인 스크립트가 rSidebar/rView 를 정의한 뒤에 실려야
      감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
 <script src="/usung-r41-live.js?v=r67"></script>
-<script src="/usung-r41-ui.js?v=r75"></script>
+<script src="/usung-r41-ui.js?v=r76"></script>
 <!-- r73) 사진을 올리기 전에 잘라내는 편집기. 승연 「관리자에서 직접 크기까지 조정가능하도록
      마치 포토샵같이」. window.r73CropPhoto 하나만 내놓고, uploadTechPhoto 가 **있으면** 부른다
      → 이 파일이 404 여도 관리자는 예전처럼 그냥 올라간다(기능만 없어진다).
