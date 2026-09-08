@@ -30,6 +30,9 @@
      라이브에 이미 발행된 그 방식의 수정을 관리자가 다시는 못 하게 된다. */
   var PEND = null;
   var WARMING = false;     // r70 워밍업 중에는 클릭을 받지 않는다 (계수가 아직 거짓말한다)
+  /* r76 — 지금 열려 있는 갤러리 사진 {src, twins, before}.
+     ★ CUR(글자)과 **따로 둔다.** 한 칸을 나눠 쓰면 r41Put 이 갤러리 상태를 글자 앵커로 읽는다. */
+  var GAL = null;
   var frame = null;
 
   function esc(s) {
@@ -204,6 +207,12 @@
        후드를 눌렀는데 배지·제목 글자 편집기가 조용히 열린다. */
     var slot = hood(ev);
     if (slot) { openPhoto(slot); return; }
+    /* r76) 갤러리 타일도 **pick() 앞**이다 — 후드와 같은 이유이고, 갤러리는 더 급하다.
+       타일 안에는 figcaption 글자(「003 · 시공갤러리」「시공 현장 03」)가 있어서
+       뒤에 두면 caretRangeFromPoint 가 그 글자를 집고, 사진 정보를 고치려던 사람이
+       **번호를 사이트 전체에서 바꾸는** 편집기를 열게 된다. */
+    var gsrc = gtile(ev);
+    if (gsrc) { openGal(gsrc); return; }
     var n = pick(ev);
     if (!n) { msg('그 자리에는 고칠 글자가 없습니다. 글자 위를 정확히 클릭하세요.'); return; }
 
@@ -281,6 +290,27 @@
     for (var i = 0; i < cards.length; i++) if (cards[i] === card) return i + 1;
     return 0;
   }
+
+  /* ── r76) 눌린 것이 시공갤러리 타일이면 그 사진의 파일명, 아니면 ''. ─────────────
+     ★★★ 여기가 이 리비전의 요점이다. r41 은 **글자**로 고칠 곳을 가리켜서
+       같은 글자가 여러 장에 있으면 손댈 수 없었다(그게 승연이 말한 「하나 바꾸면 다 바뀐다」).
+       갤러리 타일은 `dataset.key` 에 **파일명**을 이미 달고 있다(usung-r8-gal.js `galMakeTile`).
+       파일명은 69행 전체에서 **중복이 0** 이라, 이걸 쓰면 한 장을 정확히 가리킨다.
+     ★ `galInner`/`galSyncTile` 은 usung-r10.js 가 덮어쓰지만 `galMakeTile` 은 안 덮는다 —
+       그래서 `data-key` 는 r10 이 있어도 없어도 그대로 있다. */
+  function gtile(ev) {
+    var el = ev.target;
+    if (!el || !el.closest) return '';
+    var f = el.closest('.gtile');
+    /* ★ dataset 을 바로 읽지 않고 getAttribute 로 읽는다 — 이 노드는 **iframe 안**의
+         문서라 부모창의 DOMStringMap 과 프로토타입이 다를 수 있다. 속성은 언제나 문자열이다. */
+    var k = f && f.getAttribute ? f.getAttribute('data-key') : '';
+    return k || '';
+  }
+
+  /* 사이트 쪽 갤러리 창구(usung-r76-gal.js 가 내준다). api() 와 같은 꼴이다.
+     ★ GALLERY 는 최상위 const 라 window 에 없다 — 이 창구 말고는 밖에서 닿을 길이 없다. */
+  function gapi() { var w = win(); return (w && w.__r76) ? w.__r76 : null; }
 
   function pick(ev) {
     var d = doc();
@@ -369,6 +399,89 @@
       '배경이 없는 <b>투명 PNG</b> 를 권합니다 — 카드 위에 그대로 얹히기 때문입니다.<br>' +
       '자리는 <b>4장 모두 같은 크기</b>라 비율이 달라도 카드 글자를 덮지 않습니다.<br>' +
       '★ 사진은 <b>🚀 발행이 필요 없습니다</b> — 바로 올라가고 사이트 반영까지 <b>1~2분</b> 걸립니다.' +
+      '</div></div>';
+  }
+
+  /* ── r76) 시공갤러리 한 장 ────────────────────────────────────────────────────
+     ★★★ 이 편집기가 r41 글자 편집기와 다른 점은 **가리키는 방법** 하나뿐이다.
+       r41 은 「이 글자」로 가리켜서 같은 글자가 여러 장에 있으면 전부 바뀐다.
+       여기는 「이 파일」로 가리킨다 — 파일명은 69행에서 중복이 0 이라 늘 한 장이다.
+       그래서 **전체치환이 구조적으로 일어날 수 없다.** 승연이 「전체치환 버그 없이」라고
+       못박은 것이 이것이고, 조심해서 되는 게 아니라 **가리키는 방법을 바꿔야** 되는 일이었다.
+
+     ★★ 그런데 「한 장만 바뀐다」가 곧 「화면이 안 어긋난다」는 아니다.
+       galItems('전체') 가 **이름+내용이 같은 사진을 한 장으로 접는다.** 쌍둥이 한쪽만 고치면
+       접힘이 풀려 전체 탭 장수가 **늘어난다**(하네스 실측: 5 → 6). 그래서 쌍둥이가 있으면
+       **같이 바꾸기를 기본값**으로 두고 그 결과를 숫자로 미리 말해 준다.
+
+     ★ 수명: 저장하면 **바로 올라간다 — 🚀 발행이 필요 없다.** 공지사항과 같은 방식이다.
+       (글자인데 발행이 없는 건 이 화면과 공지 둘뿐이라 반드시 카드에 적는다.) */
+  function openGal(src) {
+    CUR = null;   // ★ 글자 편집 상태와 섞이면 r41Put 이 엉뚱한 앵커에 쓴다
+    var box = document.getElementById('r41Edit');
+    if (!box) return;
+    var g = gapi();
+    if (!g) { msg('갤러리 정보를 읽지 못했습니다 — 🔄 새로고침 후 다시 눌러주세요.'); return; }
+
+    var cur = null, twins = [], cats = [];
+    try { cur = g.get(src); twins = g.twins(src) || []; cats = g.cats() || []; } catch (e) { cur = null; }
+    if (!cur) { msg('그 사진을 목록에서 찾지 못했습니다 — 🔄 새로고침 후 다시 눌러주세요.'); return; }
+
+    GAL = { src: src, twins: twins, before: cur };
+
+    var opts = cats.map(function (c) {
+      return '<option value="' + esc(c) + '"' + (c === cur.cat ? ' selected' : '') + '>' + esc(c) + '</option>';
+    }).join('');
+
+    /* ★ 쌍둥이 경고 — 숫자를 **여기서 세지 않는다.** 사이트 쪽 __r76.count() 가 센다.
+         r70 이 hits() 를 적용기에 맡긴 것과 같은 이유다: 세는 규칙과 바꾸는 규칙이 갈라지면 안 된다. */
+    var now = -1;
+    try { now = g.count(); } catch (e) { now = -1; }
+    var warn = '';
+    if (twins.length) {
+      warn =
+        '<div style="border:1px solid #fbbf24;border-radius:8px;padding:8px;margin:8px 0;background:#3b2f0b">' +
+        '<div style="color:#fbbf24;font-size:12px;font-weight:600;margin-bottom:6px">' +
+        '⚠ 내용이 똑같은 사진이 ' + twins.length + '장 더 있습니다</div>' +
+        '<div style="font-size:11px;color:#e2e8f0;line-height:1.7">' +
+        esc(twins.join(' · ')) + '<br><br>' +
+        '갤러리 <b>「전체」</b> 탭은 <b>이름과 내용이 같은 사진을 한 장으로 묶어</b> 보여줍니다. ' +
+        '한 장만 바꾸면 묶임이 풀려서 <b>전체 탭 사진이 ' +
+        (now > 0 ? now + '장에서 ' + (now + twins.length) + '장으로' : '늘어납니다') +
+        '</b> 늘어납니다. 보통은 <b>같이 바꾸는 쪽</b>이 맞습니다.' +
+        '</div>' +
+        /* ★★ 체크상자에 픽셀을 못박고 글자에 min-width:0 을 준다 — r73 에서 겪은 병이다.
+             안 박으면 체크상자가 줄을 독차지하고 한글이 한 글자씩 세로로 쌓인다(KNOWLEDGE 65). */
+        '<label style="display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer">' +
+        '<input type="checkbox" id="r41GalAll" checked style="flex:0 0 16px;width:16px;height:16px;margin:0">' +
+        '<span style="flex:1 1 auto;min-width:0;font-size:12px;color:#fbbf24">' +
+        '같은 내용인 ' + twins.length + '장도 같이 바꾸기 <b>(권장)</b></span></label>' +
+        '</div>';
+    }
+
+    box.innerHTML =
+      '<div class="r41-card"><h4>🖼 시공갤러리 사진</h4>' +
+      '<div class="r41-org">파일 ' + esc(src) + ' — 이 사진 <b>한 장</b>만 바뀝니다.</div>' +
+      '<div style="font-size:11px;color:#94a3b8;margin:8px 0 4px">분류</div>' +
+      '<select id="r41GalCat" style="width:100%;box-sizing:border-box;padding:7px;border-radius:8px;' +
+      'background:#0f172a;color:#e2e8f0;border:1px solid #334155;font-size:13px">' + opts + '</select>' +
+      '<div style="font-size:11px;color:#94a3b8;margin:8px 0 4px">이름 (현장 이름)</div>' +
+      '<input id="r41GalSite" value="' + esc(cur.site || '') + '" style="width:100%;box-sizing:border-box;' +
+      'padding:7px;border-radius:8px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;font-size:13px">' +
+      '<div style="font-size:11px;color:#94a3b8;margin:8px 0 4px">내용 (규격·설명)</div>' +
+      '<input id="r41GalSpec" value="' + esc(cur.spec || '') + '" style="width:100%;box-sizing:border-box;' +
+      'padding:7px;border-radius:8px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;font-size:13px">' +
+      warn +
+      '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">' +
+      '<button class="tb-btn pri" onclick="r41GalSave()">저장</button>' +
+      '<button class="tb-btn" onclick="r41GalPrev()">미리보기</button>' +
+      '<button class="tb-btn" onclick="r41Close()">닫기</button>' +
+      '</div>' +
+      '<div style="font-size:11px;color:#94a3b8;margin-top:10px;line-height:1.7">' +
+      '<b>미리보기</b> — 이 화면에서만 바꿔 봅니다. 새로고침하면 되돌아가고 <b>사이트에는 안 올라갑니다</b>.<br>' +
+      '<b>저장</b> — 진짜로 올립니다. ★ <b>🚀 발행이 필요 없습니다</b> — 공지사항과 같습니다. ' +
+      '사이트 반영까지 <b>20~30초</b> 걸립니다.<br>' +
+      '★ 타일에 보이는 <b>번호(003 · 시공 현장 03)는 자동</b>입니다 — 여기서 고치는 값이 아닙니다.' +
       '</div></div>';
   }
 
@@ -462,7 +575,63 @@
     if (d) d.location.reload();   // 이미 바뀐 글자는 다시 그려야 원문이 돌아온다
     r41Close();
   };
-  window.r41Close = function () { CUR = null; PEND = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+  window.r41Close = function () { CUR = null; PEND = null; GAL = null; msg('글자를 클릭하면 고칠 수 있습니다. 사진은 사진을 클릭하세요.'); };
+
+  /* ── r76) 갤러리 저장·미리보기 ─────────────────────────────────────────────
+     ★ 이 파일의 규칙은 그대로다 — **여기엔 fetch 가 없다.** 칸에서 값을 읽어
+       admin.html 의 saveGallery() 에 넘긴다(r75 가 사진 주소로 한 것과 같은 꼴).
+
+     ★★ 「같이 바꾸기」를 **서버가 아니라 여기서** 편다. 쌍둥이 목록은 데이터가
+       바뀌면 같이 바뀌므로 서버에 굳혀 두면 반드시 썩는다(KNOWLEDGE 41).
+       서버는 받은 edit 항목을 그대로 저장할 뿐이고, 몇 개를 보낼지는 화면이 정한다. */
+  function galRead() {
+    if (!GAL) return null;
+    var cat = document.getElementById('r41GalCat');
+    var site = document.getElementById('r41GalSite');
+    var spec = document.getElementById('r41GalSpec');
+    if (!cat || !site || !spec) return null;
+    var all = document.getElementById('r41GalAll');
+    return {
+      src: GAL.src,
+      cat: cat.value,
+      site: String(site.value || '').trim(),
+      spec: String(spec.value || '').trim(),
+      /* ★ 분류는 쌍둥이에게 옮기지 않는다 — 쌍둥이가 **다른 분류에 일부러 놓인** 경우가 있다
+           (클래식/gc02 와 레트로/gr01 이 그렇다). 이름·내용만 맞추면 「전체」 탭 묶임이 유지되고,
+           분류는 각자 자리를 지킨다. 묶임의 열쇠가 이름+내용뿐이라 이걸로 충분하다. */
+      also: (all && all.checked) ? GAL.twins.slice() : []
+    };
+  }
+
+  window.r41GalPrev = function () {
+    var v = galRead(), g = gapi();
+    if (!v || !g) { try { toast('입력칸을 찾지 못했습니다 — 다시 열어주세요', true); } catch (e) { } return; }
+    if (!v.site && !v.spec) { try { toast('이름과 내용이 모두 비어 있습니다', true); } catch (e) { } return; }
+    try {
+      g.set(v.src, { cat: v.cat, site: v.site, spec: v.spec });
+      v.also.forEach(function (s) { g.set(s, { site: v.site, spec: v.spec }); });
+      toast('미리보기입니다 — 아직 사이트에는 올라가지 않았습니다');
+    } catch (e) { try { toast('미리보기 실패 — 🔄 새로고침 후 다시', true); } catch (e2) { } }
+  };
+
+  window.r41GalSave = function () {
+    var v = galRead();
+    if (!v) { try { toast('입력칸을 찾지 못했습니다 — 다시 열어주세요', true); } catch (e) { } return; }
+    if (!v.site && !v.spec) { try { toast('이름과 내용이 모두 비어 있습니다', true); } catch (e) { } return; }
+    tech('saveGallery', v);
+  };
+
+  /* admin.html 의 saveGallery() 가 **저장에 성공한 뒤** 부른다 —
+     r75 의 r41PhotoDone 과 같은 꼴이다. ★ 화면 갱신을 admin.html 에 두지 않는 이유:
+     GALLERY 에 닿는 길(__r76)이 이 파일에만 있고, 두 곳에 두면 반드시 한쪽이 썩는다. */
+  window.r41GalDone = function (v) {
+    var g = gapi();
+    if (!g || !v) return;
+    try {
+      g.set(v.src, { cat: v.cat, site: v.site, spec: v.spec });
+      (v.also || []).forEach(function (s) { g.set(s, { site: v.site, spec: v.spec }); });
+    } catch (e) { }
+  };
 
   /* r70d — 다중 일치를 「알고」 진행한다. 개수는 여기서 다시 센다:
      경고를 띄운 뒤 화면이 다시 그려졌을 수 있고, 그 사이 개수가 변했다면

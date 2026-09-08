@@ -34,8 +34,11 @@ const repo = () => process.env.BOARD_REPO || 'macquarter/usung-ace';
 const branch = () => process.env.BOARD_BRANCH || 'main';
 const token = () => process.env.BOARD_TOKEN;
 
-// 인스턴스 수명 동안만 사는 메모. 콜드 스타트마다 비니까 오래된 값이 굳을 일이 없다.
-let memo = { at: 0, val: null };
+/* 인스턴스 수명 동안만 사는 메모. 콜드 스타트마다 비니까 오래된 값이 굳을 일이 없다.
+   ★ r76 에서 **파일별 칸**으로 바뀌었다(Map). 제품과 갤러리가 메모 한 칸을 나눠 쓰면
+     나중에 읽은 쪽이 앞엣것을 덮어 **제품 자리에 갤러리 패치가 들어간다.**
+     칸을 나누는 편이 이 파일을 두 벌로 복제하는 것보다 싸다(KNOWLEDGE 41). */
+const memos = new Map();
 const TTL = 20000;
 
 /* 어떤 모양이 와도 add/edit/del 세 칸으로 정규화한다.
@@ -51,11 +54,11 @@ function normalize(raw) {
 
 /* 1차 — Contents API. 발행 직후 값이 즉시 나온다(실측).
    Accept: vnd.github.raw 로 받으면 base64 껍데기 없이 파일 본문 그대로다. */
-async function fromApi() {
+async function fromApi(file) {
   const tk = token();
   if (!tk) return null;                       // 토큰이 없으면 조용히 폴백으로 넘긴다
   const url = 'https://api.github.com/repos/' + repo() +
-    '/contents/data/products.json?ref=' + encodeURIComponent(branch());
+    '/contents/' + file + '?ref=' + encodeURIComponent(branch());
   const r = await fetch(url, {
     headers: {
       Authorization: 'Bearer ' + tk,
@@ -70,24 +73,30 @@ async function fromApi() {
 }
 
 /* 2차 — raw. 토큰이 없거나 API 가 죽어도 화면은 살아야 한다. 최대 5분 늦을 뿐 값은 맞다. */
-async function fromRaw() {
-  const url = 'https://raw.githubusercontent.com/' + repo() + '/' + branch() + '/data/products.json';
+async function fromRaw(file) {
+  const url = 'https://raw.githubusercontent.com/' + repo() + '/' + branch() + '/' + file;
   const r = await fetch(url, { cache: 'no-store' });
   if (!r.ok) return EMPTY;                    // 404 = 발행 전
   return normalize(JSON.parse(await r.text()));
 }
 
 /* 최종 — 무슨 일이 있어도 **던지지 않는다**. 여기서 던지면 페이지가 통째로 죽는다.
-   최악의 경우 빈 패치를 돌려주고, 방문자는 정적 215종을 그대로 본다(= 오늘과 같은 화면). */
-export async function loadPatch() {
+   최악의 경우 빈 패치를 돌려주고, 방문자는 정적 목록을 그대로 본다(= 오늘과 같은 화면). */
+export async function loadPatchFile(file) {
   const now = Date.now();
-  if (memo.val && now - memo.at < TTL) return memo.val;
+  const m = memos.get(file);
+  if (m && m.val && now - m.at < TTL) return m.val;
 
   let val = null;
-  try { val = await fromApi(); } catch (e) { val = null; }
-  if (!val) { try { val = await fromRaw(); } catch (e) { val = null; } }
+  try { val = await fromApi(file); } catch (e) { val = null; }
+  if (!val) { try { val = await fromRaw(file); } catch (e) { val = null; } }
   if (!val) val = EMPTY;
 
-  memo = { at: now, val };
+  memos.set(file, { at: now, val });
   return val;
 }
+
+/* 부르는 쪽 둘. ★ 파일 이름을 호출부에 흩지 않고 여기 한 곳에 둔다 —
+   api/products.js·api/gallery.js 의 FILE 상수와 짝이다. 어긋나면 조용히 빈 패치가 된다. */
+export const loadPatch = () => loadPatchFile('data/products.json');
+export const loadGalPatch = () => loadPatchFile('data/gallery.json');

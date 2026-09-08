@@ -8,6 +8,8 @@ import { seoHead, SEO_MARK } from './_seo.js';
 
 // r55 — 관리자 발행분(add/edit/del) 로더. 별도 모듈인 이유·raw 5분 지연 실측은 _patch.js 머리말.
 import { loadPatch } from './_patch.js';
+// r76 — 갤러리 발행분 주입 블록. inject.js 가 이미 300줄을 넘어 별도 모듈로 뺐다(_gal.js 머리말).
+import { injectGal } from './_gal.js';
 
 const RAW_URL = 'https://raw.githubusercontent.com/macquarter/usung-ace/main/index_v6.html';
 
@@ -293,6 +295,13 @@ export default async function handler(req, res) {
         html = html.split(anchor).join(anchor + inline + applier);
       }
     } catch (e) { /* 여기까지 실패하면 정적 카탈로그 그대로 — 화면은 오늘과 동일하다 */ }
+
+    /* r76 — 관리자가 발행한 시공갤러리 차이분. 근거·수법은 바로 위 r55 블록과 같다.
+       ★ 앵커 찾기·붙이기까지 _gal.js 안에 둔다 — 이 파일이 이미 한도(300)를 넘었고,
+         앵커 지식이 두 파일에 흩어지면 순서 규칙을 고칠 때 한쪽이 썩는다(KNOWLEDGE 41).
+       되돌리기: 이 한 줄 + api/_gal.js + usung-r76-gal.js + api/gallery.js. 넷은 짝이다. */
+    html = await injectGal(html, V);
+
     if (!html.includes('usung-r27-prepaint')) {
       html = html.replace('</head>', preStyle + '</head>');
     }
