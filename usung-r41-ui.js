@@ -357,11 +357,14 @@
       '<div class="r41-card"><h4>🖼 「국내 최초」 ' + slot + '번 사진</h4>' +
       '<div class="r41-org">지금 액자 안에 보이는 그 사진입니다. 바꾸면 이 자리에서 바로 확인됩니다.</div>' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
-      '<button class="tb-btn pri" onclick="r41Pick(' + slot + ')">사진 바꾸기</button>' +
+      '<button class="tb-btn pri" onclick="r41Adjust(' + slot + ')">지금 사진 조정</button>' +
+      '<button class="tb-btn" onclick="r41Pick(' + slot + ')">사진 바꾸기</button>' +
       '<button class="tb-btn" onclick="r41Reset(' + slot + ')">기본 사진으로</button>' +
       '<button class="tb-btn" onclick="r41Close()">닫기</button>' +
       '</div>' +
       '<div style="font-size:11px;color:#94a3b8;margin-top:10px;line-height:1.7">' +
+      '<b>지금 사진 조정</b> — 새 파일을 고르지 않고 <b>지금 이 사진</b>을 다시 자릅니다. ' +
+      '자를 자리를 끌어서 맞춘 뒤 「이 모양으로 올리기」를 누르세요.<br>' +
       'PNG·JPG 둘 다 됩니다 (올릴 때 자동으로 PNG 로 바꿔 저장합니다).<br>' +
       '배경이 없는 <b>투명 PNG</b> 를 권합니다 — 카드 위에 그대로 얹히기 때문입니다.<br>' +
       '자리는 <b>4장 모두 같은 크기</b>라 비율이 달라도 카드 글자를 덮지 않습니다.<br>' +
@@ -476,12 +479,32 @@
 
   /* ★ admin.html 의 전역을 그대로 부른다(선언된 function 은 window 에 붙는다).
        없으면 조용히 실패하지 말고 왜 못 하는지 말한다 — 「눌렀는데 아무 일도 없다」가 제일 나쁘다. */
-  function tech(fn, slot) {
-    if (typeof window[fn] === 'function') { window[fn](slot); return; }
+  function tech(fn, slot, extra) {
+    if (typeof window[fn] === 'function') { window[fn](slot, extra); return; }
     try { toast('사진 기능을 못 찾았습니다 — 페이지를 새로고침 해주세요'); } catch (e) { }
   }
   window.r41Pick = function (slot) { tech('pickTechPhoto', slot); };
   window.r41Reset = function (slot) { tech('resetTechPhoto', slot); };
+
+  /* ── r75) 「지금 사진 조정」 ────────────────────────────────────────────────
+     r73 은 **새 파일을 고를 때만** 크롭 편집기를 띄웠다(uploadTechPhoto 안). 그래서
+     이미 올라간 사진을 다시 만질 입구가 없었고, 승연에게 「아직 조정 불가」로 보였다.
+     ★ 이 파일의 규칙은 그대로다 — 여기엔 fetch 가 없다. 주소만 읽어 admin.html 에 넘긴다.
+     ★★ 주소를 `/tech/first<N>.png` 로 **지어내지 않는다.** 화면의 <img> 에서 읽어야
+        ① 되돌린 뒤의 기본 사진(proto_assets/tf_*.png) ② 방금 올려 아직 배포 안 된
+        dataURL 까지 같은 길로 간다. r8-tech 의 onerror 가 src 를 갈아치우기 때문에
+        「지금 보이는 것」은 currentSrc 만이 안다. */
+  window.r41Adjust = function (slot) {
+    var d = doc(), host = d && d.getElementById('th-first');
+    var card = host && host.querySelectorAll('.tf-card')[slot - 1];
+    var img = card && card.querySelector('img.tf-hood');
+    var src = img && (img.currentSrc || img.src);
+    if (!src) {
+      try { toast('지금 사진을 찾지 못했습니다 — 🔄 새로고침 후 다시 눌러주세요'); } catch (e) { }
+      return;
+    }
+    tech('adjustTechPhoto', slot, src);
+  };
   /* admin.html 의 techApplied() 가 부른다 — 액자를 살려 둔 채 그 <img> 만 바꾼다 */
   window.r41PhotoDone = function (slot, url) { paintPhoto(slot, url); };
   window.r41Del = function (i) {

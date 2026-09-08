@@ -3294,6 +3294,39 @@ async function uploadTechPhoto(slot, file){
   }catch(e){ toast('사진 올리기 실패 : ' + e.message, true); }
 }
 
+/* ★ r75) 이미 올라간 사진을 다시 자른다 — 승연 「관리자에서 국내최초가 아직 조정 불가」.
+   ── 왜 필요했나: r73 은 편집기를 uploadTechPhoto **안에서만** 불렀다. 즉 「새 파일을
+      고를 때」만 열린다. openPhoto 패널의 버튼이 셋뿐이라(바꾸기·기본으로·닫기) 이미
+      올려 둔 사진의 크기·위치를 다시 만질 입구가 아예 없었다. r75 는 그 입구다.
+   ── ★★ 새 배관을 만들지 않는다. 지금 사진을 File 로 감싸 uploadTechPhoto 에 그대로
+      넘긴다. 그러면 크롭(r73CropPhoto)·PNG 변환(toPngDataUrl)·업로드·토스트가 전부
+      그 함수 한 곳에 남는다. 여기서 fetch 를 또 짜면 규칙이 두 곳으로 갈라진다(KNOWLEDGE 41).
+   ── ★ src 는 usung-r41-ui.js 가 **화면의 <img class="tf-hood"> 에서 읽어** 넘긴다.
+      경로를 여기서 지어내면(`/tech/first${slot}.png`) 되돌린 뒤의 기본 사진과
+      아직 배포 안 된 dataURL 두 경우에 틀린 사진을 자르게 된다.
+   ── ★ data: 도 fetch 가 그대로 먹는다 → 업로드 직후(배포 대기 중)에도 같은 길로 간다. */
+async function adjustTechPhoto(slot, src){
+  const h = authHeaders();
+  if(!h){ toast('로그인해야 사진을 바꿀 수 있습니다', true); return; }
+  if(!src){ toast('지금 사진을 찾지 못했습니다 — 🔄 새로고침 후 다시 눌러주세요', true); return; }
+
+  toast('지금 사진 불러오는 중…');
+  let file;
+  try{
+    /* 캐시 옵션을 주지 않는다 — 액자의 <img> 가 이미 읽은 그 항목을 그대로 쓴다.
+       'reload' 로 새로 받으면 **화면에 보이는 것과 다른 바이트**를 자를 수 있다. */
+    const r = await fetch(src);
+    if(!r.ok) throw new Error(r.status === 404 ? '사진 파일이 없습니다' : `서버 응답 ${r.status}`);
+    const b = await r.blob();
+    if(!/^image\//.test(b.type)) throw new Error('그림 파일이 아닙니다');
+    file = new File([b], `first${slot}.png`, { type: b.type });
+  }catch(e){
+    toast('지금 사진을 불러오지 못했습니다 : ' + e.message, true);
+    return;
+  }
+  return uploadTechPhoto(slot, file);
+}
+
 async function resetTechPhoto(slot){
   const h = authHeaders();
   if(!h){ toast('로그인해야 사진을 바꿀 수 있습니다', true); return; }
@@ -3412,7 +3445,7 @@ document.getElementById('loginId').value = ADMIN_ID;
      (ui 가 R41 을 참조). 위 인라인 스크립트가 rSidebar/rView 를 정의한 뒤에 실려야
      감싸기가 먹으므로 여기 둔다. ★ ?v= 는 손으로 올릴 것. -->
 <script src="/usung-r41-live.js?v=r67"></script>
-<script src="/usung-r41-ui.js?v=r70e"></script>
+<script src="/usung-r41-ui.js?v=r75"></script>
 <!-- r73) 사진을 올리기 전에 잘라내는 편집기. 승연 「관리자에서 직접 크기까지 조정가능하도록
      마치 포토샵같이」. window.r73CropPhoto 하나만 내놓고, uploadTechPhoto 가 **있으면** 부른다
      → 이 파일이 404 여도 관리자는 예전처럼 그냥 올라간다(기능만 없어진다).
