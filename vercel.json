@@ -2,6 +2,8 @@
   "version": 2,
   "routes": [
     { "src": "/(.*)\\.php(/.*)?", "headers": { "Location": "/" }, "status": 301 },
+    { "src": "/showroom", "headers": { "Location": "/showroom/" }, "status": 308 },
+    { "src": "/showroom/(.*)", "dest": "https://yusungace-site.vercel.app/$1", "headers": { "X-Robots-Tag": "noindex" } },
     { "src": "/api/blog", "dest": "/api/blog.js" },
     { "src": "/api/board", "dest": "/api/board.js" },
     { "src": "/api/notice", "dest": "/api/notice.js" },
