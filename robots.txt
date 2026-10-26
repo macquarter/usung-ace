@@ -3,6 +3,7 @@
 
 User-agent: *
 Allow: /
+Disallow: /showroom/
 Disallow: /admin
 Disallow: /admin.html
 Disallow: /api/
@@ -14,34 +15,44 @@ Disallow: /api/
 #   원본 HTML 에 있는 만큼(회사소개·홈 정도)만 읽힌다.
 User-agent: GPTBot
 Allow: /
+Disallow: /showroom/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /showroom/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /showroom/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /showroom/
 
 User-agent: Claude-SearchBot
 Allow: /
+Disallow: /showroom/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /showroom/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /showroom/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /showroom/
 
 # ── 국내 검색 ────────────────────────────────────────────────
 User-agent: Yeti
 Allow: /
+Disallow: /showroom/
 
 User-agent: Daumoa
 Allow: /
+Disallow: /showroom/
 
 # ★ r74) 대표 주소를 yusungace.com 으로 맞췄다 (sitemap.xml 과 짝이다).
 #   r54 가 대표 주소를 옮길 때 api/_seo.js 만 고치고 이 줄과 sitemap.xml 을 빠뜨렸다.
